@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Fluent JPA Query
+Bundle-SymbolicName: com.netappsid.fjpaquery
+Bundle-Version: 0.0.1
+Bundle-Vendor: NetAppsID Inc.
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Require-Bundle: com.netappsid.javassist;bundle-version="[3.9.0,4.0.0)"
+Import-Package: org.junit;version="[4.8.0,5.0.0)";resolution:=optional
