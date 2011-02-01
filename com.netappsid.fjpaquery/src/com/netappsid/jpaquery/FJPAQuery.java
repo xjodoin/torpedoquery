@@ -14,7 +14,7 @@ import com.netappsid.jpaquery.internal.WhereClauseHandler;
 
 public class FJPAQuery {
 
-	private static Query query;
+	private static ThreadLocal<Query> query = new ThreadLocal<Query>();
 
 	public static <T> T from(Class<T> toQuery) {
 
@@ -34,17 +34,17 @@ public class FJPAQuery {
 	}
 
 	public static void select(Object value) {
-		query.handle(new SelectHandler());
+		getQuery().handle(new SelectHandler());
 	}
 	
 	public static <T> T innerJoin(T toJoin)
 	{
-		return query.handle(new InnerJoinHandler<T>());
+		return getQuery().handle(new InnerJoinHandler<T>());
 	}
 	
 	public static <T> OnGoingWhereClause<T> where(T object)
 	{
-		return query.handle(new WhereClauseHandler<T>());
+		return getQuery().handle(new WhereClauseHandler<T>());
 	}
 
 	public static String query(Object proxy) {
@@ -57,10 +57,15 @@ public class FJPAQuery {
 	
 	public static Map<String,Object> params(Object proxy)
 	{
-		return query.handle(new ParamsOutputHandler());
+		return getQuery().handle(new ParamsOutputHandler());
 	}
 
+	public static Query getQuery()
+	{
+		return query.get();
+	}
+	
 	public static void setQuery(Query query) {
-		FJPAQuery.query = query;
+		FJPAQuery.query.set(query);
 	}
 }
