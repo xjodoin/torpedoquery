@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.lang.StringUtils;
-
 public class QueryBuilder {
 
     private final Class<?> toQuery;
@@ -92,8 +90,10 @@ public class QueryBuilder {
 
     public String getAlias() {
 	if (alias == null) {
-	    String uncapitalise = StringUtils.uncapitalise(toQuery.getSimpleName());
-	    alias = uncapitalise + "_" + increment.getAndIncrement();
+	    final char[] charArray = toQuery.getSimpleName().toCharArray();
+	    
+	    charArray[0] = Character.toLowerCase(charArray[0]);
+	    alias = new String(charArray) + "_" + increment.getAndIncrement();
 	}
 	return alias;
     }
