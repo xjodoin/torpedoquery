@@ -3,7 +3,7 @@ package com.netappsid.jpaquery.internal;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,7 +13,7 @@ import javassist.util.proxy.MethodHandler;
 import com.netappsid.jpaquery.FJPAQuery;
 
 public class FJPAMethodHandler implements MethodHandler, Query {
-    private Map<Object, QueryBuilder> proxyQueryBuilders = new HashMap<Object, QueryBuilder>();
+    private Map<Object, QueryBuilder> proxyQueryBuilders = new IdentityHashMap<Object, QueryBuilder>();
     private List<MethodCall> methods = new ArrayList<MethodCall>();
 
     public QueryBuilder addQueryBuilder(Object proxy, Class toQuery, AtomicInteger increment) {
@@ -25,7 +25,7 @@ public class FJPAMethodHandler implements MethodHandler, Query {
 
     @Override
     public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
-	if (thisMethod.getDeclaringClass().equals(Query.class) || thisMethod.getDeclaringClass().equals(Object.class)) {
+	if (thisMethod.getDeclaringClass().equals(Query.class)) {
 	    return thisMethod.invoke(this, args);
 	}
 

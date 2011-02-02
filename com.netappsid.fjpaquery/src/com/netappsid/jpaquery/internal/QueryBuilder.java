@@ -77,7 +77,7 @@ public class QueryBuilder {
 	    BeanInfo beanInfo = Introspector.getBeanInfo(toQuery);
 	    PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
 	    for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-		if (propertyDescriptor.getReadMethod().equals(method)) {
+		if (propertyDescriptor.getReadMethod() !=null && propertyDescriptor.getReadMethod().equals(method)) {
 		    return propertyDescriptor.getName();
 		}
 	    }

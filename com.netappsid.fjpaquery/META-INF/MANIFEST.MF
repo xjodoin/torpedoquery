@@ -8,3 +8,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.netappsid.javassist;bundle-version="[3.9.0,4.0.0)"
 Import-Package: org.junit;version="[4.8.0,5.0.0)";resolution:=optional
+Export-Package: com.netappsid.jpaquery,
+ com.netappsid.jpaquery.internal;x-friends:="com.netappsid.javassist"
