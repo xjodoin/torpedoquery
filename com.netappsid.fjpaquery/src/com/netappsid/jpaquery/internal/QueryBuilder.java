@@ -28,18 +28,18 @@ public class QueryBuilder {
 
     public String getQuery() {
 
-	String from = "from " + toQuery.getSimpleName() + " " + getAlias();
+	String from = " from " + toQuery.getSimpleName() + " " + getAlias();
 	StringBuilder builder = new StringBuilder();
 
 	appendSelect(builder);
-
+	
 	builder.append(from);
 
 	builder.append(getJoins());
 
 	builder.append(appendWhereClause(new StringBuilder()));
 
-	return builder.toString();
+	return builder.toString().trim();
     }
 
     public StringBuilder appendWhereClause(StringBuilder builder) {
@@ -62,9 +62,9 @@ public class QueryBuilder {
     public void appendSelect(StringBuilder builder) {
 	for (Method method : toSelect) {
 	    if (builder.length() == 0) {
-		builder.append("select ").append(getAlias()).append(".").append(getFieldName(method)).append(" ");
+		builder.append("select ").append(getAlias()).append(".").append(getFieldName(method));
 	    } else {
-		builder.append(", ").append(getAlias()).append(".").append(getFieldName(method)).append(" ");
+		builder.append(", ").append(getAlias()).append(".").append(getFieldName(method));
 	    }
 	}
 
