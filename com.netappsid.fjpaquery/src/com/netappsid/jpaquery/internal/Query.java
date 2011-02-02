@@ -1,10 +1,11 @@
 package com.netappsid.jpaquery.internal;
 
+import java.util.Map;
 
 public interface Query {
+    String getQuery();
 
-	String getQuery();
+    Map<String, Object> getParameters();
 
-	<T> T handle(QueryHandler<T> handler);
-
+    <T> T handle(QueryHandler<T> handler);
 }
