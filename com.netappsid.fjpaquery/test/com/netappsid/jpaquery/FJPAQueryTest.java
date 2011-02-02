@@ -25,14 +25,24 @@ public class FJPAQueryTest {
 
 	assertEquals("select entity_0.code from Entity entity_0", query(entity));
     }
-    
+
     @Test
     public void test_selectMultipleFields() {
 	final Entity entity = from(Entity.class);
-	
+
 	select(entity.getCode(), entity.getName());
-	
+
 	assertEquals("select entity_0.code , entity_0.name from Entity entity_0", query(entity));
+    }
+
+    @Test
+    public void test_selectMultipleFieldsFromDifferentEntities() {
+	final Entity entity = from(Entity.class);
+	final SubEntity subEntity = innerJoin(entity.getSubEntity());
+
+	select(entity.getCode(), subEntity.getCode());
+
+	assertEquals("select entity_0.code , subEntity_1.code from Entity entity_0 inner join entity_0.subEntity subEntity_1", query(entity));
     }
 
     @Test
@@ -41,8 +51,7 @@ public class FJPAQueryTest {
 	select(entity.getCode());
 	SubEntity subEntity = innerJoin(entity.getSubEntity());
 
-	assertEquals("select entity_0.code from Entity entity_0 inner join entity_0.subEntity subEntity_1",
-		query(entity));
+	assertEquals("select entity_0.code from Entity entity_0 inner join entity_0.subEntity subEntity_1", query(entity));
     }
 
     @Test
@@ -52,11 +61,9 @@ public class FJPAQueryTest {
 	select(entity.getCode());
 	select(subEntity.getName());
 
-	assertEquals(
-		"select entity_0.code , subEntity_1.name from Entity entity_0 inner join entity_0.subEntity subEntity_1",
-		query(entity));
+	assertEquals("select entity_0.code , subEntity_1.name from Entity entity_0 inner join entity_0.subEntity subEntity_1", query(entity));
     }
-    
+
     @Test
     public void test_simpleWhere() {
 	Entity entity = from(Entity.class);

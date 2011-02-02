@@ -1,8 +1,9 @@
 package com.netappsid.jpaquery.internal;
 
-import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
+
 
 public interface QueryHandler<T> {
-    T handleCall(QueryBuilder queryImpl, List<Method> methods);
+    T handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, List<MethodCall> methods);
 }

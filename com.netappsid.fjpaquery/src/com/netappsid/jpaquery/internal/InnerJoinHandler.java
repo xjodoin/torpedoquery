@@ -2,15 +2,22 @@ package com.netappsid.jpaquery.internal;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import javassist.util.proxy.ProxyFactory;
 
 
 public class InnerJoinHandler<T> implements QueryHandler<T> {
-
+    private final FJPAMethodHandler methodHandler;
+    
+    public InnerJoinHandler(FJPAMethodHandler methodHandler) {
+	this.methodHandler = methodHandler;
+    }
+    
     @Override
-    public T handleCall(QueryBuilder queryImpl, List<Method> methods) {
-	final Method thisMethod = methods.get(0);
+    public T handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, List<MethodCall> methodCalls) {
+	final QueryBuilder queryImpl = proxyQueryBuilders.get(methodCalls.get(0).proxy);
+	final Method thisMethod = methodCalls.get(0).method;
 	final Class<?> returnType = thisMethod.getReturnType();
 
 	try {
@@ -18,10 +25,10 @@ public class InnerJoinHandler<T> implements QueryHandler<T> {
 	    proxyFactory.setSuperclass(returnType);
 	    proxyFactory.setInterfaces(new Class[] { Query.class });
 
-	    FJPAMethodHandler fjpaMethodHandler = new FJPAMethodHandler(returnType, queryImpl.getIncrement());
-	    Query join = (Query) proxyFactory.create(null, null, fjpaMethodHandler);
-
-	    queryImpl.addJoin(new InnerJoin(fjpaMethodHandler.getQueryBuilder(), queryImpl.getFieldName(thisMethod)));
+	    final Query join = (Query) proxyFactory.create(null, null, methodHandler);
+	    final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, returnType, queryImpl.getIncrement());
+	    
+	    queryImpl.addJoin(new InnerJoin(queryBuilder, queryImpl.getFieldName(thisMethod)));
 
 	    return (T) join;
 

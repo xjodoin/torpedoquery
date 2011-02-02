@@ -12,6 +12,7 @@ import com.netappsid.jpaquery.internal.SelectHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
 
 public class FJPAQuery {
+    private static final FJPAMethodHandler methodHandler = new FJPAMethodHandler();
     private static ThreadLocal<Query> query = new ThreadLocal<Query>();
 
     public static <T> T from(Class<T> toQuery) {
@@ -21,7 +22,10 @@ public class FJPAQuery {
 	    proxyFactory.setSuperclass(toQuery);
 	    proxyFactory.setInterfaces(new Class[] { Query.class });
 
-	    return (T) proxyFactory.create(null, null, new FJPAMethodHandler(toQuery, new AtomicInteger()));
+	    final T proxy = (T) proxyFactory.create(null, null, methodHandler);
+	    
+	    methodHandler.addQueryBuilder(proxy, toQuery, new AtomicInteger());
+	    return proxy;
 
 	} catch (Exception e) {
 	    e.printStackTrace();
@@ -35,7 +39,7 @@ public class FJPAQuery {
     }
 
     public static <T> T innerJoin(T toJoin) {
-	return getQuery().handle(new InnerJoinHandler<T>());
+	return getQuery().handle(new InnerJoinHandler<T>(methodHandler));
     }
 
     public static <T> OnGoingWhereClause<T> where(T object) {
@@ -45,7 +49,7 @@ public class FJPAQuery {
     public static String query(Object proxy) {
 	if (proxy instanceof Query) {
 	    Query from = (Query) proxy;
-	    return from.getQuery();
+	    return from.getQuery(proxy);
 	}
 	return null;
     }
@@ -53,7 +57,7 @@ public class FJPAQuery {
     public static Map<String, Object> params(Object proxy) {
 	if (proxy instanceof Query) {
 	    Query from = (Query) proxy;
-	    return from.getParameters();
+	    return from.getParameters(proxy);
 	}
 	return null;
     }
