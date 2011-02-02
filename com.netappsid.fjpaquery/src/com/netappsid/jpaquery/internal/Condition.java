@@ -1,11 +1,9 @@
 package com.netappsid.jpaquery.internal;
 
 public interface Condition<T> {
+    String getString();
 
-	String getString();
+    String getVariableName();
 
-	String getVariableName();
-
-	T getValue();
-
+    T getValue();
 }

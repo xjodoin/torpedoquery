@@ -23,7 +23,7 @@ public class FJPAQuery {
 	    proxyFactory.setInterfaces(new Class[] { Query.class });
 
 	    final T proxy = (T) proxyFactory.create(null, null, methodHandler);
-	    
+
 	    methodHandler.addQueryBuilder(proxy, toQuery, new AtomicInteger());
 	    return proxy;
 

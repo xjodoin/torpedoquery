@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class QueryBuilder {
-
     private final Class<?> toQuery;
     private List<Method> toSelect = new ArrayList<Method>();
     private List<InnerJoin> joins = new ArrayList<InnerJoin>();
@@ -32,7 +31,7 @@ public class QueryBuilder {
 	StringBuilder builder = new StringBuilder();
 
 	appendSelect(builder);
-	
+
 	builder.append(from);
 
 	builder.append(getJoins());
@@ -91,7 +90,7 @@ public class QueryBuilder {
     public String getAlias() {
 	if (alias == null) {
 	    final char[] charArray = toQuery.getSimpleName().toCharArray();
-	    
+
 	    charArray[0] = Character.toLowerCase(charArray[0]);
 	    alias = new String(charArray) + "_" + increment.getAndIncrement();
 	}
@@ -147,5 +146,4 @@ public class QueryBuilder {
 
 	return params;
     }
-
 }
