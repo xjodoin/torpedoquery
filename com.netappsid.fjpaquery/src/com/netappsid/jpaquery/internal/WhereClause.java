@@ -1,8 +1,9 @@
 package com.netappsid.jpaquery.internal;
 
+import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingWhereClause;
 
-public class WhereClause<T> implements OnGoingWhereClause<T> {
+public class WhereClause<T> implements OnGoingWhereClause<T> ,OnGoingCondition<T>{
     private Condition<T> condition;
     private final QueryBuilder queryBuilder;
     private final String fieldName;
@@ -13,7 +14,7 @@ public class WhereClause<T> implements OnGoingWhereClause<T> {
     }
 
     @Override
-    public OnGoingWhereClause<T> eq(T value) {
+    public OnGoingCondition<T> eq(T value) {
 	condition = new EqualCondition<T>(queryBuilder.getAlias() + "." + fieldName, queryBuilder.generateVariable(fieldName), value);
 	return this;
     }

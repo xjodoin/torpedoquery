@@ -1,5 +1,6 @@
 package com.netappsid.jpaquery;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,6 +42,10 @@ public class FJPAQuery {
     public static <T> T innerJoin(T toJoin) {
 	return getQuery().handle(new InnerJoinHandler<T>(methodHandler));
     }
+    
+    public static <T> T innerJoin(Collection<T> toJoin) {
+    	return getQuery().handle(new InnerJoinHandler<T>(methodHandler));
+        }
 
     public static <T> OnGoingWhereClause<T> where(T object) {
 	return getQuery().handle(new WhereClauseHandler<T>());

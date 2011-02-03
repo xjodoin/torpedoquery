@@ -57,7 +57,7 @@ public class FJPAQueryTest {
 	innerJoin(entity.getSubEntity());
 	assertEquals("from Entity entity_0 inner join entity_0.subEntity subEntity_1", query(entity));
     }
-
+    
     @Test
     public void test_innerJoin_withSelect() {
 	final Entity entity = from(Entity.class);
@@ -66,6 +66,16 @@ public class FJPAQueryTest {
 	select(entity.getCode(), subEntity.getName());
 	assertEquals("select entity_0.code, subEntity_1.name from Entity entity_0 inner join entity_0.subEntity subEntity_1", query(entity));
     }
+    
+    @Test
+    public void test_innerJoin_withList() {
+	final Entity entity = from(Entity.class);
+	final SubEntity subEntity = innerJoin(entity.getSubEntities());
+	
+	select(entity.getCode(), subEntity.getName());
+	assertEquals("select entity_0.code, subEntity_1.name from Entity entity_0 inner join entity_0.subEntities subEntity_1", query(entity));
+    }
+
 
     @Test
     public void test_simpleWhere() {

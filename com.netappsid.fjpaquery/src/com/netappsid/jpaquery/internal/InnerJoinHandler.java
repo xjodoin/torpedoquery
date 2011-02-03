@@ -1,6 +1,8 @@
 package com.netappsid.jpaquery.internal;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +19,12 @@ public class InnerJoinHandler<T> implements QueryHandler<T> {
     public T handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, List<MethodCall> methodCalls) {
 	final QueryBuilder queryImpl = proxyQueryBuilders.get(methodCalls.get(0).proxy);
 	final Method thisMethod = methodCalls.get(0).method;
-	final Class<?> returnType = thisMethod.getReturnType();
+	Class<?> returnType = thisMethod.getReturnType();
+	
+	if(Collection.class.isAssignableFrom(returnType))
+	{
+		returnType = (Class<?>) ((ParameterizedType)thisMethod.getGenericReturnType()).getActualTypeArguments()[0];
+	}
 
 	try {
 	    final ProxyFactory proxyFactory = new ProxyFactory();
