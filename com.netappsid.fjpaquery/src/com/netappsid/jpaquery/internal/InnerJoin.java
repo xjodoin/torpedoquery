@@ -2,7 +2,7 @@ package com.netappsid.jpaquery.internal;
 
 import java.util.Map;
 
-public class InnerJoin {
+public class InnerJoin implements Join {
     private final QueryBuilder join;
     private final String fieldName;
 

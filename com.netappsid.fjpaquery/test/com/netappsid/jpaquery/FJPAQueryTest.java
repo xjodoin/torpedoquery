@@ -59,6 +59,14 @@ public class FJPAQueryTest {
     }
     
     @Test
+    public void test_leftJoin() {
+	final Entity entity = from(Entity.class);
+	
+	leftJoin(entity.getSubEntity());
+	assertEquals("from Entity entity_0 left join entity_0.subEntity subEntity_1", query(entity));
+    }
+    
+    @Test
     public void test_innerJoin_withSelect() {
 	final Entity entity = from(Entity.class);
 	final SubEntity subEntity = innerJoin(entity.getSubEntity());

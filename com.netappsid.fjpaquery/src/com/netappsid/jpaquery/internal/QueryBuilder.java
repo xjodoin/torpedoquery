@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class QueryBuilder {
     private final Class<?> toQuery;
     private List<Method> toSelect = new ArrayList<Method>();
-    private List<InnerJoin> joins = new ArrayList<InnerJoin>();
+    private List<Join> joins = new ArrayList<Join>();
     private List<WhereClause<?>> whereClauses = new ArrayList<WhereClause<?>>();
 
     private String alias;
@@ -51,7 +51,7 @@ public class QueryBuilder {
 	    }
 	}
 
-	for (InnerJoin join : joins) {
+	for (Join join : joins) {
 	    join.appendWhereClause(builder);
 	}
 
@@ -67,7 +67,7 @@ public class QueryBuilder {
 	    }
 	}
 
-	for (InnerJoin join : joins) {
+	for (Join join : joins) {
 	    join.appendSelect(builder);
 	}
     }
@@ -101,7 +101,7 @@ public class QueryBuilder {
 	toSelect.add(thisMethod);
     }
 
-    public void addJoin(InnerJoin innerJoin) {
+    public void addJoin(Join innerJoin) {
 	joins.add(innerJoin);
     }
 
@@ -113,7 +113,7 @@ public class QueryBuilder {
 
 	StringBuilder builder = new StringBuilder();
 
-	for (InnerJoin join : joins) {
+	for (Join join : joins) {
 	    builder.append(join.getJoin(getAlias()));
 	}
 
@@ -140,7 +140,7 @@ public class QueryBuilder {
 	    params.put(whereClause.getVariableName(), whereClause.getValue());
 	}
 
-	for (InnerJoin join : joins) {
+	for (Join join : joins) {
 	    params.putAll(join.getParams());
 	}
 

@@ -13,65 +13,73 @@ import com.netappsid.jpaquery.internal.SelectHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
 
 public class FJPAQuery {
-    private static final FJPAMethodHandler methodHandler = new FJPAMethodHandler();
-    private static ThreadLocal<Query> query = new ThreadLocal<Query>();
+	private static final FJPAMethodHandler methodHandler = new FJPAMethodHandler();
+	private static ThreadLocal<Query> query = new ThreadLocal<Query>();
 
-    public static <T> T from(Class<T> toQuery) {
+	public static <T> T from(Class<T> toQuery) {
 
-	try {
-	    final ProxyFactory proxyFactory = new ProxyFactory();
-	    proxyFactory.setSuperclass(toQuery);
-	    proxyFactory.setInterfaces(new Class[] { Query.class });
+		try {
+			final ProxyFactory proxyFactory = new ProxyFactory();
+			proxyFactory.setSuperclass(toQuery);
+			proxyFactory.setInterfaces(new Class[] { Query.class });
 
-	    final T proxy = (T) proxyFactory.create(null, null, methodHandler);
+			final T proxy = (T) proxyFactory.create(null, null, methodHandler);
 
-	    methodHandler.addQueryBuilder(proxy, toQuery, new AtomicInteger());
-	    return proxy;
+			methodHandler.addQueryBuilder(proxy, toQuery, new AtomicInteger());
+			return proxy;
 
-	} catch (Exception e) {
-	    e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
-	return null;
-    }
-
-    public static void select(Object... values) {
-	getQuery().handle(new SelectHandler());
-    }
-
-    public static <T> T innerJoin(T toJoin) {
-	return getQuery().handle(new InnerJoinHandler<T>(methodHandler));
-    }
-    
-    public static <T> T innerJoin(Collection<T> toJoin) {
-    	return getQuery().handle(new InnerJoinHandler<T>(methodHandler));
-        }
-
-    public static <T> OnGoingWhereClause<T> where(T object) {
-	return getQuery().handle(new WhereClauseHandler<T>());
-    }
-
-    public static String query(Object proxy) {
-	if (proxy instanceof Query) {
-	    Query from = (Query) proxy;
-	    return from.getQuery(proxy);
+	public static void select(Object... values) {
+		getQuery().handle(new SelectHandler());
 	}
-	return null;
-    }
 
-    public static Map<String, Object> params(Object proxy) {
-	if (proxy instanceof Query) {
-	    Query from = (Query) proxy;
-	    return from.getParameters(proxy);
+	public static <T> T innerJoin(T toJoin) {
+		return getQuery().handle(new InnerJoinHandler<T>(methodHandler));
 	}
-	return null;
-    }
+	
+	public static <T> T leftJoin(T toJoin) {
+		return getQuery().handle(new LeftJoinHandler<T>(methodHandler));
+	}
 
-    public static Query getQuery() {
-	return query.get();
-    }
+	public static <T> T innerJoin(Collection<T> toJoin) {
+		return getQuery().handle(new InnerJoinHandler<T>(methodHandler));
+	}
+	
+	public static <T> T leftJoin(Collection<T> toJoin) {
+		return getQuery().handle(new LeftJoinHandler<T>(methodHandler));
+	}
 
-    public static void setQuery(Query query) {
-	FJPAQuery.query.set(query);
-    }
+	public static <T> OnGoingWhereClause<T> where(T object) {
+		return getQuery().handle(new WhereClauseHandler<T>());
+	}
+
+	public static String query(Object proxy) {
+		if (proxy instanceof Query) {
+			Query from = (Query) proxy;
+			return from.getQuery(proxy);
+		}
+		return null;
+	}
+
+	public static Map<String, Object> params(Object proxy) {
+		if (proxy instanceof Query) {
+			Query from = (Query) proxy;
+			return from.getParameters(proxy);
+		}
+		return null;
+	}
+
+	public static Query getQuery() {
+		return query.get();
+	}
+
+	public static void setQuery(Query query) {
+		FJPAQuery.query.set(query);
+	}
 }
