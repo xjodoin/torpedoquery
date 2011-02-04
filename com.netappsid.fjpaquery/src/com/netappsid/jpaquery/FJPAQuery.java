@@ -12,8 +12,14 @@ import com.netappsid.jpaquery.internal.Query;
 import com.netappsid.jpaquery.internal.SelectHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
 
-public class FJPAQuery {
-	private static final FJPAMethodHandler methodHandler = new FJPAMethodHandler();
+public class FJPAQuery 
+{
+	private static ThreadLocal<FJPAMethodHandler> methodHandler = new ThreadLocal<FJPAMethodHandler>() {
+		@Override
+		protected FJPAMethodHandler initialValue() {
+			return new FJPAMethodHandler();
+		}
+	};
 	private static ThreadLocal<Query> query = new ThreadLocal<Query>();
 
 	public static <T> T from(Class<T> toQuery) {
@@ -23,9 +29,10 @@ public class FJPAQuery {
 			proxyFactory.setSuperclass(toQuery);
 			proxyFactory.setInterfaces(new Class[] { Query.class });
 
-			final T proxy = (T) proxyFactory.create(null, null, methodHandler);
+			FJPAMethodHandler fjpaMethodHandler = getFJPAMethodHandler();
+			final T proxy = (T) proxyFactory.create(null, null, fjpaMethodHandler);
 
-			methodHandler.addQueryBuilder(proxy, toQuery, new AtomicInteger());
+			fjpaMethodHandler.addQueryBuilder(proxy, toQuery, new AtomicInteger());
 			return proxy;
 
 		} catch (Exception e) {
@@ -40,19 +47,19 @@ public class FJPAQuery {
 	}
 
 	public static <T> T innerJoin(T toJoin) {
-		return getQuery().handle(new InnerJoinHandler<T>(methodHandler));
+		return getQuery().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
 	}
-	
+
 	public static <T> T leftJoin(T toJoin) {
-		return getQuery().handle(new LeftJoinHandler<T>(methodHandler));
+		return getQuery().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
 	public static <T> T innerJoin(Collection<T> toJoin) {
-		return getQuery().handle(new InnerJoinHandler<T>(methodHandler));
+		return getQuery().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
 	}
-	
+
 	public static <T> T leftJoin(Collection<T> toJoin) {
-		return getQuery().handle(new LeftJoinHandler<T>(methodHandler));
+		return getQuery().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
 	public static <T> OnGoingWhereClause<T> where(T object) {
@@ -75,6 +82,11 @@ public class FJPAQuery {
 		return null;
 	}
 
+	public static FJPAMethodHandler getFJPAMethodHandler()
+	{
+		return methodHandler.get();
+	}
+	
 	public static Query getQuery() {
 		return query.get();
 	}
