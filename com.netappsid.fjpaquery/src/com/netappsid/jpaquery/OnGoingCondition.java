@@ -1,6 +1,5 @@
 package com.netappsid.jpaquery;
 
-public interface OnGoingCondition<T>
-{
+public interface OnGoingCondition<T> {
 
 }

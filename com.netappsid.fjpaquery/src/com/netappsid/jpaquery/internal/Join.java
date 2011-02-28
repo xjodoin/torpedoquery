@@ -10,6 +10,6 @@ public interface Join {
 
 	String getJoin(String alias);
 
-	Map<String,Object> getParams();
+	Map<String, Object> getParams();
 
 }

@@ -1,10 +1,11 @@
 package com.netappsid.jpaquery.test.bo;
+
 public class SubEntity {
 	public String getCode() {
-	    return null;
+		return null;
 	}
-	
+
 	public String getName() {
-	    return null;
+		return null;
 	}
-    }
+}

@@ -12,8 +12,7 @@ import com.netappsid.jpaquery.internal.Query;
 import com.netappsid.jpaquery.internal.SelectHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
 
-public class FJPAQuery 
-{
+public class FJPAQuery {
 	private static ThreadLocal<FJPAMethodHandler> methodHandler = new ThreadLocal<FJPAMethodHandler>() {
 		@Override
 		protected FJPAMethodHandler initialValue() {
@@ -82,11 +81,10 @@ public class FJPAQuery
 		return null;
 	}
 
-	public static FJPAMethodHandler getFJPAMethodHandler()
-	{
+	public static FJPAMethodHandler getFJPAMethodHandler() {
 		return methodHandler.get();
 	}
-	
+
 	public static Query getQuery() {
 		return query.get();
 	}
