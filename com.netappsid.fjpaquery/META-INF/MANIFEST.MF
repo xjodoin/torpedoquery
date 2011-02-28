@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fluent JPA Query
 Bundle-SymbolicName: com.netappsid.fjpaquery
-Bundle-Version: 0.1.0
+Bundle-Version: 0.1.1
 Bundle-Vendor: NetAppsID Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
