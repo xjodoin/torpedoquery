@@ -1,10 +1,14 @@
 package com.netappsid.jpaquery;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javassist.util.proxy.ProxyFactory;
+
+import javax.persistence.EntityManager;
 
 import com.netappsid.jpaquery.internal.FJPAMethodHandler;
 import com.netappsid.jpaquery.internal.InnerJoinHandler;
@@ -81,15 +85,34 @@ public class FJPAQuery {
 		return null;
 	}
 
-	public static FJPAMethodHandler getFJPAMethodHandler() {
-		return methodHandler.get();
+	public static <T> T singleResult(EntityManager entityManager, T from) {
+		return (T) createJPAQuery(entityManager, from).getSingleResult();
 	}
 
-	public static Query getQuery() {
-		return query.get();
+	public static <T> List<T> resultList(EntityManager entityManager, T from) {
+		return createJPAQuery(entityManager, from).getResultList();
 	}
 
 	public static void setQuery(Query query) {
 		FJPAQuery.query.set(query);
+	}
+
+	private static FJPAMethodHandler getFJPAMethodHandler() {
+		return methodHandler.get();
+	}
+
+	private static Query getQuery() {
+		return query.get();
+	}
+
+	private static javax.persistence.Query createJPAQuery(EntityManager entityManager, Object from) {
+		final javax.persistence.Query query = entityManager.createQuery(query(from));
+		final Map<String, Object> parameters = params(from);
+
+		for (Entry<String, Object> parameter : parameters.entrySet()) {
+			query.setParameter(parameter.getKey(), parameter.getValue());
+		}
+
+		return query;
 	}
 }

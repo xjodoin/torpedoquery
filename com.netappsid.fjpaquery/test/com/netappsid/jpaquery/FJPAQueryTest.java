@@ -2,6 +2,10 @@ package com.netappsid.jpaquery;
 
 import static com.netappsid.jpaquery.FJPAQuery.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.junit.Test;
 
@@ -101,6 +105,38 @@ public class FJPAQueryTest {
 
 		assertEquals("from Entity entity_0 where entity_0.active = :active_1", query(entity));
 		assertEquals(true, params(entity).get("active_1"));
+	}
+	
+	@Test
+	public void test_singleResult() {
+		final EntityManager entityManager = mock(EntityManager.class);
+		final Query query = mock(Query.class);
+		when(entityManager.createQuery(anyString())).thenReturn(query);
+		
+		final Entity entity = from(Entity.class);
+		where(entity.getCode()).eq("test");
+		
+		singleResult(entityManager, entity);
+		
+		verify(entityManager).createQuery(query(entity));
+		verify(query).setParameter(params(entity).keySet().iterator().next(), params(entity).values().iterator().next());
+		verify(query).getSingleResult();
+	}
+	
+	@Test
+	public void test_resultList() {
+		final EntityManager entityManager = mock(EntityManager.class);
+		final Query query = mock(Query.class);
+		when(entityManager.createQuery(anyString())).thenReturn(query);
+		
+		final Entity entity = from(Entity.class);
+		where(entity.getCode()).eq("test");
+		
+		resultList(entityManager, entity);
+		
+		verify(entityManager).createQuery(query(entity));
+		verify(query).setParameter(params(entity).keySet().iterator().next(), params(entity).values().iterator().next());
+		verify(query).getResultList();
 	}
 
 	/**
