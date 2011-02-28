@@ -94,6 +94,15 @@ public class FJPAQueryTest {
 		assertEquals("test", params(entity).get("code_1"));
 	}
 
+	@Test
+	public void test_where_primitiveType() {
+		final Entity entity = from(Entity.class);
+		where(entity.isActive()).eq(true);
+
+		assertEquals("from Entity entity_0 where entity_0.active = :active_1", query(entity));
+		assertEquals(true, params(entity).get("active_1"));
+	}
+
 	/**
 	 * where(entity.getCode()).neq("code"); where(entity.getCode()).lt("code);
 	 * where(entity.getCode()).lte("code); where(entity.getCode()).gt("code);

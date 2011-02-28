@@ -11,6 +11,10 @@ public class Entity {
 		return null;
 	}
 
+	public boolean isActive() {
+		return false;
+	}
+
 	public SubEntity getSubEntity() {
 		return null;
 	}

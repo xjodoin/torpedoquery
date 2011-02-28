@@ -31,7 +31,14 @@ public class FJPAMethodHandler implements MethodHandler, Query {
 
 		methods.add(new MethodCall(self, thisMethod));
 		FJPAQuery.setQuery((Query) self);
-		return null;
+
+		final Class returnType = thisMethod.getReturnType();
+
+		if (returnType.isPrimitive()) {
+			return returnType.isAssignableFrom(boolean.class) ? false : 0;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
