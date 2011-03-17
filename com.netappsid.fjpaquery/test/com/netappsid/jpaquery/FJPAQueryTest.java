@@ -97,6 +97,14 @@ public class FJPAQueryTest {
 		assertEquals("from Entity entity_0 where entity_0.code = :code_1", query(entity));
 		assertEquals("test", params(entity).get("code_1"));
 	}
+	
+	@Test
+	public void test_isNullWhere() {
+		final Entity entity = from(Entity.class);
+		where(entity.getCode()).isNull();
+		
+		assertEquals("from Entity entity_0 where entity_0.code is null", query(entity));
+	}
 
 	@Test
 	public void test_where_primitiveType() {

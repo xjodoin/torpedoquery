@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fluent JPA Query
 Bundle-SymbolicName: com.netappsid.fjpaquery
-Bundle-Version: 0.2.0
+Bundle-Version: 0.3.0
 Bundle-Vendor: NetAppsID Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
@@ -10,5 +10,5 @@ Require-Bundle: com.netappsid.javassist;bundle-version="[3.9.0,4.0.0)",
  org.mockito.mockito-core-eclipse;bundle-version="[1.8.5,2.0.0)";resolution:=optional
 Import-Package: javax.persistence,
  org.junit;version="[4.8.0,5.0.0)";resolution:=optional
-Export-Package: com.netappsid.jpaquery;version="0.2.0",
+Export-Package: com.netappsid.jpaquery;version="0.3.0",
  com.netappsid.jpaquery.internal;x-friends:="com.netappsid.javassist"

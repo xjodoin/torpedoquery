@@ -18,6 +18,12 @@ public class WhereClause<T> implements OnGoingWhereClause<T>, OnGoingCondition<T
 		condition = new EqualCondition<T>(queryBuilder.getAlias() + "." + fieldName, queryBuilder.generateVariable(fieldName), value);
 		return this;
 	}
+	
+	@Override
+	public OnGoingCondition<T> isNull() {
+		condition = new IsNullCondition(queryBuilder.getAlias() + "." + fieldName);
+		return this;
+	}
 
 	public String getCondition() {
 		return condition.getString();
