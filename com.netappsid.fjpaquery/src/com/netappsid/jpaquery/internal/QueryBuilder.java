@@ -137,7 +137,11 @@ public class QueryBuilder {
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		for (WhereClause<?> whereClause : whereClauses) {
-			params.put(whereClause.getVariableName(), whereClause.getValue());
+			final String variableName = whereClause.getVariableName();
+			
+			if (variableName != null) {
+				params.put(variableName, whereClause.getValue());
+			}
 		}
 
 		for (Join join : joins) {

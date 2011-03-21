@@ -104,6 +104,7 @@ public class FJPAQueryTest {
 		where(entity.getCode()).isNull();
 
 		assertEquals("from Entity entity_0 where entity_0.code is null", query(entity));
+		assertTrue(params(entity).isEmpty());
 	}
 
 	@Test
