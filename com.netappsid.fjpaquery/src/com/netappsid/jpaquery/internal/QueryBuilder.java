@@ -47,7 +47,7 @@ public class QueryBuilder {
 			if (builder.length() == 0) {
 				builder.append(" where ").append(clause.getCondition()).append(" ");
 			} else {
-				builder.append(", ").append(clause.getCondition()).append(" ");
+				builder.append("and ").append(clause.getCondition()).append(" ");
 			}
 		}
 

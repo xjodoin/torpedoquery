@@ -97,12 +97,12 @@ public class FJPAQueryTest {
 		assertEquals("from Entity entity_0 where entity_0.code = :code_1", query(entity));
 		assertEquals("test", params(entity).get("code_1"));
 	}
-	
+
 	@Test
 	public void test_isNullWhere() {
 		final Entity entity = from(Entity.class);
 		where(entity.getCode()).isNull();
-		
+
 		assertEquals("from Entity entity_0 where entity_0.code is null", query(entity));
 	}
 
@@ -114,34 +114,44 @@ public class FJPAQueryTest {
 		assertEquals("from Entity entity_0 where entity_0.active = :active_1", query(entity));
 		assertEquals(true, params(entity).get("active_1"));
 	}
-	
+
+	@Test
+	public void test_multipleWhereRestrictionsResultInConjunction() {
+		final Entity entity = from(Entity.class);
+		where(entity.isActive()).eq(true);
+		where(entity.getCode()).isNull();
+		
+		assertEquals("from Entity entity_0 where entity_0.active = :active_1 and entity_0.code is null", query(entity));
+		assertEquals(true, params(entity).get("active_1"));
+	}
+
 	@Test
 	public void test_singleResult() {
 		final EntityManager entityManager = mock(EntityManager.class);
 		final Query query = mock(Query.class);
 		when(entityManager.createQuery(anyString())).thenReturn(query);
-		
+
 		final Entity entity = from(Entity.class);
 		where(entity.getCode()).eq("test");
-		
+
 		singleResult(entityManager, entity);
-		
+
 		verify(entityManager).createQuery(query(entity));
 		verify(query).setParameter(params(entity).keySet().iterator().next(), params(entity).values().iterator().next());
 		verify(query).getSingleResult();
 	}
-	
+
 	@Test
 	public void test_resultList() {
 		final EntityManager entityManager = mock(EntityManager.class);
 		final Query query = mock(Query.class);
 		when(entityManager.createQuery(anyString())).thenReturn(query);
-		
+
 		final Entity entity = from(Entity.class);
 		where(entity.getCode()).eq("test");
-		
+
 		resultList(entityManager, entity);
-		
+
 		verify(entityManager).createQuery(query(entity));
 		verify(query).setParameter(params(entity).keySet().iterator().next(), params(entity).values().iterator().next());
 		verify(query).getResultList();
