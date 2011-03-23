@@ -65,7 +65,7 @@ public class FJPAQuery {
 		return getQuery().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
-	public static <T> OnGoingWhereClause<T> where(T object) {
+	public static <T> OnGoingCondition<T> where(T object) {
 		return getQuery().handle(new WhereClauseHandler<T>());
 	}
 
@@ -85,11 +85,11 @@ public class FJPAQuery {
 		return null;
 	}
 
-	public static <T> T singleResult(EntityManager entityManager, T from) {
+	public static <T> T singleResult(EntityManager entityManager, Object from) {
 		return (T) createJPAQuery(entityManager, from).getSingleResult();
 	}
 
-	public static <T> List<T> resultList(EntityManager entityManager, T from) {
+	public static <T> List<T> resultList(EntityManager entityManager, Object from) {
 		return createJPAQuery(entityManager, from).getResultList();
 	}
 
