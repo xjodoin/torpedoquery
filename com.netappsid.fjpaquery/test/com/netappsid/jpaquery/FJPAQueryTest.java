@@ -51,7 +51,7 @@ public class FJPAQueryTest {
 		final SubEntity subEntity = innerJoin(entity.getSubEntity());
 
 		select(subEntity.getCode(), entity.getCode());
-		assertEquals("select subEntity_1.code, entity_0.code from Entity entity_0 inner join entity_0.subEntity subEntity_1", query(entity));
+		assertEquals("select entity_0.code, subEntity_1.code from Entity entity_0 inner join entity_0.subEntity subEntity_1", query(entity));
 	}
 
 	@Test
@@ -121,7 +121,7 @@ public class FJPAQueryTest {
 		final Entity entity = from(Entity.class);
 		where(entity.isActive()).eq(true);
 		where(entity.getCode()).isNull();
-		
+
 		assertEquals("from Entity entity_0 where entity_0.active = :active_1 and entity_0.code is null", query(entity));
 		assertEquals(true, params(entity).get("active_1"));
 	}
