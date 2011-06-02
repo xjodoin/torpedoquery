@@ -9,6 +9,6 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: com.netappsid.javassist;bundle-version="[3.9.0,4.0.0)",
  org.mockito.mockito-core-eclipse;bundle-version="[1.8.5,2.0.0)";resolution:=optional
 Import-Package: javax.persistence,
- org.junit;version="[4.8.0,5.0.0)";resolution:=optional
+ org.junit;version="[4.5.0,5.0.0)";resolution:=optional
 Export-Package: com.netappsid.jpaquery;version="0.3.0",
  com.netappsid.jpaquery.internal;x-friends:="com.netappsid.javassist"
