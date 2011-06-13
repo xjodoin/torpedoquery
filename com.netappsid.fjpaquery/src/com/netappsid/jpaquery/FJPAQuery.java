@@ -10,6 +10,7 @@ import javassist.util.proxy.ProxyFactory;
 
 import javax.persistence.EntityManager;
 
+import com.netappsid.jpaquery.internal.CountFunctionHandler;
 import com.netappsid.jpaquery.internal.FJPAMethodHandler;
 import com.netappsid.jpaquery.internal.InnerJoinHandler;
 import com.netappsid.jpaquery.internal.Query;
@@ -46,7 +47,7 @@ public class FJPAQuery {
 	}
 
 	public static void select(Object... values) {
-		getQuery().handle(new SelectHandler());
+		getQuery().handle(new SelectHandler(values));
 	}
 
 	public static <T> T innerJoin(T toJoin) {
@@ -67,6 +68,14 @@ public class FJPAQuery {
 
 	public static <T> OnGoingCondition<T> where(T object) {
 		return getQuery().handle(new WhereClauseHandler<T>());
+	}
+
+	// JPA Functions
+	public static Function count(Object object) {
+		if (object instanceof Query) {
+			setQuery((Query) object);
+		}
+		return getQuery().handle(new CountFunctionHandler(object));
 	}
 
 	public static String query(Object proxy) {

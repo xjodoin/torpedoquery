@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class QueryBuilder {
 	private final Class<?> toQuery;
-	private List<Method> toSelect = new ArrayList<Method>();
+	private List<Selector> toSelect = new ArrayList<Selector>();
 	private List<Join> joins = new ArrayList<Join>();
 	private List<WhereClause<?>> whereClauses = new ArrayList<WhereClause<?>>();
 
@@ -59,11 +59,11 @@ public class QueryBuilder {
 	}
 
 	public void appendSelect(StringBuilder builder) {
-		for (Method method : toSelect) {
+		for (Selector selector : toSelect) {
 			if (builder.length() == 0) {
-				builder.append("select ").append(getAlias()).append(".").append(getFieldName(method));
+				builder.append("select ").append(selector.createQueryFragment(this));
 			} else {
-				builder.append(", ").append(getAlias()).append(".").append(getFieldName(method));
+				builder.append(", ").append(selector.createQueryFragment(this));
 			}
 		}
 
@@ -97,8 +97,8 @@ public class QueryBuilder {
 		return alias;
 	}
 
-	public void addSelector(Method thisMethod) {
-		toSelect.add(thisMethod);
+	public void addSelector(Selector selector) {
+		toSelect.add(selector);
 	}
 
 	public void addJoin(Join innerJoin) {
@@ -138,7 +138,7 @@ public class QueryBuilder {
 
 		for (WhereClause<?> whereClause : whereClauses) {
 			final String variableName = whereClause.getVariableName();
-			
+
 			if (variableName != null) {
 				params.put(variableName, whereClause.getValue());
 			}
@@ -150,4 +150,5 @@ public class QueryBuilder {
 
 		return params;
 	}
+
 }
