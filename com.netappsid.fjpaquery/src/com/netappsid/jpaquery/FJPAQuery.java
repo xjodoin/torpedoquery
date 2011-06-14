@@ -10,11 +10,15 @@ import javassist.util.proxy.ProxyFactory;
 
 import javax.persistence.EntityManager;
 
+import com.netappsid.jpaquery.internal.AvgFunctionHandler;
 import com.netappsid.jpaquery.internal.CountFunctionHandler;
 import com.netappsid.jpaquery.internal.FJPAMethodHandler;
 import com.netappsid.jpaquery.internal.InnerJoinHandler;
+import com.netappsid.jpaquery.internal.MaxFunctionHandler;
+import com.netappsid.jpaquery.internal.MinFunctionHandler;
 import com.netappsid.jpaquery.internal.Query;
 import com.netappsid.jpaquery.internal.SelectHandler;
+import com.netappsid.jpaquery.internal.SumFunctionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
 
 public class FJPAQuery {
@@ -76,6 +80,26 @@ public class FJPAQuery {
 			setQuery((Query) object);
 		}
 		return getQuery().handle(new CountFunctionHandler(object));
+	}
+	
+	public static Function sum(Number number)
+	{
+		return getQuery().handle(new SumFunctionHandler());
+	}
+	
+	public static Function min(Number number)
+	{
+		return getQuery().handle(new MinFunctionHandler());
+	}
+	
+	public static Function max(Number number)
+	{
+		return getQuery().handle(new MaxFunctionHandler());
+	}
+	
+	public static Function avg(Number number)
+	{
+		return getQuery().handle(new AvgFunctionHandler());
 	}
 
 	public static String query(Object proxy) {

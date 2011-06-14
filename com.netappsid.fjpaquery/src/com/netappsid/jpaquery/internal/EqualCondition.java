@@ -16,10 +16,12 @@ public class EqualCondition<T> implements Condition {
 		return fieldPath + " = :" + variableName;
 	}
 
+	@Override
 	public String getVariableName() {
 		return variableName;
 	}
 
+	@Override
 	public T getValue() {
 		return value;
 	}
