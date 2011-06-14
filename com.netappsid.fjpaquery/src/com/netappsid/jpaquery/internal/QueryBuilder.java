@@ -45,9 +45,9 @@ public class QueryBuilder {
 
 		for (WhereClause<?> clause : whereClauses) {
 			if (builder.length() == 0) {
-				builder.append(" where ").append(clause.getCondition()).append(" ");
+				builder.append(" where ").append(clause.createQueryFragment(this)).append(" ");
 			} else {
-				builder.append("and ").append(clause.getCondition()).append(" ");
+				builder.append("and ").append(clause.createQueryFragment(this)).append(" ");
 			}
 		}
 
@@ -149,6 +149,10 @@ public class QueryBuilder {
 		}
 
 		return params;
+	}
+
+	public String generateVariable(Method method) {
+		return generateVariable(getFieldName(method));
 	}
 
 }
