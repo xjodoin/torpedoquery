@@ -12,7 +12,7 @@ import javassist.util.proxy.MethodHandler;
 
 import com.netappsid.jpaquery.FJPAQuery;
 
-public class FJPAMethodHandler implements MethodHandler, Query {
+public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 	private Map<Object, QueryBuilder> proxyQueryBuilders = new IdentityHashMap<Object, QueryBuilder>();
 	private List<MethodCall> methods = new ArrayList<MethodCall>();
 
@@ -25,12 +25,12 @@ public class FJPAMethodHandler implements MethodHandler, Query {
 
 	@Override
 	public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
-		if (thisMethod.getDeclaringClass().equals(Query.class)) {
+		if (thisMethod.getDeclaringClass().equals(InternalQuery.class)) {
 			return thisMethod.invoke(this, args);
 		}
 
-		methods.add(new MethodCall(self, thisMethod));
-		FJPAQuery.setQuery((Query) self);
+		methods.add(new MethodCall((InternalQuery) self, thisMethod));
+		FJPAQuery.setQuery((InternalQuery) self);
 
 		final Class returnType = thisMethod.getReturnType();
 

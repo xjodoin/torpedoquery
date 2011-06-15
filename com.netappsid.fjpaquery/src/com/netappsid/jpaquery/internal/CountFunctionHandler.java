@@ -30,8 +30,8 @@ public class CountFunctionHandler implements Function, QueryHandler<Function> {
 
 		if (!methods.isEmpty()) {
 			MethodCall methodCall = methods.get(0);
-			method = methodCall.method;
-			proxy = methodCall.proxy;
+			method = methodCall.getMethod();
+			proxy = methodCall.getProxy();
 		}
 
 		return this;

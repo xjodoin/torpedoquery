@@ -28,4 +28,6 @@ public interface OnGoingCondition<T> {
 
 	OnGoingLogicalOperation in(List<T> values);
 
+	OnGoingLogicalOperation in(Query<T> subQuery);
+
 }

@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.netappsid.jpaquery.Function;
+import com.netappsid.jpaquery.Query;
 
-public class SelectHandler implements QueryHandler<Void> {
+public class SelectHandler<T> implements QueryHandler<Query<T>> {
 
 	private final Object[] values;
 
@@ -15,9 +16,11 @@ public class SelectHandler implements QueryHandler<Void> {
 	}
 
 	@Override
-	public Void handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, List<MethodCall> methodCalls) {
+	public Query<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, List<MethodCall> methodCalls) {
 
 		Iterator<MethodCall> iterator = methodCalls.iterator();
+
+		InternalQuery proxy = null;
 
 		for (int i = 0; i < values.length; i++) {
 
@@ -26,16 +29,17 @@ public class SelectHandler implements QueryHandler<Void> {
 			if (param instanceof Function) {
 
 				Function function = (Function) values[i];
-				Object proxy = function.getProxy();
+				proxy = (InternalQuery) function.getProxy();
 				proxyQueryBuilders.get(proxy).addSelector(function);
 
 			} else {
 
 				MethodCall methodCall = iterator.next();
-				proxyQueryBuilders.get(methodCall.proxy).addSelector(new SimpleMethodCallSelector(methodCall.method));
+				proxy = methodCall.getProxy();
+				proxyQueryBuilders.get(proxy).addSelector(new SimpleMethodCallSelector(methodCall.getMethod()));
 			}
 		}
 
-		return null;
+		return proxy;
 	}
 }

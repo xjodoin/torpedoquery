@@ -104,5 +104,16 @@ public class WhereClauseTest {
 		assertEquals("from Entity entity_1 where entity_1.primitiveInt in ( :primitiveInt_0 )", query(from));
 
 	}
+	
+	@Test
+	public void test_in_subSelect() {
+		Entity subSelect = from(Entity.class);
+		
+		Entity from = from(Entity.class);
+		where(from.getCode()).in(select(subSelect.getCode()));
+
+		assertEquals("from Entity entity_0 where entity_0.code in ( select entity_0.code from Entity entity_0 )", query(from));
+
+	}
 
 }

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+
 import javassist.util.proxy.ProxyFactory;
 
 public abstract class JoinHandler<T> implements QueryHandler<T> {
@@ -18,8 +19,8 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 
 	@Override
 	public T handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, List<MethodCall> methodCalls) {
-		final QueryBuilder queryImpl = proxyQueryBuilders.get(methodCalls.get(0).proxy);
-		final Method thisMethod = methodCalls.get(0).method;
+		final QueryBuilder queryImpl = proxyQueryBuilders.get(methodCalls.get(0).getProxy());
+		final Method thisMethod = methodCalls.get(0).getMethod();
 		Class<?> returnType = thisMethod.getReturnType();
 
 		if (Collection.class.isAssignableFrom(returnType)) {
@@ -30,9 +31,9 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 
 			final ProxyFactory proxyFactory = new ProxyFactory();
 			proxyFactory.setSuperclass(returnType);
-			proxyFactory.setInterfaces(new Class[] { Query.class });
+			proxyFactory.setInterfaces(new Class[] { InternalQuery.class });
 
-			final Query join = (Query) proxyFactory.create(null, null, methodHandler);
+			final InternalQuery join = (InternalQuery) proxyFactory.create(null, null, methodHandler);
 			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, returnType, queryImpl.getIncrement());
 
 			queryImpl.addJoin(createJoin(queryBuilder, queryImpl.getFieldName(thisMethod)));

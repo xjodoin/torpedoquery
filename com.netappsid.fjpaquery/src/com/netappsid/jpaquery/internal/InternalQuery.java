@@ -2,7 +2,9 @@ package com.netappsid.jpaquery.internal;
 
 import java.util.Map;
 
-public interface Query {
+import com.netappsid.jpaquery.Query;
+
+public interface InternalQuery extends Query {
 	String getQuery(Object proxy);
 
 	Map<String, Object> getParameters(Object proxy);

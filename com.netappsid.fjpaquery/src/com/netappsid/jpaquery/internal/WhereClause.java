@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLogicalOperation;
+import com.netappsid.jpaquery.Query;
 
 public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperation {
 	private Condition<?> condition;
@@ -73,6 +74,12 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperat
 	@Override
 	public OnGoingLogicalOperation in(List<T> values) {
 		condition = new InCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateVariable(method), values);
+		return this;
+	}
+
+	@Override
+	public OnGoingLogicalOperation in(Query<T> query) {
+		condition = new InSubQueryCondition<T>(new SimpleMethodCallSelector(method), query);
 		return this;
 	}
 
