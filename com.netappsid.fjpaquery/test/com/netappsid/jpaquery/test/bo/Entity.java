@@ -26,4 +26,8 @@ public class Entity {
 	public Integer getIntegerField() {
 		return null;
 	}
+
+	public int getPrimitiveInt() {
+		return 0;
+	}
 }

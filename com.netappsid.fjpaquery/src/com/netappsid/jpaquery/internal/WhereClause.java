@@ -1,12 +1,14 @@
 package com.netappsid.jpaquery.internal;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLogicalOperation;
 
 public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperation {
-	private Condition<T> condition;
+	private Condition<?> condition;
 	private final QueryBuilder queryBuilder;
 	private final Method method;
 
@@ -50,10 +52,27 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperat
 		condition = new GteCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateVariable(method), value);
 		return this;
 	}
-	
+
 	@Override
 	public OnGoingLogicalOperation isNull() {
 		condition = new IsNullCondition(new SimpleMethodCallSelector(method));
+		return this;
+	}
+
+	@Override
+	public OnGoingLogicalOperation isNotNull() {
+		condition = new IsNotNullCondition(new SimpleMethodCallSelector(method));
+		return this;
+	}
+
+	@Override
+	public OnGoingLogicalOperation in(T... values) {
+		return in(Arrays.asList(values));
+	}
+
+	@Override
+	public OnGoingLogicalOperation in(List<T> values) {
+		condition = new InCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateVariable(method), values);
 		return this;
 	}
 
@@ -65,7 +84,7 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperat
 		return condition.getVariableName();
 	}
 
-	public T getValue() {
+	public Object getValue() {
 		return condition.getValue();
 	}
 
@@ -78,6 +97,5 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperat
 	public <T1> OnGoingCondition<T1> or(T1 property) {
 		return (OnGoingCondition<T1>) this;
 	}
-
 
 }
