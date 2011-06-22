@@ -1,26 +1,14 @@
 package com.netappsid.jpaquery.internal;
 
-public class EqualCondition<T> implements Condition {
-	private final T value;
-	private final String fieldPath;
-	private final String variableName;
+public class EqualCondition<T> extends AbstractCondition<T> {
 
-	public EqualCondition(String fieldPath, String variableName, T value) {
-		this.fieldPath = fieldPath;
-		this.variableName = variableName;
-		this.value = value;
+	public EqualCondition(Selector selector, String variableName, T value) {
+		super(selector, variableName, value);
 	}
 
 	@Override
-	public String getString() {
-		return fieldPath + " = :" + variableName;
+	protected String getComparator() {
+		return "=";
 	}
 
-	public String getVariableName() {
-		return variableName;
-	}
-
-	public T getValue() {
-		return value;
-	}
 }

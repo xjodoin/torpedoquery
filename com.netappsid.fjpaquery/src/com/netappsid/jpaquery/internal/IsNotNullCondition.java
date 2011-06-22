@@ -1,15 +1,15 @@
 package com.netappsid.jpaquery.internal;
 
-public class IsNullCondition implements Condition {
+public class IsNotNullCondition implements Condition {
 	private final SimpleMethodCallSelector simpleMethodCallSelector;
 
-	public IsNullCondition(SimpleMethodCallSelector simpleMethodCallSelector) {
+	public IsNotNullCondition(SimpleMethodCallSelector simpleMethodCallSelector) {
 		this.simpleMethodCallSelector = simpleMethodCallSelector;
 	}
 
 	@Override
 	public String createQueryFragment(QueryBuilder queryBuilder) {
-		return simpleMethodCallSelector.createQueryFragment(queryBuilder) + " is null";
+		return simpleMethodCallSelector.createQueryFragment(queryBuilder) + " is not null";
 	}
 
 	@Override

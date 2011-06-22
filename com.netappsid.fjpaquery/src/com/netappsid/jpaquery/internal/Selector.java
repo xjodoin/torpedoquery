@@ -1,10 +1,7 @@
 package com.netappsid.jpaquery.internal;
 
-public interface Condition<T> {
-
-	String getVariableName();
-
-	T getValue();
+public interface Selector {
 
 	String createQueryFragment(QueryBuilder queryBuilder);
+
 }

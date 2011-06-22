@@ -22,4 +22,12 @@ public class Entity {
 	public List<SubEntity> getSubEntities() {
 		return null;
 	}
+
+	public Integer getIntegerField() {
+		return null;
+	}
+
+	public int getPrimitiveInt() {
+		return 0;
+	}
 }

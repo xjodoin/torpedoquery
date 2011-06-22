@@ -94,8 +94,8 @@ public class FJPAQueryTest {
 
 		where(entity.getCode()).eq("test");
 
-		assertEquals("from Entity entity_0 where entity_0.code = :code_1", query(entity));
-		assertEquals("test", params(entity).get("code_1"));
+		assertEquals("from Entity entity_1 where entity_1.code = :code_0", query(entity));
+		assertEquals("test", params(entity).get("code_0"));
 	}
 
 	@Test
@@ -112,8 +112,8 @@ public class FJPAQueryTest {
 		final Entity entity = from(Entity.class);
 		where(entity.isActive()).eq(true);
 
-		assertEquals("from Entity entity_0 where entity_0.active = :active_1", query(entity));
-		assertEquals(true, params(entity).get("active_1"));
+		assertEquals("from Entity entity_1 where entity_1.active = :active_0", query(entity));
+		assertEquals(true, params(entity).get("active_0"));
 	}
 
 	@Test
@@ -122,8 +122,8 @@ public class FJPAQueryTest {
 		where(entity.isActive()).eq(true);
 		where(entity.getCode()).isNull();
 
-		assertEquals("from Entity entity_0 where entity_0.active = :active_1 and entity_0.code is null", query(entity));
-		assertEquals(true, params(entity).get("active_1"));
+		assertEquals("from Entity entity_1 where entity_1.active = :active_0 and entity_1.code is null", query(entity));
+		assertEquals(true, params(entity).get("active_0"));
 	}
 
 	@Test
