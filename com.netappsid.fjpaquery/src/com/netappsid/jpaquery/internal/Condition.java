@@ -1,10 +1,11 @@
 package com.netappsid.jpaquery.internal;
 
-public interface Condition<T> {
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-	String getVariableName();
+public interface Condition {
 
-	T getValue();
+	String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor);
 
-	String createQueryFragment(QueryBuilder queryBuilder);
+	List<Parameter> getParameters();
 }

@@ -1,11 +1,9 @@
 package com.netappsid.jpaquery;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javassist.util.proxy.ProxyFactory;
 
@@ -41,7 +39,7 @@ public class FJPAQuery {
 			FJPAMethodHandler fjpaMethodHandler = getFJPAMethodHandler();
 			final T proxy = (T) proxyFactory.create(null, null, fjpaMethodHandler);
 
-			fjpaMethodHandler.addQueryBuilder(proxy, toQuery, new AtomicInteger());
+			fjpaMethodHandler.addQueryBuilder(proxy, toQuery);
 			return proxy;
 
 		} catch (Exception e) {
@@ -52,9 +50,9 @@ public class FJPAQuery {
 	}
 
 	public static <T> Query<T> select(T value) {
-		return select(new Object[]{value});
+		return select(new Object[] { value });
 	}
-	
+
 	public static <T> Query<T> select(Object... values) {
 		return getQuery().handle(new SelectHandler(values));
 	}
@@ -86,24 +84,20 @@ public class FJPAQuery {
 		}
 		return getQuery().handle(new CountFunctionHandler(object));
 	}
-	
-	public static Function sum(Number number)
-	{
+
+	public static Function sum(Number number) {
 		return getQuery().handle(new SumFunctionHandler());
 	}
-	
-	public static Function min(Number number)
-	{
+
+	public static Function min(Number number) {
 		return getQuery().handle(new MinFunctionHandler());
 	}
-	
-	public static Function max(Number number)
-	{
+
+	public static Function max(Number number) {
 		return getQuery().handle(new MaxFunctionHandler());
 	}
-	
-	public static Function avg(Number number)
-	{
+
+	public static Function avg(Number number) {
 		return getQuery().handle(new AvgFunctionHandler());
 	}
 

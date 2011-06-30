@@ -3,6 +3,7 @@ package com.netappsid.jpaquery.internal;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.Function;
 
@@ -16,10 +17,10 @@ public class CountFunctionHandler implements Function, QueryHandler<Function> {
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder) {
+	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
 		if (method != null) {
 			SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(method);
-			return "count(" + simpleMethodCallSelector.createQueryFragment(queryBuilder) + ")";
+			return "count(" + simpleMethodCallSelector.createQueryFragment(queryBuilder, incrementor) + ")";
 		} else {
 			return "count(*)";
 		}

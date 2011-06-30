@@ -1,6 +1,7 @@
 package com.netappsid.jpaquery.internal;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class InnerJoin implements Join {
 	private final QueryBuilder join;
@@ -11,19 +12,23 @@ public class InnerJoin implements Join {
 		this.fieldName = fieldName;
 	}
 
-	public String getJoin(String parentAlias) {
+	@Override
+	public String getJoin(String parentAlias, AtomicInteger incrementor) {
 
-		return " inner join " + parentAlias + "." + fieldName + " " + join.getAlias() + (join.hasSubJoin() ? join.getJoins() : "");
+		return " inner join " + parentAlias + "." + fieldName + " " + join.getAlias(incrementor) + (join.hasSubJoin() ? join.getJoins(incrementor) : "");
 	}
 
-	public void appendSelect(StringBuilder builder) {
-		join.appendSelect(builder);
+	@Override
+	public void appendSelect(StringBuilder builder, AtomicInteger incrementor) {
+		join.appendSelect(builder, incrementor);
 	}
 
-	public void appendWhereClause(StringBuilder builder) {
-		join.appendWhereClause(builder);
+	@Override
+	public void appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
+		join.appendWhereClause(builder, incrementor);
 	}
 
+	@Override
 	public Map<String, Object> getParams() {
 		return join.getParams();
 	}

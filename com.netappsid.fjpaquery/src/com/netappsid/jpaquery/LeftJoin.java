@@ -1,6 +1,7 @@
 package com.netappsid.jpaquery;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.internal.Join;
 import com.netappsid.jpaquery.internal.QueryBuilder;
@@ -15,19 +16,23 @@ public class LeftJoin implements Join {
 		this.fieldName = fieldName;
 	}
 
-	public String getJoin(String parentAlias) {
+	@Override
+	public String getJoin(String parentAlias, AtomicInteger incrementor) {
 
-		return " left join " + parentAlias + "." + fieldName + " " + join.getAlias() + (join.hasSubJoin() ? join.getJoins() : "");
+		return " left join " + parentAlias + "." + fieldName + " " + join.getAlias(incrementor) + (join.hasSubJoin() ? join.getJoins(incrementor) : "");
 	}
 
-	public void appendSelect(StringBuilder builder) {
-		join.appendSelect(builder);
+	@Override
+	public void appendSelect(StringBuilder builder, AtomicInteger incrementor) {
+		join.appendSelect(builder, incrementor);
 	}
 
-	public void appendWhereClause(StringBuilder builder) {
-		join.appendWhereClause(builder);
+	@Override
+	public void appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
+		join.appendWhereClause(builder, incrementor);
 	}
 
+	@Override
 	public Map<String, Object> getParams() {
 		return join.getParams();
 	}

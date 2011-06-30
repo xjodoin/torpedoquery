@@ -1,9 +1,9 @@
 package com.netappsid.jpaquery.internal;
 
-public class NotEqualCondition<T> extends AbstractCondition<T> {
+public class NotEqualCondition<T> extends SingleParameterCondition<T> {
 
-	public NotEqualCondition(Selector selector, String variableName, T value) {
-		super(selector, variableName, value);
+	public NotEqualCondition(Selector selector, Parameter<T> parameter) {
+		super(selector, parameter);
 	}
 
 	@Override

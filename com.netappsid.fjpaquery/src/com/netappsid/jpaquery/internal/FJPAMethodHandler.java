@@ -13,11 +13,11 @@ import javassist.util.proxy.MethodHandler;
 import com.netappsid.jpaquery.FJPAQuery;
 
 public class FJPAMethodHandler implements MethodHandler, InternalQuery {
-	private Map<Object, QueryBuilder> proxyQueryBuilders = new IdentityHashMap<Object, QueryBuilder>();
-	private List<MethodCall> methods = new ArrayList<MethodCall>();
+	private final Map<Object, QueryBuilder> proxyQueryBuilders = new IdentityHashMap<Object, QueryBuilder>();
+	private final List<MethodCall> methods = new ArrayList<MethodCall>();
 
-	public QueryBuilder addQueryBuilder(Object proxy, Class toQuery, AtomicInteger increment) {
-		final QueryBuilder queryBuilder = new QueryBuilder(toQuery, increment);
+	public QueryBuilder addQueryBuilder(Object proxy, Class toQuery) {
+		final QueryBuilder queryBuilder = new QueryBuilder(toQuery);
 
 		proxyQueryBuilders.put(proxy, queryBuilder);
 		return queryBuilder;
@@ -43,7 +43,7 @@ public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 
 	@Override
 	public String getQuery(Object proxy) {
-		return proxyQueryBuilders.get(proxy).getQuery();
+		return proxyQueryBuilders.get(proxy).getQuery(new AtomicInteger());
 	}
 
 	@Override

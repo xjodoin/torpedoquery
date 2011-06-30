@@ -1,9 +1,9 @@
 package com.netappsid.jpaquery.internal;
 
-public class GteCondition<T> extends AbstractCondition<T> {
+public class GteCondition<T> extends SingleParameterCondition<T> {
 
-	public GteCondition(Selector selector, String variableName, T value) {
-		super(selector, variableName, value);
+	public GteCondition(Selector selector, Parameter<T> parameter) {
+		super(selector, parameter);
 	}
 
 	@Override

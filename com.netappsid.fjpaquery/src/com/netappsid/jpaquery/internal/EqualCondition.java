@@ -1,9 +1,9 @@
 package com.netappsid.jpaquery.internal;
 
-public class EqualCondition<T> extends AbstractCondition<T> {
+public class EqualCondition<T> extends SingleParameterCondition<T> {
 
-	public EqualCondition(Selector selector, String variableName, T value) {
-		super(selector, variableName, value);
+	public EqualCondition(Selector selector, Parameter<T> parameter) {
+		super(selector, parameter);
 	}
 
 	@Override

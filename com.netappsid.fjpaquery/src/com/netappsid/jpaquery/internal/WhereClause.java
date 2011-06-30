@@ -3,13 +3,14 @@ package com.netappsid.jpaquery.internal;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLogicalOperation;
 import com.netappsid.jpaquery.Query;
 
 public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperation {
-	private Condition<?> condition;
+	private Condition condition;
 	private final QueryBuilder queryBuilder;
 	private final Method method;
 
@@ -20,37 +21,37 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperat
 
 	@Override
 	public OnGoingLogicalOperation eq(T value) {
-		condition = new EqualCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateVariable(method), value);
+		condition = new EqualCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
 		return this;
 	}
 
 	@Override
 	public OnGoingLogicalOperation neq(T value) {
-		condition = new NotEqualCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateVariable(method), value);
+		condition = new NotEqualCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
 		return this;
 	}
 
 	@Override
 	public OnGoingLogicalOperation lt(T value) {
-		condition = new LtCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateVariable(method), value);
+		condition = new LtCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
 		return this;
 	}
 
 	@Override
 	public OnGoingLogicalOperation lte(T value) {
-		condition = new LteCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateVariable(method), value);
+		condition = new LteCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
 		return this;
 	}
 
 	@Override
 	public OnGoingLogicalOperation gt(T value) {
-		condition = new GtCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateVariable(method), value);
+		condition = new GtCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
 		return this;
 	}
 
 	@Override
 	public OnGoingLogicalOperation gte(T value) {
-		condition = new GteCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateVariable(method), value);
+		condition = new GteCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
 		return this;
 	}
 
@@ -73,7 +74,7 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperat
 
 	@Override
 	public OnGoingLogicalOperation in(List<T> values) {
-		condition = new InCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateVariable(method), values);
+		condition = new InCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, values));
 		return this;
 	}
 
@@ -83,16 +84,8 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperat
 		return this;
 	}
 
-	public String createQueryFragment(QueryBuilder queryBuilder) {
-		return condition.createQueryFragment(queryBuilder);
-	}
-
-	public String getVariableName() {
-		return condition.getVariableName();
-	}
-
-	public Object getValue() {
-		return condition.getValue();
+	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+		return condition.createQueryFragment(queryBuilder, incrementor);
 	}
 
 	@Override
@@ -103,6 +96,10 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperat
 	@Override
 	public <T1> OnGoingCondition<T1> or(T1 property) {
 		return (OnGoingCondition<T1>) this;
+	}
+
+	public List<Parameter> getParameters() {
+		return condition.getParameters();
 	}
 
 }

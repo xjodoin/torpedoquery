@@ -1,30 +1,23 @@
 package com.netappsid.jpaquery.internal;
 
+import java.util.List;
+
 public abstract class AbstractCondition<T> implements Condition {
-	private final T value;
-	private final String variableName;
 	private final Selector selector;
+	private final List<Parameter> parameters;
 
-	public AbstractCondition(Selector selector, String variableName, T value) {
+	public AbstractCondition(Selector selector, List<Parameter> parameters) {
 		this.selector = selector;
-		this.variableName = variableName;
-		this.value = value;
+		this.parameters = parameters;
+	}
+
+	public Selector getSelector() {
+		return selector;
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder) {
-		return selector.createQueryFragment(queryBuilder) + " " + getComparator() + " :" + variableName;
+	public List<Parameter> getParameters() {
+		return parameters;
 	}
 
-	@Override
-	public String getVariableName() {
-		return variableName;
-	}
-
-	@Override
-	public T getValue() {
-		return value;
-	}
-
-	protected abstract String getComparator();
 }

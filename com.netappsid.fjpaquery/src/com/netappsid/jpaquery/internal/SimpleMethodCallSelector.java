@@ -1,6 +1,7 @@
 package com.netappsid.jpaquery.internal;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SimpleMethodCallSelector implements Selector {
 
@@ -11,8 +12,8 @@ public class SimpleMethodCallSelector implements Selector {
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder) {
-		return queryBuilder.getAlias() + "." + queryBuilder.getFieldName(method);
+	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+		return queryBuilder.getAlias(incrementor) + "." + queryBuilder.getFieldName(method);
 	}
 
 }

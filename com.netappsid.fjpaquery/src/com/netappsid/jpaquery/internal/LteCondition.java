@@ -1,9 +1,9 @@
 package com.netappsid.jpaquery.internal;
 
-public class LteCondition<T> extends AbstractCondition<T> {
+public class LteCondition<T> extends SingleParameterCondition<T> {
 
-	public LteCondition(Selector selector, String variableName, T value) {
-		super(selector, variableName, value);
+	public LteCondition(Selector selector, Parameter<T> parameter) {
+		super(selector, parameter);
 	}
 
 	@Override

@@ -1,9 +1,12 @@
 package com.netappsid.jpaquery.internal;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.netappsid.jpaquery.FJPAQuery;
 import com.netappsid.jpaquery.Query;
 
-public class InSubQueryCondition<T> implements Condition<Void> {
+public class InSubQueryCondition<T> implements Condition {
 
 	private final Selector selector;
 	private final Query<T> query;
@@ -14,18 +17,14 @@ public class InSubQueryCondition<T> implements Condition<Void> {
 	}
 
 	@Override
-	public String getVariableName() {
-		return null;
+	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+		return selector.createQueryFragment(queryBuilder, incrementor) + " in ( " + FJPAQuery.query(query) + " ) ";
 	}
 
 	@Override
-	public Void getValue() {
+	public List<Parameter> getParameters() {
+		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder) {
-		return selector.createQueryFragment(queryBuilder) + " in ( " + FJPAQuery.query(query) + " ) ";
 	}
 
 }

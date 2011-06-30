@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-
 import javassist.util.proxy.ProxyFactory;
 
 public abstract class JoinHandler<T> implements QueryHandler<T> {
@@ -34,7 +33,7 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 			proxyFactory.setInterfaces(new Class[] { InternalQuery.class });
 
 			final InternalQuery join = (InternalQuery) proxyFactory.create(null, null, methodHandler);
-			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, returnType, queryImpl.getIncrement());
+			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, returnType);
 
 			queryImpl.addJoin(createJoin(queryBuilder, queryImpl.getFieldName(thisMethod)));
 

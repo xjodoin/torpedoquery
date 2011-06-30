@@ -13,62 +13,60 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class QueryBuilder {
 	private final Class<?> toQuery;
-	private List<Selector> toSelect = new ArrayList<Selector>();
-	private List<Join> joins = new ArrayList<Join>();
-	private List<WhereClause<?>> whereClauses = new ArrayList<WhereClause<?>>();
+	private final List<Selector> toSelect = new ArrayList<Selector>();
+	private final List<Join> joins = new ArrayList<Join>();
+	private final List<WhereClause<?>> whereClauses = new ArrayList<WhereClause<?>>();
 
 	private String alias;
-	private AtomicInteger increment;
 
-	public QueryBuilder(Class<?> toQuery, AtomicInteger increment) {
+	public QueryBuilder(Class<?> toQuery) {
 		this.toQuery = toQuery;
-		this.increment = increment;
 	}
 
-	public String getQuery() {
+	public String getQuery(AtomicInteger incrementor) {
 
-		String from = " from " + toQuery.getSimpleName() + " " + getAlias();
+		String from = " from " + toQuery.getSimpleName() + " " + getAlias(incrementor);
 		StringBuilder builder = new StringBuilder();
 
-		appendSelect(builder);
+		appendSelect(builder, incrementor);
 
 		builder.append(from);
 
-		builder.append(getJoins());
+		builder.append(getJoins(incrementor));
 
-		builder.append(appendWhereClause(new StringBuilder()));
+		builder.append(appendWhereClause(new StringBuilder(), incrementor));
 
 		return builder.toString().trim();
 	}
 
-	public StringBuilder appendWhereClause(StringBuilder builder) {
+	public StringBuilder appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
 
 		for (WhereClause<?> clause : whereClauses) {
 			if (builder.length() == 0) {
-				builder.append(" where ").append(clause.createQueryFragment(this)).append(" ");
+				builder.append(" where ").append(clause.createQueryFragment(this, incrementor)).append(" ");
 			} else {
-				builder.append("and ").append(clause.createQueryFragment(this)).append(" ");
+				builder.append("and ").append(clause.createQueryFragment(this, incrementor)).append(" ");
 			}
 		}
 
 		for (Join join : joins) {
-			join.appendWhereClause(builder);
+			join.appendWhereClause(builder, incrementor);
 		}
 
 		return builder;
 	}
 
-	public void appendSelect(StringBuilder builder) {
+	public void appendSelect(StringBuilder builder, AtomicInteger incrementor) {
 		for (Selector selector : toSelect) {
 			if (builder.length() == 0) {
-				builder.append("select ").append(selector.createQueryFragment(this));
+				builder.append("select ").append(selector.createQueryFragment(this, incrementor));
 			} else {
-				builder.append(", ").append(selector.createQueryFragment(this));
+				builder.append(", ").append(selector.createQueryFragment(this, incrementor));
 			}
 		}
 
 		for (Join join : joins) {
-			join.appendSelect(builder);
+			join.appendSelect(builder, incrementor);
 		}
 	}
 
@@ -87,12 +85,12 @@ public class QueryBuilder {
 		return null;
 	}
 
-	public String getAlias() {
+	public String getAlias(AtomicInteger incrementor) {
 		if (alias == null) {
 			final char[] charArray = toQuery.getSimpleName().toCharArray();
 
 			charArray[0] = Character.toLowerCase(charArray[0]);
-			alias = new String(charArray) + "_" + increment.getAndIncrement();
+			alias = new String(charArray) + "_" + incrementor.getAndIncrement();
 		}
 		return alias;
 	}
@@ -109,38 +107,30 @@ public class QueryBuilder {
 		return !joins.isEmpty();
 	}
 
-	public String getJoins() {
+	public String getJoins(AtomicInteger incrementor) {
 
 		StringBuilder builder = new StringBuilder();
 
 		for (Join join : joins) {
-			builder.append(join.getJoin(getAlias()));
+			builder.append(join.getJoin(getAlias(incrementor), incrementor));
 		}
 
 		return builder.toString();
-	}
-
-	public AtomicInteger getIncrement() {
-		return increment;
 	}
 
 	public void addWhereClause(WhereClause<?> whereClause) {
 		whereClauses.add(whereClause);
 	}
 
-	public String generateVariable(String fieldName) {
-		return fieldName + "_" + increment.getAndIncrement();
-	}
-
 	public Map<String, Object> getParams() {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 
-		for (WhereClause<?> whereClause : whereClauses) {
-			final String variableName = whereClause.getVariableName();
+		for (WhereClause whereClause : whereClauses) {
+			final List<Parameter> parameters = whereClause.getParameters();
 
-			if (variableName != null) {
-				params.put(variableName, whereClause.getValue());
+			for (Parameter parameter : parameters) {
+				params.put(parameter.getName(), parameter.getValue());
 			}
 		}
 
@@ -151,8 +141,12 @@ public class QueryBuilder {
 		return params;
 	}
 
-	public String generateVariable(Method method) {
-		return generateVariable(getFieldName(method));
+	public <T> Parameter<T> generateParameter(Method method, T value) {
+		return new Parameter<T>(getFieldName(method), value);
+	}
+
+	public <T> Parameter<List<T>> generateParameter(Method method, List<T> value) {
+		return new Parameter<List<T>>(getFieldName(method), value);
 	}
 
 }

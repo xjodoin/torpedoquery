@@ -3,6 +3,7 @@ package com.netappsid.jpaquery.internal;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.Function;
 
@@ -12,10 +13,10 @@ public abstract class AggregateFunctionHandler implements QueryHandler<Function>
 	private Object proxy;
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder) {
+	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
 
 		SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(method);
-		return getFunctionName() + "(" + simpleMethodCallSelector.createQueryFragment(queryBuilder) + ")";
+		return getFunctionName() + "(" + simpleMethodCallSelector.createQueryFragment(queryBuilder, incrementor) + ")";
 	}
 
 	@Override

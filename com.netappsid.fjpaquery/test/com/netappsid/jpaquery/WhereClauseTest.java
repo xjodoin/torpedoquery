@@ -20,7 +20,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getCode()).eq("test");
 
-		assertEquals("from Entity entity_1 where entity_1.code = :code_0", query(from));
+		assertEquals("from Entity entity_0 where entity_0.code = :code_1", query(from));
 
 	}
 
@@ -29,7 +29,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getCode()).neq("test");
 
-		assertEquals("from Entity entity_1 where entity_1.code <> :code_0", query(from));
+		assertEquals("from Entity entity_0 where entity_0.code <> :code_1", query(from));
 
 	}
 
@@ -38,7 +38,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getCode()).lt("test");
 
-		assertEquals("from Entity entity_1 where entity_1.code < :code_0", query(from));
+		assertEquals("from Entity entity_0 where entity_0.code < :code_1", query(from));
 
 	}
 
@@ -47,7 +47,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getCode()).lte("test");
 
-		assertEquals("from Entity entity_1 where entity_1.code <= :code_0", query(from));
+		assertEquals("from Entity entity_0 where entity_0.code <= :code_1", query(from));
 
 	}
 
@@ -56,7 +56,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getCode()).gt("test");
 
-		assertEquals("from Entity entity_1 where entity_1.code > :code_0", query(from));
+		assertEquals("from Entity entity_0 where entity_0.code > :code_1", query(from));
 
 	}
 
@@ -65,7 +65,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getIntegerField()).gte(2);
 
-		assertEquals("from Entity entity_1 where entity_1.integerField >= :integerField_0", query(from));
+		assertEquals("from Entity entity_0 where entity_0.integerField >= :integerField_1", query(from));
 
 	}
 
@@ -74,7 +74,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getPrimitiveInt()).gte(2);
 
-		assertEquals("from Entity entity_1 where entity_1.primitiveInt >= :primitiveInt_0", query(from));
+		assertEquals("from Entity entity_0 where entity_0.primitiveInt >= :primitiveInt_1", query(from));
 
 	}
 
@@ -101,19 +101,22 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getPrimitiveInt()).in(3, 4);
 
-		assertEquals("from Entity entity_1 where entity_1.primitiveInt in ( :primitiveInt_0 )", query(from));
+		assertEquals("from Entity entity_0 where entity_0.primitiveInt in ( :primitiveInt_1 )", query(from));
 
 	}
-	
+
 	@Test
 	public void test_in_subSelect() {
 		Entity subSelect = from(Entity.class);
-		
+
 		Entity from = from(Entity.class);
 		where(from.getCode()).in(select(subSelect.getCode()));
 
 		assertEquals("from Entity entity_0 where entity_0.code in ( select entity_0.code from Entity entity_0 )", query(from));
 
 	}
+
+	// TODO je suis rendu à combiner les paramètre des subquery la variable ne
+	// doit pas être générer avant l'output en string
 
 }

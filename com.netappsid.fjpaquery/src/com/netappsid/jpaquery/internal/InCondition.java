@@ -1,32 +1,23 @@
 package com.netappsid.jpaquery.internal;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class InCondition<T> implements Condition<List<T>> {
+public class InCondition<T> extends AbstractCondition<List<T>> {
 
 	private final Selector selector;
-	private final List<T> values;
-	private final String variableName;
+	private final Parameter<List<T>> parameter;
 
-	public InCondition(Selector selector,String variableName, List<T> values) {
+	public InCondition(Selector selector, Parameter parameter) {
+		super(selector, Arrays.asList(parameter));
 		this.selector = selector;
-		this.variableName = variableName;
-		this.values = values;
+		this.parameter = parameter;
 	}
 
 	@Override
-	public String getVariableName() {
-		return variableName;
-	}
-
-	@Override
-	public List<T> getValue() {
-		return values;
-	}
-
-	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder) {
-		return selector.createQueryFragment(queryBuilder) + " in ( :" + variableName +" ) ";
+	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+		return selector.createQueryFragment(queryBuilder, incrementor) + " in ( :" + parameter.generate(incrementor) + " ) ";
 	}
 
 }
