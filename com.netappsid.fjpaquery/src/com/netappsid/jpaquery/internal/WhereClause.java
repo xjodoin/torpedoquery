@@ -2,6 +2,7 @@ package com.netappsid.jpaquery.internal;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -73,7 +74,7 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperat
 	}
 
 	@Override
-	public OnGoingLogicalOperation in(List<T> values) {
+	public OnGoingLogicalOperation in(Collection<T> values) {
 		condition = new InCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, values));
 		return this;
 	}

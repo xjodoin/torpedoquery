@@ -1,6 +1,6 @@
 package com.netappsid.jpaquery;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface OnGoingCondition<T> {
 
@@ -27,7 +27,7 @@ public interface OnGoingCondition<T> {
 
 	OnGoingLogicalOperation in(T... values);
 
-	OnGoingLogicalOperation in(List<T> values);
+	OnGoingLogicalOperation in(Collection<T> values);
 
 	OnGoingLogicalOperation in(Query<T> subQuery);
 
