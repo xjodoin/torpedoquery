@@ -1,9 +1,5 @@
-package com.netappsid.jpaquery;
+package com.netappsid.jpaquery.internal;
 
-import com.netappsid.jpaquery.internal.FJPAMethodHandler;
-import com.netappsid.jpaquery.internal.Join;
-import com.netappsid.jpaquery.internal.JoinHandler;
-import com.netappsid.jpaquery.internal.QueryBuilder;
 
 public class LeftJoinHandler<T> extends JoinHandler<T> {
 

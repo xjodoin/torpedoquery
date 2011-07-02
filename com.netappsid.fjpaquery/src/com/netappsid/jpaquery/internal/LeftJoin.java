@@ -1,7 +1,5 @@
-package com.netappsid.jpaquery;
+package com.netappsid.jpaquery.internal;
 
-import com.netappsid.jpaquery.internal.AbstractJoin;
-import com.netappsid.jpaquery.internal.QueryBuilder;
 
 public class LeftJoin extends AbstractJoin {
 
