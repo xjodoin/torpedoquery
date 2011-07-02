@@ -4,8 +4,9 @@ import java.util.List;
 
 public interface OnGoingCondition<T> {
 
+	// TODO
 	// where(entity.getCode()).like("code);
-	// where(entity.getCode()).in("code); where(entity.getCode()).notIn("code);
+	// where(entity.getCode()).notIn("code);
 	// where(entity.getCode()).isEmpty(); where(entity.getCode()).isNotEmpty();
 
 	OnGoingLogicalOperation eq(T value);

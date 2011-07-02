@@ -1,6 +1,6 @@
 package com.netappsid.jpaquery.internal;
 
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public interface Join {
@@ -11,6 +11,6 @@ public interface Join {
 
 	String getJoin(String alias, AtomicInteger incrementor);
 
-	Map<String, Object> getParams();
+	List<Parameter> getParams();
 
 }

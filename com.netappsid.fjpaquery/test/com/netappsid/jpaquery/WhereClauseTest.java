@@ -3,17 +3,13 @@ package com.netappsid.jpaquery;
 import static com.netappsid.jpaquery.FJPAQuery.*;
 import static org.junit.Assert.*;
 
+import java.util.Map;
+
 import org.junit.Test;
 
 import com.netappsid.jpaquery.test.bo.Entity;
 
 public class WhereClauseTest {
-
-	// OnGoingLogicalOperation gt(T value);
-	//
-	// OnGoingLogicalOperation gte(T value);
-	//
-	// OnGoingLogicalOperation isNull();
 
 	@Test
 	public void test_eq() {
@@ -112,11 +108,22 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getCode()).in(select(subSelect.getCode()));
 
-		assertEquals("from Entity entity_0 where entity_0.code in ( select entity_0.code from Entity entity_0 )", query(from));
+		assertEquals("from Entity entity_0 where entity_0.code in ( select entity_1.code from Entity entity_1 )", query(from));
 
 	}
 
-	// TODO je suis rendu à combiner les paramètre des subquery la variable ne
-	// doit pas être générer avant l'output en string
+	@Test
+	public void test_in_subSelect_with_params() {
+		Entity subSelect = from(Entity.class);
+		where(subSelect.getCode()).eq("subquery");
+		Entity from = from(Entity.class);
+		where(from.getCode()).in(select(subSelect.getCode()));
+
+		assertEquals("from Entity entity_0 where entity_0.code in ( select entity_1.code from Entity entity_1 where entity_1.code = :code_2 )", query(from));
+		Map<String, Object> params = params(from);
+		assertEquals(1, params.size());
+		assertEquals("subquery", params.get("code_2"));
+
+	}
 
 }

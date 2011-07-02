@@ -3,7 +3,6 @@ package com.netappsid.jpaquery.internal;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.FJPAQuery;
 import com.netappsid.jpaquery.Query;
 
 public class InSubQueryCondition<T> implements Condition {
@@ -18,13 +17,17 @@ public class InSubQueryCondition<T> implements Condition {
 
 	@Override
 	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
-		return selector.createQueryFragment(queryBuilder, incrementor) + " in ( " + FJPAQuery.query(query) + " ) ";
+		String queryFragment = selector.createQueryFragment(queryBuilder, incrementor);
+
+		InternalQuery subQuery = (InternalQuery) query;
+		String subQueryString = subQuery.getQuery(query, incrementor);
+		return queryFragment + " in ( " + subQueryString + " ) ";
 	}
 
 	@Override
 	public List<Parameter> getParameters() {
-		// TODO Auto-generated method stub
-		return null;
+		InternalQuery subQuery = (InternalQuery) query;
+		return subQuery.getParameters(subQuery);
 	}
 
 }

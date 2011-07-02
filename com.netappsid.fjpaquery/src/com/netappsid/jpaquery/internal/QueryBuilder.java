@@ -122,23 +122,28 @@ public class QueryBuilder {
 		whereClauses.add(whereClause);
 	}
 
-	public Map<String, Object> getParams() {
+	public Map<String, Object> getParametersAsMap() {
 
 		Map<String, Object> params = new HashMap<String, Object>();
+		List<Parameter> parameters = getParameters();
+		for (Parameter parameter : parameters) {
+			params.put(parameter.getName(), parameter.getValue());
+		}
+		return params;
+	}
+
+	public List<Parameter> getParameters() {
+		List<Parameter> parameters = new ArrayList<Parameter>();
 
 		for (WhereClause whereClause : whereClauses) {
-			final List<Parameter> parameters = whereClause.getParameters();
-
-			for (Parameter parameter : parameters) {
-				params.put(parameter.getName(), parameter.getValue());
-			}
+			parameters.addAll(whereClause.getParameters());
 		}
 
 		for (Join join : joins) {
-			params.putAll(join.getParams());
+			parameters.addAll(join.getParams());
 		}
 
-		return params;
+		return parameters;
 	}
 
 	public <T> Parameter<T> generateParameter(Method method, T value) {

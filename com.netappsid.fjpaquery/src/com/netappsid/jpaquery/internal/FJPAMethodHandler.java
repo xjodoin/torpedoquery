@@ -43,12 +43,22 @@ public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 
 	@Override
 	public String getQuery(Object proxy) {
-		return proxyQueryBuilders.get(proxy).getQuery(new AtomicInteger());
+		return getQuery(proxy, new AtomicInteger());
 	}
 
 	@Override
-	public Map<String, Object> getParameters(Object proxy) {
-		return proxyQueryBuilders.get(proxy).getParams();
+	public String getQuery(Object proxy, AtomicInteger incrementor) {
+		return proxyQueryBuilders.get(proxy).getQuery(incrementor);
+	}
+
+	@Override
+	public Map<String, Object> getParametersAsMap(Object proxy) {
+		return proxyQueryBuilders.get(proxy).getParametersAsMap();
+	}
+
+	@Override
+	public List<Parameter> getParameters(Object proxy) {
+		return proxyQueryBuilders.get(proxy).getParameters();
 	}
 
 	@Override

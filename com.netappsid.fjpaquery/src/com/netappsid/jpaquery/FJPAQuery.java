@@ -16,6 +16,7 @@ import com.netappsid.jpaquery.internal.InnerJoinHandler;
 import com.netappsid.jpaquery.internal.InternalQuery;
 import com.netappsid.jpaquery.internal.MaxFunctionHandler;
 import com.netappsid.jpaquery.internal.MinFunctionHandler;
+import com.netappsid.jpaquery.internal.RightJoinHandler;
 import com.netappsid.jpaquery.internal.SelectHandler;
 import com.netappsid.jpaquery.internal.SumFunctionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
@@ -61,16 +62,24 @@ public class FJPAQuery {
 		return getQuery().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
-	public static <T> T leftJoin(T toJoin) {
-		return getQuery().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
-	}
-
 	public static <T> T innerJoin(Collection<T> toJoin) {
 		return getQuery().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
+	public static <T> T leftJoin(T toJoin) {
+		return getQuery().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
+	}
+
 	public static <T> T leftJoin(Collection<T> toJoin) {
 		return getQuery().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
+	}
+
+	public static <T> T rightJoin(T toJoin) {
+		return getQuery().handle(new RightJoinHandler<T>(getFJPAMethodHandler()));
+	}
+
+	public static <T> T rightJoin(Collection<T> toJoin) {
+		return getQuery().handle(new RightJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
 	public static <T> OnGoingCondition<T> where(T object) {
@@ -112,7 +121,7 @@ public class FJPAQuery {
 	public static Map<String, Object> params(Object proxy) {
 		if (proxy instanceof InternalQuery) {
 			InternalQuery from = (InternalQuery) proxy;
-			return from.getParameters(proxy);
+			return from.getParametersAsMap(proxy);
 		}
 		return null;
 	}
