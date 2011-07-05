@@ -3,7 +3,7 @@ package com.netappsid.jpaquery.internal;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
-import java.util.List;
+import java.util.Deque;
 import java.util.Map;
 
 import javassist.util.proxy.ProxyFactory;
@@ -17,9 +17,12 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 	}
 
 	@Override
-	public T handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, List<MethodCall> methodCalls) {
-		final QueryBuilder queryImpl = proxyQueryBuilders.get(methodCalls.get(0).getProxy());
-		final Method thisMethod = methodCalls.get(0).getMethod();
+	public T handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
+
+		MethodCall pollFirst = methodCalls.pollFirst();
+
+		final QueryBuilder queryImpl = proxyQueryBuilders.get(pollFirst.getProxy());
+		final Method thisMethod = pollFirst.getMethod();
 		Class<?> returnType = thisMethod.getReturnType();
 
 		if (Collection.class.isAssignableFrom(returnType)) {

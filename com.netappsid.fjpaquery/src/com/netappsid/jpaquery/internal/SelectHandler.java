@@ -1,7 +1,7 @@
 package com.netappsid.jpaquery.internal;
 
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import com.netappsid.jpaquery.Function;
@@ -16,7 +16,7 @@ public class SelectHandler<T> implements QueryHandler<Query<T>> {
 	}
 
 	@Override
-	public Query<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, List<MethodCall> methodCalls) {
+	public Query<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 
 		Iterator<MethodCall> iterator = methodCalls.iterator();
 

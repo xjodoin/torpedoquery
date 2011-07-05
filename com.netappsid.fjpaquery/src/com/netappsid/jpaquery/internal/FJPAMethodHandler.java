@@ -1,9 +1,9 @@
 package com.netappsid.jpaquery.internal;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.IdentityHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,7 +14,7 @@ import com.netappsid.jpaquery.FJPAQuery;
 
 public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 	private final Map<Object, QueryBuilder> proxyQueryBuilders = new IdentityHashMap<Object, QueryBuilder>();
-	private final List<MethodCall> methods = new ArrayList<MethodCall>();
+	private final LinkedList<MethodCall> methods = new LinkedList<MethodCall>();
 
 	public QueryBuilder addQueryBuilder(Object proxy, Class toQuery) {
 		final QueryBuilder queryBuilder = new QueryBuilder(toQuery);
@@ -26,7 +26,11 @@ public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 	@Override
 	public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
 		if (thisMethod.getDeclaringClass().equals(InternalQuery.class)) {
-			return thisMethod.invoke(this, args);
+			try {
+				return thisMethod.invoke(this, args);
+			} catch (InvocationTargetException e) {
+				throw e.getTargetException();
+			}
 		}
 
 		methods.add(new MethodCall((InternalQuery) self, thisMethod));
@@ -63,8 +67,7 @@ public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 
 	@Override
 	public <T> T handle(QueryHandler<T> handler) {
-		final T result = handler.handleCall(proxyQueryBuilders, Collections.unmodifiableList(methods));
-
+		final T result = handler.handleCall(proxyQueryBuilders, methods);
 		methods.clear();
 		return result;
 	}

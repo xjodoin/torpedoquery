@@ -1,7 +1,7 @@
 package com.netappsid.jpaquery.internal;
 
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,10 +25,10 @@ public abstract class AggregateFunctionHandler implements QueryHandler<Function>
 	}
 
 	@Override
-	public Function handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, List<MethodCall> methods) {
+	public Function handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
 
 		if (!methods.isEmpty()) {
-			MethodCall methodCall = methods.get(0);
+			MethodCall methodCall = methods.pollFirst();
 			method = methodCall.getMethod();
 			proxy = methodCall.getProxy();
 		}

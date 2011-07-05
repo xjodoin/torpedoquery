@@ -125,14 +125,11 @@ public class FJPAQueryTest {
 		assertEquals(true, params(entity).get("active_1"));
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void test_multipleWhereRestrictionsResultInConjunction() {
 		final Entity entity = from(Entity.class);
 		where(entity.isActive()).eq(true);
 		where(entity.getCode()).isNull();
-
-		assertEquals("from Entity entity_0 where entity_0.active = :active_1 and entity_0.code is null", query(entity));
-		assertEquals(true, params(entity).get("active_1"));
 	}
 
 	@Test
