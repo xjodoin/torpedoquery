@@ -9,26 +9,26 @@ public interface OnGoingCondition<T> {
 	// where(entity.getCode()).notIn("code);
 	// where(entity.getCode()).isEmpty(); where(entity.getCode()).isNotEmpty();
 
-	OnGoingLogicalOperation eq(T value);
+	OnGoingLogicalCondition eq(T value);
 
-	OnGoingLogicalOperation neq(T value);
+	OnGoingLogicalCondition neq(T value);
 
-	OnGoingLogicalOperation lt(T value);
+	OnGoingLogicalCondition lt(T value);
 
-	OnGoingLogicalOperation lte(T value);
+	OnGoingLogicalCondition lte(T value);
 
-	OnGoingLogicalOperation gt(T value);
+	OnGoingLogicalCondition gt(T value);
 
-	OnGoingLogicalOperation gte(T value);
+	OnGoingLogicalCondition gte(T value);
 
-	OnGoingLogicalOperation isNull();
+	OnGoingLogicalCondition isNull();
 
-	OnGoingLogicalOperation isNotNull();
+	OnGoingLogicalCondition isNotNull();
 
-	OnGoingLogicalOperation in(T... values);
+	OnGoingLogicalCondition in(T... values);
 
-	OnGoingLogicalOperation in(Collection<T> values);
+	OnGoingLogicalCondition in(Collection<T> values);
 
-	OnGoingLogicalOperation in(Query<T> subQuery);
+	OnGoingLogicalCondition in(Query<T> subQuery);
 
 }

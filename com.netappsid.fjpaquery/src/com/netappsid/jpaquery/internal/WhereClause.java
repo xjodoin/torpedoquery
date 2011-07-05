@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.OnGoingCondition;
-import com.netappsid.jpaquery.OnGoingLogicalOperation;
+import com.netappsid.jpaquery.OnGoingLogicalCondition;
 import com.netappsid.jpaquery.Query;
 
-public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperation {
-	private Condition condition;
+public class WhereClause<T> implements OnGoingCondition<T> {
 	private final QueryBuilder queryBuilder;
 	private final Method method;
+	private LogicalCondition logicalCondition;
 
 	public WhereClause(QueryBuilder queryBuilder, Method method) {
 		this.queryBuilder = queryBuilder;
@@ -21,86 +21,85 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLogicalOperat
 	}
 
 	@Override
-	public OnGoingLogicalOperation eq(T value) {
-		condition = new EqualCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
-		return this;
+	public OnGoingLogicalCondition eq(T value) {
+		Condition condition = new EqualCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalOperation neq(T value) {
-		condition = new NotEqualCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
-		return this;
+	public OnGoingLogicalCondition neq(T value) {
+		Condition condition = new NotEqualCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalOperation lt(T value) {
-		condition = new LtCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
-		return this;
+	public OnGoingLogicalCondition lt(T value) {
+		Condition condition = new LtCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalOperation lte(T value) {
-		condition = new LteCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
-		return this;
+	public OnGoingLogicalCondition lte(T value) {
+		Condition condition = new LteCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalOperation gt(T value) {
-		condition = new GtCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
-		return this;
+	public OnGoingLogicalCondition gt(T value) {
+		Condition condition = new GtCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalOperation gte(T value) {
-		condition = new GteCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
-		return this;
+	public OnGoingLogicalCondition gte(T value) {
+		Condition condition = new GteCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalOperation isNull() {
-		condition = new IsNullCondition(new SimpleMethodCallSelector(method));
-		return this;
+	public OnGoingLogicalCondition isNull() {
+		Condition condition = new IsNullCondition(new SimpleMethodCallSelector(method));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalOperation isNotNull() {
-		condition = new IsNotNullCondition(new SimpleMethodCallSelector(method));
-		return this;
+	public OnGoingLogicalCondition isNotNull() {
+		Condition condition = new IsNotNullCondition(new SimpleMethodCallSelector(method));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalOperation in(T... values) {
+	public OnGoingLogicalCondition in(T... values) {
 		return in(Arrays.asList(values));
 	}
 
 	@Override
-	public OnGoingLogicalOperation in(Collection<T> values) {
-		condition = new InCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, values));
-		return this;
+	public OnGoingLogicalCondition in(Collection<T> values) {
+		Condition condition = new InCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, values));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalOperation in(Query<T> query) {
-		condition = new InSubQueryCondition<T>(new SimpleMethodCallSelector(method), query);
-		return this;
+	public OnGoingLogicalCondition in(Query<T> query) {
+		Condition condition = new InSubQueryCondition<T>(new SimpleMethodCallSelector(method), query);
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
-		return condition.createQueryFragment(queryBuilder, incrementor);
+		return logicalCondition.createQueryFragment(queryBuilder, incrementor);
 	}
 
-	@Override
-	public <T1> OnGoingCondition<T1> and(T1 property) {
-		return (OnGoingCondition<T1>) this;
-	}
-
-	@Override
-	public <T1> OnGoingCondition<T1> or(T1 property) {
-		return (OnGoingCondition<T1>) this;
+	private OnGoingLogicalCondition getOnGoingLogicalCondition(Condition condition) {
+		logicalCondition = new LogicalCondition(condition);
+		return logicalCondition;
 	}
 
 	public List<Parameter> getParameters() {
-		return condition.getParameters();
+		return logicalCondition.getParameters();
+	}
+
+	public boolean hasCondition() {
+		return logicalCondition != null;
 	}
 
 }

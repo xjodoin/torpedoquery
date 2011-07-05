@@ -139,7 +139,8 @@ public class FJPAQuery {
 		FJPAQuery.query.set(query);
 	}
 
-	private static FJPAMethodHandler getFJPAMethodHandler() {
+	// TODO devrait se retrouver dans l'api interne
+	public static FJPAMethodHandler getFJPAMethodHandler() {
 		return methodHandler.get();
 	}
 

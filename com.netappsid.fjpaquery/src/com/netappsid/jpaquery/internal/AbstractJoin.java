@@ -26,11 +26,6 @@ public abstract class AbstractJoin implements Join {
 	}
 
 	@Override
-	public void appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
-		join.appendWhereClause(builder, incrementor);
-	}
-
-	@Override
 	public List<Parameter> getParams() {
 		return join.getParameters();
 	}

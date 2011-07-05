@@ -15,7 +15,7 @@ public class QueryBuilder {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<Selector>();
 	private final List<Join> joins = new ArrayList<Join>();
-	private final List<WhereClause<?>> whereClauses = new ArrayList<WhereClause<?>>();
+	private WhereClause<?> whereClause;
 
 	private String alias;
 
@@ -34,26 +34,11 @@ public class QueryBuilder {
 
 		builder.append(getJoins(incrementor));
 
-		builder.append(appendWhereClause(new StringBuilder(), incrementor));
+		if (whereClause != null) {
+			builder.append(" where ").append(whereClause.createQueryFragment(this, incrementor));
+		}
 
 		return builder.toString().trim();
-	}
-
-	public StringBuilder appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
-
-		for (WhereClause<?> clause : whereClauses) {
-			if (builder.length() == 0) {
-				builder.append(" where ").append(clause.createQueryFragment(this, incrementor)).append(" ");
-			} else {
-				builder.append("and ").append(clause.createQueryFragment(this, incrementor)).append(" ");
-			}
-		}
-
-		for (Join join : joins) {
-			join.appendWhereClause(builder, incrementor);
-		}
-
-		return builder;
 	}
 
 	public void appendSelect(StringBuilder builder, AtomicInteger incrementor) {
@@ -118,8 +103,13 @@ public class QueryBuilder {
 		return builder.toString();
 	}
 
-	public void addWhereClause(WhereClause<?> whereClause) {
-		whereClauses.add(whereClause);
+	public void setWhereClause(WhereClause<?> whereClause) {
+
+		if (this.whereClause != null) {
+			throw new IllegalArgumentException("You cannot have more than one WhereClause by query");
+		}
+
+		this.whereClause = whereClause;
 	}
 
 	public Map<String, Object> getParametersAsMap() {
@@ -135,9 +125,7 @@ public class QueryBuilder {
 	public List<Parameter> getParameters() {
 		List<Parameter> parameters = new ArrayList<Parameter>();
 
-		for (WhereClause whereClause : whereClauses) {
-			parameters.addAll(whereClause.getParameters());
-		}
+		parameters.addAll(whereClause.getParameters());
 
 		for (Join join : joins) {
 			parameters.addAll(join.getParams());
