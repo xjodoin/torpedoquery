@@ -12,6 +12,7 @@ public class LogicalCondition implements OnGoingLogicalCondition {
 
 	private final Condition leftCondition;
 	private WhereClause right;
+	private String condition;
 
 	public LogicalCondition(Condition leftCondition) {
 		this.leftCondition = leftCondition;
@@ -20,6 +21,11 @@ public class LogicalCondition implements OnGoingLogicalCondition {
 	@Override
 	public <T1> OnGoingCondition<T1> and(T1 property) {
 
+		condition = " and ";
+		return getRight();
+	}
+
+	private <T1> OnGoingCondition<T1> getRight() {
 		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
 		WhereClauseHandler<T1> whereClauseHandler = new WhereClauseHandler<T1>(false);
 		OnGoingCondition<T1> handle = fjpaMethodHandler.handle(whereClauseHandler);
@@ -29,8 +35,8 @@ public class LogicalCondition implements OnGoingLogicalCondition {
 
 	@Override
 	public <T1> OnGoingCondition<T1> or(T1 property) {
-		// TODO Auto-generated method stub
-		return null;
+		condition = " or ";
+		return getRight();
 	}
 
 	public List<Parameter> getParameters() {
@@ -47,7 +53,7 @@ public class LogicalCondition implements OnGoingLogicalCondition {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(leftCondition.createQueryFragment(queryBuilder, incrementor));
 		if (right != null && right.hasCondition()) {
-			stringBuilder.append(" and ").append(right.createQueryFragment(queryBuilder, incrementor));
+			stringBuilder.append(condition).append(right.createQueryFragment(queryBuilder, incrementor));
 		}
 		return stringBuilder.toString();
 	}

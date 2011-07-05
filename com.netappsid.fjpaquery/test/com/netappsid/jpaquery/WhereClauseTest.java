@@ -134,4 +134,12 @@ public class WhereClauseTest {
 		assertEquals("from Entity entity_0 where entity_0.name = :name_1 and entity_0.primitiveInt > :primitiveInt_2", query(from));
 	}
 
+	@Test
+	public void test_Or_WhereClause() {
+		Entity from = from(Entity.class);
+		where(from.getName()).eq("test").or(from.getPrimitiveInt()).gt(10);
+
+		assertEquals("from Entity entity_0 where entity_0.name = :name_1 or entity_0.primitiveInt > :primitiveInt_2", query(from));
+	}
+
 }
