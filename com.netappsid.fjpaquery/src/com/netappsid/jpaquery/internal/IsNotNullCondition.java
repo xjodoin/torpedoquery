@@ -5,15 +5,16 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class IsNotNullCondition implements Condition {
-	private final SimpleMethodCallSelector simpleMethodCallSelector;
 
-	public IsNotNullCondition(SimpleMethodCallSelector simpleMethodCallSelector) {
-		this.simpleMethodCallSelector = simpleMethodCallSelector;
+	private final Selector selector;
+
+	public IsNotNullCondition(Selector selector) {
+		this.selector = selector;
 	}
 
 	@Override
 	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
-		return simpleMethodCallSelector.createQueryFragment(queryBuilder, incrementor) + " is not null";
+		return selector.createQueryFragment(queryBuilder, incrementor) + " is not null";
 	}
 
 	@Override

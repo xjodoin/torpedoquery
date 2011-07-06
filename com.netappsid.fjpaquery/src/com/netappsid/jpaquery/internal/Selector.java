@@ -6,4 +6,6 @@ public interface Selector {
 
 	String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor);
 
+	String getName();
+
 }

@@ -30,18 +30,18 @@ public class LikeCondition implements Condition {
 	}
 
 	private final String toMatch;
-	private final SimpleMethodCallSelector simpleMethodCallSelector;
 	private final Type type;
+	private final Selector selector;
 
-	public LikeCondition(Type type, SimpleMethodCallSelector simpleMethodCallSelector, String toMatch) {
+	public LikeCondition(Type type, Selector selector, String toMatch) {
 		this.type = type;
-		this.simpleMethodCallSelector = simpleMethodCallSelector;
+		this.selector = selector;
 		this.toMatch = toMatch;
 	}
 
 	@Override
 	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
-		return simpleMethodCallSelector.createQueryFragment(queryBuilder, incrementor) + " like '" + type.wrap(toMatch) + "' ";
+		return selector.createQueryFragment(queryBuilder, incrementor) + " like '" + type.wrap(toMatch) + "' ";
 	}
 
 	@Override

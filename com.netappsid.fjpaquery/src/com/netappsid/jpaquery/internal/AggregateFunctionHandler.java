@@ -38,4 +38,9 @@ public abstract class AggregateFunctionHandler implements QueryHandler<Function>
 
 	protected abstract String getFunctionName();
 
+	@Override
+	public String getName() {
+		return "";
+	}
+
 }

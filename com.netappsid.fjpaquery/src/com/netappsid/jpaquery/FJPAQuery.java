@@ -20,6 +20,7 @@ import com.netappsid.jpaquery.internal.MinFunctionHandler;
 import com.netappsid.jpaquery.internal.RightJoinHandler;
 import com.netappsid.jpaquery.internal.SelectHandler;
 import com.netappsid.jpaquery.internal.SumFunctionHandler;
+import com.netappsid.jpaquery.internal.WhereClauseCollectionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
 
 public class FJPAQuery {
@@ -85,6 +86,10 @@ public class FJPAQuery {
 
 	public static <T> OnGoingCondition<T> where(T object) {
 		return getQuery().handle(new WhereClauseHandler<T>());
+	}
+
+	public static <T> OnGoingCollectionCondition<T> where(Collection<T> object) {
+		return getQuery().handle(new WhereClauseCollectionHandler<T>());
 	}
 
 	// JPA Functions

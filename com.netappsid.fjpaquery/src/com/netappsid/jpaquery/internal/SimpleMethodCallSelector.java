@@ -13,7 +13,12 @@ public class SimpleMethodCallSelector implements Selector {
 
 	@Override
 	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
-		return queryBuilder.getAlias(incrementor) + "." + queryBuilder.getFieldName(method);
+		return queryBuilder.getAlias(incrementor) + "." + getName();
+	}
+
+	@Override
+	public String getName() {
+		return FieldUtils.getFieldName(method);
 	}
 
 }

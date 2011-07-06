@@ -6,66 +6,67 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.netappsid.jpaquery.OnGoingCollectionCondition;
 import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLikeCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
 import com.netappsid.jpaquery.Query;
 
-public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLikeCondition {
+public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T> {
 	private final QueryBuilder queryBuilder;
-	private final Method method;
+	private Selector selector;
 	private LogicalCondition logicalCondition;
 
 	public WhereClause(QueryBuilder queryBuilder, Method method) {
 		this.queryBuilder = queryBuilder;
-		this.method = method;
+		this.selector = new SimpleMethodCallSelector(method);
 	}
 
 	@Override
 	public OnGoingLogicalCondition eq(T value) {
-		Condition condition = new EqualCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		Condition condition = new EqualCondition<T>(selector, queryBuilder.generateParameter(selector, value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition neq(T value) {
-		Condition condition = new NotEqualCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		Condition condition = new NotEqualCondition<T>(selector, queryBuilder.generateParameter(selector, value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition lt(T value) {
-		Condition condition = new LtCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		Condition condition = new LtCondition<T>(selector, queryBuilder.generateParameter(selector, value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition lte(T value) {
-		Condition condition = new LteCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		Condition condition = new LteCondition<T>(selector, queryBuilder.generateParameter(selector, value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition gt(T value) {
-		Condition condition = new GtCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		Condition condition = new GtCondition<T>(selector, queryBuilder.generateParameter(selector, value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition gte(T value) {
-		Condition condition = new GteCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, value));
+		Condition condition = new GteCondition<T>(selector, queryBuilder.generateParameter(selector, value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition isNull() {
-		Condition condition = new IsNullCondition(new SimpleMethodCallSelector(method));
+		Condition condition = new IsNullCondition(selector);
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition isNotNull() {
-		Condition condition = new IsNotNullCondition(new SimpleMethodCallSelector(method));
+		Condition condition = new IsNotNullCondition(selector);
 		return getOnGoingLogicalCondition(condition);
 	}
 
@@ -76,29 +77,29 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLikeCondition
 
 	@Override
 	public OnGoingLogicalCondition in(Collection<T> values) {
-		Condition condition = new InCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, values));
+		Condition condition = new InCondition<T>(selector, queryBuilder.generateParameter(selector, values));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition in(Query<T> query) {
-		Condition condition = new InSubQueryCondition<T>(new SimpleMethodCallSelector(method), query);
+		Condition condition = new InSubQueryCondition<T>(selector, query);
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition notIn(T... values) {
-		return getOnGoingLogicalCondition(new NotInCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, values)));
+		return getOnGoingLogicalCondition(new NotInCondition<T>(selector, queryBuilder.generateParameter(selector, values)));
 	}
 
 	@Override
 	public OnGoingLogicalCondition notIn(Collection<T> values) {
-		return getOnGoingLogicalCondition(new NotInCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, values)));
+		return getOnGoingLogicalCondition(new NotInCondition<T>(selector, queryBuilder.generateParameter(selector, values)));
 	}
 
 	@Override
 	public OnGoingLogicalCondition notIn(Query<T> subQuery) {
-		return getOnGoingLogicalCondition(new NotInSubQueryCondition<T>(new SimpleMethodCallSelector(method), subQuery));
+		return getOnGoingLogicalCondition(new NotInSubQueryCondition<T>(selector, subQuery));
 	}
 
 	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
@@ -125,16 +126,32 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLikeCondition
 
 	@Override
 	public OnGoingLogicalCondition any(String toMatch) {
-		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.ANY, new SimpleMethodCallSelector(method), toMatch));
+		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.ANY, selector, toMatch));
 	}
 
 	@Override
 	public OnGoingLogicalCondition startsWith(String toMatch) {
-		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.STARTSWITH, new SimpleMethodCallSelector(method), toMatch));
+		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.STARTSWITH, selector, toMatch));
 	}
 
 	@Override
 	public OnGoingLogicalCondition endsWith(String toMatch) {
-		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.ENDSWITH, new SimpleMethodCallSelector(method), toMatch));
+		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.ENDSWITH, selector, toMatch));
+	}
+
+	@Override
+	public OnGoingLogicalCondition isEmpty() {
+		return getOnGoingLogicalCondition(new IsEmptyCondition(selector));
+	}
+
+	@Override
+	public OnGoingLogicalCondition isNotEmpty() {
+		return getOnGoingLogicalCondition(new IsNotEmptyCondition(selector));
+	}
+
+	@Override
+	public OnGoingCondition<Integer> size() {
+		selector = new SizeSelector(selector);
+		return (OnGoingCondition<Integer>) this;
 	}
 }

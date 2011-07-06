@@ -5,7 +5,6 @@ import java.util.Collection;
 public interface OnGoingCondition<T> {
 
 	// TODO
-	// where(entity.getCode()).notIn("code);
 	// where(entity.getCode()).isEmpty(); where(entity.getCode()).isNotEmpty();
 
 	OnGoingLogicalCondition eq(T value);

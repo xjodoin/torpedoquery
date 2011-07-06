@@ -1,10 +1,5 @@
 package com.netappsid.jpaquery.internal;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,21 +48,6 @@ public class QueryBuilder {
 		for (Join join : joins) {
 			join.appendSelect(builder, incrementor);
 		}
-	}
-
-	public String getFieldName(Method method) {
-		try {
-			BeanInfo beanInfo = Introspector.getBeanInfo(toQuery);
-			PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-			for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-				if (propertyDescriptor.getReadMethod() != null && propertyDescriptor.getReadMethod().equals(method)) {
-					return propertyDescriptor.getName();
-				}
-			}
-		} catch (IntrospectionException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	public String getAlias(AtomicInteger incrementor) {
@@ -134,12 +114,12 @@ public class QueryBuilder {
 		return parameters;
 	}
 
-	public <T> Parameter<T> generateParameter(Method method, T value) {
-		return new Parameter<T>(getFieldName(method), value);
+	public <T> Parameter<T> generateParameter(Selector selector, T value) {
+		return new Parameter<T>(selector.getName(), value);
 	}
 
-	public <T> Parameter<List<T>> generateParameter(Method method, List<T> value) {
-		return new Parameter<List<T>>(getFieldName(method), value);
+	public <T> Parameter<List<T>> generateParameter(Selector selector, List<T> value) {
+		return new Parameter<List<T>>(selector.getName(), value);
 	}
 
 }

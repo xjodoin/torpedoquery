@@ -186,4 +186,27 @@ public class WhereClauseTest {
 		assertEquals("from Entity entity_0 where entity_0.code like '%test'", query(from));
 	}
 
+	@Test
+	public void test_is_empty() {
+		Entity from = from(Entity.class);
+		where(from.getSubEntities()).isEmpty();
+
+		assertEquals("from Entity entity_0 where entity_0.subEntities is empty", query(from));
+	}
+
+	@Test
+	public void test_is_not_empty() {
+		Entity from = from(Entity.class);
+		where(from.getSubEntities()).isNotEmpty();
+
+		assertEquals("from Entity entity_0 where entity_0.subEntities is not empty", query(from));
+	}
+
+	@Test
+	public void test_size() {
+		Entity from = from(Entity.class);
+		where(from.getSubEntities()).size().gt(2);
+
+		assertEquals("from Entity entity_0 where entity_0.subEntities.size > :subEntities_1", query(from));
+	}
 }

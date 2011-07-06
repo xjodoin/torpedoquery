@@ -43,4 +43,9 @@ public class CountFunctionHandler implements Function, QueryHandler<Function> {
 		return proxy;
 	}
 
+	@Override
+	public String getName() {
+		return "";
+	}
+
 }
