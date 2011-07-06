@@ -163,6 +163,16 @@ public class FJPAQueryTest {
 		verify(query).setParameter(params(entity).keySet().iterator().next(), params(entity).values().iterator().next());
 		verify(query).getResultList();
 	}
+	
+	@Test
+	public void test_condition_only_on_join()
+	{
+		Entity from = from(Entity.class);
+		SubEntity innerJoin = innerJoin(from.getSubEntity());
+		
+		where(innerJoin.getCode()).eq("test");
+		assertEquals("from Entity entity_0 inner join entity_0.subEntity subEntity_1 where subEntity_1.code = :code_2", query(from));
+	}
 
 	/**
 	 * where(entity.getCode()).neq("code"); where(entity.getCode()).lt("code);

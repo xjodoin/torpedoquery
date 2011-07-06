@@ -29,11 +29,26 @@ public class QueryBuilder {
 
 		builder.append(getJoins(incrementor));
 
-		if (whereClause != null) {
-			builder.append(" where ").append(whereClause.createQueryFragment(this, incrementor));
-		}
+		builder.append(appendWhereClause(new StringBuilder(), incrementor));
 
 		return builder.toString().trim();
+	}
+
+	public StringBuilder appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
+
+		if (whereClause != null) {
+			if (builder.length() == 0) {
+				builder.append(" where ").append(whereClause.createQueryFragment(this, incrementor)).append(" ");
+			} else {
+				builder.append("and ").append(whereClause.createQueryFragment(this, incrementor)).append(" ");
+			}
+		}
+
+		for (Join join : joins) {
+			join.appendWhereClause(builder, incrementor);
+		}
+
+		return builder;
 	}
 
 	public void appendSelect(StringBuilder builder, AtomicInteger incrementor) {
@@ -105,8 +120,10 @@ public class QueryBuilder {
 	public List<Parameter> getParameters() {
 		List<Parameter> parameters = new ArrayList<Parameter>();
 
-		parameters.addAll(whereClause.getParameters());
-
+		if (whereClause != null) {
+			parameters.addAll(whereClause.getParameters());
+		}
+		
 		for (Join join : joins) {
 			parameters.addAll(join.getParams());
 		}
