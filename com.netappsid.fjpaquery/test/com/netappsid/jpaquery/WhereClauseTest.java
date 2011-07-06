@@ -113,6 +113,26 @@ public class WhereClauseTest {
 	}
 
 	@Test
+	public void test_notIn_values() {
+		Entity from = from(Entity.class);
+		where(from.getPrimitiveInt()).notIn(3, 4);
+
+		assertEquals("from Entity entity_0 where entity_0.primitiveInt not in ( :primitiveInt_1 )", query(from));
+
+	}
+
+	@Test
+	public void test_notIn_subSelect() {
+		Entity subSelect = from(Entity.class);
+
+		Entity from = from(Entity.class);
+		where(from.getCode()).notIn(select(subSelect.getCode()));
+
+		assertEquals("from Entity entity_0 where entity_0.code not in ( select entity_1.code from Entity entity_1 )", query(from));
+
+	}
+
+	@Test
 	public void test_in_subSelect_with_params() {
 		Entity subSelect = from(Entity.class);
 		where(subSelect.getCode()).eq("subquery");

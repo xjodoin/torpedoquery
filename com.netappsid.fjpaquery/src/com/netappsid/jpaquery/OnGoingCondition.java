@@ -30,6 +30,12 @@ public interface OnGoingCondition<T> {
 
 	OnGoingLogicalCondition in(Query<T> subQuery);
 
+	OnGoingLogicalCondition notIn(T... values);
+
+	OnGoingLogicalCondition notIn(Collection<T> values);
+
+	OnGoingLogicalCondition notIn(Query<T> subQuery);
+
 	OnGoingLikeCondition like();
 
 }

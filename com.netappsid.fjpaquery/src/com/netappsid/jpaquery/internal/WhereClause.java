@@ -86,6 +86,21 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLikeCondition
 		return getOnGoingLogicalCondition(condition);
 	}
 
+	@Override
+	public OnGoingLogicalCondition notIn(T... values) {
+		return getOnGoingLogicalCondition(new NotInCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, values)));
+	}
+
+	@Override
+	public OnGoingLogicalCondition notIn(Collection<T> values) {
+		return getOnGoingLogicalCondition(new NotInCondition<T>(new SimpleMethodCallSelector(method), queryBuilder.generateParameter(method, values)));
+	}
+
+	@Override
+	public OnGoingLogicalCondition notIn(Query<T> subQuery) {
+		return getOnGoingLogicalCondition(new NotInSubQueryCondition<T>(new SimpleMethodCallSelector(method), subQuery));
+	}
+
 	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
 		return logicalCondition.createQueryFragment(queryBuilder, incrementor);
 	}

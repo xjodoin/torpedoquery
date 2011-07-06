@@ -21,7 +21,11 @@ public class InSubQueryCondition<T> implements Condition {
 
 		InternalQuery subQuery = (InternalQuery) query;
 		String subQueryString = subQuery.getQuery(query, incrementor);
-		return queryFragment + " in ( " + subQueryString + " ) ";
+		return queryFragment + " " + getFragment() + " ( " + subQueryString + " ) ";
+	}
+
+	protected String getFragment() {
+		return "in";
 	}
 
 	@Override
