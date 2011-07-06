@@ -17,11 +17,14 @@ import com.netappsid.jpaquery.internal.InternalQuery;
 import com.netappsid.jpaquery.internal.LeftJoinHandler;
 import com.netappsid.jpaquery.internal.MaxFunctionHandler;
 import com.netappsid.jpaquery.internal.MinFunctionHandler;
+import com.netappsid.jpaquery.internal.MultiClassLoaderProvider;
 import com.netappsid.jpaquery.internal.RightJoinHandler;
 import com.netappsid.jpaquery.internal.SelectHandler;
 import com.netappsid.jpaquery.internal.SumFunctionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseCollectionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
+
+
 
 public class FJPAQuery {
 	private static ThreadLocal<FJPAMethodHandler> methodHandler = new ThreadLocal<FJPAMethodHandler>() {
@@ -30,12 +33,22 @@ public class FJPAQuery {
 			return new FJPAMethodHandler();
 		}
 	};
+	
+	private static MultiClassLoaderProvider osgiAwareClassLoaderProvider;
+	
+	static
+	{
+		osgiAwareClassLoaderProvider = new MultiClassLoaderProvider();
+		ProxyFactory.classLoaderProvider = osgiAwareClassLoaderProvider;
+	}
+	
 	private static ThreadLocal<InternalQuery> query = new ThreadLocal<InternalQuery>();
 
 	public static <T> T from(Class<T> toQuery) {
 
 		try {
 			final ProxyFactory proxyFactory = new ProxyFactory();
+			
 			proxyFactory.setSuperclass(toQuery);
 			proxyFactory.setInterfaces(new Class[] { InternalQuery.class });
 
