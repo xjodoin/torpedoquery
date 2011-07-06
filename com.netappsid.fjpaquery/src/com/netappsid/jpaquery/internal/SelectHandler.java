@@ -32,6 +32,9 @@ public class SelectHandler<T> implements QueryHandler<Query<T>> {
 				proxy = (InternalQuery) function.getProxy();
 				proxyQueryBuilders.get(proxy).addSelector(function);
 
+			} else if (param instanceof InternalQuery) {
+				proxy = (InternalQuery) param;
+				proxyQueryBuilders.get(proxy).addSelector(new ObjectSelector(proxy));
 			} else {
 
 				MethodCall methodCall = iterator.next();
