@@ -10,9 +10,10 @@ import com.netappsid.jpaquery.OnGoingCollectionCondition;
 import com.netappsid.jpaquery.OnGoingLikeCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
 import com.netappsid.jpaquery.OnGoingNumberCondition;
+import com.netappsid.jpaquery.OnGoingStringCondition;
 import com.netappsid.jpaquery.Query;
 
-public class WhereClause<T> implements OnGoingNumberCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T> {
+public class WhereClause<T> implements OnGoingNumberCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T> {
 	private final QueryBuilder queryBuilder;
 	private Selector selector;
 	private LogicalCondition logicalCondition;

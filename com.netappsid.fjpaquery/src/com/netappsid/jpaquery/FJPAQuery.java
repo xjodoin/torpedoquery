@@ -92,6 +92,10 @@ public class FJPAQuery {
 		return getQuery().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T>>());
 	}
 
+	public static OnGoingStringCondition<String> where(String object) {
+		return getQuery().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>());
+	}
+
 	public static <T> OnGoingCollectionCondition<T> where(Collection<T> object) {
 		return getQuery().handle(new WhereClauseCollectionHandler<T>());
 	}
