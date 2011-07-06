@@ -5,7 +5,6 @@ import java.util.Collection;
 public interface OnGoingCondition<T> {
 
 	// TODO
-	// where(entity.getCode()).like("code);
 	// where(entity.getCode()).notIn("code);
 	// where(entity.getCode()).isEmpty(); where(entity.getCode()).isNotEmpty();
 
@@ -30,5 +29,7 @@ public interface OnGoingCondition<T> {
 	OnGoingLogicalCondition in(Collection<T> values);
 
 	OnGoingLogicalCondition in(Query<T> subQuery);
+
+	OnGoingLikeCondition like();
 
 }

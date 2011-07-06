@@ -7,10 +7,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.OnGoingCondition;
+import com.netappsid.jpaquery.OnGoingLikeCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
 import com.netappsid.jpaquery.Query;
 
-public class WhereClause<T> implements OnGoingCondition<T> {
+public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLikeCondition {
 	private final QueryBuilder queryBuilder;
 	private final Method method;
 	private LogicalCondition logicalCondition;
@@ -102,4 +103,23 @@ public class WhereClause<T> implements OnGoingCondition<T> {
 		return logicalCondition != null;
 	}
 
+	@Override
+	public OnGoingLikeCondition like() {
+		return this;
+	}
+
+	@Override
+	public OnGoingLogicalCondition any(String toMatch) {
+		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.ANY, new SimpleMethodCallSelector(method), toMatch));
+	}
+
+	@Override
+	public OnGoingLogicalCondition startsWith(String toMatch) {
+		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.STARTSWITH, new SimpleMethodCallSelector(method), toMatch));
+	}
+
+	@Override
+	public OnGoingLogicalCondition endsWith(String toMatch) {
+		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.ENDSWITH, new SimpleMethodCallSelector(method), toMatch));
+	}
 }

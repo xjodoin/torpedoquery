@@ -142,4 +142,28 @@ public class WhereClauseTest {
 		assertEquals("from Entity entity_0 where entity_0.name = :name_1 or entity_0.primitiveInt > :primitiveInt_2", query(from));
 	}
 
+	@Test
+	public void test_like_any() {
+		Entity from = from(Entity.class);
+		where(from.getCode()).like().any("test");
+
+		assertEquals("from Entity entity_0 where entity_0.code like '%test%'", query(from));
+	}
+
+	@Test
+	public void test_like_startsWith() {
+		Entity from = from(Entity.class);
+		where(from.getCode()).like().startsWith("test");
+
+		assertEquals("from Entity entity_0 where entity_0.code like 'test%'", query(from));
+	}
+
+	@Test
+	public void test_like_endsWith() {
+		Entity from = from(Entity.class);
+		where(from.getCode()).like().endsWith("test");
+
+		assertEquals("from Entity entity_0 where entity_0.code like '%test'", query(from));
+	}
+
 }
