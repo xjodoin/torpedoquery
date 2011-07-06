@@ -85,7 +85,11 @@ public class FJPAQuery {
 	}
 
 	public static <T> OnGoingCondition<T> where(T object) {
-		return getQuery().handle(new WhereClauseHandler<T>());
+		return getQuery().handle(new WhereClauseHandler<T, OnGoingCondition<T>>());
+	}
+
+	public static <T extends Number> OnGoingNumberCondition<T> where(T object) {
+		return getQuery().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T>>());
 	}
 
 	public static <T> OnGoingCollectionCondition<T> where(Collection<T> object) {

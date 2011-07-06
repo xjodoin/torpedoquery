@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.netappsid.jpaquery.OnGoingCondition;
 
-public class WhereClauseHandler<T> implements QueryHandler<com.netappsid.jpaquery.OnGoingCondition<T>> {
+public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements QueryHandler<E> {
 
 	private final boolean registerWhereClause;
 
@@ -18,13 +18,13 @@ public class WhereClauseHandler<T> implements QueryHandler<com.netappsid.jpaquer
 	}
 
 	@Override
-	public OnGoingCondition<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
+	public E handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 		MethodCall pollFirst = methodCalls.pollFirst();
 		final QueryBuilder queryImpl = proxyQueryBuilders.get(pollFirst.getProxy());
 		final WhereClause<T> whereClause = new WhereClause<T>(queryImpl, pollFirst.getMethod());
 		if (registerWhereClause) {
 			queryImpl.setWhereClause(whereClause);
 		}
-		return whereClause;
+		return (E) whereClause;
 	}
 }

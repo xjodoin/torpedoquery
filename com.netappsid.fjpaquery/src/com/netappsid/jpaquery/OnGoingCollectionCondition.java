@@ -6,6 +6,6 @@ public interface OnGoingCollectionCondition<T> {
 
 	OnGoingLogicalCondition isNotEmpty();
 
-	OnGoingCondition<Integer> size();
+	OnGoingNumberCondition<Integer> size();
 
 }

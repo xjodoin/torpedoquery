@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.netappsid.jpaquery.FJPAQuery;
 import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
+import com.netappsid.jpaquery.OnGoingNumberCondition;
 
 public class LogicalCondition implements OnGoingLogicalCondition {
 
@@ -25,18 +26,30 @@ public class LogicalCondition implements OnGoingLogicalCondition {
 		return getRight();
 	}
 
-	private <T1> OnGoingCondition<T1> getRight() {
-		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
-		WhereClauseHandler<T1> whereClauseHandler = new WhereClauseHandler<T1>(false);
-		OnGoingCondition<T1> handle = fjpaMethodHandler.handle(whereClauseHandler);
-		right = (WhereClause) handle;
-		return handle;
+	@Override
+	public <T1 extends Number> OnGoingNumberCondition<T1> and(T1 property) {
+		condition = " and ";
+		return getRight();
 	}
 
 	@Override
 	public <T1> OnGoingCondition<T1> or(T1 property) {
 		condition = " or ";
 		return getRight();
+	}
+
+	@Override
+	public <T1 extends Number> OnGoingNumberCondition<T1> or(T1 property) {
+		condition = " or ";
+		return getRight();
+	}
+
+	private <T1> WhereClause<T1> getRight() {
+		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
+		WhereClauseHandler<T1, OnGoingCondition<T1>> whereClauseHandler = new WhereClauseHandler<T1, OnGoingCondition<T1>>(false);
+		OnGoingCondition<T1> handle = fjpaMethodHandler.handle(whereClauseHandler);
+		right = (WhereClause) handle;
+		return right;
 	}
 
 	public List<Parameter> getParameters() {

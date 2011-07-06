@@ -32,27 +32,27 @@ public class WhereClauseTest {
 	@Test
 	public void test_lt() {
 		Entity from = from(Entity.class);
-		where(from.getCode()).lt("test");
+		where(from.getIntegerField()).lt(2);
 
-		assertEquals("from Entity entity_0 where entity_0.code < :code_1", query(from));
+		assertEquals("from Entity entity_0 where entity_0.integerField < :integerField_1", query(from));
 
 	}
 
 	@Test
 	public void test_lte() {
 		Entity from = from(Entity.class);
-		where(from.getCode()).lte("test");
+		where(from.getIntegerField()).lte(2);
 
-		assertEquals("from Entity entity_0 where entity_0.code <= :code_1", query(from));
+		assertEquals("from Entity entity_0 where entity_0.integerField <= :integerField_1", query(from));
 
 	}
 
 	@Test
 	public void test_gt() {
 		Entity from = from(Entity.class);
-		where(from.getCode()).gt("test");
+		where(from.getIntegerField()).gt(2);
 
-		assertEquals("from Entity entity_0 where entity_0.code > :code_1", query(from));
+		assertEquals("from Entity entity_0 where entity_0.integerField > :integerField_1", query(from));
 
 	}
 

@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.OnGoingCollectionCondition;
-import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLikeCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
+import com.netappsid.jpaquery.OnGoingNumberCondition;
 import com.netappsid.jpaquery.Query;
 
-public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T> {
+public class WhereClause<T> implements OnGoingNumberCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T> {
 	private final QueryBuilder queryBuilder;
 	private Selector selector;
 	private LogicalCondition logicalCondition;
@@ -150,8 +150,8 @@ public class WhereClause<T> implements OnGoingCondition<T>, OnGoingLikeCondition
 	}
 
 	@Override
-	public OnGoingCondition<Integer> size() {
+	public OnGoingNumberCondition<Integer> size() {
 		selector = new SizeSelector(selector);
-		return (OnGoingCondition<Integer>) this;
+		return (OnGoingNumberCondition<Integer>) this;
 	}
 }
