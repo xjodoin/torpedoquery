@@ -1,6 +1,5 @@
 package com.netappsid.jpaquery.internal;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,66 +8,70 @@ import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
 import com.netappsid.jpaquery.OnGoingNumberCondition;
 
-public class LogicalCondition implements OnGoingLogicalCondition {
+public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 
-	private final Condition leftCondition;
-	private WhereClause right;
-	private String condition;
+	private Condition condition;
 
-	public LogicalCondition(Condition leftCondition) {
-		this.leftCondition = leftCondition;
+	public LogicalCondition(Condition condition) {
+		this.condition = condition;
 	}
 
 	@Override
 	public <T1> OnGoingCondition<T1> and(T1 property) {
 
-		condition = " and ";
-		return getRight();
-	}
-
-	@Override
-	public <T1 extends Number> OnGoingNumberCondition<T1> and(T1 property) {
-		condition = " and ";
-		return getRight();
+		OnGoingCondition<T1> right = this.<T1, OnGoingCondition<T1>> createCondition();
+		condition = new AndCondition(condition, (Condition) right);
+		return right;
 	}
 
 	@Override
 	public <T1> OnGoingCondition<T1> or(T1 property) {
-		condition = " or ";
-		return getRight();
+		OnGoingCondition<T1> right = this.<T1, OnGoingCondition<T1>> createCondition();
+		condition = new OrCondition(condition, (Condition) right);
+		return right;
+	}
+
+	@Override
+	public <T1 extends Number> OnGoingNumberCondition<T1> and(T1 property) {
+		OnGoingNumberCondition<T1> right = this.<T1, OnGoingNumberCondition<T1>> createCondition();
+		condition = new AndCondition(condition, (Condition) right);
+		return right;
 	}
 
 	@Override
 	public <T1 extends Number> OnGoingNumberCondition<T1> or(T1 property) {
-		condition = " or ";
-		return getRight();
-	}
-
-	private <T1> WhereClause<T1> getRight() {
-		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
-		WhereClauseHandler<T1, OnGoingCondition<T1>> whereClauseHandler = new WhereClauseHandler<T1, OnGoingCondition<T1>>(false);
-		OnGoingCondition<T1> handle = fjpaMethodHandler.handle(whereClauseHandler);
-		right = (WhereClause) handle;
+		OnGoingNumberCondition<T1> right = this.<T1, OnGoingNumberCondition<T1>> createCondition();
+		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
 
-	public List<Parameter> getParameters() {
-		List<Parameter> parameters = new ArrayList<Parameter>();
-		parameters.addAll(leftCondition.getParameters());
-		if (right != null && right.hasCondition()) {
-			parameters.addAll(right.getParameters());
-		}
-		return parameters;
+	private <T, E extends OnGoingCondition<T>> E createCondition() {
+		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
+		WhereClauseHandler<T, E> whereClauseHandler = new WhereClauseHandler<T, E>(this, false);
+		E handle = fjpaMethodHandler.handle(whereClauseHandler);
+		return handle;
 	}
 
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+	@Override
+	public List<Parameter> getParameters() {
+		return condition.getParameters();
+	}
 
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(leftCondition.createQueryFragment(queryBuilder, incrementor));
-		if (right != null && right.hasCondition()) {
-			stringBuilder.append(condition).append(right.createQueryFragment(queryBuilder, incrementor));
-		}
-		return stringBuilder.toString();
+	@Override
+	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+		return condition.createQueryFragment(queryBuilder, incrementor);
+	}
+
+	@Override
+	public OnGoingLogicalCondition and(OnGoingLogicalCondition condition) {
+		this.condition = new AndCondition(this.condition, new GroupingCondition((Condition) condition));
+		return this;
+	}
+
+	@Override
+	public OnGoingLogicalCondition or(OnGoingLogicalCondition condition) {
+		this.condition = new OrCondition(this.condition, new GroupingCondition((Condition) condition));
+		return this;
 	}
 
 }

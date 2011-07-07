@@ -24,8 +24,6 @@ import com.netappsid.jpaquery.internal.SumFunctionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseCollectionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
 
-
-
 public class FJPAQuery {
 	private static ThreadLocal<FJPAMethodHandler> methodHandler = new ThreadLocal<FJPAMethodHandler>() {
 		@Override
@@ -33,22 +31,21 @@ public class FJPAQuery {
 			return new FJPAMethodHandler();
 		}
 	};
-	
+
 	private static MultiClassLoaderProvider osgiAwareClassLoaderProvider;
-	
-	static
-	{
+
+	static {
 		osgiAwareClassLoaderProvider = new MultiClassLoaderProvider();
 		ProxyFactory.classLoaderProvider = osgiAwareClassLoaderProvider;
 	}
-	
+
 	private static ThreadLocal<InternalQuery> query = new ThreadLocal<InternalQuery>();
 
 	public static <T> T from(Class<T> toQuery) {
 
 		try {
 			final ProxyFactory proxyFactory = new ProxyFactory();
-			
+
 			proxyFactory.setSuperclass(toQuery);
 			proxyFactory.setInterfaces(new Class[] { InternalQuery.class });
 
@@ -111,6 +108,22 @@ public class FJPAQuery {
 
 	public static <T> OnGoingCollectionCondition<T> where(Collection<T> object) {
 		return getQuery().handle(new WhereClauseCollectionHandler<T>());
+	}
+
+	public static <T> OnGoingCondition<T> condition(T object) {
+		return getQuery().handle(new WhereClauseHandler<T, OnGoingCondition<T>>(false));
+	}
+
+	public static <T extends Number> OnGoingNumberCondition<T> condition(T object) {
+		return getQuery().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T>>(false));
+	}
+
+	public static OnGoingStringCondition<String> condition(String object) {
+		return getQuery().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(false));
+	}
+
+	public static <T> OnGoingCollectionCondition<T> condition(Collection<T> object) {
+		return getQuery().handle(new WhereClauseCollectionHandler<T>(false));
 	}
 
 	// JPA Functions

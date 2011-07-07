@@ -5,15 +5,22 @@ import java.util.Map;
 
 import com.netappsid.jpaquery.OnGoingCondition;
 
+//TODO duplicate avec WhereClauseCollectionHandler
 public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements QueryHandler<E> {
 
 	private final boolean registerWhereClause;
+	private final LogicalCondition logicalCondition;
 
 	public WhereClauseHandler() {
-		this(true);
+		this(null, true);
 	}
 
 	public WhereClauseHandler(boolean registerWhereClause) {
+		this(null, registerWhereClause);
+	}
+
+	public WhereClauseHandler(LogicalCondition logicalCondition, boolean registerWhereClause) {
+		this.logicalCondition = logicalCondition;
 		this.registerWhereClause = registerWhereClause;
 	}
 
@@ -21,7 +28,8 @@ public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements Que
 	public E handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 		MethodCall pollFirst = methodCalls.pollFirst();
 		final QueryBuilder queryImpl = proxyQueryBuilders.get(pollFirst.getProxy());
-		final WhereClause<T> whereClause = new WhereClause<T>(queryImpl, pollFirst.getMethod());
+		final WhereClause<T> whereClause = logicalCondition != null ? new WhereClause<T>(logicalCondition, queryImpl, pollFirst.getMethod())
+				: new WhereClause<T>(queryImpl, pollFirst.getMethod());
 		if (registerWhereClause) {
 			queryImpl.setWhereClause(whereClause);
 		}

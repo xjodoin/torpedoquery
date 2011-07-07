@@ -36,11 +36,13 @@ public class QueryBuilder {
 
 	public StringBuilder appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
 
-		if (whereClause != null) {
+		Condition whereClauseCondition = getWhereClause();
+
+		if (whereClauseCondition != null) {
 			if (builder.length() == 0) {
-				builder.append(" where ").append(whereClause.createQueryFragment(this, incrementor)).append(" ");
+				builder.append(" where ").append(whereClauseCondition.createQueryFragment(this, incrementor)).append(" ");
 			} else {
-				builder.append("and ").append(whereClause.createQueryFragment(this, incrementor)).append(" ");
+				builder.append("and ").append(whereClauseCondition.createQueryFragment(this, incrementor)).append(" ");
 			}
 		}
 
@@ -107,6 +109,13 @@ public class QueryBuilder {
 		this.whereClause = whereClause;
 	}
 
+	public Condition getWhereClause() {
+		if (whereClause != null) {
+			return whereClause.getLogicalCondition() != null ? whereClause.getLogicalCondition() : whereClause;
+		}
+		return null;
+	}
+
 	public Map<String, Object> getParametersAsMap() {
 
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -120,10 +129,12 @@ public class QueryBuilder {
 	public List<Parameter> getParameters() {
 		List<Parameter> parameters = new ArrayList<Parameter>();
 
-		if (whereClause != null) {
-			parameters.addAll(whereClause.getParameters());
+		Condition whereClauseCondition = getWhereClause();
+
+		if (whereClauseCondition != null) {
+			parameters.addAll(whereClauseCondition.getParameters());
 		}
-		
+
 		for (Join join : joins) {
 			parameters.addAll(join.getParams());
 		}

@@ -3,6 +3,7 @@ package com.netappsid.jpaquery.internal;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -13,14 +14,26 @@ import com.netappsid.jpaquery.OnGoingNumberCondition;
 import com.netappsid.jpaquery.OnGoingStringCondition;
 import com.netappsid.jpaquery.Query;
 
-public class WhereClause<T> implements OnGoingNumberCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T> {
+public class WhereClause<T> implements OnGoingNumberCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T>, Condition {
 	private final QueryBuilder queryBuilder;
 	private Selector selector;
-	private LogicalCondition logicalCondition;
+	private final LogicalCondition logicalCondition;
+	private Condition condition;
 
 	public WhereClause(QueryBuilder queryBuilder, Method method) {
+		this.logicalCondition = new LogicalCondition(this);
 		this.queryBuilder = queryBuilder;
 		this.selector = new SimpleMethodCallSelector(method);
+	}
+
+	public WhereClause(LogicalCondition logicalCondition, QueryBuilder queryBuilder, Method method) {
+		this.logicalCondition = logicalCondition;
+		this.queryBuilder = queryBuilder;
+		this.selector = new SimpleMethodCallSelector(method);
+	}
+
+	public LogicalCondition getLogicalCondition() {
+		return logicalCondition;
 	}
 
 	@Override
@@ -103,21 +116,28 @@ public class WhereClause<T> implements OnGoingNumberCondition<T>, OnGoingStringC
 		return getOnGoingLogicalCondition(new NotInSubQueryCondition<T>(selector, subQuery));
 	}
 
+	@Override
 	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
-		return logicalCondition.createQueryFragment(queryBuilder, incrementor);
+		if (condition != null) {
+			return condition.createQueryFragment(queryBuilder, incrementor);
+		} else {
+			return "";
+		}
+
 	}
 
 	private OnGoingLogicalCondition getOnGoingLogicalCondition(Condition condition) {
-		logicalCondition = new LogicalCondition(condition);
+		this.condition = condition;
 		return logicalCondition;
 	}
 
+	@Override
 	public List<Parameter> getParameters() {
-		return logicalCondition.getParameters();
-	}
-
-	public boolean hasCondition() {
-		return logicalCondition != null;
+		if (condition != null) {
+			return condition.getParameters();
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
 	@Override
