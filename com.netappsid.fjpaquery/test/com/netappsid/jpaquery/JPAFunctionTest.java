@@ -33,8 +33,7 @@ public class JPAFunctionTest {
 	@Test
 	public void testCountFunction_withSpecifiedField_plusOneSelect_inverse() {
 		Entity from = from(Entity.class);
-		Function count = count(from.getCode());
-		select(from.getCode(),count);
+		select(from.getCode(),count(from.getCode()));
 		assertEquals("select entity_0.code, count(entity_0.code) from Entity entity_0", query(from));
 	}
 	

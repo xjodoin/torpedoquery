@@ -18,7 +18,7 @@ public class SelectHandler<T> implements QueryHandler<Query<T>> {
 	@Override
 	public Query<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 
-		Iterator<MethodCall> iterator = methodCalls.iterator();
+		Iterator<MethodCall> iterator = methodCalls.descendingIterator();
 
 		InternalQuery proxy = null;
 
@@ -38,6 +38,7 @@ public class SelectHandler<T> implements QueryHandler<Query<T>> {
 			} else {
 
 				MethodCall methodCall = iterator.next();
+				iterator.remove();
 				proxy = methodCall.getProxy();
 				proxyQueryBuilders.get(proxy).addSelector(new SimpleMethodCallSelector(methodCall.getMethod()));
 			}
