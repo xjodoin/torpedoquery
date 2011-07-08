@@ -7,11 +7,17 @@ import java.util.Map;
 import com.netappsid.jpaquery.Function;
 import com.netappsid.jpaquery.Query;
 
-public class SelectHandler<T> implements QueryHandler<Query<T>> {
+public class ArrayCallHandler<T> implements QueryHandler<Query<T>> {
+
+	public static interface ValueHandler {
+		void handle(InternalQuery proxy, QueryBuilder queryBuilder, Selector selector);
+	}
 
 	private final Object[] values;
+	private final ValueHandler handler;
 
-	public SelectHandler(Object[] values) {
+	public ArrayCallHandler(ValueHandler handler, Object[] values) {
+		this.handler = handler;
 		this.values = values;
 	}
 
@@ -25,23 +31,29 @@ public class SelectHandler<T> implements QueryHandler<Query<T>> {
 		for (int i = 0; i < values.length; i++) {
 
 			Object param = values[i];
+			QueryBuilder queryBuilder;
+			Selector selector;
 
 			if (param instanceof Function) {
-
 				Function function = (Function) values[i];
+				selector = function;
 				proxy = (InternalQuery) function.getProxy();
-				proxyQueryBuilders.get(proxy).addSelector(function);
+				queryBuilder = proxyQueryBuilders.get(proxy);
 
 			} else if (param instanceof InternalQuery) {
 				proxy = (InternalQuery) param;
-				proxyQueryBuilders.get(proxy).addSelector(new ObjectSelector(proxy));
+				queryBuilder = proxyQueryBuilders.get(proxy);
+				selector = new ObjectSelector(proxy);
 			} else {
 
 				MethodCall methodCall = iterator.next();
 				iterator.remove();
 				proxy = methodCall.getProxy();
-				proxyQueryBuilders.get(proxy).addSelector(new SimpleMethodCallSelector(methodCall.getMethod()));
+				queryBuilder = proxyQueryBuilders.get(proxy);
+				selector = new SimpleMethodCallSelector(methodCall.getMethod());
 			}
+
+			handler.handle(proxy, queryBuilder, selector);
 		}
 
 		return proxy;

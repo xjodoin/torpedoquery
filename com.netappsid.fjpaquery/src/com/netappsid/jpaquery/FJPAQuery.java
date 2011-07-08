@@ -9,7 +9,10 @@ import javassist.util.proxy.ProxyFactory;
 
 import javax.persistence.EntityManager;
 
+import com.netappsid.jpaquery.internal.ArrayCallHandler;
+import com.netappsid.jpaquery.internal.ArrayCallHandler.ValueHandler;
 import com.netappsid.jpaquery.internal.AvgFunctionHandler;
+import com.netappsid.jpaquery.internal.CoalesceFunction;
 import com.netappsid.jpaquery.internal.CountFunctionHandler;
 import com.netappsid.jpaquery.internal.FJPAMethodHandler;
 import com.netappsid.jpaquery.internal.InnerJoinHandler;
@@ -18,8 +21,9 @@ import com.netappsid.jpaquery.internal.LeftJoinHandler;
 import com.netappsid.jpaquery.internal.MaxFunctionHandler;
 import com.netappsid.jpaquery.internal.MinFunctionHandler;
 import com.netappsid.jpaquery.internal.MultiClassLoaderProvider;
+import com.netappsid.jpaquery.internal.QueryBuilder;
 import com.netappsid.jpaquery.internal.RightJoinHandler;
-import com.netappsid.jpaquery.internal.SelectHandler;
+import com.netappsid.jpaquery.internal.Selector;
 import com.netappsid.jpaquery.internal.SumFunctionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseCollectionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
@@ -67,7 +71,13 @@ public class FJPAQuery {
 	}
 
 	public static <T> Query<T> select(Object... values) {
-		return getQuery().handle(new SelectHandler(values));
+		return getQuery().handle(new ArrayCallHandler(new ValueHandler() {
+
+			@Override
+			public void handle(InternalQuery query, QueryBuilder queryBuilder, Selector selector) {
+				queryBuilder.addSelector(selector);
+			}
+		}, values));
 	}
 
 	public static <T> T innerJoin(T toJoin) {
@@ -148,6 +158,19 @@ public class FJPAQuery {
 
 	public static Function avg(Number number) {
 		return getQuery().handle(new AvgFunctionHandler());
+	}
+
+	public static Function coalesce(Object... values) {
+		final CoalesceFunction coalesceFunction = new CoalesceFunction();
+		getQuery().handle(new ArrayCallHandler(new ValueHandler() {
+			@Override
+			public void handle(InternalQuery proxy, QueryBuilder queryBuilder, Selector selector) {
+				coalesceFunction.setQuery(proxy);
+				coalesceFunction.addSelector(selector);
+			}
+		}, values));
+
+		return coalesceFunction;
 	}
 
 	public static String query(Object proxy) {

@@ -1,7 +1,7 @@
 package com.netappsid.jpaquery;
 
 import static com.netappsid.jpaquery.FJPAQuery.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -29,45 +29,47 @@ public class JPAFunctionTest {
 		select(count(from.getCode()), from.getCode());
 		assertEquals("select count(entity_0.code), entity_0.code from Entity entity_0", query(from));
 	}
-	
+
 	@Test
 	public void testCountFunction_withSpecifiedField_plusOneSelect_inverse() {
 		Entity from = from(Entity.class);
-		select(from.getCode(),count(from.getCode()));
+		select(from.getCode(), count(from.getCode()));
 		assertEquals("select entity_0.code, count(entity_0.code) from Entity entity_0", query(from));
 	}
-	
+
 	@Test
-	public void testSumFunction()
-	{
+	public void testSumFunction() {
 		Entity from = from(Entity.class);
 		select(sum(from.getIntegerField()));
 		assertEquals("select sum(entity_0.integerField) from Entity entity_0", query(from));
 	}
-	
+
 	@Test
-	public void testMinFunction()
-	{
+	public void testMinFunction() {
 		Entity from = from(Entity.class);
 		select(min(from.getIntegerField()));
 		assertEquals("select min(entity_0.integerField) from Entity entity_0", query(from));
 	}
-	
+
 	@Test
-	public void testMaxFunction()
-	{
+	public void testMaxFunction() {
 		Entity from = from(Entity.class);
 		select(max(from.getIntegerField()));
 		assertEquals("select max(entity_0.integerField) from Entity entity_0", query(from));
 	}
-	
+
 	@Test
-	public void testAvgFunction()
-	{
+	public void testAvgFunction() {
 		Entity from = from(Entity.class);
 		select(avg(from.getIntegerField()));
 		assertEquals("select avg(entity_0.integerField) from Entity entity_0", query(from));
 	}
-	
+
+	@Test
+	public void testCoalesceFunction() {
+		Entity from = from(Entity.class);
+		select(coalesce(from.getCode(), from.getName()));
+		assertEquals("select coalesce(entity_0.code,entity_0.name) from Entity entity_0", query(from));
+	}
 
 }

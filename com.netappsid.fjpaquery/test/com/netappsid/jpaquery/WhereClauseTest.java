@@ -229,6 +229,14 @@ public class WhereClauseTest {
 	}
 
 	@Test
+	public void test_where_with_condition_or_inline() {
+		Entity from = from(Entity.class);
+		where(from.getName()).eq("test").or(condition(from.getCode()).eq("test").or(from.getCode()).eq("test2"));
+
+		assertEquals("from Entity entity_0 where entity_0.name = :name_1 or ( entity_0.code = :code_2 or entity_0.code = :code_3 )", query(from));
+	}
+
+	@Test
 	public void test_where_three_conditions() {
 		Entity from = from(Entity.class);
 		where(from.getName()).eq("test").and(from.getIntegerField()).gt(2).and(from.getCode()).eq("test");
