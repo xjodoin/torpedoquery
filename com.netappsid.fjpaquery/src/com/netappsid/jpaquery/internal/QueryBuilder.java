@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.netappsid.jpaquery.OrderBy;
+
 public class QueryBuilder {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<Selector>();
@@ -13,6 +15,7 @@ public class QueryBuilder {
 	private WhereClause<?> whereClause;
 
 	private String alias;
+	private OrderBy orderBy;
 
 	public QueryBuilder(Class<?> toQuery) {
 		this.toQuery = toQuery;
@@ -31,7 +34,22 @@ public class QueryBuilder {
 
 		builder.append(appendWhereClause(new StringBuilder(), incrementor));
 
+		builder.append(appendOrderBy(new StringBuilder(), incrementor));
+
 		return builder.toString().trim();
+	}
+
+	public String appendOrderBy(StringBuilder builder, AtomicInteger incrementor) {
+
+		if (orderBy != null) {
+			orderBy.createQueryFragment(builder, this, incrementor);
+		}
+
+		for (Join join : joins) {
+			join.appendOrderBy(builder, incrementor);
+		}
+
+		return builder.toString();
 	}
 
 	public StringBuilder appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
@@ -148,6 +166,15 @@ public class QueryBuilder {
 
 	public <T> Parameter<List<T>> generateParameter(Selector selector, List<T> value) {
 		return new Parameter<List<T>>(selector.getName(), value);
+	}
+
+	public void addOrder(Selector selector) {
+		if (orderBy == null) {
+			orderBy = new OrderBy();
+		}
+
+		orderBy.addOrder(selector);
+
 	}
 
 }

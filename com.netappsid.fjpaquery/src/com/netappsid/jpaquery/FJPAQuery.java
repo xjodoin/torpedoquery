@@ -173,6 +173,16 @@ public class FJPAQuery {
 		return coalesceFunction;
 	}
 
+	public static void orderBy(Object... values) {
+		getQuery().handle(new ArrayCallHandler(new ValueHandler() {
+			@Override
+			public void handle(InternalQuery proxy, QueryBuilder queryBuilder, Selector selector) {
+				queryBuilder.addOrder(selector);
+			}
+		}, values));
+
+	}
+
 	public static String query(Object proxy) {
 		if (proxy instanceof InternalQuery) {
 			InternalQuery from = (InternalQuery) proxy;

@@ -13,4 +13,6 @@ public interface Join {
 
 	List<Parameter> getParams();
 
+	void appendOrderBy(StringBuilder builder, AtomicInteger incrementor);
+
 }
