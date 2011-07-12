@@ -42,4 +42,24 @@ public class OrderByTest {
 		assertEquals("from Entity entity_0 inner join entity_0.subEntity subEntity_1 order by entity_0.code,subEntity_1.code", query(from));
 	}
 
+	@Test
+	public void test_simpleOrderBy_asc() {
+		Entity from = from(Entity.class);
+		orderBy(asc(from.getCode()));
+		assertEquals("from Entity entity_0 order by entity_0.code asc", query(from));
+	}
+
+	@Test
+	public void test_simpleOrderBy_desc() {
+		Entity from = from(Entity.class);
+		orderBy(desc(from.getCode()));
+		assertEquals("from Entity entity_0 order by entity_0.code desc", query(from));
+	}
+
+	@Test
+	public void test_simpleOrderBy_asc_and_default() {
+		Entity from = from(Entity.class);
+		orderBy(asc(from.getCode()), from.getName());
+		assertEquals("from Entity entity_0 order by entity_0.code asc,entity_0.name", query(from));
+	}
 }

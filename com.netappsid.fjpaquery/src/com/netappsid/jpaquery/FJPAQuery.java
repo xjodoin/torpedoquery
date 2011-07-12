@@ -183,6 +183,16 @@ public class FJPAQuery {
 
 	}
 
+	// orderBy function
+
+	public static Function asc(Object object) {
+		return getQuery().handle(new AscFunctionHandler());
+	}
+
+	public static Function desc(Object object) {
+		return getQuery().handle(new DescFunctionHandler());
+	}
+
 	public static String query(Object proxy) {
 		if (proxy instanceof InternalQuery) {
 			InternalQuery from = (InternalQuery) proxy;
