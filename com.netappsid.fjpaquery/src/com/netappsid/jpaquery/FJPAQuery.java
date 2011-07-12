@@ -58,6 +58,7 @@ public class FJPAQuery {
 			final T proxy = (T) proxyFactory.create(null, null, fjpaMethodHandler);
 
 			fjpaMethodHandler.addQueryBuilder(proxy, toQuery);
+			setQuery((InternalQuery) proxy);
 			return proxy;
 
 		} catch (Exception e) {
