@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import javassist.util.proxy.ProxyFactory;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import com.netappsid.jpaquery.internal.ArrayCallHandler;
 import com.netappsid.jpaquery.internal.ArrayCallHandler.ValueHandler;
@@ -209,11 +210,15 @@ public class FJPAQuery {
 		return null;
 	}
 
-	public static <T> T singleResult(EntityManager entityManager, Object from) {
-		return (T) createJPAQuery(entityManager, from).getSingleResult();
+	public static <T> T get(EntityManager entityManager, Query<T> from) {
+		try {
+			return (T) createJPAQuery(entityManager, from).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
-	public static <T> List<T> resultList(EntityManager entityManager, Object from) {
+	public static <T> List<T> list(EntityManager entityManager, Query<T> from) {
 		return createJPAQuery(entityManager, from).getResultList();
 	}
 
