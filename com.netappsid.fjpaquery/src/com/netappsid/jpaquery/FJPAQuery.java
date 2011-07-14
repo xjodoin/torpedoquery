@@ -69,10 +69,10 @@ public class FJPAQuery {
 	}
 
 	public static <T> Query<T> select(T value) {
-		return select(new Object[] { value });
+		return (Query<T>) FJPAQuery.select(new Object[] { value });
 	}
 
-	public static <T> Query<T> select(Object... values) {
+	public static <T> Query<T[]> select(T... values) {
 		return getQuery().handle(new ArrayCallHandler(new ValueHandler() {
 
 			@Override
