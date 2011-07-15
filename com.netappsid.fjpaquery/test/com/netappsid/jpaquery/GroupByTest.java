@@ -14,7 +14,8 @@ public class GroupByTest {
 		Entity from = from(Entity.class);
 		groupBy(from.getName());
 		Query<Object[]> select = select(from.getName(), sum(from.getIntegerField()));
-		String query = query(from);
-		Assert.assertEquals("select entity_0.name,sum(entity_0.integerField) from Entity entity_0 group by entity_0.name", query);
+		String query = select.getQuery();
+
+		Assert.assertEquals("select entity_0.name, sum(entity_0.integerField) from Entity entity_0 group by entity_0.name", query);
 	}
 }

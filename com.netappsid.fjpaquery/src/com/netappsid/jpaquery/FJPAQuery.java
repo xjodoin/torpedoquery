@@ -13,9 +13,11 @@ import javax.persistence.NoResultException;
 
 import com.netappsid.jpaquery.internal.ArrayCallHandler;
 import com.netappsid.jpaquery.internal.ArrayCallHandler.ValueHandler;
+import com.netappsid.jpaquery.internal.AscFunctionHandler;
 import com.netappsid.jpaquery.internal.AvgFunctionHandler;
 import com.netappsid.jpaquery.internal.CoalesceFunction;
 import com.netappsid.jpaquery.internal.CountFunctionHandler;
+import com.netappsid.jpaquery.internal.DescFunctionHandler;
 import com.netappsid.jpaquery.internal.FJPAMethodHandler;
 import com.netappsid.jpaquery.internal.InnerJoinHandler;
 import com.netappsid.jpaquery.internal.LeftJoinHandler;
@@ -142,6 +144,7 @@ public class FJPAQuery {
 		getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
 			@Override
 			public void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
+				queryBuilder.addGroupBy(selector);
 			}
 		}, values));
 	}

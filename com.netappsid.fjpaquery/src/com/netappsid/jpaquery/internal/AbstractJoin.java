@@ -36,6 +36,11 @@ public abstract class AbstractJoin implements Join {
 	}
 
 	@Override
+	public void appendGroupBy(StringBuilder builder, AtomicInteger incrementor) {
+		join.appendGroupBy(builder, incrementor);
+	}
+
+	@Override
 	public List<Parameter> getParams() {
 		return join.getParameters();
 	}

@@ -1,12 +1,10 @@
-package com.netappsid.jpaquery;
+package com.netappsid.jpaquery.internal;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.internal.QueryBuilder;
-import com.netappsid.jpaquery.internal.Selector;
 
 public class OrderBy {
 

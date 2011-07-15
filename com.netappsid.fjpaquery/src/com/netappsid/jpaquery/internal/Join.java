@@ -15,4 +15,6 @@ public interface Join {
 
 	void appendOrderBy(StringBuilder builder, AtomicInteger incrementor);
 
+	void appendGroupBy(StringBuilder builder, AtomicInteger incrementor);
+
 }

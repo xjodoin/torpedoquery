@@ -1,6 +1,5 @@
-package com.netappsid.jpaquery;
+package com.netappsid.jpaquery.internal;
 
-import com.netappsid.jpaquery.internal.OrderByFunctionHandler;
 
 public class AscFunctionHandler extends OrderByFunctionHandler {
 

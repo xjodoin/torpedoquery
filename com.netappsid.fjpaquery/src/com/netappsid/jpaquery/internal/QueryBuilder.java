@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.OrderBy;
 import com.netappsid.jpaquery.Query;
 
 public class QueryBuilder implements Query<Object> {
@@ -17,6 +16,7 @@ public class QueryBuilder implements Query<Object> {
 
 	private String alias;
 	private OrderBy orderBy;
+	private GroupBy groupBy;
 
 	public QueryBuilder(Class<?> toQuery) {
 		this.toQuery = toQuery;
@@ -37,7 +37,14 @@ public class QueryBuilder implements Query<Object> {
 
 		builder.append(appendOrderBy(new StringBuilder(), incrementor));
 
+		builder.append(appendGroupBy(new StringBuilder(), incrementor));
+
 		return builder.toString().trim();
+	}
+
+	@Override
+	public String getQuery() {
+		return getQuery(new AtomicInteger());
 	}
 
 	public String appendOrderBy(StringBuilder builder, AtomicInteger incrementor) {
@@ -48,6 +55,19 @@ public class QueryBuilder implements Query<Object> {
 
 		for (Join join : joins) {
 			join.appendOrderBy(builder, incrementor);
+		}
+
+		return builder.toString();
+	}
+
+	public String appendGroupBy(StringBuilder builder, AtomicInteger incrementor) {
+
+		if (groupBy != null) {
+			groupBy.createQueryFragment(builder, this, incrementor);
+		}
+
+		for (Join join : joins) {
+			join.appendGroupBy(builder, incrementor);
 		}
 
 		return builder.toString();
@@ -176,6 +196,14 @@ public class QueryBuilder implements Query<Object> {
 
 		orderBy.addOrder(selector);
 
+	}
+
+	public void addGroupBy(Selector selector) {
+		if (groupBy == null) {
+			groupBy = new GroupBy();
+		}
+
+		groupBy.addGroup(selector);
 	}
 
 }
