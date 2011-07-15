@@ -10,7 +10,7 @@ import com.netappsid.jpaquery.Function;
 public class CoalesceFunction implements Function {
 
 	private final List<Selector> selectors = new ArrayList<Selector>();
-	private InternalQuery proxy;
+	private Proxy proxy;
 
 	@Override
 	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
@@ -44,7 +44,7 @@ public class CoalesceFunction implements Function {
 		selectors.add(selector);
 	}
 
-	public void setQuery(InternalQuery proxy) {
+	public void setQuery(Proxy proxy) {
 		this.proxy = proxy;
 
 	}

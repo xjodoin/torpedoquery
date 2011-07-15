@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javassist.util.proxy.ProxyFactory;
 
@@ -17,11 +18,11 @@ import com.netappsid.jpaquery.internal.CoalesceFunction;
 import com.netappsid.jpaquery.internal.CountFunctionHandler;
 import com.netappsid.jpaquery.internal.FJPAMethodHandler;
 import com.netappsid.jpaquery.internal.InnerJoinHandler;
-import com.netappsid.jpaquery.internal.InternalQuery;
 import com.netappsid.jpaquery.internal.LeftJoinHandler;
 import com.netappsid.jpaquery.internal.MaxFunctionHandler;
 import com.netappsid.jpaquery.internal.MinFunctionHandler;
 import com.netappsid.jpaquery.internal.MultiClassLoaderProvider;
+import com.netappsid.jpaquery.internal.Proxy;
 import com.netappsid.jpaquery.internal.QueryBuilder;
 import com.netappsid.jpaquery.internal.RightJoinHandler;
 import com.netappsid.jpaquery.internal.Selector;
@@ -38,7 +39,7 @@ public class FJPAQuery {
 		ProxyFactory.classLoaderProvider = osgiAwareClassLoaderProvider;
 	}
 
-	private static ThreadLocal<InternalQuery> query = new ThreadLocal<InternalQuery>();
+	private static ThreadLocal<Proxy> query = new ThreadLocal<Proxy>();
 
 	public static <T> T from(Class<T> toQuery) {
 
@@ -46,7 +47,7 @@ public class FJPAQuery {
 			final ProxyFactory proxyFactory = new ProxyFactory();
 
 			proxyFactory.setSuperclass(toQuery);
-			proxyFactory.setInterfaces(new Class[] { InternalQuery.class });
+			proxyFactory.setInterfaces(new Class[] { Proxy.class });
 
 			QueryBuilder queryBuilder = new QueryBuilder(toQuery);
 			FJPAMethodHandler fjpaMethodHandler = new FJPAMethodHandler(queryBuilder);
@@ -54,7 +55,7 @@ public class FJPAQuery {
 
 			fjpaMethodHandler.addQueryBuilder(proxy, queryBuilder);
 
-			setQuery((InternalQuery) proxy);
+			setQuery((Proxy) proxy);
 			return proxy;
 
 		} catch (Exception e) {
@@ -69,13 +70,16 @@ public class FJPAQuery {
 	}
 
 	public static <T> Query<T[]> select(T... values) {
-		return getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
+		FJPAMethodHandler fjpaMethodHandler = getFJPAMethodHandler();
+		fjpaMethodHandler.handle(new ArrayCallHandler(new ValueHandler() {
 
 			@Override
-			public void handle(InternalQuery query, QueryBuilder queryBuilder, Selector selector) {
+			public void handle(Proxy query, QueryBuilder queryBuilder, Selector selector) {
 				queryBuilder.addSelector(selector);
 			}
 		}, values));
+		return fjpaMethodHandler.getRoot();
+
 	}
 
 	public static <T> T innerJoin(T toJoin) {
@@ -137,15 +141,15 @@ public class FJPAQuery {
 	public static void groupBy(Object... values) {
 		getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
 			@Override
-			public void handle(InternalQuery proxy, QueryBuilder queryBuilder, Selector selector) {
+			public void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
 			}
 		}, values));
 	}
 
 	// JPA Functions
 	public static Function count(Object object) {
-		if (object instanceof InternalQuery) {
-			setQuery((InternalQuery) object);
+		if (object instanceof Proxy) {
+			setQuery((Proxy) object);
 		}
 		return getFJPAMethodHandler().handle(new CountFunctionHandler(object));
 	}
@@ -170,7 +174,7 @@ public class FJPAQuery {
 		final CoalesceFunction coalesceFunction = new CoalesceFunction();
 		getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
 			@Override
-			public void handle(InternalQuery proxy, QueryBuilder queryBuilder, Selector selector) {
+			public void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
 				coalesceFunction.setQuery(proxy);
 				coalesceFunction.addSelector(selector);
 			}
@@ -182,7 +186,7 @@ public class FJPAQuery {
 	public static void orderBy(Object... values) {
 		getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
 			@Override
-			public void handle(InternalQuery proxy, QueryBuilder queryBuilder, Selector selector) {
+			public void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
 				queryBuilder.addOrder(selector);
 			}
 		}, values));
@@ -200,47 +204,47 @@ public class FJPAQuery {
 	}
 
 	public static String query(Object proxy) {
-		if (proxy instanceof InternalQuery) {
-			InternalQuery from = (InternalQuery) proxy;
-			return from.getQuery(proxy);
+		if (proxy instanceof Proxy) {
+			Proxy from = (Proxy) proxy;
+			return from.getFJPAMethodHandler().<QueryBuilder> getRoot().getQuery(new AtomicInteger());
 		}
 		return null;
 	}
 
 	public static Map<String, Object> params(Object proxy) {
-		if (proxy instanceof InternalQuery) {
-			InternalQuery from = (InternalQuery) proxy;
-			return from.getParametersAsMap(proxy);
+		if (proxy instanceof Proxy) {
+			Proxy from = (Proxy) proxy;
+			return from.getFJPAMethodHandler().<QueryBuilder> getRoot().getParametersAsMap();
 		}
 		return null;
 	}
 
 	public static <T> T get(EntityManager entityManager, Query<T> from) {
 		try {
-			return (T) createJPAQuery(entityManager, from).getSingleResult();
+			return (T) createJPAQuery(entityManager, (QueryBuilder) from).getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
 	}
 
 	public static <T> List<T> list(EntityManager entityManager, Query<T> from) {
-		return createJPAQuery(entityManager, from).getResultList();
+		return createJPAQuery(entityManager, (QueryBuilder) from).getResultList();
 	}
 
-	public static void setQuery(InternalQuery query) {
+	public static void setQuery(Proxy query) {
 		FJPAQuery.query.set(query);
 	}
 
 	// TODO devrait se retrouver dans l'api interne
 
 	public static FJPAMethodHandler getFJPAMethodHandler() {
-		InternalQuery internalQuery = query.get();
+		Proxy internalQuery = query.get();
 		return internalQuery.getFJPAMethodHandler();
 	}
 
-	private static javax.persistence.Query createJPAQuery(EntityManager entityManager, Object from) {
-		final javax.persistence.Query query = entityManager.createQuery(query(from));
-		final Map<String, Object> parameters = params(from);
+	private static javax.persistence.Query createJPAQuery(EntityManager entityManager, QueryBuilder from) {
+		final javax.persistence.Query query = entityManager.createQuery(from.getQuery(new AtomicInteger()));
+		final Map<String, Object> parameters = from.getParametersAsMap();
 
 		for (Entry<String, Object> parameter : parameters.entrySet()) {
 			query.setParameter(parameter.getKey(), parameter.getValue());

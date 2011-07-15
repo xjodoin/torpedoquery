@@ -5,15 +5,14 @@ import java.lang.reflect.Method;
 import java.util.Deque;
 import java.util.IdentityHashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javassist.util.proxy.MethodHandler;
 
 import com.netappsid.jpaquery.FJPAQuery;
+import com.netappsid.jpaquery.Query;
 
-public class FJPAMethodHandler implements MethodHandler, InternalQuery {
+public class FJPAMethodHandler implements MethodHandler, Proxy {
 	private final Map<Object, QueryBuilder> proxyQueryBuilders = new IdentityHashMap<Object, QueryBuilder>();
 	private final Deque<MethodCall> methods = new LinkedList<MethodCall>();
 	private final QueryBuilder root;
@@ -29,7 +28,7 @@ public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 
 	@Override
 	public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
-		if (thisMethod.getDeclaringClass().equals(InternalQuery.class)) {
+		if (thisMethod.getDeclaringClass().equals(Proxy.class)) {
 			try {
 				return thisMethod.invoke(this, args);
 			} catch (InvocationTargetException e) {
@@ -37,8 +36,8 @@ public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 			}
 		}
 
-		methods.addFirst(new MethodCall((InternalQuery) self, thisMethod));
-		FJPAQuery.setQuery((InternalQuery) self);
+		methods.addFirst(new MethodCall((Proxy) self, thisMethod));
+		FJPAQuery.setQuery((Proxy) self);
 
 		final Class returnType = thisMethod.getReturnType();
 
@@ -49,27 +48,6 @@ public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 		}
 	}
 
-	@Override
-	public String getQuery(Object proxy) {
-		return getQuery(proxy, new AtomicInteger());
-	}
-
-	@Override
-	public String getQuery(Object proxy, AtomicInteger incrementor) {
-		return proxyQueryBuilders.get(proxy).getQuery(incrementor);
-	}
-
-	@Override
-	public Map<String, Object> getParametersAsMap(Object proxy) {
-		return proxyQueryBuilders.get(proxy).getParametersAsMap();
-	}
-
-	@Override
-	public List<Parameter> getParameters(Object proxy) {
-		return proxyQueryBuilders.get(proxy).getParameters();
-	}
-
-	@Override
 	public <T> T handle(QueryHandler<T> handler) {
 		final T result = handler.handleCall(proxyQueryBuilders, methods);
 		return result;
@@ -79,8 +57,8 @@ public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 		return proxyQueryBuilders.get(proxy);
 	}
 
-	public QueryBuilder getRoot() {
-		return root;
+	public <T extends Query> T getRoot() {
+		return (T) root;
 	}
 
 	@Override

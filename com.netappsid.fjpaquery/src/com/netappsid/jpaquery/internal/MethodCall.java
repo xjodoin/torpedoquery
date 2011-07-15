@@ -4,15 +4,15 @@ import java.lang.reflect.Method;
 
 
 public class MethodCall {
-	private final InternalQuery proxy;
+	private final Proxy proxy;
 	private final Method method;
 
-	public MethodCall(InternalQuery proxy, Method method) {
+	public MethodCall(Proxy proxy, Method method) {
 		this.proxy = proxy;
 		this.method = method;
 	}
 
-	public InternalQuery getProxy() {
+	public Proxy getProxy() {
 		return proxy;
 	}
 

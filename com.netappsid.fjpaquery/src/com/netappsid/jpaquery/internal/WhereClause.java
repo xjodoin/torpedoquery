@@ -97,7 +97,7 @@ public class WhereClause<T> implements OnGoingNumberCondition<T>, OnGoingStringC
 
 	@Override
 	public OnGoingLogicalCondition in(Query<T> query) {
-		Condition condition = new InSubQueryCondition<T>(selector, query);
+		Condition condition = new InSubQueryCondition<T>(selector, (QueryBuilder) query);
 		return getOnGoingLogicalCondition(condition);
 	}
 
@@ -113,7 +113,7 @@ public class WhereClause<T> implements OnGoingNumberCondition<T>, OnGoingStringC
 
 	@Override
 	public OnGoingLogicalCondition notIn(Query<T> subQuery) {
-		return getOnGoingLogicalCondition(new NotInSubQueryCondition<T>(selector, subQuery));
+		return getOnGoingLogicalCondition(new NotInSubQueryCondition<T>(selector, (QueryBuilder) subQuery));
 	}
 
 	@Override

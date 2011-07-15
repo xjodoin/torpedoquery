@@ -4,9 +4,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ObjectSelector implements Selector {
 
-	private final InternalQuery proxy;
+	private final Proxy proxy;
 
-	public ObjectSelector(InternalQuery proxy) {
+	public ObjectSelector(Proxy proxy) {
 		this.proxy = proxy;
 	}
 

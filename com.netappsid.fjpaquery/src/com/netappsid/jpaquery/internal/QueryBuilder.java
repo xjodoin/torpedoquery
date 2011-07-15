@@ -7,8 +7,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.OrderBy;
+import com.netappsid.jpaquery.Query;
 
-public class QueryBuilder {
+public class QueryBuilder implements Query<Object> {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<Selector>();
 	private final List<Join> joins = new ArrayList<Join>();

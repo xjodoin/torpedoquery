@@ -5,12 +5,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.netappsid.jpaquery.Function;
-import com.netappsid.jpaquery.Query;
 
-public class ArrayCallHandler<T> implements QueryHandler<Query<T>> {
+public class ArrayCallHandler implements QueryHandler<Void> {
 
 	public static interface ValueHandler {
-		void handle(InternalQuery proxy, QueryBuilder queryBuilder, Selector selector);
+		void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector);
 	}
 
 	private final Object[] values;
@@ -22,11 +21,11 @@ public class ArrayCallHandler<T> implements QueryHandler<Query<T>> {
 	}
 
 	@Override
-	public Query<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
+	public Void handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 
 		Iterator<MethodCall> iterator = methodCalls.descendingIterator();
 
-		InternalQuery proxy = null;
+		Proxy proxy = null;
 
 		for (int i = 0; i < values.length; i++) {
 
@@ -37,11 +36,11 @@ public class ArrayCallHandler<T> implements QueryHandler<Query<T>> {
 			if (param instanceof Function) {
 				Function function = (Function) values[i];
 				selector = function;
-				proxy = (InternalQuery) function.getProxy();
+				proxy = (Proxy) function.getProxy();
 				queryBuilder = proxyQueryBuilders.get(proxy);
 
-			} else if (param instanceof InternalQuery) {
-				proxy = (InternalQuery) param;
+			} else if (param instanceof Proxy) {
+				proxy = (Proxy) param;
 				queryBuilder = proxyQueryBuilders.get(proxy);
 				selector = new ObjectSelector(proxy);
 			} else {
@@ -55,7 +54,7 @@ public class ArrayCallHandler<T> implements QueryHandler<Query<T>> {
 
 			handler.handle(proxy, queryBuilder, selector);
 		}
+		return null;
 
-		return proxy;
 	}
 }
