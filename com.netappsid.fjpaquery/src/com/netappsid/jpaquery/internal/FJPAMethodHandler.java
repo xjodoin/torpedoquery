@@ -16,10 +16,13 @@ import com.netappsid.jpaquery.FJPAQuery;
 public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 	private final Map<Object, QueryBuilder> proxyQueryBuilders = new IdentityHashMap<Object, QueryBuilder>();
 	private final Deque<MethodCall> methods = new LinkedList<MethodCall>();
+	private final QueryBuilder root;
 
-	public QueryBuilder addQueryBuilder(Object proxy, Class toQuery) {
-		final QueryBuilder queryBuilder = new QueryBuilder(toQuery);
+	public FJPAMethodHandler(QueryBuilder root) {
+		this.root = root;
+	}
 
+	public QueryBuilder addQueryBuilder(Object proxy, QueryBuilder queryBuilder) {
 		proxyQueryBuilders.put(proxy, queryBuilder);
 		return queryBuilder;
 	}
@@ -74,6 +77,10 @@ public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 
 	public QueryBuilder getQueryBuilder(Object proxy) {
 		return proxyQueryBuilders.get(proxy);
+	}
+
+	public QueryBuilder getRoot() {
+		return root;
 	}
 
 	@Override

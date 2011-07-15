@@ -48,10 +48,12 @@ public class FJPAQuery {
 			proxyFactory.setSuperclass(toQuery);
 			proxyFactory.setInterfaces(new Class[] { InternalQuery.class });
 
-			FJPAMethodHandler fjpaMethodHandler = new FJPAMethodHandler();
+			QueryBuilder queryBuilder = new QueryBuilder(toQuery);
+			FJPAMethodHandler fjpaMethodHandler = new FJPAMethodHandler(queryBuilder);
 			final T proxy = (T) proxyFactory.create(null, null, fjpaMethodHandler);
 
-			fjpaMethodHandler.addQueryBuilder(proxy, toQuery);
+			fjpaMethodHandler.addQueryBuilder(proxy, queryBuilder);
+
 			setQuery((InternalQuery) proxy);
 			return proxy;
 
@@ -67,7 +69,7 @@ public class FJPAQuery {
 	}
 
 	public static <T> Query<T[]> select(T... values) {
-		return getQuery().handle(new ArrayCallHandler(new ValueHandler() {
+		return getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
 
 			@Override
 			public void handle(InternalQuery query, QueryBuilder queryBuilder, Selector selector) {
@@ -77,63 +79,67 @@ public class FJPAQuery {
 	}
 
 	public static <T> T innerJoin(T toJoin) {
-		return getQuery().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
 	public static <T> T innerJoin(Collection<T> toJoin) {
-		return getQuery().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
 	public static <T> T leftJoin(T toJoin) {
-		return getQuery().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
 	public static <T> T leftJoin(Collection<T> toJoin) {
-		return getQuery().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
 	public static <T> T rightJoin(T toJoin) {
-		return getQuery().handle(new RightJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new RightJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
 	public static <T> T rightJoin(Collection<T> toJoin) {
-		return getQuery().handle(new RightJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new RightJoinHandler<T>(getFJPAMethodHandler()));
 	}
 
 	public static <T> OnGoingCondition<T> where(T object) {
-		return getQuery().handle(new WhereClauseHandler<T, OnGoingCondition<T>>());
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>());
 	}
 
 	public static <T extends Number> OnGoingNumberCondition<T> where(T object) {
-		return getQuery().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T>>());
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T>>());
 	}
 
 	public static OnGoingStringCondition<String> where(String object) {
-		return getQuery().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>());
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>());
 	}
 
 	public static <T> OnGoingCollectionCondition<T> where(Collection<T> object) {
-		return getQuery().handle(new WhereClauseCollectionHandler<T>());
+		return getFJPAMethodHandler().handle(new WhereClauseCollectionHandler<T>());
 	}
 
 	public static <T> OnGoingCondition<T> condition(T object) {
-		return getQuery().handle(new WhereClauseHandler<T, OnGoingCondition<T>>(false));
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>(false));
 	}
 
 	public static <T extends Number> OnGoingNumberCondition<T> condition(T object) {
-		return getQuery().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T>>(false));
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T>>(false));
 	}
 
 	public static OnGoingStringCondition<String> condition(String object) {
-		return getQuery().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(false));
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(false));
 	}
 
 	public static <T> OnGoingCollectionCondition<T> condition(Collection<T> object) {
-		return getQuery().handle(new WhereClauseCollectionHandler<T>(false));
+		return getFJPAMethodHandler().handle(new WhereClauseCollectionHandler<T>(false));
 	}
 
 	public static void groupBy(Object... values) {
-
+		getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
+			@Override
+			public void handle(InternalQuery proxy, QueryBuilder queryBuilder, Selector selector) {
+			}
+		}, values));
 	}
 
 	// JPA Functions
@@ -141,28 +147,28 @@ public class FJPAQuery {
 		if (object instanceof InternalQuery) {
 			setQuery((InternalQuery) object);
 		}
-		return getQuery().handle(new CountFunctionHandler(object));
+		return getFJPAMethodHandler().handle(new CountFunctionHandler(object));
 	}
 
 	public static Function sum(Number number) {
-		return getQuery().handle(new SumFunctionHandler());
+		return getFJPAMethodHandler().handle(new SumFunctionHandler());
 	}
 
 	public static Function min(Number number) {
-		return getQuery().handle(new MinFunctionHandler());
+		return getFJPAMethodHandler().handle(new MinFunctionHandler());
 	}
 
 	public static Function max(Number number) {
-		return getQuery().handle(new MaxFunctionHandler());
+		return getFJPAMethodHandler().handle(new MaxFunctionHandler());
 	}
 
 	public static Function avg(Number number) {
-		return getQuery().handle(new AvgFunctionHandler());
+		return getFJPAMethodHandler().handle(new AvgFunctionHandler());
 	}
 
 	public static Function coalesce(Object... values) {
 		final CoalesceFunction coalesceFunction = new CoalesceFunction();
-		getQuery().handle(new ArrayCallHandler(new ValueHandler() {
+		getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
 			@Override
 			public void handle(InternalQuery proxy, QueryBuilder queryBuilder, Selector selector) {
 				coalesceFunction.setQuery(proxy);
@@ -174,7 +180,7 @@ public class FJPAQuery {
 	}
 
 	public static void orderBy(Object... values) {
-		getQuery().handle(new ArrayCallHandler(new ValueHandler() {
+		getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
 			@Override
 			public void handle(InternalQuery proxy, QueryBuilder queryBuilder, Selector selector) {
 				queryBuilder.addOrder(selector);
@@ -186,11 +192,11 @@ public class FJPAQuery {
 	// orderBy function
 
 	public static Function asc(Object object) {
-		return getQuery().handle(new AscFunctionHandler());
+		return getFJPAMethodHandler().handle(new AscFunctionHandler());
 	}
 
 	public static Function desc(Object object) {
-		return getQuery().handle(new DescFunctionHandler());
+		return getFJPAMethodHandler().handle(new DescFunctionHandler());
 	}
 
 	public static String query(Object proxy) {
@@ -230,10 +236,6 @@ public class FJPAQuery {
 	public static FJPAMethodHandler getFJPAMethodHandler() {
 		InternalQuery internalQuery = query.get();
 		return internalQuery.getFJPAMethodHandler();
-	}
-
-	private static InternalQuery getQuery() {
-		return query.get();
 	}
 
 	private static javax.persistence.Query createJPAQuery(EntityManager entityManager, Object from) {

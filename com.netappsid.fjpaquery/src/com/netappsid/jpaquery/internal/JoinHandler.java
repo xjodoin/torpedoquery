@@ -36,7 +36,7 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 			proxyFactory.setInterfaces(new Class[] { InternalQuery.class });
 
 			final InternalQuery join = (InternalQuery) proxyFactory.create(null, null, methodHandler);
-			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, returnType);
+			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, new QueryBuilder(returnType));
 
 			queryImpl.addJoin(createJoin(queryBuilder, FieldUtils.getFieldName(thisMethod)));
 
