@@ -16,4 +16,6 @@ public interface InternalQuery extends Query {
 	String getQuery(Object proxy, AtomicInteger incrementor);
 
 	Map<String, Object> getParametersAsMap(Object proxy);
+
+	FJPAMethodHandler getFJPAMethodHandler();
 }

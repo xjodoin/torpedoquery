@@ -75,4 +75,9 @@ public class FJPAMethodHandler implements MethodHandler, InternalQuery {
 	public QueryBuilder getQueryBuilder(Object proxy) {
 		return proxyQueryBuilders.get(proxy);
 	}
+
+	@Override
+	public FJPAMethodHandler getFJPAMethodHandler() {
+		return this;
+	}
 }

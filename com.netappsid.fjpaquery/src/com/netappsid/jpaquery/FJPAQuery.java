@@ -30,12 +30,6 @@ import com.netappsid.jpaquery.internal.WhereClauseCollectionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
 
 public class FJPAQuery {
-	private static ThreadLocal<FJPAMethodHandler> methodHandler = new ThreadLocal<FJPAMethodHandler>() {
-		@Override
-		protected FJPAMethodHandler initialValue() {
-			return new FJPAMethodHandler();
-		}
-	};
 
 	private static MultiClassLoaderProvider osgiAwareClassLoaderProvider;
 
@@ -54,7 +48,7 @@ public class FJPAQuery {
 			proxyFactory.setSuperclass(toQuery);
 			proxyFactory.setInterfaces(new Class[] { InternalQuery.class });
 
-			FJPAMethodHandler fjpaMethodHandler = getFJPAMethodHandler();
+			FJPAMethodHandler fjpaMethodHandler = new FJPAMethodHandler();
 			final T proxy = (T) proxyFactory.create(null, null, fjpaMethodHandler);
 
 			fjpaMethodHandler.addQueryBuilder(proxy, toQuery);
@@ -136,6 +130,10 @@ public class FJPAQuery {
 
 	public static <T> OnGoingCollectionCondition<T> condition(Collection<T> object) {
 		return getQuery().handle(new WhereClauseCollectionHandler<T>(false));
+	}
+
+	public static void groupBy(Object... values) {
+
 	}
 
 	// JPA Functions
@@ -228,8 +226,10 @@ public class FJPAQuery {
 	}
 
 	// TODO devrait se retrouver dans l'api interne
+
 	public static FJPAMethodHandler getFJPAMethodHandler() {
-		return methodHandler.get();
+		InternalQuery internalQuery = query.get();
+		return internalQuery.getFJPAMethodHandler();
 	}
 
 	private static InternalQuery getQuery() {
