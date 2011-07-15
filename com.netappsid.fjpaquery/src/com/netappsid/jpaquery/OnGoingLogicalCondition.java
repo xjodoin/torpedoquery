@@ -8,6 +8,10 @@ public interface OnGoingLogicalCondition {
 	<T1 extends Number> OnGoingNumberCondition<T1> and(T1 property);
 
 	<T1 extends Number> OnGoingNumberCondition<T1> or(T1 property);
+	
+	OnGoingStringCondition<String> and(String property);
+
+	OnGoingStringCondition<String> or(String property);
 
 	OnGoingLogicalCondition and(OnGoingLogicalCondition condition);
 

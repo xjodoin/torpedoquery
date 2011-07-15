@@ -7,6 +7,7 @@ import com.netappsid.jpaquery.FJPAQuery;
 import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
 import com.netappsid.jpaquery.OnGoingNumberCondition;
+import com.netappsid.jpaquery.OnGoingStringCondition;
 
 public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 
@@ -72,6 +73,20 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 	public OnGoingLogicalCondition or(OnGoingLogicalCondition condition) {
 		this.condition = new OrCondition(this.condition, new GroupingCondition((Condition) condition));
 		return this;
+	}
+
+	@Override
+	public OnGoingStringCondition<String> and(String property) {
+		OnGoingStringCondition<String> right = this.<String, OnGoingStringCondition<String>> createCondition();
+		condition = new AndCondition(condition, (Condition) right);
+		return right;
+	}
+
+	@Override
+	public OnGoingStringCondition<String> or(String property) {
+		OnGoingStringCondition<String> right = this.<String, OnGoingStringCondition<String>> createCondition();
+		condition = new OrCondition(condition, (Condition) right);
+		return right;
 	}
 
 }

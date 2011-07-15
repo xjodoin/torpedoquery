@@ -141,7 +141,7 @@ public class FJPAQueryTest {
 		final Entity entity = from(Entity.class);
 		where(entity.getCode()).eq("test");
 		com.netappsid.jpaquery.Query<Entity> select = select(entity);
-		get(entityManager, select);
+		select.get(entityManager);
 
 		verify(entityManager).createQuery(query(entity));
 		verify(query).setParameter(params(entity).keySet().iterator().next(), params(entity).values().iterator().next());
@@ -157,7 +157,7 @@ public class FJPAQueryTest {
 		final Entity entity = from(Entity.class);
 		where(entity.getCode()).eq("test");
 		com.netappsid.jpaquery.Query<Entity> select = select(entity);
-		list(entityManager, select);
+		select.list(entityManager);
 
 		verify(entityManager).createQuery(query(entity));
 		verify(query).setParameter(params(entity).keySet().iterator().next(), params(entity).values().iterator().next());

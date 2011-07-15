@@ -1,15 +1,10 @@
 package com.netappsid.jpaquery;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javassist.util.proxy.ProxyFactory;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 
 import com.netappsid.jpaquery.internal.ArrayCallHandler;
 import com.netappsid.jpaquery.internal.ArrayCallHandler.ValueHandler;
@@ -18,6 +13,7 @@ import com.netappsid.jpaquery.internal.AvgFunctionHandler;
 import com.netappsid.jpaquery.internal.CoalesceFunction;
 import com.netappsid.jpaquery.internal.CountFunctionHandler;
 import com.netappsid.jpaquery.internal.DescFunctionHandler;
+import com.netappsid.jpaquery.internal.DistinctFunctionHandler;
 import com.netappsid.jpaquery.internal.FJPAMethodHandler;
 import com.netappsid.jpaquery.internal.InnerJoinHandler;
 import com.netappsid.jpaquery.internal.LeftJoinHandler;
@@ -67,8 +63,16 @@ public class FJPAQuery {
 		return null;
 	}
 
+	public static <T> Query<T> select(Function<T> value) {
+		return (Query<T>) FJPAQuery.select(new Object[] { value });
+	}
+
 	public static <T> Query<T> select(T value) {
 		return (Query<T>) FJPAQuery.select(new Object[] { value });
+	}
+
+	public static <T> Query<T[]> select(Function<T>... values) {
+		return select((T[]) values);
 	}
 
 	public static <T> Query<T[]> select(T... values) {
@@ -86,6 +90,10 @@ public class FJPAQuery {
 
 	public static <T> T innerJoin(T toJoin) {
 		return getFJPAMethodHandler().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
+	}
+
+	public static <T, E extends T> E innerJoin(Collection<T> toJoin, Class<E> realType) {
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler()));
 	}
 
 	public static <T> T innerJoin(Collection<T> toJoin) {
@@ -186,6 +194,13 @@ public class FJPAQuery {
 		return coalesceFunction;
 	}
 
+	public static <T> Function<T> distinct(T object) {
+		if (object instanceof Proxy) {
+			setQuery((Proxy) object);
+		}
+		return getFJPAMethodHandler().handle(new DistinctFunctionHandler<T>(object));
+	}
+
 	public static void orderBy(Object... values) {
 		getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
 			@Override
@@ -222,18 +237,6 @@ public class FJPAQuery {
 		return null;
 	}
 
-	public static <T> T get(EntityManager entityManager, Query<T> from) {
-		try {
-			return (T) createJPAQuery(entityManager, (QueryBuilder) from).getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
-
-	public static <T> List<T> list(EntityManager entityManager, Query<T> from) {
-		return createJPAQuery(entityManager, (QueryBuilder) from).getResultList();
-	}
-
 	public static void setQuery(Proxy query) {
 		FJPAQuery.query.set(query);
 	}
@@ -245,14 +248,4 @@ public class FJPAQuery {
 		return internalQuery.getFJPAMethodHandler();
 	}
 
-	private static javax.persistence.Query createJPAQuery(EntityManager entityManager, QueryBuilder from) {
-		final javax.persistence.Query query = entityManager.createQuery(from.getQuery(new AtomicInteger()));
-		final Map<String, Object> parameters = from.getParametersAsMap();
-
-		for (Entry<String, Object> parameter : parameters.entrySet()) {
-			query.setParameter(parameter.getKey(), parameter.getValue());
-		}
-
-		return query;
-	}
 }

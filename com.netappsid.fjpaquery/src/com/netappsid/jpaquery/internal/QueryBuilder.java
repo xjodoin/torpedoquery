@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+
+import com.netappsid.jpaquery.PostFunction;
 import com.netappsid.jpaquery.Query;
 
-public class QueryBuilder implements Query<Object> {
+public class QueryBuilder<T> implements Query<T> {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<Selector>();
 	private final List<Join> joins = new ArrayList<Join>();
@@ -155,6 +160,7 @@ public class QueryBuilder implements Query<Object> {
 		return null;
 	}
 
+	@Override
 	public Map<String, Object> getParametersAsMap() {
 
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -204,6 +210,42 @@ public class QueryBuilder implements Query<Object> {
 		}
 
 		groupBy.addGroup(selector);
+	}
+
+	@Override
+	public T get(EntityManager entityManager) {
+		try {
+			return (T) createJPAQuery(entityManager).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<T> list(EntityManager entityManager) {
+		return createJPAQuery(entityManager).getResultList();
+	}
+	
+	@Override
+	public <E> List<E> map(EntityManager entityManager, PostFunction<E, T> function) {
+		List<T> toConvert = list(entityManager);
+		List<E> result = new ArrayList<E>();
+		
+		for (T value : toConvert) {
+			result.add(function.execute(value));
+		}
+		return result;
+	}
+	
+	private javax.persistence.Query createJPAQuery(EntityManager entityManager) {
+		final javax.persistence.Query query = entityManager.createQuery(getQuery(new AtomicInteger()));
+		final Map<String, Object> parameters = getParametersAsMap();
+
+		for (Entry<String, Object> parameter : parameters.entrySet()) {
+			query.setParameter(parameter.getKey(), parameter.getValue());
+		}
+
+		return query;
 	}
 
 }
