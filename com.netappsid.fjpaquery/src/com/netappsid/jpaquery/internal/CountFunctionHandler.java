@@ -7,11 +7,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.Function;
 
-public class CountFunctionHandler implements Function, QueryHandler<Function> {
+public class CountFunctionHandler implements Function<Integer>, QueryHandler<Function<Integer>> {
 
 	private Object proxy;
 	private Method method;
-	private QueryBuilder queryBuilder;
+	private QueryBuilder<?> queryBuilder;
 
 	public CountFunctionHandler(Object proxy) {
 		this.proxy = proxy;
@@ -28,7 +28,7 @@ public class CountFunctionHandler implements Function, QueryHandler<Function> {
 	}
 
 	@Override
-	public Function handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
+	public Function<Integer> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
 
 		if (!methods.isEmpty()) {
 			MethodCall methodCall = methods.pollFirst();

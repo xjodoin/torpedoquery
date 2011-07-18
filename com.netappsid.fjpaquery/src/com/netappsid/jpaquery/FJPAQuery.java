@@ -77,14 +77,16 @@ public class FJPAQuery {
 
 	public static <T> Query<T[]> select(T... values) {
 		FJPAMethodHandler fjpaMethodHandler = getFJPAMethodHandler();
+		final QueryBuilder root = fjpaMethodHandler.getRoot();
 		fjpaMethodHandler.handle(new ArrayCallHandler(new ValueHandler() {
 
 			@Override
 			public void handle(Proxy query, QueryBuilder queryBuilder, Selector selector) {
-				queryBuilder.addSelector(selector);
+				root.addSelector(selector);
 			}
 		}, values));
-		return fjpaMethodHandler.getRoot();
+
+		return root;
 
 	}
 
@@ -93,7 +95,7 @@ public class FJPAQuery {
 	}
 
 	public static <T, E extends T> E innerJoin(Collection<T> toJoin, Class<E> realType) {
-		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(),realType));
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(), realType));
 	}
 
 	public static <T> T innerJoin(Collection<T> toJoin) {

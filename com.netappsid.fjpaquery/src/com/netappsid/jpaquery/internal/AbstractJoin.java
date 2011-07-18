@@ -21,11 +21,6 @@ public abstract class AbstractJoin implements Join {
 	}
 
 	@Override
-	public void appendSelect(StringBuilder builder, AtomicInteger incrementor) {
-		join.appendSelect(builder, incrementor);
-	}
-
-	@Override
 	public void appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
 		join.appendWhereClause(builder, incrementor);
 	}

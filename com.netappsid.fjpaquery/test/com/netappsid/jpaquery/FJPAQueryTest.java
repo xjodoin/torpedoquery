@@ -52,7 +52,7 @@ public class FJPAQueryTest {
 		final SubEntity subEntity = innerJoin(entity.getSubEntity());
 
 		select(subEntity.getCode(), entity.getCode());
-		assertEquals("select entity_0.code, subEntity_1.code from Entity entity_0 inner join entity_0.subEntity subEntity_1", query(entity));
+		assertEquals("select subEntity_1.code, entity_0.code from Entity entity_0 inner join entity_0.subEntity subEntity_1", query(entity));
 	}
 
 	@Test
@@ -180,6 +180,15 @@ public class FJPAQueryTest {
 		SubEntity innerJoin = innerJoin(from.getSubEntity());
 		where(innerJoin.getCode()).eq("test");
 		assertEquals("select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 where subEntity_1.code = :code_2", query(from));
+	}
+
+	@Test
+	public void test_Join_Select_Come_Before_The_Root() {
+		Entity from = from(Entity.class);
+		SubEntity innerJoin = innerJoin(from.getSubEntities());
+		com.netappsid.jpaquery.Query<String[]> select = select(innerJoin.getName(), from.getCode());
+		String query = select.getQuery();
+		assertEquals("select subEntity_1.name, entity_0.code from Entity entity_0 inner join entity_0.subEntities subEntity_1", query);
 	}
 
 	/**

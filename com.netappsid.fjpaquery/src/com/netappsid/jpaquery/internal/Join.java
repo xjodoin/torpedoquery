@@ -7,8 +7,6 @@ public interface Join {
 
 	void appendWhereClause(StringBuilder builder, AtomicInteger incrementor);
 
-	void appendSelect(StringBuilder builder, AtomicInteger incrementor);
-
 	String getJoin(String alias, AtomicInteger incrementor);
 
 	List<Parameter> getParams();

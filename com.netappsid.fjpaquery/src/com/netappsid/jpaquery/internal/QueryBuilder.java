@@ -105,10 +105,6 @@ public class QueryBuilder<T> implements Query<T> {
 				builder.append(", ").append(selector.createQueryFragment(incrementor));
 			}
 		}
-
-		for (Join join : joins) {
-			join.appendSelect(builder, incrementor);
-		}
 	}
 
 	public String getAlias(AtomicInteger incrementor) {
@@ -225,18 +221,18 @@ public class QueryBuilder<T> implements Query<T> {
 	public List<T> list(EntityManager entityManager) {
 		return createJPAQuery(entityManager).getResultList();
 	}
-	
+
 	@Override
 	public <E> List<E> map(EntityManager entityManager, PostFunction<E, T> function) {
 		List<T> toConvert = list(entityManager);
 		List<E> result = new ArrayList<E>();
-		
+
 		for (T value : toConvert) {
 			result.add(function.execute(value));
 		}
 		return result;
 	}
-	
+
 	private javax.persistence.Query createJPAQuery(EntityManager entityManager) {
 		final javax.persistence.Query query = entityManager.createQuery(getQuery(new AtomicInteger()));
 		final Map<String, Object> parameters = getParametersAsMap();

@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.netappsid.jpaquery.test.bo.Entity;
+import com.netappsid.jpaquery.test.bo.SubEntity;
 
 public class JPAFunctionTest {
 
@@ -71,21 +72,27 @@ public class JPAFunctionTest {
 		select(coalesce(from.getCode(), from.getName()));
 		assertEquals("select coalesce(entity_0.code,entity_0.name) from Entity entity_0", query(from));
 	}
-	
+
 	@Test
-	public void testDistinctEntity()
-	{
+	public void testDistinctEntity() {
 		Entity from = from(Entity.class);
 		Query<Entity> select = select(distinct(from));
 		assertEquals("select distinct entity_0 from Entity entity_0", select.getQuery());
 	}
 
 	@Test
-	public void testDistinctOnField()
-	{
+	public void testDistinctOnField() {
 		Entity from = from(Entity.class);
 		Query<String> select = select(distinct(from.getCode()));
 		assertEquals("select distinct entity_0.code from Entity entity_0", select.getQuery());
 	}
-	
+
+	@Test
+	public void testCombiningFunctionWithInnerJoin() {
+		Entity from = from(Entity.class);
+		SubEntity innerJoin = innerJoin(from.getSubEntities());
+		Query<Object[]> select = select(distinct(from), innerJoin);
+		assertEquals("select distinct entity_0, subEntity_1 from Entity entity_0 inner join entity_0.subEntities subEntity_1", select.getQuery());
+	}
+
 }
