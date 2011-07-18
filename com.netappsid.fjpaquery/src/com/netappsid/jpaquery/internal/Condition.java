@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public interface Condition {
 
-	String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor);
+	String createQueryFragment(AtomicInteger incrementor);
 
 	List<Parameter> getParameters();
 }

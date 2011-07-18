@@ -13,16 +13,16 @@ public class CoalesceFunction implements Function {
 	private Proxy proxy;
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+	public String createQueryFragment(AtomicInteger incrementor) {
 
 		StringBuffer stringBuffer = new StringBuffer();
 		Iterator<Selector> iterator = selectors.iterator();
 		Selector first = iterator.next();
-		stringBuffer.append("coalesce(").append(first.createQueryFragment(queryBuilder, incrementor));
+		stringBuffer.append("coalesce(").append(first.createQueryFragment(incrementor));
 
 		while (iterator.hasNext()) {
 			Selector selector = iterator.next();
-			stringBuffer.append(",").append(selector.createQueryFragment(queryBuilder, incrementor));
+			stringBuffer.append(",").append(selector.createQueryFragment(incrementor));
 		}
 
 		stringBuffer.append(")");

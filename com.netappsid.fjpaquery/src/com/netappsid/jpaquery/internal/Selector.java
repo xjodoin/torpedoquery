@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public interface Selector {
 
-	String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor);
+	String createQueryFragment(AtomicInteger incrementor);
 
 	String getName();
 

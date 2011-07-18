@@ -11,8 +11,8 @@ public class SizeSelector implements Selector {
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
-		return selector.createQueryFragment(queryBuilder, incrementor) + ".size";
+	public String createQueryFragment(AtomicInteger incrementor) {
+		return selector.createQueryFragment(incrementor) + ".size";
 	}
 
 	@Override

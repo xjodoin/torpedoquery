@@ -40,8 +40,8 @@ public class LikeCondition implements Condition {
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
-		return selector.createQueryFragment(queryBuilder, incrementor) + " like '" + type.wrap(toMatch) + "' ";
+	public String createQueryFragment(AtomicInteger incrementor) {
+		return selector.createQueryFragment(incrementor) + " like '" + type.wrap(toMatch) + "' ";
 	}
 
 	@Override

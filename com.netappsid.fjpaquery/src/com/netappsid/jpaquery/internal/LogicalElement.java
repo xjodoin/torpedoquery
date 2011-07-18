@@ -23,9 +23,9 @@ public abstract class LogicalElement implements Condition {
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+	public String createQueryFragment(AtomicInteger incrementor) {
 
-		return left.createQueryFragment(queryBuilder, incrementor) + getCondition() + right.createQueryFragment(queryBuilder, incrementor);
+		return left.createQueryFragment(incrementor) + getCondition() + right.createQueryFragment(incrementor);
 	}
 
 	protected abstract String getCondition();

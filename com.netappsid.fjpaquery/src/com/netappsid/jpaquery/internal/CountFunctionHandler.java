@@ -11,16 +11,17 @@ public class CountFunctionHandler implements Function, QueryHandler<Function> {
 
 	private Object proxy;
 	private Method method;
+	private QueryBuilder queryBuilder;
 
 	public CountFunctionHandler(Object proxy) {
 		this.proxy = proxy;
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+	public String createQueryFragment(AtomicInteger incrementor) {
 		if (method != null) {
-			SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(method);
-			return "count(" + simpleMethodCallSelector.createQueryFragment(queryBuilder, incrementor) + ")";
+			SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(queryBuilder, method);
+			return "count(" + simpleMethodCallSelector.createQueryFragment(incrementor) + ")";
 		} else {
 			return "count(*)";
 		}
@@ -33,6 +34,7 @@ public class CountFunctionHandler implements Function, QueryHandler<Function> {
 			MethodCall methodCall = methods.pollFirst();
 			method = methodCall.getMethod();
 			proxy = methodCall.getProxy();
+			queryBuilder = proxyQueryBuilders.get(proxy);
 		}
 
 		return this;

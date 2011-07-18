@@ -11,12 +11,13 @@ public abstract class AggregateFunctionHandler implements QueryHandler<Function>
 
 	private Method method;
 	private Object proxy;
+	private QueryBuilder queryBuilder;
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+	public String createQueryFragment(AtomicInteger incrementor) {
 
-		SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(method);
-		return getFunctionName() + "(" + simpleMethodCallSelector.createQueryFragment(queryBuilder, incrementor) + ")";
+		SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(queryBuilder, method);
+		return getFunctionName() + "(" + simpleMethodCallSelector.createQueryFragment(incrementor) + ")";
 	}
 
 	@Override
@@ -31,6 +32,7 @@ public abstract class AggregateFunctionHandler implements QueryHandler<Function>
 			MethodCall methodCall = methods.pollFirst();
 			method = methodCall.getMethod();
 			proxy = methodCall.getProxy();
+			queryBuilder = proxyQueryBuilders.get(proxy);
 		}
 
 		return this;

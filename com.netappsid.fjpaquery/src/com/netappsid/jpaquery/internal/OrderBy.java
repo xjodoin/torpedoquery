@@ -20,12 +20,12 @@ public class OrderBy {
 			Iterator<Selector> iterator = orders.iterator();
 
 			if (builder.length() == 0) {
-				builder.append(" order by ").append(iterator.next().createQueryFragment(queryBuilder, incrementor));
+				builder.append(" order by ").append(iterator.next().createQueryFragment(incrementor));
 			}
 
 			while (iterator.hasNext()) {
 				Selector selector = iterator.next();
-				builder.append(",").append(selector.createQueryFragment(queryBuilder, incrementor));
+				builder.append(",").append(selector.createQueryFragment(incrementor));
 			}
 
 			return builder.toString();

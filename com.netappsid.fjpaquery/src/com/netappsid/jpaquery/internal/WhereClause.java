@@ -23,13 +23,13 @@ public class WhereClause<T> implements OnGoingNumberCondition<T>, OnGoingStringC
 	public WhereClause(QueryBuilder queryBuilder, Method method) {
 		this.logicalCondition = new LogicalCondition(this);
 		this.queryBuilder = queryBuilder;
-		this.selector = new SimpleMethodCallSelector(method);
+		this.selector = new SimpleMethodCallSelector(queryBuilder, method);
 	}
 
 	public WhereClause(LogicalCondition logicalCondition, QueryBuilder queryBuilder, Method method) {
 		this.logicalCondition = logicalCondition;
 		this.queryBuilder = queryBuilder;
-		this.selector = new SimpleMethodCallSelector(method);
+		this.selector = new SimpleMethodCallSelector(queryBuilder, method);
 	}
 
 	public LogicalCondition getLogicalCondition() {
@@ -117,9 +117,9 @@ public class WhereClause<T> implements OnGoingNumberCondition<T>, OnGoingStringC
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+	public String createQueryFragment(AtomicInteger incrementor) {
 		if (condition != null) {
-			return condition.createQueryFragment(queryBuilder, incrementor);
+			return condition.createQueryFragment(incrementor);
 		} else {
 			return "";
 		}

@@ -13,8 +13,8 @@ public class IsNotNullCondition implements Condition {
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
-		return selector.createQueryFragment(queryBuilder, incrementor) + " is not null";
+	public String createQueryFragment(AtomicInteger incrementor) {
+		return selector.createQueryFragment(incrementor) + " is not null";
 	}
 
 	@Override

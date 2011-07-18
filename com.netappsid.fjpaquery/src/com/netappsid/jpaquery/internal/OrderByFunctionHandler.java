@@ -11,12 +11,13 @@ public abstract class OrderByFunctionHandler implements QueryHandler<Function>, 
 
 	private Method method;
 	private Object proxy;
+	private QueryBuilder queryBuilder;
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+	public String createQueryFragment(AtomicInteger incrementor) {
 
-		SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(method);
-		return simpleMethodCallSelector.createQueryFragment(queryBuilder, incrementor) + " " + getFunctionName();
+		SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(queryBuilder, method);
+		return simpleMethodCallSelector.createQueryFragment(incrementor) + " " + getFunctionName();
 	}
 
 	@Override
@@ -31,6 +32,7 @@ public abstract class OrderByFunctionHandler implements QueryHandler<Function>, 
 			MethodCall methodCall = methods.pollFirst();
 			method = methodCall.getMethod();
 			proxy = methodCall.getProxy();
+			queryBuilder = proxyQueryBuilders.get(proxy);
 		}
 
 		return this;

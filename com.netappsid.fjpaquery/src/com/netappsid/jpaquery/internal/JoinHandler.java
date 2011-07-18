@@ -11,9 +11,15 @@ import javassist.util.proxy.ProxyFactory;
 public abstract class JoinHandler<T> implements QueryHandler<T> {
 
 	private final FJPAMethodHandler methodHandler;
+	private Class<T> realType;
 
 	public JoinHandler(FJPAMethodHandler methodHandler) {
 		this.methodHandler = methodHandler;
+	}
+
+	public JoinHandler(FJPAMethodHandler fjpaMethodHandler, Class<T> realType) {
+		methodHandler = fjpaMethodHandler;
+		this.realType = realType;
 	}
 
 	@Override
@@ -32,11 +38,12 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 		try {
 
 			final ProxyFactory proxyFactory = new ProxyFactory();
-			proxyFactory.setSuperclass(returnType);
+			Class<? extends Object> goodType = getGoodType(returnType);
+			proxyFactory.setSuperclass(goodType);
 			proxyFactory.setInterfaces(new Class[] { Proxy.class });
 
 			final Proxy join = (Proxy) proxyFactory.create(null, null, methodHandler);
-			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, new QueryBuilder(returnType));
+			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, new QueryBuilder(goodType));
 
 			queryImpl.addJoin(createJoin(queryBuilder, FieldUtils.getFieldName(thisMethod)));
 
@@ -47,6 +54,10 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 		}
 
 		return null;
+	}
+
+	private Class<? extends Object> getGoodType(Class<?> returnType) {
+		return realType != null ? realType :returnType;
 	}
 
 	protected abstract Join createJoin(QueryBuilder queryBuilder, String fieldName);

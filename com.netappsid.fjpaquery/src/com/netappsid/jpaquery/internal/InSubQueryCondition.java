@@ -14,8 +14,8 @@ public class InSubQueryCondition<T> implements Condition {
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
-		String queryFragment = selector.createQueryFragment(queryBuilder, incrementor);
+	public String createQueryFragment(AtomicInteger incrementor) {
+		String queryFragment = selector.createQueryFragment(incrementor);
 
 		String subQueryString = subQuery.getQuery(incrementor);
 		return queryFragment + " " + getFragment() + " ( " + subQueryString + " ) ";

@@ -12,16 +12,17 @@ public class DistinctFunctionHandler<T> implements Function<T>, QueryHandler<Fun
 
 	private Object proxy;
 	private Method method;
+	private QueryBuilder queryBuilder;
 
 	public DistinctFunctionHandler(Object proxy) {
 		this.proxy = proxy;
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+	public String createQueryFragment(AtomicInteger incrementor) {
 		if (method != null) {
-			SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(method);
-			return "distinct " + simpleMethodCallSelector.createQueryFragment(queryBuilder, incrementor);
+			SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(queryBuilder, method);
+			return "distinct " + simpleMethodCallSelector.createQueryFragment(incrementor);
 		} else {
 			return "distinct " + FJPAQuery.getFJPAMethodHandler().getQueryBuilder(proxy).getAlias(incrementor);
 		}
@@ -30,10 +31,11 @@ public class DistinctFunctionHandler<T> implements Function<T>, QueryHandler<Fun
 	@Override
 	public Function<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
 
-		if (!methods.isEmpty()) {
+		if (proxy == null) {
 			MethodCall methodCall = methods.pollFirst();
 			method = methodCall.getMethod();
 			proxy = methodCall.getProxy();
+			queryBuilder = proxyQueryBuilders.get(proxy);
 		}
 
 		return this;

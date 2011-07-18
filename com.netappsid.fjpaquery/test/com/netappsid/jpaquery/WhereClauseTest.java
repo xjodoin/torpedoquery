@@ -8,6 +8,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.netappsid.jpaquery.test.bo.Entity;
+import com.netappsid.jpaquery.test.bo.SubEntity;
 
 public class WhereClauseTest {
 
@@ -234,6 +235,21 @@ public class WhereClauseTest {
 		where(from.getName()).eq("test").or(condition(from.getCode()).eq("test").or(from.getCode()).eq("test2"));
 
 		assertEquals("from Entity entity_0 where entity_0.name = :name_1 or ( entity_0.code = :code_2 or entity_0.code = :code_3 )", query(from));
+	}
+
+	@Test
+	public void test_condition_with_root_and_inner() {
+
+		Entity entity = from(Entity.class);
+		SubEntity subEntity = innerJoin(entity.getSubEntities());
+		OnGoingLogicalCondition condition = condition(entity.getCode()).eq("test1").or(subEntity.getCode()).eq("test2");
+		where(entity.getIntegerField()).gt(10).and(condition);
+
+		Query<Entity> select = select(entity);
+		String query = select.getQuery();
+		assertEquals(
+				"select entity_0 from Entity entity_0 inner join entity_0.subEntities subEntity_1 where entity_0.integerField > :integerField_2 and ( entity_0.code = :code_3 or subEntity_1.code = :code_4 )",
+				query);
 	}
 
 	@Test

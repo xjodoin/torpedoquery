@@ -84,9 +84,9 @@ public class QueryBuilder<T> implements Query<T> {
 
 		if (whereClauseCondition != null) {
 			if (builder.length() == 0) {
-				builder.append(" where ").append(whereClauseCondition.createQueryFragment(this, incrementor)).append(" ");
+				builder.append(" where ").append(whereClauseCondition.createQueryFragment(incrementor)).append(" ");
 			} else {
-				builder.append("and ").append(whereClauseCondition.createQueryFragment(this, incrementor)).append(" ");
+				builder.append("and ").append(whereClauseCondition.createQueryFragment(incrementor)).append(" ");
 			}
 		}
 
@@ -100,9 +100,9 @@ public class QueryBuilder<T> implements Query<T> {
 	public void appendSelect(StringBuilder builder, AtomicInteger incrementor) {
 		for (Selector selector : toSelect) {
 			if (builder.length() == 0) {
-				builder.append("select ").append(selector.createQueryFragment(this, incrementor));
+				builder.append("select ").append(selector.createQueryFragment(incrementor));
 			} else {
-				builder.append(", ").append(selector.createQueryFragment(this, incrementor));
+				builder.append(", ").append(selector.createQueryFragment(incrementor));
 			}
 		}
 

@@ -12,8 +12,8 @@ public class GroupingCondition implements Condition {
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
-		return "( " + condition.createQueryFragment(queryBuilder, incrementor) + " )";
+	public String createQueryFragment(AtomicInteger incrementor) {
+		return "( " + condition.createQueryFragment(incrementor) + " )";
 	}
 
 	@Override

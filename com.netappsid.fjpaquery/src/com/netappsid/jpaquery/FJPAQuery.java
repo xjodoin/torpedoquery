@@ -93,7 +93,7 @@ public class FJPAQuery {
 	}
 
 	public static <T, E extends T> E innerJoin(Collection<T> toJoin, Class<E> realType) {
-		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(),realType));
 	}
 
 	public static <T> T innerJoin(Collection<T> toJoin) {

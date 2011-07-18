@@ -5,6 +5,10 @@ public class InnerJoinHandler<T> extends JoinHandler<T> {
 		super(methodHandler);
 	}
 
+	public InnerJoinHandler(FJPAMethodHandler fjpaMethodHandler, Class<T> realType) {
+		super(fjpaMethodHandler,realType);
+	}
+
 	@Override
 	protected Join createJoin(QueryBuilder queryBuilder, String fieldName) {
 		return new InnerJoin(queryBuilder, fieldName);

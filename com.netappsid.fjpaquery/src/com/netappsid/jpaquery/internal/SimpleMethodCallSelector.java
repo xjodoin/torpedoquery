@@ -6,13 +6,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SimpleMethodCallSelector implements Selector {
 
 	private final Method method;
+	private final QueryBuilder<?> queryBuilder;
 
-	public SimpleMethodCallSelector(Method method) {
+	public SimpleMethodCallSelector(QueryBuilder<?> queryBuilder, Method method) {
+		this.queryBuilder = queryBuilder;
 		this.method = method;
 	}
 
 	@Override
-	public String createQueryFragment(QueryBuilder queryBuilder, AtomicInteger incrementor) {
+	public String createQueryFragment(AtomicInteger incrementor) {
 		return queryBuilder.getAlias(incrementor) + "." + getName();
 	}
 

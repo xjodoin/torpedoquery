@@ -42,14 +42,14 @@ public class ArrayCallHandler implements QueryHandler<Void> {
 			} else if (param instanceof Proxy) {
 				proxy = (Proxy) param;
 				queryBuilder = proxyQueryBuilders.get(proxy);
-				selector = new ObjectSelector(proxy);
+				selector = new ObjectSelector(queryBuilder);
 			} else {
 
 				MethodCall methodCall = iterator.next();
 				iterator.remove();
 				proxy = methodCall.getProxy();
 				queryBuilder = proxyQueryBuilders.get(proxy);
-				selector = new SimpleMethodCallSelector(methodCall.getMethod());
+				selector = new SimpleMethodCallSelector(queryBuilder, methodCall.getMethod());
 			}
 
 			handler.handle(proxy, queryBuilder, selector);
