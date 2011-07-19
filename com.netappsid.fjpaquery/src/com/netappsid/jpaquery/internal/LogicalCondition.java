@@ -1,9 +1,11 @@
 package com.netappsid.jpaquery.internal;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.FJPAQuery;
+import com.netappsid.jpaquery.OnGoingCollectionCondition;
 import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
 import com.netappsid.jpaquery.OnGoingNumberCondition;
@@ -53,6 +55,13 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 		return handle;
 	}
 
+	private <T> OnGoingCollectionCondition<T> createCollectionCondition() {
+		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
+		WhereClauseCollectionHandler<T> whereClauseCollectionHandler = new WhereClauseCollectionHandler<T>(this, false);
+		OnGoingCollectionCondition<T> handle = fjpaMethodHandler.handle(whereClauseCollectionHandler);
+		return handle;
+	}
+
 	@Override
 	public List<Parameter> getParameters() {
 		return condition.getParameters();
@@ -85,6 +94,20 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 	@Override
 	public OnGoingStringCondition<String> or(String property) {
 		OnGoingStringCondition<String> right = this.<String, OnGoingStringCondition<String>> createCondition();
+		condition = new OrCondition(condition, (Condition) right);
+		return right;
+	}
+
+	@Override
+	public <T1> OnGoingCollectionCondition<T1> and(Collection<T1> object) {
+		OnGoingCollectionCondition<T1> right = createCollectionCondition();
+		condition = new AndCondition(condition, (Condition) right);
+		return right;
+	}
+
+	@Override
+	public <T1> OnGoingCollectionCondition<T1> or(Collection<T1> object) {
+		OnGoingCollectionCondition<T1> right = createCollectionCondition();
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
