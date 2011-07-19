@@ -173,7 +173,7 @@ public class FJPAQuery {
 	}
 
 	// JPA Functions
-	public static Function<Integer> count(Object object) {
+	public static Function<Long> count(Object object) {
 		if (object instanceof Proxy) {
 			setQuery((Proxy) object);
 		}
