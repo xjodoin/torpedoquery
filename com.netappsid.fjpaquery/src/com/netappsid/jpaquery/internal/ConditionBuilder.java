@@ -1,12 +1,12 @@
 package com.netappsid.jpaquery.internal;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.netappsid.jpaquery.NumberFunction;
 import com.netappsid.jpaquery.OnGoingCollectionCondition;
 import com.netappsid.jpaquery.OnGoingLikeCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
@@ -14,22 +14,23 @@ import com.netappsid.jpaquery.OnGoingNumberCondition;
 import com.netappsid.jpaquery.OnGoingStringCondition;
 import com.netappsid.jpaquery.Query;
 
-public class ConditionBuilder<T> implements OnGoingNumberCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T>, Condition {
+public class ConditionBuilder<T, N extends Number> implements OnGoingNumberCondition<T, N>, OnGoingStringCondition<T>, OnGoingLikeCondition,
+		OnGoingCollectionCondition<T>, Condition {
 	private final QueryBuilder queryBuilder;
 	private Selector selector;
 	private final LogicalCondition logicalCondition;
 	private Condition condition;
 
-	public ConditionBuilder(QueryBuilder queryBuilder, Method method) {
+	public ConditionBuilder(QueryBuilder queryBuilder, Selector selector) {
 		this.logicalCondition = new LogicalCondition(this);
 		this.queryBuilder = queryBuilder;
-		this.selector = new SimpleMethodCallSelector(queryBuilder, method);
+		this.selector = selector;
 	}
 
-	public ConditionBuilder(LogicalCondition logicalCondition, QueryBuilder queryBuilder, Method method) {
+	public ConditionBuilder(LogicalCondition logicalCondition, QueryBuilder queryBuilder, Selector selector) {
 		this.logicalCondition = logicalCondition;
 		this.queryBuilder = queryBuilder;
-		this.selector = new SimpleMethodCallSelector(queryBuilder, method);
+		this.selector = selector;
 	}
 
 	public LogicalCondition getLogicalCondition() {
@@ -49,26 +50,26 @@ public class ConditionBuilder<T> implements OnGoingNumberCondition<T>, OnGoingSt
 	}
 
 	@Override
-	public OnGoingLogicalCondition lt(T value) {
-		Condition condition = new LtCondition<T>(selector, queryBuilder.generateParameter(selector, value));
+	public OnGoingLogicalCondition lt(N value) {
+		Condition condition = new LtCondition<N>(selector, queryBuilder.generateParameter(selector, value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition lte(T value) {
-		Condition condition = new LteCondition<T>(selector, queryBuilder.generateParameter(selector, value));
+	public OnGoingLogicalCondition lte(N value) {
+		Condition condition = new LteCondition<N>(selector, queryBuilder.generateParameter(selector, value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition gt(T value) {
-		Condition condition = new GtCondition<T>(selector, queryBuilder.generateParameter(selector, value));
+	public OnGoingLogicalCondition gt(N value) {
+		Condition condition = new GtCondition<N>(selector, queryBuilder.generateParameter(selector, value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition gte(T value) {
-		Condition condition = new GteCondition<T>(selector, queryBuilder.generateParameter(selector, value));
+	public OnGoingLogicalCondition gte(N value) {
+		Condition condition = new GteCondition<N>(selector, queryBuilder.generateParameter(selector, value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
@@ -171,8 +172,32 @@ public class ConditionBuilder<T> implements OnGoingNumberCondition<T>, OnGoingSt
 	}
 
 	@Override
-	public OnGoingNumberCondition<Integer> size() {
+	public OnGoingNumberCondition<Integer, Integer> size() {
 		selector = new SizeSelector(selector);
-		return (OnGoingNumberCondition<Integer>) this;
+		return (OnGoingNumberCondition<Integer, Integer>) this;
+	}
+
+	@Override
+	public OnGoingLogicalCondition lt(NumberFunction<N> value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OnGoingLogicalCondition lte(NumberFunction<N> value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OnGoingLogicalCondition gt(NumberFunction<N> value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OnGoingLogicalCondition gte(NumberFunction<N> value) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

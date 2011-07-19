@@ -127,8 +127,8 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>());
 	}
 
-	public static <T extends Number> OnGoingNumberCondition<T> where(T object) {
-		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T>>());
+	public static <T extends Number> OnGoingNumberCondition<T, T> where(T object) {
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T, T>>());
 	}
 
 	public static OnGoingStringCondition<String> where(String object) {
@@ -143,8 +143,8 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>(false));
 	}
 
-	public static <T extends Number> OnGoingNumberCondition<T> condition(T object) {
-		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T>>(false));
+	public static <T extends Number> OnGoingNumberCondition<T, T> condition(T object) {
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T, T>>(false));
 	}
 
 	public static OnGoingStringCondition<String> condition(String object) {
@@ -173,30 +173,30 @@ public class FJPAQuery {
 	}
 
 	// JPA Functions
-	public static Function count(Object object) {
+	public static Function<Integer> count(Object object) {
 		if (object instanceof Proxy) {
 			setQuery((Proxy) object);
 		}
 		return getFJPAMethodHandler().handle(new CountFunctionHandler(object));
 	}
 
-	public static Function sum(Number number) {
-		return getFJPAMethodHandler().handle(new SumFunctionHandler());
+	public static <T extends Number> NumberFunction<T> sum(T number) {
+		return getFJPAMethodHandler().handle(new SumFunctionHandler<T>());
 	}
 
-	public static Function min(Number number) {
-		return getFJPAMethodHandler().handle(new MinFunctionHandler());
+	public static <T extends Number> NumberFunction<T> min(T number) {
+		return getFJPAMethodHandler().handle(new MinFunctionHandler<T>());
 	}
 
-	public static Function max(Number number) {
-		return getFJPAMethodHandler().handle(new MaxFunctionHandler());
+	public static <T extends Number> NumberFunction<T> max(T number) {
+		return getFJPAMethodHandler().handle(new MaxFunctionHandler<T>());
 	}
 
-	public static Function avg(Number number) {
-		return getFJPAMethodHandler().handle(new AvgFunctionHandler());
+	public static <T extends Number> NumberFunction<T> avg(T number) {
+		return getFJPAMethodHandler().handle(new AvgFunctionHandler<T>());
 	}
 
-	public static Function coalesce(Object... values) {
+	public static <T> Function<T> coalesce(T... values) {
 		final CoalesceFunction coalesceFunction = new CoalesceFunction();
 		getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
 			@Override

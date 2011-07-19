@@ -34,15 +34,15 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 	}
 
 	@Override
-	public <T1 extends Number> OnGoingNumberCondition<T1> and(T1 property) {
-		OnGoingNumberCondition<T1> right = ConditionHelper.<T1, OnGoingNumberCondition<T1>> createCondition(this);
+	public <T1 extends Number> OnGoingNumberCondition<T1, T1> and(T1 property) {
+		OnGoingNumberCondition<T1, T1> right = ConditionHelper.<T1, OnGoingNumberCondition<T1, T1>> createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
-	public <T1 extends Number> OnGoingNumberCondition<T1> or(T1 property) {
-		OnGoingNumberCondition<T1> right = ConditionHelper.<T1, OnGoingNumberCondition<T1>> createCondition(this);
+	public <T1 extends Number> OnGoingNumberCondition<T1, T1> or(T1 property) {
+		OnGoingNumberCondition<T1, T1> right = ConditionHelper.<T1, OnGoingNumberCondition<T1, T1>> createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}

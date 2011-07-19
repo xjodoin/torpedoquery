@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.netappsid.jpaquery.Function;
+import com.netappsid.jpaquery.NumberFunction;
 import com.netappsid.jpaquery.OnGoingCollectionCondition;
 import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingGroupByCondition;
@@ -47,28 +49,42 @@ public class GroupBy implements OnGoingGroupByCondition {
 	@Override
 	public <T> OnGoingCondition<T> having(T object) {
 		OnGoingCondition<T> createCondition = ConditionHelper.<T, OnGoingCondition<T>> createCondition(null);
-		this.havingCondition = (Condition) createCondition;
+		havingCondition = (Condition) createCondition;
 		return createCondition;
 	}
 
 	@Override
-	public <T extends Number> OnGoingNumberCondition<T> having(T object) {
-		OnGoingNumberCondition<T> createCondition = ConditionHelper.<T, OnGoingNumberCondition<T>> createCondition(null);
-		this.havingCondition = (Condition) createCondition;
+	public <T extends Number> OnGoingNumberCondition<T, T> having(T object) {
+		OnGoingNumberCondition<T, T> createCondition = ConditionHelper.<T, OnGoingNumberCondition<T, T>> createCondition(null);
+		havingCondition = (Condition) createCondition;
 		return createCondition;
 	}
 
 	@Override
 	public OnGoingStringCondition<String> having(String object) {
 		OnGoingStringCondition<String> createCondition = ConditionHelper.<String, OnGoingStringCondition<String>> createCondition(null);
-		this.havingCondition = (Condition) createCondition;
+		havingCondition = (Condition) createCondition;
 		return createCondition;
 	}
 
 	@Override
 	public <T> OnGoingCollectionCondition<T> having(Collection<T> object) {
 		OnGoingCollectionCondition<T> createCollectionCondition = ConditionHelper.createCollectionCondition(null);
-		this.havingCondition = (Condition) createCollectionCondition;
+		havingCondition = (Condition) createCollectionCondition;
 		return createCollectionCondition;
+	}
+
+	@Override
+	public <T> OnGoingCondition<T> having(Function<T> object) {
+		OnGoingCondition<T> createCondition = ConditionHelper.<T, OnGoingCondition<T>> createCondition(null);
+		havingCondition = (Condition) createCondition;
+		return createCondition;
+	}
+
+	@Override
+	public <T extends Number> OnGoingNumberCondition<T, T> having(NumberFunction<T> object) {
+		OnGoingNumberCondition<T, T> createCondition = ConditionHelper.<T, OnGoingNumberCondition<T, T>> createCondition(null);
+		havingCondition = (Condition) createCondition;
+		return createCondition;
 	}
 }

@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.Function;
 
-public abstract class AggregateFunctionHandler implements QueryHandler<Function>, Function {
+public abstract class AggregateFunctionHandler<T, F extends Function<T>> implements QueryHandler<F>, Function<T> {
 
 	private Method method;
 	private Object proxy;
@@ -26,7 +26,7 @@ public abstract class AggregateFunctionHandler implements QueryHandler<Function>
 	}
 
 	@Override
-	public Function handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
+	public F handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
 
 		if (!methods.isEmpty()) {
 			MethodCall methodCall = methods.pollFirst();
@@ -35,7 +35,7 @@ public abstract class AggregateFunctionHandler implements QueryHandler<Function>
 			queryBuilder = proxyQueryBuilders.get(proxy);
 		}
 
-		return this;
+		return (F) this;
 	}
 
 	protected abstract String getFunctionName();

@@ -1,13 +1,12 @@
 package com.netappsid.jpaquery.internal;
 
+import com.netappsid.jpaquery.NumberFunction;
 
-public class MinFunctionHandler extends AggregateFunctionHandler {
+public class MinFunctionHandler<T extends Number> extends AggregateFunctionHandler<T, NumberFunction<T>> implements NumberFunction<T> {
 
 	@Override
 	protected String getFunctionName() {
 		return "min";
 	}
-
-	
 
 }

@@ -8,4 +8,8 @@ public class SubEntity {
 	public String getName() {
 		return null;
 	}
+
+	public Integer getNumberField() {
+		return null;
+	}
 }
