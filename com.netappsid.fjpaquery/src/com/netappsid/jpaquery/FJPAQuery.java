@@ -15,6 +15,7 @@ import com.netappsid.jpaquery.internal.CountFunctionHandler;
 import com.netappsid.jpaquery.internal.DescFunctionHandler;
 import com.netappsid.jpaquery.internal.DistinctFunctionHandler;
 import com.netappsid.jpaquery.internal.FJPAMethodHandler;
+import com.netappsid.jpaquery.internal.GroupBy;
 import com.netappsid.jpaquery.internal.InnerJoinHandler;
 import com.netappsid.jpaquery.internal.LeftJoinHandler;
 import com.netappsid.jpaquery.internal.MaxFunctionHandler;
@@ -93,7 +94,7 @@ public class FJPAQuery {
 	public static <T> T innerJoin(T toJoin) {
 		return getFJPAMethodHandler().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
 	}
-	
+
 	public static <T, E extends T> E innerJoin(T toJoin, Class<E> realType) {
 		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(), realType));
 	}
@@ -154,13 +155,21 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new WhereClauseCollectionHandler<T>(false));
 	}
 
-	public static void groupBy(Object... values) {
-		getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
+	public static OnGoingGroupByCondition groupBy(Object... values) {
+
+		FJPAMethodHandler fjpaMethodHandler = getFJPAMethodHandler();
+		final QueryBuilder root = fjpaMethodHandler.getRoot();
+		final GroupBy groupBy = new GroupBy();
+
+		fjpaMethodHandler.handle(new ArrayCallHandler(new ValueHandler() {
 			@Override
 			public void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
-				queryBuilder.addGroupBy(selector);
+				groupBy.addGroup(selector);
 			}
 		}, values));
+
+		root.setGroupBy(groupBy);
+		return groupBy;
 	}
 
 	// JPA Functions

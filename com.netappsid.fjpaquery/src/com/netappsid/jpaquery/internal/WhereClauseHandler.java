@@ -28,8 +28,8 @@ public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements Que
 	public E handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 		MethodCall pollFirst = methodCalls.pollFirst();
 		final QueryBuilder queryImpl = proxyQueryBuilders.get(pollFirst.getProxy());
-		final WhereClause<T> whereClause = logicalCondition != null ? new WhereClause<T>(logicalCondition, queryImpl, pollFirst.getMethod())
-				: new WhereClause<T>(queryImpl, pollFirst.getMethod());
+		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<T>(logicalCondition, queryImpl, pollFirst.getMethod())
+				: new ConditionBuilder<T>(queryImpl, pollFirst.getMethod());
 		if (registerWhereClause) {
 			queryImpl.setWhereClause(whereClause);
 		}

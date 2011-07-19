@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.FJPAQuery;
 import com.netappsid.jpaquery.OnGoingCollectionCondition;
 import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
@@ -22,44 +21,30 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 	@Override
 	public <T1> OnGoingCondition<T1> and(T1 property) {
 
-		OnGoingCondition<T1> right = this.<T1, OnGoingCondition<T1>> createCondition();
+		OnGoingCondition<T1> right = ConditionHelper.<T1, OnGoingCondition<T1>> createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public <T1> OnGoingCondition<T1> or(T1 property) {
-		OnGoingCondition<T1> right = this.<T1, OnGoingCondition<T1>> createCondition();
+		OnGoingCondition<T1> right = ConditionHelper.<T1, OnGoingCondition<T1>> createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public <T1 extends Number> OnGoingNumberCondition<T1> and(T1 property) {
-		OnGoingNumberCondition<T1> right = this.<T1, OnGoingNumberCondition<T1>> createCondition();
+		OnGoingNumberCondition<T1> right = ConditionHelper.<T1, OnGoingNumberCondition<T1>> createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public <T1 extends Number> OnGoingNumberCondition<T1> or(T1 property) {
-		OnGoingNumberCondition<T1> right = this.<T1, OnGoingNumberCondition<T1>> createCondition();
+		OnGoingNumberCondition<T1> right = ConditionHelper.<T1, OnGoingNumberCondition<T1>> createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
-	}
-
-	private <T, E extends OnGoingCondition<T>> E createCondition() {
-		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
-		WhereClauseHandler<T, E> whereClauseHandler = new WhereClauseHandler<T, E>(this, false);
-		E handle = fjpaMethodHandler.handle(whereClauseHandler);
-		return handle;
-	}
-
-	private <T> OnGoingCollectionCondition<T> createCollectionCondition() {
-		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
-		WhereClauseCollectionHandler<T> whereClauseCollectionHandler = new WhereClauseCollectionHandler<T>(this, false);
-		OnGoingCollectionCondition<T> handle = fjpaMethodHandler.handle(whereClauseCollectionHandler);
-		return handle;
 	}
 
 	@Override
@@ -86,28 +71,28 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 
 	@Override
 	public OnGoingStringCondition<String> and(String property) {
-		OnGoingStringCondition<String> right = this.<String, OnGoingStringCondition<String>> createCondition();
+		OnGoingStringCondition<String> right = ConditionHelper.<String, OnGoingStringCondition<String>> createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public OnGoingStringCondition<String> or(String property) {
-		OnGoingStringCondition<String> right = this.<String, OnGoingStringCondition<String>> createCondition();
+		OnGoingStringCondition<String> right = ConditionHelper.<String, OnGoingStringCondition<String>> createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public <T1> OnGoingCollectionCondition<T1> and(Collection<T1> object) {
-		OnGoingCollectionCondition<T1> right = createCollectionCondition();
+		OnGoingCollectionCondition<T1> right = ConditionHelper.createCollectionCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public <T1> OnGoingCollectionCondition<T1> or(Collection<T1> object) {
-		OnGoingCollectionCondition<T1> right = createCollectionCondition();
+		OnGoingCollectionCondition<T1> right = ConditionHelper.createCollectionCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}

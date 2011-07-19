@@ -14,19 +14,19 @@ import com.netappsid.jpaquery.OnGoingNumberCondition;
 import com.netappsid.jpaquery.OnGoingStringCondition;
 import com.netappsid.jpaquery.Query;
 
-public class WhereClause<T> implements OnGoingNumberCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T>, Condition {
+public class ConditionBuilder<T> implements OnGoingNumberCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T>, Condition {
 	private final QueryBuilder queryBuilder;
 	private Selector selector;
 	private final LogicalCondition logicalCondition;
 	private Condition condition;
 
-	public WhereClause(QueryBuilder queryBuilder, Method method) {
+	public ConditionBuilder(QueryBuilder queryBuilder, Method method) {
 		this.logicalCondition = new LogicalCondition(this);
 		this.queryBuilder = queryBuilder;
 		this.selector = new SimpleMethodCallSelector(queryBuilder, method);
 	}
 
-	public WhereClause(LogicalCondition logicalCondition, QueryBuilder queryBuilder, Method method) {
+	public ConditionBuilder(LogicalCondition logicalCondition, QueryBuilder queryBuilder, Method method) {
 		this.logicalCondition = logicalCondition;
 		this.queryBuilder = queryBuilder;
 		this.selector = new SimpleMethodCallSelector(queryBuilder, method);

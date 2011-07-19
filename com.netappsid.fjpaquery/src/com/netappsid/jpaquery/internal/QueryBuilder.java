@@ -17,7 +17,7 @@ public class QueryBuilder<T> implements Query<T> {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<Selector>();
 	private final List<Join> joins = new ArrayList<Join>();
-	private WhereClause<?> whereClause;
+	private ConditionBuilder<?> whereClause;
 
 	private String alias;
 	private OrderBy orderBy;
@@ -68,7 +68,7 @@ public class QueryBuilder<T> implements Query<T> {
 	public String appendGroupBy(StringBuilder builder, AtomicInteger incrementor) {
 
 		if (groupBy != null) {
-			groupBy.createQueryFragment(builder, this, incrementor);
+			groupBy.createQueryFragment(builder, incrementor);
 		}
 
 		for (Join join : joins) {
@@ -140,7 +140,7 @@ public class QueryBuilder<T> implements Query<T> {
 		return builder.toString();
 	}
 
-	public void setWhereClause(WhereClause<?> whereClause) {
+	public void setWhereClause(ConditionBuilder<?> whereClause) {
 
 		if (this.whereClause != null) {
 			throw new IllegalArgumentException("You cannot have more than one WhereClause by query");
@@ -200,12 +200,8 @@ public class QueryBuilder<T> implements Query<T> {
 
 	}
 
-	public void addGroupBy(Selector selector) {
-		if (groupBy == null) {
-			groupBy = new GroupBy();
-		}
-
-		groupBy.addGroup(selector);
+	public void setGroupBy(GroupBy groupBy) {
+		this.groupBy = groupBy;
 	}
 
 	@Override
