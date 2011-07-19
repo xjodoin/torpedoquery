@@ -9,7 +9,7 @@ public interface Join {
 
 	String getJoin(String alias, AtomicInteger incrementor);
 
-	List<Parameter> getParams();
+	List<ValueParameter> getParams();
 
 	void appendOrderBy(StringBuilder builder, AtomicInteger incrementor);
 

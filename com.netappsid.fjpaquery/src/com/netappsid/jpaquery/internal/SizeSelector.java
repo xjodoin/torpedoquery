@@ -2,9 +2,9 @@ package com.netappsid.jpaquery.internal;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SizeSelector implements Selector {
+public class SizeSelector<T> implements Selector<T> {
 
-	private final Selector selector;
+	private final Selector<T> selector;
 
 	public SizeSelector(Selector selector) {
 		this.selector = selector;
@@ -16,8 +16,8 @@ public class SizeSelector implements Selector {
 	}
 
 	@Override
-	public String getName() {
-		return selector.getName();
+	public Parameter<T> generateParameter(T value) {
+		return selector.generateParameter(value);
 	}
 
 }

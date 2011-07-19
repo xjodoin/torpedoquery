@@ -17,7 +17,7 @@ public class InCondition<T> extends AbstractCondition<List<T>> {
 
 	@Override
 	public String createQueryFragment(AtomicInteger incrementor) {
-		return selector.createQueryFragment(incrementor) + " " + getFragment() + " ( :" + parameter.generate(incrementor) + " ) ";
+		return selector.createQueryFragment(incrementor) + " " + getFragment() + " ( " + parameter.generate(incrementor) + " ) ";
 	}
 
 	protected String getFragment() {

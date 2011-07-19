@@ -41,8 +41,8 @@ public abstract class AggregateFunctionHandler<T, F extends Function<T>> impleme
 	protected abstract String getFunctionName();
 
 	@Override
-	public String getName() {
-		return "";
+	public Parameter<T> generateParameter(T value) {
+		return new SelectorParameter<T>(this);
 	}
 
 }

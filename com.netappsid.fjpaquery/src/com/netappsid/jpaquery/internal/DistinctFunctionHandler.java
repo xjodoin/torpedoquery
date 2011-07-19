@@ -47,8 +47,7 @@ public class DistinctFunctionHandler<T> implements Function<T>, QueryHandler<Fun
 	}
 
 	@Override
-	public String getName() {
-		return "";
+	public Parameter<T> generateParameter(T value) {
+		return new SelectorParameter<T>(this);
 	}
-
 }

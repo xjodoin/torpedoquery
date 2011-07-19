@@ -41,8 +41,8 @@ public abstract class OrderByFunctionHandler implements QueryHandler<Function>, 
 	protected abstract String getFunctionName();
 
 	@Override
-	public String getName() {
-		return "";
+	public Parameter generateParameter(Object value) {
+		return null;
 	}
 
 }

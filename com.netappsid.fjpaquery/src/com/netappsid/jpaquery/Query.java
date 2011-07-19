@@ -9,7 +9,7 @@ public interface Query<T> {
 
 	String getQuery();
 
-	Map<String, Object> getParametersAsMap();
+	Map<String, Object> getParameters();
 	
 	<E> List<E> map(EntityManager entityManager,PostFunction<E,T> function);
 

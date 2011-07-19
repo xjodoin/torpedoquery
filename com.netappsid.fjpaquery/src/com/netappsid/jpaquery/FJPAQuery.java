@@ -247,7 +247,7 @@ public class FJPAQuery {
 	public static Map<String, Object> params(Object proxy) {
 		if (proxy instanceof Proxy) {
 			Proxy from = (Proxy) proxy;
-			return from.getFJPAMethodHandler().<QueryBuilder> getRoot().getParametersAsMap();
+			return from.getFJPAMethodHandler().<QueryBuilder> getRoot().getParameters();
 		}
 		return null;
 	}

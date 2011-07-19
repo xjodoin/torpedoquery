@@ -2,7 +2,7 @@ package com.netappsid.jpaquery.internal;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ObjectSelector implements Selector {
+public class ObjectSelector<T> implements Selector<T> {
 
 	private final QueryBuilder<?> builder;
 
@@ -16,8 +16,8 @@ public class ObjectSelector implements Selector {
 	}
 
 	@Override
-	public String getName() {
-		return "empty";
+	public Parameter<T> generateParameter(Object value) {
+		return new SelectorParameter<T>(this);
 	}
 
 }

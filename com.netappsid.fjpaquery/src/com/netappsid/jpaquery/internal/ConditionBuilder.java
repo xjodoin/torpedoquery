@@ -39,37 +39,37 @@ public class ConditionBuilder<T, N extends Number> implements OnGoingNumberCondi
 
 	@Override
 	public OnGoingLogicalCondition eq(T value) {
-		Condition condition = new EqualCondition<T>(selector, queryBuilder.generateParameter(selector, value));
+		Condition condition = new EqualCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition neq(T value) {
-		Condition condition = new NotEqualCondition<T>(selector, queryBuilder.generateParameter(selector, value));
+		Condition condition = new NotEqualCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition lt(N value) {
-		Condition condition = new LtCondition<N>(selector, queryBuilder.generateParameter(selector, value));
+		Condition condition = new LtCondition<N>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition lte(N value) {
-		Condition condition = new LteCondition<N>(selector, queryBuilder.generateParameter(selector, value));
+		Condition condition = new LteCondition<N>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition gt(N value) {
-		Condition condition = new GtCondition<N>(selector, queryBuilder.generateParameter(selector, value));
+		Condition condition = new GtCondition<N>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition gte(N value) {
-		Condition condition = new GteCondition<N>(selector, queryBuilder.generateParameter(selector, value));
+		Condition condition = new GteCondition<N>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
@@ -92,7 +92,7 @@ public class ConditionBuilder<T, N extends Number> implements OnGoingNumberCondi
 
 	@Override
 	public OnGoingLogicalCondition in(Collection<T> values) {
-		Condition condition = new InCondition<T>(selector, queryBuilder.generateParameter(selector, values));
+		Condition condition = new InCondition<T>(selector, selector.generateParameter(values));
 		return getOnGoingLogicalCondition(condition);
 	}
 
@@ -104,12 +104,12 @@ public class ConditionBuilder<T, N extends Number> implements OnGoingNumberCondi
 
 	@Override
 	public OnGoingLogicalCondition notIn(T... values) {
-		return getOnGoingLogicalCondition(new NotInCondition<T>(selector, queryBuilder.generateParameter(selector, values)));
+		return getOnGoingLogicalCondition(new NotInCondition<T>(selector, selector.generateParameter(values)));
 	}
 
 	@Override
 	public OnGoingLogicalCondition notIn(Collection<T> values) {
-		return getOnGoingLogicalCondition(new NotInCondition<T>(selector, queryBuilder.generateParameter(selector, values)));
+		return getOnGoingLogicalCondition(new NotInCondition<T>(selector, selector.generateParameter(values)));
 	}
 
 	@Override
@@ -179,8 +179,8 @@ public class ConditionBuilder<T, N extends Number> implements OnGoingNumberCondi
 
 	@Override
 	public OnGoingLogicalCondition lt(NumberFunction<N> value) {
-		// TODO Auto-generated method stub
-		return null;
+		selector = value;
+		return lt((N) null);
 	}
 
 	@Override

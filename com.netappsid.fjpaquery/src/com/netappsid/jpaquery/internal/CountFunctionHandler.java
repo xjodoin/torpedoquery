@@ -46,8 +46,7 @@ public class CountFunctionHandler implements Function<Long>, QueryHandler<Functi
 	}
 
 	@Override
-	public String getName() {
-		return "";
+	public Parameter<Long> generateParameter(Long value) {
+		return new SelectorParameter<Long>(this);
 	}
-
 }

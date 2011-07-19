@@ -27,7 +27,7 @@ public class InSubQueryCondition<T> implements Condition {
 
 	@Override
 	public List<Parameter> getParameters() {
-		return subQuery.getParameters();
+		return subQuery.getValueParameters();
 	}
 
 }

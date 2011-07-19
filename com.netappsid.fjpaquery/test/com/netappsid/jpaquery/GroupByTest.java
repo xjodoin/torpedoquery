@@ -40,6 +40,7 @@ public class GroupByTest {
 		String query = select.getQuery();
 
 		Assert.assertEquals(
-				"select entity_0.name from Entity entity_0 group by entity_0.name having sum(entity_0.integerField) < sum(subEntity_1.numberField)", query);
+				"select entity_0.name from Entity entity_0 inner join entity_0.subEntities subEntity_1 group by entity_0.name having sum(subEntity_1.numberField) < sum(subEntity_1.numberField)",
+				query);
 	}
 }

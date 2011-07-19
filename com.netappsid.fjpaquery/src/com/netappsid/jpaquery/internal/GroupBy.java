@@ -75,15 +75,15 @@ public class GroupBy implements OnGoingGroupByCondition {
 	}
 
 	@Override
-	public <T> OnGoingCondition<T> having(Function<T> object) {
-		OnGoingCondition<T> createCondition = ConditionHelper.<T, OnGoingCondition<T>> createCondition(null);
+	public <T> OnGoingCondition<T> having(Function<T> function) {
+		OnGoingCondition<T> createCondition = ConditionHelper.<T, OnGoingCondition<T>> createCondition(function, null);
 		havingCondition = (Condition) createCondition;
 		return createCondition;
 	}
 
 	@Override
-	public <T extends Number> OnGoingNumberCondition<T, T> having(NumberFunction<T> object) {
-		OnGoingNumberCondition<T, T> createCondition = ConditionHelper.<T, OnGoingNumberCondition<T, T>> createCondition(null);
+	public <T extends Number> OnGoingNumberCondition<T, T> having(NumberFunction<T> function) {
+		OnGoingNumberCondition<T, T> createCondition = ConditionHelper.<T, OnGoingNumberCondition<T, T>> createCondition(function, null);
 		havingCondition = (Condition) createCondition;
 		return createCondition;
 	}

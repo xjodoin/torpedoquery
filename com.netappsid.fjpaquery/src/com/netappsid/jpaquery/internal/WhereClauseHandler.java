@@ -37,6 +37,7 @@ public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements Que
 		Selector conditionSelector = function;
 
 		final QueryBuilder queryImpl;
+
 		if (conditionSelector == null) {
 			MethodCall pollFirst = methodCalls.pollFirst();
 			queryImpl = proxyQueryBuilders.get(pollFirst.getProxy());

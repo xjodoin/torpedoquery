@@ -157,38 +157,36 @@ public class QueryBuilder<T> implements Query<T> {
 	}
 
 	@Override
-	public Map<String, Object> getParametersAsMap() {
+	public Map<String, Object> getParameters() {
 
 		Map<String, Object> params = new HashMap<String, Object>();
-		List<Parameter> parameters = getParameters();
-		for (Parameter parameter : parameters) {
+		List<ValueParameter> parameters = getValueParameters();
+		for (ValueParameter parameter : parameters) {
 			params.put(parameter.getName(), parameter.getValue());
 		}
 		return params;
 	}
 
-	public List<Parameter> getParameters() {
-		List<Parameter> parameters = new ArrayList<Parameter>();
+	public List<ValueParameter> getValueParameters() {
+		List<ValueParameter> valueParameters = new ArrayList<ValueParameter>();
 
 		Condition whereClauseCondition = getWhereClause();
 
 		if (whereClauseCondition != null) {
-			parameters.addAll(whereClauseCondition.getParameters());
+			List<Parameter> parameters = whereClauseCondition.getParameters();
+			for (Parameter parameter : parameters) {
+				if (parameter instanceof ValueParameter) {
+					valueParameters.add((ValueParameter) parameter);
+				}
+			}
 		}
 
 		for (Join join : joins) {
-			parameters.addAll(join.getParams());
+			List<ValueParameter> params = join.getParams();
+			valueParameters.addAll(params);
 		}
 
-		return parameters;
-	}
-
-	public <T> Parameter<T> generateParameter(Selector selector, T value) {
-		return new Parameter<T>(selector.getName(), value);
-	}
-
-	public <T> Parameter<List<T>> generateParameter(Selector selector, List<T> value) {
-		return new Parameter<List<T>>(selector.getName(), value);
+		return valueParameters;
 	}
 
 	public void addOrder(Selector selector) {
@@ -231,7 +229,7 @@ public class QueryBuilder<T> implements Query<T> {
 
 	private javax.persistence.Query createJPAQuery(EntityManager entityManager) {
 		final javax.persistence.Query query = entityManager.createQuery(getQuery(new AtomicInteger()));
-		final Map<String, Object> parameters = getParametersAsMap();
+		final Map<String, Object> parameters = getParameters();
 
 		for (Entry<String, Object> parameter : parameters.entrySet()) {
 			query.setParameter(parameter.getKey(), parameter.getValue());

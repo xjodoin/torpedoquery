@@ -2,10 +2,10 @@ package com.netappsid.jpaquery.internal;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public interface Selector {
+public interface Selector<T> {
 
 	String createQueryFragment(AtomicInteger incrementor);
 
-	String getName();
+	Parameter<T> generateParameter(T value);
 
 }

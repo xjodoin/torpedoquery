@@ -14,7 +14,7 @@ public abstract class SingleParameterCondition<T> extends AbstractCondition<T> {
 
 	@Override
 	public String createQueryFragment(AtomicInteger incrementor) {
-		return getSelector().createQueryFragment(incrementor) + " " + getComparator() + " :" + parameter.generate(incrementor);
+		return getSelector().createQueryFragment(incrementor) + " " + getComparator() + " " + parameter.generate(incrementor);
 	}
 
 	protected abstract String getComparator();

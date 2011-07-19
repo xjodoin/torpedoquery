@@ -36,8 +36,8 @@ public abstract class AbstractJoin implements Join {
 	}
 
 	@Override
-	public List<Parameter> getParams() {
-		return join.getParameters();
+	public List<ValueParameter> getParams() {
+		return join.getValueParameters();
 	}
 
 	public abstract String getJoinType();

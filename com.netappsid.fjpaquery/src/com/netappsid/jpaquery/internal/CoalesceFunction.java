@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.Function;
 
-public class CoalesceFunction implements Function {
+public class CoalesceFunction<T> implements Function<T> {
 
 	private final List<Selector> selectors = new ArrayList<Selector>();
 	private Proxy proxy;
@@ -31,11 +31,6 @@ public class CoalesceFunction implements Function {
 	}
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
 	public Object getProxy() {
 		return proxy;
 	}
@@ -47,6 +42,11 @@ public class CoalesceFunction implements Function {
 	public void setQuery(Proxy proxy) {
 		this.proxy = proxy;
 
+	}
+
+	@Override
+	public Parameter<T> generateParameter(T value) {
+		return new SelectorParameter<T>(this);
 	}
 
 }
