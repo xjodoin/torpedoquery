@@ -9,21 +9,19 @@ import javassist.util.proxy.ProxyFactory.ClassLoaderProvider;
 
 public class MultiClassLoaderProvider implements ClassLoaderProvider {
 
-	private class MultiClassLoader extends ClassLoader
-	{
+	private class MultiClassLoader extends ClassLoader {
 		private final Collection<ClassLoader> classLoaders;
 
 		public MultiClassLoader(Collection<ClassLoader> classLoaders) {
 			this.classLoaders = classLoaders;
 		}
-		
+
 		@Override
 		public Class<?> loadClass(String name) throws ClassNotFoundException {
 			for (ClassLoader classLoader : classLoaders) {
 				try {
 					Class<?> loadClass = classLoader.loadClass(name);
-					if(loadClass!=null)
-					{
+					if (loadClass != null) {
 						return loadClass;
 					}
 				} catch (ClassNotFoundException e) {
@@ -32,16 +30,21 @@ public class MultiClassLoaderProvider implements ClassLoaderProvider {
 			throw new ClassNotFoundException(name);
 		}
 	}
-	
+
 	@Override
 	public ClassLoader get(ProxyFactory factory) {
 		Class[] interfaces = factory.getInterfaces();
 		Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
-		classLoaders.add(factory.getSuperclass().getClassLoader());
+
+		Class superclass = factory.getSuperclass();
+		if (superclass.getClassLoader() != null) {
+			classLoaders.add(superclass.getClassLoader());
+		}
+
 		for (Class clazz : interfaces) {
 			classLoaders.add(clazz.getClassLoader());
 		}
-		
+
 		return new MultiClassLoader(classLoaders);
 	}
 
