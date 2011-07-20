@@ -178,26 +178,26 @@ public class ConditionBuilder<T, N extends Number> implements OnGoingNumberCondi
 	}
 
 	@Override
-	public OnGoingLogicalCondition lt(NumberFunction<N> value) {
-		selector = value;
-		return lt((N) null);
+	public OnGoingLogicalCondition lt(NumberFunction<N, N> value) {
+		Condition condition = new LtCondition<N>(selector, value.generateParameter(null));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition lte(NumberFunction<N> value) {
-		// TODO Auto-generated method stub
-		return null;
+	public OnGoingLogicalCondition lte(NumberFunction<N, N> value) {
+		Condition condition = new LteCondition<N>(selector, value.generateParameter(null));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition gt(NumberFunction<N> value) {
-		// TODO Auto-generated method stub
-		return null;
+	public OnGoingLogicalCondition gt(NumberFunction<N, N> value) {
+		Condition condition = new GtCondition<N>(selector, value.generateParameter(null));
+		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition gte(NumberFunction<N> value) {
-		// TODO Auto-generated method stub
-		return null;
+	public OnGoingLogicalCondition gte(NumberFunction<N, N> value) {
+		Condition condition = new GteCondition<N>(selector, value.generateParameter(null));
+		return getOnGoingLogicalCondition(condition);
 	}
 }

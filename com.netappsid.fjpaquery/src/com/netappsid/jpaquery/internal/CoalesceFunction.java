@@ -5,9 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.Function;
+import com.netappsid.jpaquery.NumberFunction;
 
-public class CoalesceFunction<T> implements Function<T> {
+public class CoalesceFunction<T> implements NumberFunction<T, Number> {
 
 	private final List<Selector> selectors = new ArrayList<Selector>();
 	private Proxy proxy;

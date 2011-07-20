@@ -11,6 +11,7 @@ import com.netappsid.jpaquery.internal.ArrayCallHandler.ValueHandler;
 import com.netappsid.jpaquery.internal.AscFunctionHandler;
 import com.netappsid.jpaquery.internal.AvgFunctionHandler;
 import com.netappsid.jpaquery.internal.CoalesceFunction;
+import com.netappsid.jpaquery.internal.ConstantFunctionHandler;
 import com.netappsid.jpaquery.internal.CountFunctionHandler;
 import com.netappsid.jpaquery.internal.DescFunctionHandler;
 import com.netappsid.jpaquery.internal.DistinctFunctionHandler;
@@ -21,6 +22,7 @@ import com.netappsid.jpaquery.internal.LeftJoinHandler;
 import com.netappsid.jpaquery.internal.MaxFunctionHandler;
 import com.netappsid.jpaquery.internal.MinFunctionHandler;
 import com.netappsid.jpaquery.internal.MultiClassLoaderProvider;
+import com.netappsid.jpaquery.internal.NumberConstantFunctionHandler;
 import com.netappsid.jpaquery.internal.Proxy;
 import com.netappsid.jpaquery.internal.QueryBuilder;
 import com.netappsid.jpaquery.internal.RightJoinHandler;
@@ -180,23 +182,33 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new CountFunctionHandler(object));
 	}
 
-	public static <T extends Number> NumberFunction<T> sum(T number) {
+	public static <T extends Number> NumberFunction<T, T> sum(T number) {
 		return getFJPAMethodHandler().handle(new SumFunctionHandler<T>());
 	}
 
-	public static <T extends Number> NumberFunction<T> min(T number) {
+	public static <T extends Number> NumberFunction<T, T> min(T number) {
 		return getFJPAMethodHandler().handle(new MinFunctionHandler<T>());
 	}
 
-	public static <T extends Number> NumberFunction<T> max(T number) {
+	public static <T extends Number> NumberFunction<T, T> max(T number) {
 		return getFJPAMethodHandler().handle(new MaxFunctionHandler<T>());
 	}
 
-	public static <T extends Number> NumberFunction<T> avg(T number) {
+	public static <T extends Number> NumberFunction<T, T> avg(T number) {
 		return getFJPAMethodHandler().handle(new AvgFunctionHandler<T>());
 	}
 
+	public static <T, E extends Function<T>> E coalesce(E... values) {
+		CoalesceFunction<E> coalesceFunction = getCoalesceFunction(values);
+		return (E) coalesceFunction;
+	}
+
 	public static <T> Function<T> coalesce(T... values) {
+		final CoalesceFunction<T> coalesceFunction = getCoalesceFunction(values);
+		return coalesceFunction;
+	}
+
+	private static <T> CoalesceFunction<T> getCoalesceFunction(T... values) {
 		final CoalesceFunction coalesceFunction = new CoalesceFunction();
 		getFJPAMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
 			@Override
@@ -205,7 +217,6 @@ public class FJPAQuery {
 				coalesceFunction.addSelector(selector);
 			}
 		}, values));
-
 		return coalesceFunction;
 	}
 
@@ -214,6 +225,14 @@ public class FJPAQuery {
 			setQuery((Proxy) object);
 		}
 		return getFJPAMethodHandler().handle(new DistinctFunctionHandler<T>(object));
+	}
+
+	public static <T> Function<T> constant(T constant) {
+		return getFJPAMethodHandler().handle(new ConstantFunctionHandler<T>(constant));
+	}
+
+	public static <T extends Number> NumberFunction<T, T> constant(T constant) {
+		return getFJPAMethodHandler().handle(new NumberConstantFunctionHandler<T>(constant));
 	}
 
 	public static void orderBy(Object... values) {

@@ -1,5 +1,5 @@
 package com.netappsid.jpaquery;
 
-public interface NumberFunction<T extends Number> extends Function<T> {
+public interface NumberFunction<T, N extends Number> extends Function<T> {
 
 }

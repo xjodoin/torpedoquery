@@ -6,7 +6,7 @@ public interface OnGoingGroupByCondition {
 
 	public <T> OnGoingCondition<T> having(Function<T> object);
 
-	public <T extends Number> OnGoingNumberCondition<T, T> having(NumberFunction<T> object);
+	public <T extends Number> OnGoingNumberCondition<T, T> having(NumberFunction<T, T> object);
 
 	public <T> OnGoingCondition<T> having(T object);
 
