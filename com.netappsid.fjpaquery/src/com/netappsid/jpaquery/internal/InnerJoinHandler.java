@@ -1,12 +1,12 @@
 package com.netappsid.jpaquery.internal;
 
 public class InnerJoinHandler<T> extends JoinHandler<T> {
-	public InnerJoinHandler(FJPAMethodHandler methodHandler) {
-		super(methodHandler);
+	public InnerJoinHandler(FJPAMethodHandler methodHandler, ProxyFactoryFactory proxyFactoryFactory) {
+		super(methodHandler, proxyFactoryFactory);
 	}
 
-	public InnerJoinHandler(FJPAMethodHandler fjpaMethodHandler, Class<T> realType) {
-		super(fjpaMethodHandler,realType);
+	public InnerJoinHandler(FJPAMethodHandler fjpaMethodHandler, ProxyFactoryFactory proxyFactoryFactory, Class<T> realType) {
+		super(fjpaMethodHandler, proxyFactoryFactory, realType);
 	}
 
 	@Override

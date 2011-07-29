@@ -1,10 +1,9 @@
 package com.netappsid.jpaquery.internal;
 
-
 public class LeftJoinHandler<T> extends JoinHandler<T> {
 
-	public LeftJoinHandler(FJPAMethodHandler methodHandler) {
-		super(methodHandler);
+	public LeftJoinHandler(FJPAMethodHandler methodHandler, ProxyFactoryFactory proxyFactoryFactory) {
+		super(methodHandler, proxyFactoryFactory);
 	}
 
 	@Override

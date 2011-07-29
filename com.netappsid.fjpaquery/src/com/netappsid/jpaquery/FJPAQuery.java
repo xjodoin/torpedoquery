@@ -24,6 +24,7 @@ import com.netappsid.jpaquery.internal.MinFunctionHandler;
 import com.netappsid.jpaquery.internal.MultiClassLoaderProvider;
 import com.netappsid.jpaquery.internal.NumberConstantFunctionHandler;
 import com.netappsid.jpaquery.internal.Proxy;
+import com.netappsid.jpaquery.internal.ProxyFactoryFactory;
 import com.netappsid.jpaquery.internal.QueryBuilder;
 import com.netappsid.jpaquery.internal.RightJoinHandler;
 import com.netappsid.jpaquery.internal.Selector;
@@ -32,20 +33,12 @@ import com.netappsid.jpaquery.internal.WhereClauseCollectionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
 
 public class FJPAQuery {
-
-	private static MultiClassLoaderProvider osgiAwareClassLoaderProvider;
-
-	static {
-		osgiAwareClassLoaderProvider = new MultiClassLoaderProvider();
-		ProxyFactory.classLoaderProvider = osgiAwareClassLoaderProvider;
-	}
-
 	private static ThreadLocal<Proxy> query = new ThreadLocal<Proxy>();
+	private static final ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(new MultiClassLoaderProvider());
 
 	public static <T> T from(Class<T> toQuery) {
-
 		try {
-			final ProxyFactory proxyFactory = new ProxyFactory();
+			final ProxyFactory proxyFactory = proxyFactoryFactory.getProxyFactory();
 
 			proxyFactory.setSuperclass(toQuery);
 			proxyFactory.setInterfaces(new Class[] { Proxy.class });
@@ -94,35 +87,35 @@ public class FJPAQuery {
 	}
 
 	public static <T> T innerJoin(T toJoin) {
-		return getFJPAMethodHandler().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
 	}
 
 	public static <T, E extends T> E innerJoin(T toJoin, Class<E> realType) {
-		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(), realType));
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
 	}
 
 	public static <T, E extends T> E innerJoin(Collection<T> toJoin, Class<E> realType) {
-		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(), realType));
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
 	}
 
 	public static <T> T innerJoin(Collection<T> toJoin) {
-		return getFJPAMethodHandler().handle(new InnerJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
 	}
 
 	public static <T> T leftJoin(T toJoin) {
-		return getFJPAMethodHandler().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new LeftJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
 	}
 
 	public static <T> T leftJoin(Collection<T> toJoin) {
-		return getFJPAMethodHandler().handle(new LeftJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new LeftJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
 	}
 
 	public static <T> T rightJoin(T toJoin) {
-		return getFJPAMethodHandler().handle(new RightJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new RightJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
 	}
 
 	public static <T> T rightJoin(Collection<T> toJoin) {
-		return getFJPAMethodHandler().handle(new RightJoinHandler<T>(getFJPAMethodHandler()));
+		return getFJPAMethodHandler().handle(new RightJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
 	}
 
 	public static <T> OnGoingCondition<T> where(T object) {
