@@ -1,8 +1,8 @@
 package com.netappsid.jpaquery.internal;
 
-import com.netappsid.jpaquery.NumberFunction;
+import com.netappsid.jpaquery.ComparableFunction;
 
-public class MinFunctionHandler<T extends Number> extends AggregateFunctionHandler<T, NumberFunction<T, T>> implements NumberFunction<T, T> {
+public class MinFunctionHandler<T> extends AggregateFunctionHandler<T, ComparableFunction<T>> implements ComparableFunction<T> {
 
 	@Override
 	protected String getFunctionName() {

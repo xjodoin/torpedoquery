@@ -46,8 +46,8 @@ public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements Que
 			queryImpl = proxyQueryBuilders.get(function.getProxy());
 		}
 
-		final ConditionBuilder<T, ? extends Number> whereClause = logicalCondition != null ? new ConditionBuilder<T, Number>(logicalCondition, queryImpl,
-				conditionSelector) : new ConditionBuilder<T, Number>(queryImpl, conditionSelector);
+		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<T>(logicalCondition, queryImpl, conditionSelector)
+				: new ConditionBuilder<T>(queryImpl, conditionSelector);
 
 		if (registerWhereClause) {
 			queryImpl.setWhereClause(whereClause);

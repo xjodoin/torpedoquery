@@ -6,11 +6,11 @@ public interface OnGoingGroupByCondition {
 
 	public <T> OnGoingCondition<T> having(Function<T> object);
 
-	public <T extends Number> OnGoingNumberCondition<T, T> having(NumberFunction<T, T> object);
+	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> having(ComparableFunction<V> object);
 
 	public <T> OnGoingCondition<T> having(T object);
 
-	public <T extends Number> OnGoingNumberCondition<T, T> having(T object);
+	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> having(T object);
 
 	public OnGoingStringCondition<String> having(String object);
 

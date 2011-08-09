@@ -3,6 +3,7 @@ package com.netappsid.jpaquery;
 import static com.netappsid.jpaquery.FJPAQuery.*;
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.Map;
 
 import org.junit.Test;
@@ -258,5 +259,13 @@ public class WhereClauseTest {
 		where(from.getName()).eq("test").and(from.getIntegerField()).gt(2).and(from.getCode()).eq("test");
 
 		assertEquals("from Entity entity_0 where entity_0.name = :name_1 and entity_0.integerField > :integerField_2 and entity_0.code = :code_3", query(from));
+	}
+
+	@Test
+	public void testDateFieldAccessToRelationalCondition() {
+		Entity from = from(Entity.class);
+		where(from.getDateField()).gt(new Date());
+		Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.dateField > :dateField_1", select.getQuery());
 	}
 }

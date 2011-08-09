@@ -3,17 +3,17 @@ package com.netappsid.jpaquery;
 import java.util.Collection;
 
 public interface OnGoingLogicalCondition {
-	<T1> OnGoingCondition<T1> and(T1 property);
+	<T> OnGoingCondition<T> and(T property);
 
-	<T1> OnGoingCondition<T1> or(T1 property);
+	<T> OnGoingCondition<T> or(T property);
 
-	<T1 extends Number> OnGoingNumberCondition<T1, T1> and(T1 property);
+	<V, T extends Comparable<V>> OnGoingComparableCondition<V> and(T property);
 
-	<T1 extends Number> OnGoingNumberCondition<T1, T1> or(T1 property);
+	<V, T extends Comparable<V>> OnGoingComparableCondition<V> or(T property);
 
-	<T1> OnGoingCollectionCondition<T1> and(Collection<T1> object);
+	<T> OnGoingCollectionCondition<T> and(Collection<T> object);
 
-	<T1> OnGoingCollectionCondition<T1> or(Collection<T1> object);
+	<T> OnGoingCollectionCondition<T> or(Collection<T> object);
 
 	OnGoingStringCondition<String> and(String property);
 

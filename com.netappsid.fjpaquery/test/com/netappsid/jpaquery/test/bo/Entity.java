@@ -1,8 +1,11 @@
 package com.netappsid.jpaquery.test.bo;
 
+import java.util.Date;
 import java.util.List;
 
 public class Entity {
+	private Date dateField;
+
 	public String getCode() {
 		return null;
 	}
@@ -29,5 +32,9 @@ public class Entity {
 
 	public int getPrimitiveInt() {
 		return 0;
+	}
+
+	public Date getDateField() {
+		return dateField;
 	}
 }

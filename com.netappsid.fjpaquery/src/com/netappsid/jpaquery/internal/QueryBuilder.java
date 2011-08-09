@@ -17,7 +17,7 @@ public class QueryBuilder<T> implements Query<T> {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<Selector>();
 	private final List<Join> joins = new ArrayList<Join>();
-	private ConditionBuilder<?, ? extends Number> whereClause;
+	private ConditionBuilder<?> whereClause;
 
 	private String freezeQuery;
 
@@ -150,7 +150,7 @@ public class QueryBuilder<T> implements Query<T> {
 		return builder.toString();
 	}
 
-	public void setWhereClause(ConditionBuilder<?, ? extends Number> whereClause) {
+	public void setWhereClause(ConditionBuilder<?> whereClause) {
 
 		if (this.whereClause != null) {
 			throw new IllegalArgumentException("You cannot have more than one WhereClause by query");

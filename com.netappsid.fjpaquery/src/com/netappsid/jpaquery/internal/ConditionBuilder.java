@@ -6,16 +6,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.NumberFunction;
+import com.netappsid.jpaquery.ComparableFunction;
 import com.netappsid.jpaquery.OnGoingCollectionCondition;
+import com.netappsid.jpaquery.OnGoingComparableCondition;
 import com.netappsid.jpaquery.OnGoingLikeCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
-import com.netappsid.jpaquery.OnGoingNumberCondition;
 import com.netappsid.jpaquery.OnGoingStringCondition;
 import com.netappsid.jpaquery.Query;
 
-public class ConditionBuilder<T, N extends Number> implements OnGoingNumberCondition<T, N>, OnGoingStringCondition<T>, OnGoingLikeCondition,
-		OnGoingCollectionCondition<T>, Condition {
+public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T>,
+		Condition {
 	private final QueryBuilder queryBuilder;
 	private Selector selector;
 	private final LogicalCondition logicalCondition;
@@ -50,26 +50,26 @@ public class ConditionBuilder<T, N extends Number> implements OnGoingNumberCondi
 	}
 
 	@Override
-	public OnGoingLogicalCondition lt(N value) {
-		Condition condition = new LtCondition<N>(selector, selector.generateParameter(value));
+	public OnGoingLogicalCondition lt(T value) {
+		Condition condition = new LtCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition lte(N value) {
-		Condition condition = new LteCondition<N>(selector, selector.generateParameter(value));
+	public OnGoingLogicalCondition lte(T value) {
+		Condition condition = new LteCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition gt(N value) {
-		Condition condition = new GtCondition<N>(selector, selector.generateParameter(value));
+	public OnGoingLogicalCondition gt(T value) {
+		Condition condition = new GtCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition gte(N value) {
-		Condition condition = new GteCondition<N>(selector, selector.generateParameter(value));
+	public OnGoingLogicalCondition gte(T value) {
+		Condition condition = new GteCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
@@ -172,32 +172,32 @@ public class ConditionBuilder<T, N extends Number> implements OnGoingNumberCondi
 	}
 
 	@Override
-	public OnGoingNumberCondition<Integer, Integer> size() {
+	public OnGoingComparableCondition<Integer> size() {
 		selector = new SizeSelector(selector);
-		return (OnGoingNumberCondition<Integer, Integer>) this;
+		return (OnGoingComparableCondition<Integer>) this;
 	}
 
 	@Override
-	public OnGoingLogicalCondition lt(NumberFunction<N, N> value) {
-		Condition condition = new LtCondition<N>(selector, value.generateParameter(null));
+	public OnGoingLogicalCondition lt(ComparableFunction<T> value) {
+		Condition condition = new LtCondition<T>(selector, value.generateParameter(null));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition lte(NumberFunction<N, N> value) {
-		Condition condition = new LteCondition<N>(selector, value.generateParameter(null));
+	public OnGoingLogicalCondition lte(ComparableFunction<T> value) {
+		Condition condition = new LteCondition<T>(selector, value.generateParameter(null));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition gt(NumberFunction<N, N> value) {
-		Condition condition = new GtCondition<N>(selector, value.generateParameter(null));
+	public OnGoingLogicalCondition gt(ComparableFunction<T> value) {
+		Condition condition = new GtCondition<T>(selector, value.generateParameter(null));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
-	public OnGoingLogicalCondition gte(NumberFunction<N, N> value) {
-		Condition condition = new GteCondition<N>(selector, value.generateParameter(null));
+	public OnGoingLogicalCondition gte(ComparableFunction<T> value) {
+		Condition condition = new GteCondition<T>(selector, value.generateParameter(null));
 		return getOnGoingLogicalCondition(condition);
 	}
 }

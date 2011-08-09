@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.OnGoingCollectionCondition;
+import com.netappsid.jpaquery.OnGoingComparableCondition;
 import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
-import com.netappsid.jpaquery.OnGoingNumberCondition;
 import com.netappsid.jpaquery.OnGoingStringCondition;
 
 public class LogicalCondition implements OnGoingLogicalCondition, Condition {
@@ -34,15 +34,15 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 	}
 
 	@Override
-	public <T1 extends Number> OnGoingNumberCondition<T1, T1> and(T1 property) {
-		OnGoingNumberCondition<T1, T1> right = ConditionHelper.<T1, OnGoingNumberCondition<T1, T1>> createCondition(this);
+	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> and(T property) {
+		OnGoingComparableCondition<V> right = ConditionHelper.<V, OnGoingComparableCondition<V>> createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
-	public <T1 extends Number> OnGoingNumberCondition<T1, T1> or(T1 property) {
-		OnGoingNumberCondition<T1, T1> right = ConditionHelper.<T1, OnGoingNumberCondition<T1, T1>> createCondition(this);
+	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> or(T property) {
+		OnGoingComparableCondition<V> right = ConditionHelper.<V, OnGoingComparableCondition<V>> createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}

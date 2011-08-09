@@ -11,6 +11,7 @@ import com.netappsid.jpaquery.internal.ArrayCallHandler.ValueHandler;
 import com.netappsid.jpaquery.internal.AscFunctionHandler;
 import com.netappsid.jpaquery.internal.AvgFunctionHandler;
 import com.netappsid.jpaquery.internal.CoalesceFunction;
+import com.netappsid.jpaquery.internal.ComparableConstantFunctionHandler;
 import com.netappsid.jpaquery.internal.ConstantFunctionHandler;
 import com.netappsid.jpaquery.internal.CountFunctionHandler;
 import com.netappsid.jpaquery.internal.DescFunctionHandler;
@@ -22,7 +23,6 @@ import com.netappsid.jpaquery.internal.LeftJoinHandler;
 import com.netappsid.jpaquery.internal.MaxFunctionHandler;
 import com.netappsid.jpaquery.internal.MinFunctionHandler;
 import com.netappsid.jpaquery.internal.MultiClassLoaderProvider;
-import com.netappsid.jpaquery.internal.NumberConstantFunctionHandler;
 import com.netappsid.jpaquery.internal.Proxy;
 import com.netappsid.jpaquery.internal.ProxyFactoryFactory;
 import com.netappsid.jpaquery.internal.QueryBuilder;
@@ -122,8 +122,8 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>());
 	}
 
-	public static <T extends Number> OnGoingNumberCondition<T, T> where(T object) {
-		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T, T>>());
+	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> where(T object) {
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>());
 	}
 
 	public static OnGoingStringCondition<String> where(String object) {
@@ -138,8 +138,8 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>(false));
 	}
 
-	public static <T extends Number> OnGoingNumberCondition<T, T> condition(T object) {
-		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingNumberCondition<T, T>>(false));
+	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(T object) {
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(false));
 	}
 
 	public static OnGoingStringCondition<String> condition(String object) {
@@ -175,20 +175,20 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new CountFunctionHandler(object));
 	}
 
-	public static <T extends Number> NumberFunction<T, T> sum(T number) {
+	public static <T extends Number> ComparableFunction<T> sum(T number) {
 		return getFJPAMethodHandler().handle(new SumFunctionHandler<T>());
 	}
 
-	public static <T extends Number> NumberFunction<T, T> min(T number) {
-		return getFJPAMethodHandler().handle(new MinFunctionHandler<T>());
+	public static <V, T extends Comparable<V>> ComparableFunction<V> min(T number) {
+		return getFJPAMethodHandler().handle(new MinFunctionHandler<V>());
 	}
 
-	public static <T extends Number> NumberFunction<T, T> max(T number) {
-		return getFJPAMethodHandler().handle(new MaxFunctionHandler<T>());
+	public static <V, T extends Comparable<V>> ComparableFunction<V> max(T number) {
+		return getFJPAMethodHandler().handle(new MaxFunctionHandler<V>());
 	}
 
-	public static <T extends Number> NumberFunction<T, T> avg(T number) {
-		return getFJPAMethodHandler().handle(new AvgFunctionHandler<T>());
+	public static <V, T extends Comparable<V>> ComparableFunction<V> avg(T number) {
+		return getFJPAMethodHandler().handle(new AvgFunctionHandler<V>());
 	}
 
 	public static <T, E extends Function<T>> E coalesce(E... values) {
@@ -224,8 +224,8 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new ConstantFunctionHandler<T>(constant));
 	}
 
-	public static <T extends Number> NumberFunction<T, T> constant(T constant) {
-		return getFJPAMethodHandler().handle(new NumberConstantFunctionHandler<T>(constant));
+	public static <V, T extends Comparable<V>> ComparableFunction<T> constant(T constant) {
+		return getFJPAMethodHandler().handle(new ComparableConstantFunctionHandler<T>(constant));
 	}
 
 	public static void orderBy(Object... values) {

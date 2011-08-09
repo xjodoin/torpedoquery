@@ -6,12 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.netappsid.jpaquery.ComparableFunction;
 import com.netappsid.jpaquery.Function;
-import com.netappsid.jpaquery.NumberFunction;
 import com.netappsid.jpaquery.OnGoingCollectionCondition;
+import com.netappsid.jpaquery.OnGoingComparableCondition;
 import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingGroupByCondition;
-import com.netappsid.jpaquery.OnGoingNumberCondition;
 import com.netappsid.jpaquery.OnGoingStringCondition;
 
 public class GroupBy implements OnGoingGroupByCondition {
@@ -54,8 +54,8 @@ public class GroupBy implements OnGoingGroupByCondition {
 	}
 
 	@Override
-	public <T extends Number> OnGoingNumberCondition<T, T> having(T object) {
-		OnGoingNumberCondition<T, T> createCondition = ConditionHelper.<T, OnGoingNumberCondition<T, T>> createCondition(null);
+	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> having(T object) {
+		OnGoingComparableCondition<V> createCondition = ConditionHelper.<V, OnGoingComparableCondition<V>> createCondition(null);
 		havingCondition = (Condition) createCondition;
 		return createCondition;
 	}
@@ -82,8 +82,8 @@ public class GroupBy implements OnGoingGroupByCondition {
 	}
 
 	@Override
-	public <T extends Number> OnGoingNumberCondition<T, T> having(NumberFunction<T, T> function) {
-		OnGoingNumberCondition<T, T> createCondition = ConditionHelper.<T, OnGoingNumberCondition<T, T>> createCondition(function, null);
+	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> having(ComparableFunction<V> function) {
+		OnGoingComparableCondition<V> createCondition = ConditionHelper.<V, OnGoingComparableCondition<V>> createCondition(function, null);
 		havingCondition = (Condition) createCondition;
 		return createCondition;
 	}

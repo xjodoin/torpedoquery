@@ -4,13 +4,13 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.NumberFunction;
+import com.netappsid.jpaquery.ComparableFunction;
 
-public class NumberConstantFunctionHandler<T extends Number> implements NumberFunction<T, T>, QueryHandler<NumberFunction<T, T>> {
+public class ComparableConstantFunctionHandler<T> implements ComparableFunction<T>, QueryHandler<ComparableFunction<T>> {
 
 	private final T constant;
 
-	public NumberConstantFunctionHandler(T constant) {
+	public ComparableConstantFunctionHandler(T constant) {
 		this.constant = constant;
 	}
 
@@ -20,7 +20,7 @@ public class NumberConstantFunctionHandler<T extends Number> implements NumberFu
 	}
 
 	@Override
-	public NumberFunction<T, T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
+	public ComparableFunction<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
 		return this;
 	}
 
