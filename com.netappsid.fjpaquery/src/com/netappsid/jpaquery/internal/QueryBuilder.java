@@ -19,6 +19,8 @@ public class QueryBuilder<T> implements Query<T> {
 	private final List<Join> joins = new ArrayList<Join>();
 	private ConditionBuilder<?, ? extends Number> whereClause;
 
+	private String freezeQuery;
+
 	private String alias;
 	private OrderBy orderBy;
 	private GroupBy groupBy;
@@ -28,23 +30,31 @@ public class QueryBuilder<T> implements Query<T> {
 	}
 
 	public String getQuery(AtomicInteger incrementor) {
+		return freezeQuery(incrementor);
+	}
 
-		String from = " from " + toQuery.getSimpleName() + " " + getAlias(incrementor);
-		StringBuilder builder = new StringBuilder();
+	private String freezeQuery(AtomicInteger incrementor) {
 
-		appendSelect(builder, incrementor);
+		if (freezeQuery == null) {
+			String from = " from " + toQuery.getSimpleName() + " " + getAlias(incrementor);
+			StringBuilder builder = new StringBuilder();
 
-		builder.append(from);
+			appendSelect(builder, incrementor);
 
-		builder.append(getJoins(incrementor));
+			builder.append(from);
 
-		builder.append(appendWhereClause(new StringBuilder(), incrementor));
+			builder.append(getJoins(incrementor));
 
-		builder.append(appendOrderBy(new StringBuilder(), incrementor));
+			builder.append(appendWhereClause(new StringBuilder(), incrementor));
 
-		builder.append(appendGroupBy(new StringBuilder(), incrementor));
+			builder.append(appendOrderBy(new StringBuilder(), incrementor));
 
-		return builder.toString().trim();
+			builder.append(appendGroupBy(new StringBuilder(), incrementor));
+
+			freezeQuery = builder.toString().trim();
+
+		}
+		return freezeQuery;
 	}
 
 	@Override
@@ -158,6 +168,8 @@ public class QueryBuilder<T> implements Query<T> {
 
 	@Override
 	public Map<String, Object> getParameters() {
+
+		freezeQuery(new AtomicInteger());
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		List<ValueParameter> parameters = getValueParameters();

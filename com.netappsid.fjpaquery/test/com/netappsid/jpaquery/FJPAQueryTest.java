@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -189,6 +191,15 @@ public class FJPAQueryTest {
 		com.netappsid.jpaquery.Query<String[]> select = select(innerJoin.getName(), from.getCode());
 		String query = select.getQuery();
 		assertEquals("select subEntity_1.name, entity_0.code from Entity entity_0 inner join entity_0.subEntities subEntity_1", query);
+	}
+
+	@Test
+	public void test_parameters_must_not_be_empty_if_ask_before_string() {
+		Entity from = from(Entity.class);
+		where(from.getIntegerField()).eq(1);
+		com.netappsid.jpaquery.Query<Entity> select = select(from);
+		Map<String, Object> parameters = select.getParameters();
+		assertEquals(1, parameters.get("integerField_1"));
 	}
 
 	/**
