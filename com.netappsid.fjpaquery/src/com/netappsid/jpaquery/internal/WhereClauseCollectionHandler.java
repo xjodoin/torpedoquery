@@ -27,8 +27,8 @@ public class WhereClauseCollectionHandler<T> implements QueryHandler<com.netapps
 	public OnGoingCollectionCondition<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 		MethodCall pollFirst = methodCalls.pollFirst();
 		final QueryBuilder queryImpl = proxyQueryBuilders.get(pollFirst.getProxy());
-		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<T>(logicalCondition, queryImpl, new SimpleMethodCallSelector(
-				queryImpl, pollFirst.getMethod())) : new ConditionBuilder<T>(queryImpl, new SimpleMethodCallSelector(queryImpl, pollFirst.getMethod()));
+		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<T>(logicalCondition, new SimpleMethodCallSelector(queryImpl,
+				pollFirst.getMethod())) : new ConditionBuilder<T>(new SimpleMethodCallSelector(queryImpl, pollFirst.getMethod()));
 		if (registerWhereClause) {
 			queryImpl.setWhereClause(whereClause);
 		}

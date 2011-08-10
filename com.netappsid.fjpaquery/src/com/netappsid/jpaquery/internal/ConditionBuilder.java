@@ -16,20 +16,17 @@ import com.netappsid.jpaquery.Query;
 
 public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T>,
 		Condition {
-	private final QueryBuilder queryBuilder;
 	private Selector selector;
 	private final LogicalCondition logicalCondition;
 	private Condition condition;
 
-	public ConditionBuilder(QueryBuilder queryBuilder, Selector selector) {
+	public ConditionBuilder(Selector selector) {
 		this.logicalCondition = new LogicalCondition(this);
-		this.queryBuilder = queryBuilder;
 		this.selector = selector;
 	}
 
-	public ConditionBuilder(LogicalCondition logicalCondition, QueryBuilder queryBuilder, Selector selector) {
+	public ConditionBuilder(LogicalCondition logicalCondition, Selector selector) {
 		this.logicalCondition = logicalCondition;
-		this.queryBuilder = queryBuilder;
 		this.selector = selector;
 	}
 
