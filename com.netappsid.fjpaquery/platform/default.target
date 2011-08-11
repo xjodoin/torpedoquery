@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.6"?>
-
-<target name="CustomBuilt360 Development Target">
-<locations>
-<location path="${container_loc}/plugins" type="Directory"/>
-<location path="${eclipse_home}" type="Profile"/>
-</locations>
-</target>

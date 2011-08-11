@@ -1,14 +1,24 @@
 Manifest-Version: 1.0
+Embed-Directory: target/dependency
+Private-Package: javassist,javassist.bytecode,javassist.bytecode.analy
+ sis,javassist.bytecode.annotation,javassist.bytecode.stackmap,javassi
+ st.compiler,javassist.compiler.ast,javassist.convert,javassist.expr,j
+ avassist.runtime,javassist.scopedpool,javassist.tools,javassist.tools
+ .reflect,javassist.tools.rmi,javassist.tools.web,javassist.util,javas
+ sist.util.proxy,target.dependency
+Bundle-ClassPath: .,target/dependency/javassist-3.12.1.GA.jar
+Built-By: xjodoin
+Tool: Bnd-0.0.238
+Bundle-Name: com.netappsid.fjpaquery [com.netappsid.fjpaquery]
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.6.0_22
+Bundle-Version: 1.0.0.SNAPSHOT
+Bnd-LastModified: 1313036964900
 Bundle-ManifestVersion: 2
-Bundle-Name: Fluent JPA Query
+Bundle-Activator: com.netappsid.fjpaquery.internal.ExampleActivator
+Import-Package: com.netappsid.fjpaquery.internal,com.sun.jdi,com.sun.j
+ di.connect,com.sun.jdi.event,com.sun.jdi.request
+Embed-Dependency: *;scope=compile|runtime;inline=false
 Bundle-SymbolicName: com.netappsid.fjpaquery
-Bundle-Version: 0.3.0
-Bundle-Vendor: NetAppsID Inc.
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ActivationPolicy: lazy
-Require-Bundle: com.netappsid.javassist;bundle-version="[3.9.0,4.0.0)",
- org.mockito.mockito-core-eclipse;bundle-version="[1.8.5,2.0.0)";resolution:=optional
-Import-Package: javax.persistence,
- org.junit;version="[4.5.0,5.0.0)";resolution:=optional
-Export-Package: com.netappsid.jpaquery;version="0.3.0",
- com.netappsid.jpaquery.internal;x-friends:="com.netappsid.javassist"
+Embed-StripGroup: true
+
