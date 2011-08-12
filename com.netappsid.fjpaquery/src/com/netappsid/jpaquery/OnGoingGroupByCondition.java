@@ -6,7 +6,7 @@ public interface OnGoingGroupByCondition {
 
 	public <T> OnGoingCondition<T> having(Function<T> object);
 
-	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> having(ComparableFunction<V> object);
+	public <T extends Comparable<?>> OnGoingComparableCondition<T> having(ComparableFunction<T> object);
 
 	public <T> OnGoingCondition<T> having(T object);
 

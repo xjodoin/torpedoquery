@@ -175,8 +175,8 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new CountFunctionHandler(object));
 	}
 
-	public static <T extends Number> ComparableFunction<T> sum(T number) {
-		return getFJPAMethodHandler().handle(new SumFunctionHandler<T>());
+	public static <V, T extends Comparable<V>> ComparableFunction<V> sum(T number) {
+		return getFJPAMethodHandler().handle(new SumFunctionHandler<V>());
 	}
 
 	public static <V, T extends Comparable<V>> ComparableFunction<V> min(T number) {

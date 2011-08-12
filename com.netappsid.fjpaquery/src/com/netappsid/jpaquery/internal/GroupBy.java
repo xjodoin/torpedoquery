@@ -82,8 +82,8 @@ public class GroupBy implements OnGoingGroupByCondition {
 	}
 
 	@Override
-	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> having(ComparableFunction<V> function) {
-		OnGoingComparableCondition<V> createCondition = ConditionHelper.<V, OnGoingComparableCondition<V>> createCondition(function, null);
+	public <T extends Comparable<?>> OnGoingComparableCondition<T> having(ComparableFunction<T> function) {
+		OnGoingComparableCondition<T> createCondition = ConditionHelper.<T, OnGoingComparableCondition<T>> createCondition(function, null);
 		havingCondition = (Condition) createCondition;
 		return createCondition;
 	}
