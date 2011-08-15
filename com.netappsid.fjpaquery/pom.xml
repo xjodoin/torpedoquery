@@ -16,6 +16,11 @@
 
 	<packaging>bundle</packaging>
 
+	<scm>
+		<connection>scm:git:git@github.com:360-Innovations/FJPAQuery.git</connection>
+		<url>scm:git:git@github.com:360-Innovations/FJPAQuery.git</url>
+		<developerConnection>scm:git:git@github.com:360-Innovations/FJPAQuery.git</developerConnection>
+	</scm>
 
 
 	<build>
