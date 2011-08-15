@@ -31,7 +31,7 @@
 					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
 						<Export-Package>com.netappsid.jpaquery</Export-Package>
-						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 					</instructions>
 				</configuration>
 			</plugin>
