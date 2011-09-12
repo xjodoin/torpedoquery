@@ -54,10 +54,28 @@ public class FJPAQuery {
 			return proxy;
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
+	}
 
-		return null;
+	public static <T, E extends T> E extend(T toExtend, Class<E> extendClass) {
+		try {
+			final ProxyFactory proxyFactory = proxyFactoryFactory.getProxyFactory();
+
+			proxyFactory.setSuperclass(extendClass);
+			proxyFactory.setInterfaces(new Class[] { Proxy.class });
+
+			FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
+			final E proxy = (E) proxyFactory.create(null, null, fjpaMethodHandler);
+
+			QueryBuilder queryBuilder = fjpaMethodHandler.getQueryBuilder(toExtend);
+			fjpaMethodHandler.addQueryBuilder(proxy, queryBuilder);
+
+			return proxy;
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static <T> Query<T> select(Function<T> value) {

@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import org.junit.Test;
 
 import com.netappsid.jpaquery.test.bo.Entity;
+import com.netappsid.jpaquery.test.bo.ExtendEntity;
 import com.netappsid.jpaquery.test.bo.SubEntity;
 
 public class FJPAQueryTest {
@@ -212,6 +213,18 @@ public class FJPAQueryTest {
 		Map<String, Object> parameters = select.getParameters();
 		assertEquals("select subEntity_1 from Entity entity_0 inner join entity_0.subEntities subEntity_1 with subEntity_1.code = :code_2", query);
 		assertEquals("test", parameters.get("code_2"));
+	}
+
+	@Test
+	public void testExtend_specificSubClassField() {
+		Entity from = from(Entity.class);
+		ExtendEntity extend = extend(from, ExtendEntity.class);
+		where(extend.getSpecificField()).eq("test");
+
+		com.netappsid.jpaquery.Query<Entity> select = select(from);
+
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.specificField = :specificField_1", select.getQuery());
+		assertEquals("test", select.getParameters().get("specificField_1"));
 	}
 
 }
