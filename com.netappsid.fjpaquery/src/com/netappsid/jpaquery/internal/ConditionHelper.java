@@ -2,7 +2,6 @@ package com.netappsid.jpaquery.internal;
 
 import com.netappsid.jpaquery.FJPAQuery;
 import com.netappsid.jpaquery.Function;
-import com.netappsid.jpaquery.OnGoingCollectionCondition;
 import com.netappsid.jpaquery.OnGoingCondition;
 
 public class ConditionHelper {
@@ -18,10 +17,4 @@ public class ConditionHelper {
 		return handle;
 	}
 
-	public static <T> OnGoingCollectionCondition<T> createCollectionCondition(LogicalCondition condition) {
-		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
-		WhereClauseCollectionHandler<T> whereClauseCollectionHandler = new WhereClauseCollectionHandler<T>(condition, false);
-		OnGoingCollectionCondition<T> handle = fjpaMethodHandler.handle(whereClauseCollectionHandler);
-		return handle;
-	}
 }

@@ -1,6 +1,6 @@
 package com.netappsid.jpaquery;
 
-public interface OnGoingComparableCondition<T> extends OnGoingCondition<T> {
+public interface OnGoingComparableCondition<T> extends ValueOnGoingCondition<T> {
 	OnGoingLogicalCondition lt(T value);
 
 	OnGoingLogicalCondition lt(ComparableFunction<T> value);

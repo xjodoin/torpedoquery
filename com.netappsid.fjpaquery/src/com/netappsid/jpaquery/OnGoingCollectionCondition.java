@@ -1,6 +1,6 @@
 package com.netappsid.jpaquery;
 
-public interface OnGoingCollectionCondition<T> {
+public interface OnGoingCollectionCondition<T> extends OnGoingCondition<T> {
 
 	OnGoingLogicalCondition isEmpty();
 

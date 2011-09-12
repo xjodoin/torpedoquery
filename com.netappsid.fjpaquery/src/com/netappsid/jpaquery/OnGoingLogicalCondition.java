@@ -3,9 +3,9 @@ package com.netappsid.jpaquery;
 import java.util.Collection;
 
 public interface OnGoingLogicalCondition {
-	<T> OnGoingCondition<T> and(T property);
+	<T> ValueOnGoingCondition<T> and(T property);
 
-	<T> OnGoingCondition<T> or(T property);
+	<T> ValueOnGoingCondition<T> or(T property);
 
 	<V, T extends Comparable<V>> OnGoingComparableCondition<V> and(T property);
 

@@ -10,9 +10,9 @@ import com.netappsid.jpaquery.ComparableFunction;
 import com.netappsid.jpaquery.Function;
 import com.netappsid.jpaquery.OnGoingCollectionCondition;
 import com.netappsid.jpaquery.OnGoingComparableCondition;
-import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingGroupByCondition;
 import com.netappsid.jpaquery.OnGoingStringCondition;
+import com.netappsid.jpaquery.ValueOnGoingCondition;
 
 public class GroupBy implements OnGoingGroupByCondition {
 
@@ -47,8 +47,8 @@ public class GroupBy implements OnGoingGroupByCondition {
 	}
 
 	@Override
-	public <T> OnGoingCondition<T> having(T object) {
-		OnGoingCondition<T> createCondition = ConditionHelper.<T, OnGoingCondition<T>> createCondition(null);
+	public <T> ValueOnGoingCondition<T> having(T object) {
+		ValueOnGoingCondition<T> createCondition = ConditionHelper.<T, ValueOnGoingCondition<T>> createCondition(null);
 		havingCondition = (Condition) createCondition;
 		return createCondition;
 	}
@@ -69,14 +69,14 @@ public class GroupBy implements OnGoingGroupByCondition {
 
 	@Override
 	public <T> OnGoingCollectionCondition<T> having(Collection<T> object) {
-		OnGoingCollectionCondition<T> createCollectionCondition = ConditionHelper.createCollectionCondition(null);
+		OnGoingCollectionCondition<T> createCollectionCondition = ConditionHelper.<T, OnGoingCollectionCondition<T>> createCondition(null);
 		havingCondition = (Condition) createCollectionCondition;
 		return createCollectionCondition;
 	}
 
 	@Override
-	public <T> OnGoingCondition<T> having(Function<T> function) {
-		OnGoingCondition<T> createCondition = ConditionHelper.<T, OnGoingCondition<T>> createCondition(function, null);
+	public <T> ValueOnGoingCondition<T> having(Function<T> function) {
+		ValueOnGoingCondition<T> createCondition = ConditionHelper.<T, ValueOnGoingCondition<T>> createCondition(function, null);
 		havingCondition = (Condition) createCondition;
 		return createCondition;
 	}

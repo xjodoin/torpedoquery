@@ -30,8 +30,8 @@ import com.netappsid.jpaquery.internal.QueryBuilder;
 import com.netappsid.jpaquery.internal.RightJoinHandler;
 import com.netappsid.jpaquery.internal.Selector;
 import com.netappsid.jpaquery.internal.SumFunctionHandler;
-import com.netappsid.jpaquery.internal.WhereClauseCollectionHandler;
 import com.netappsid.jpaquery.internal.WhereClauseHandler;
+import com.netappsid.jpaquery.internal.WhereQueryConfigurator;
 
 public class FJPAQuery {
 	private static ThreadLocal<Proxy> query = new ThreadLocal<Proxy>();
@@ -135,8 +135,8 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new RightJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
 	}
 
-	public static <T> OnGoingCondition<T> where(T object) {
-		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>());
+	public static <T> ValueOnGoingCondition<T> where(T object) {
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>());
 	}
 
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> where(T object) {
@@ -148,11 +148,11 @@ public class FJPAQuery {
 	}
 
 	public static <T> OnGoingCollectionCondition<T> where(Collection<T> object) {
-		return getFJPAMethodHandler().handle(new WhereClauseCollectionHandler<T>());
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(new WhereQueryConfigurator<T>()));
 	}
 
-	public static <T> OnGoingCondition<T> with(T object) {
-		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>(new WithQueryConfigurator<T>()));
+	public static <T> ValueOnGoingCondition<T> with(T object) {
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>(new WithQueryConfigurator<T>()));
 	}
 
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> with(T object) {
@@ -164,11 +164,11 @@ public class FJPAQuery {
 	}
 
 	public static <T> OnGoingCollectionCondition<T> with(Collection<T> object) {
-		return getFJPAMethodHandler().handle(new WhereClauseCollectionHandler<T>());
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(new WithQueryConfigurator<T>()));
 	}
 
-	public static <T> OnGoingCondition<T> condition(T object) {
-		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>(new DoNothingQueryConfigurator<T>()));
+	public static <T> ValueOnGoingCondition<T> condition(T object) {
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>(new DoNothingQueryConfigurator<T>()));
 	}
 
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(T object) {
@@ -180,7 +180,7 @@ public class FJPAQuery {
 	}
 
 	public static <T> OnGoingCollectionCondition<T> condition(Collection<T> object) {
-		return getFJPAMethodHandler().handle(new WhereClauseCollectionHandler<T>(false));
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(new DoNothingQueryConfigurator<T>()));
 	}
 
 	public static OnGoingGroupByCondition groupBy(Object... values) {

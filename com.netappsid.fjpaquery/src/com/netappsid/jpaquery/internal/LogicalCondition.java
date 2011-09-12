@@ -6,9 +6,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netappsid.jpaquery.OnGoingCollectionCondition;
 import com.netappsid.jpaquery.OnGoingComparableCondition;
-import com.netappsid.jpaquery.OnGoingCondition;
 import com.netappsid.jpaquery.OnGoingLogicalCondition;
 import com.netappsid.jpaquery.OnGoingStringCondition;
+import com.netappsid.jpaquery.ValueOnGoingCondition;
 
 public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 
@@ -19,16 +19,16 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 	}
 
 	@Override
-	public <T1> OnGoingCondition<T1> and(T1 property) {
+	public <T1> ValueOnGoingCondition<T1> and(T1 property) {
 
-		OnGoingCondition<T1> right = ConditionHelper.<T1, OnGoingCondition<T1>> createCondition(this);
+		ValueOnGoingCondition<T1> right = ConditionHelper.<T1, ValueOnGoingCondition<T1>> createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
-	public <T1> OnGoingCondition<T1> or(T1 property) {
-		OnGoingCondition<T1> right = ConditionHelper.<T1, OnGoingCondition<T1>> createCondition(this);
+	public <T1> ValueOnGoingCondition<T1> or(T1 property) {
+		ValueOnGoingCondition<T1> right = ConditionHelper.<T1, ValueOnGoingCondition<T1>> createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
@@ -85,14 +85,14 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 
 	@Override
 	public <T1> OnGoingCollectionCondition<T1> and(Collection<T1> object) {
-		OnGoingCollectionCondition<T1> right = ConditionHelper.createCollectionCondition(this);
+		OnGoingCollectionCondition<T1> right = ConditionHelper.<T1, OnGoingCollectionCondition<T1>> createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public <T1> OnGoingCollectionCondition<T1> or(Collection<T1> object) {
-		OnGoingCollectionCondition<T1> right = ConditionHelper.createCollectionCondition(this);
+		OnGoingCollectionCondition<T1> right = ConditionHelper.<T1, OnGoingCollectionCondition<T1>> createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
