@@ -16,8 +16,8 @@ public abstract class AbstractJoin implements Join {
 	@Override
 	public String getJoin(String parentAlias, AtomicInteger incrementor) {
 
-		return " " + getJoinType() + " join " + parentAlias + "." + fieldName + " " + join.getAlias(incrementor)
-				+ (join.hasSubJoin() ? join.getJoins(incrementor) : "");
+		return (" " + getJoinType() + " join " + parentAlias + "." + fieldName + " " + join.getAlias(incrementor))
+				+ (join.hasWithClause() ? join.getWithClause(incrementor) : "") + (join.hasSubJoin() ? join.getJoins(incrementor) : "");
 	}
 
 	@Override

@@ -9,39 +9,39 @@ import com.netappsid.jpaquery.OnGoingCondition;
 //TODO duplicate avec WhereClauseCollectionHandler
 public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements QueryHandler<E> {
 
-	private final boolean registerWhereClause;
 	private final LogicalCondition logicalCondition;
 	private final Function<T> function;
+	private final QueryConfigurator<T> configurator;
 
 	public WhereClauseHandler() {
-		this(null, true);
+		this(null, new WhereQueryConfigurator<T>());
 	}
 
-	public WhereClauseHandler(boolean registerWhereClause) {
-		this(null, registerWhereClause);
+	public WhereClauseHandler(QueryConfigurator<T> configurator) {
+		this(null, configurator);
 	}
 
-	public WhereClauseHandler(LogicalCondition logicalCondition, boolean registerWhereClause) {
-		this(null, logicalCondition, registerWhereClause);
+	public WhereClauseHandler(LogicalCondition logicalCondition, QueryConfigurator<T> configurator) {
+		this(null, logicalCondition, configurator);
 	}
 
-	public WhereClauseHandler(Function<T> function, LogicalCondition logicalCondition, boolean registerWhereClause) {
+	public WhereClauseHandler(Function<T> function, LogicalCondition logicalCondition, QueryConfigurator<T> configurator) {
 		this.function = function;
 		this.logicalCondition = logicalCondition;
-		this.registerWhereClause = registerWhereClause;
+		this.configurator = configurator;
 	}
 
 	@Override
 	public E handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 
-		Selector conditionSelector = function;
+		Selector<T> conditionSelector = function;
 
-		final QueryBuilder queryImpl;
+		final QueryBuilder<T> queryImpl;
 
 		if (conditionSelector == null) {
 			MethodCall pollFirst = methodCalls.pollFirst();
 			queryImpl = proxyQueryBuilders.get(pollFirst.getProxy());
-			conditionSelector = new SimpleMethodCallSelector(queryImpl, pollFirst.getMethod());
+			conditionSelector = new SimpleMethodCallSelector<T>(queryImpl, pollFirst.getMethod());
 		} else {
 			queryImpl = proxyQueryBuilders.get(function.getProxy());
 		}
@@ -49,9 +49,7 @@ public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements Que
 		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<T>(logicalCondition, conditionSelector)
 				: new ConditionBuilder<T>(conditionSelector);
 
-		if (registerWhereClause) {
-			queryImpl.setWhereClause(whereClause);
-		}
+		configurator.configure(queryImpl, whereClause);
 
 		return (E) whereClause;
 	}

@@ -202,26 +202,16 @@ public class FJPAQueryTest {
 		assertEquals(1, parameters.get("integerField_1"));
 	}
 
-	/**
-	 * where(entity.getCode()).neq("code"); where(entity.getCode()).lt("code);
-	 * where(entity.getCode()).lte("code); where(entity.getCode()).gt("code);
-	 * where(entity.getCode()).gte("code); where(entity.getCode()).like("code);
-	 * where(entity.getCode()).in("code); where(entity.getCode()).notIn("code);
-	 * where(entity.getCode()).isNull(); where(entity.getCode()).isNotNull();
-	 * where(entity.getCode()).isEmpty(); where(entity.getCode()).isNotEmpty();
-	 * where(entity.getCode()).memberOf(Entity.class);
-	 * where(entity.getCode()).notMemberOf(Entity.class); ===
-	 * select(coalesce(entity.getCode(), entity.getName())); ===
-	 * select(parent.getChildren(0).getCode()); === from Entity entity where
-	 * (entity.code = :code and entity.name = :name) or entity.code = :code2
-	 * 
-	 * final Grouping grouping =
-	 * group(entity.getCode()).eq("code").and(entity.getName()).eq("name");
-	 * where(grouping).or(entity.getCode()).eq("code2");
-	 * 
-	 * OR
-	 * 
-	 * where(group(entity.getCode()).eq("code").and(entity.getName()).eq("name")
-	 * ).or(entity.getCode()).eq("code2");
-	 */
+	@Test
+	public void testJoinWith_with_Condition() {
+		Entity from = from(Entity.class);
+		SubEntity innerJoin = innerJoin(from.getSubEntities());
+		with(innerJoin.getCode()).eq("test");
+		com.netappsid.jpaquery.Query<SubEntity> select = select(innerJoin);
+		String query = select.getQuery();
+		Map<String, Object> parameters = select.getParameters();
+		assertEquals("select subEntity_1 from Entity entity_0 inner join entity_0.subEntities subEntity_1 with subEntity_1.code = :code_2", query);
+		assertEquals("test", parameters.get("code_2"));
+	}
+
 }

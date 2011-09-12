@@ -16,6 +16,7 @@ import com.netappsid.jpaquery.internal.ConstantFunctionHandler;
 import com.netappsid.jpaquery.internal.CountFunctionHandler;
 import com.netappsid.jpaquery.internal.DescFunctionHandler;
 import com.netappsid.jpaquery.internal.DistinctFunctionHandler;
+import com.netappsid.jpaquery.internal.DoNothingQueryConfigurator;
 import com.netappsid.jpaquery.internal.FJPAMethodHandler;
 import com.netappsid.jpaquery.internal.GroupBy;
 import com.netappsid.jpaquery.internal.InnerJoinHandler;
@@ -150,16 +151,32 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new WhereClauseCollectionHandler<T>());
 	}
 
+	public static <T> OnGoingCondition<T> with(T object) {
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>(new WithQueryConfigurator<T>()));
+	}
+
+	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> with(T object) {
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(new WithQueryConfigurator<V>()));
+	}
+
+	public static OnGoingStringCondition<String> with(String object) {
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(new WithQueryConfigurator<String>()));
+	}
+
+	public static <T> OnGoingCollectionCondition<T> with(Collection<T> object) {
+		return getFJPAMethodHandler().handle(new WhereClauseCollectionHandler<T>());
+	}
+
 	public static <T> OnGoingCondition<T> condition(T object) {
-		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>(false));
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCondition<T>>(new DoNothingQueryConfigurator<T>()));
 	}
 
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(T object) {
-		return getFJPAMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(false));
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(new DoNothingQueryConfigurator<V>()));
 	}
 
 	public static OnGoingStringCondition<String> condition(String object) {
-		return getFJPAMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(false));
+		return getFJPAMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(new DoNothingQueryConfigurator<String>()));
 	}
 
 	public static <T> OnGoingCollectionCondition<T> condition(Collection<T> object) {

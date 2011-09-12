@@ -18,6 +18,7 @@ public class QueryBuilder<T> implements Query<T> {
 	private final List<Selector> toSelect = new ArrayList<Selector>();
 	private final List<Join> joins = new ArrayList<Join>();
 	private ConditionBuilder<?> whereClause;
+	private ConditionBuilder<?> withClause;
 
 	private String freezeQuery;
 
@@ -90,7 +91,7 @@ public class QueryBuilder<T> implements Query<T> {
 
 	public StringBuilder appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
 
-		Condition whereClauseCondition = getWhereClause();
+		Condition whereClauseCondition = getConditionClause(whereClause);
 
 		if (whereClauseCondition != null) {
 			if (builder.length() == 0) {
@@ -159,9 +160,9 @@ public class QueryBuilder<T> implements Query<T> {
 		this.whereClause = whereClause;
 	}
 
-	public Condition getWhereClause() {
-		if (whereClause != null) {
-			return whereClause.getLogicalCondition() != null ? whereClause.getLogicalCondition() : whereClause;
+	private static Condition getConditionClause(ConditionBuilder<?> conditionBuilder) {
+		if (conditionBuilder != null) {
+			return conditionBuilder.getLogicalCondition() != null ? conditionBuilder.getLogicalCondition() : conditionBuilder;
 		}
 		return null;
 	}
@@ -182,16 +183,13 @@ public class QueryBuilder<T> implements Query<T> {
 	public List<ValueParameter> getValueParameters() {
 		List<ValueParameter> valueParameters = new ArrayList<ValueParameter>();
 
-		Condition whereClauseCondition = getWhereClause();
+		Condition whereClauseCondition = getConditionClause(whereClause);
 
-		if (whereClauseCondition != null) {
-			List<Parameter> parameters = whereClauseCondition.getParameters();
-			for (Parameter parameter : parameters) {
-				if (parameter instanceof ValueParameter) {
-					valueParameters.add((ValueParameter) parameter);
-				}
-			}
-		}
+		feedValueParameters(valueParameters, whereClauseCondition);
+
+		Condition withConditionClause = getConditionClause(withClause);
+
+		feedValueParameters(valueParameters, withConditionClause);
 
 		for (Join join : joins) {
 			List<ValueParameter> params = join.getParams();
@@ -199,6 +197,17 @@ public class QueryBuilder<T> implements Query<T> {
 		}
 
 		return valueParameters;
+	}
+
+	private void feedValueParameters(List<ValueParameter> valueParameters, Condition clauseCondition) {
+		if (clauseCondition != null) {
+			List<Parameter> parameters = clauseCondition.getParameters();
+			for (Parameter parameter : parameters) {
+				if (parameter instanceof ValueParameter) {
+					valueParameters.add((ValueParameter) parameter);
+				}
+			}
+		}
 	}
 
 	public void addOrder(Selector selector) {
@@ -212,6 +221,10 @@ public class QueryBuilder<T> implements Query<T> {
 
 	public void setGroupBy(GroupBy groupBy) {
 		this.groupBy = groupBy;
+	}
+
+	public void setWithClause(ConditionBuilder<?> withClause) {
+		this.withClause = withClause;
 	}
 
 	@Override
@@ -248,6 +261,22 @@ public class QueryBuilder<T> implements Query<T> {
 		}
 
 		return query;
+	}
+
+	public boolean hasWithClause() {
+		return withClause != null;
+	}
+
+	public String getWithClause(AtomicInteger incrementor) {
+
+		StringBuilder builder = new StringBuilder();
+		Condition with = getConditionClause(withClause);
+
+		if (with != null) {
+			builder.append(" with ").append(with.createQueryFragment(incrementor)).append(" ");
+		}
+
+		return builder.toString();
 	}
 
 }

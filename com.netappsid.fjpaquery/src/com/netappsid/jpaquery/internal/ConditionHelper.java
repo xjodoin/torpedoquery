@@ -6,28 +6,22 @@ import com.netappsid.jpaquery.OnGoingCollectionCondition;
 import com.netappsid.jpaquery.OnGoingCondition;
 
 public class ConditionHelper {
-	public static <T, E extends OnGoingCondition<T>> E createCondition(
-			LogicalCondition condition) {
+	public static <T, E extends OnGoingCondition<T>> E createCondition(LogicalCondition condition) {
 		E handle = ConditionHelper.<T, E> createCondition(null, condition);
 		return handle;
 	}
 
-	public static <T, E extends OnGoingCondition<T>> E createCondition(
-			Function<T> function, LogicalCondition condition) {
+	public static <T, E extends OnGoingCondition<T>> E createCondition(Function<T> function, LogicalCondition condition) {
 		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
-		WhereClauseHandler<T, E> whereClauseHandler = new WhereClauseHandler<T, E>(
-				function, condition, false);
+		WhereClauseHandler<T, E> whereClauseHandler = new WhereClauseHandler<T, E>(function, condition, new DoNothingQueryConfigurator<T>());
 		E handle = fjpaMethodHandler.handle(whereClauseHandler);
 		return handle;
 	}
 
-	public static <T> OnGoingCollectionCondition<T> createCollectionCondition(
-			LogicalCondition condition) {
+	public static <T> OnGoingCollectionCondition<T> createCollectionCondition(LogicalCondition condition) {
 		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
-		WhereClauseCollectionHandler<T> whereClauseCollectionHandler = new WhereClauseCollectionHandler<T>(
-				condition, false);
-		OnGoingCollectionCondition<T> handle = fjpaMethodHandler
-				.handle(whereClauseCollectionHandler);
+		WhereClauseCollectionHandler<T> whereClauseCollectionHandler = new WhereClauseCollectionHandler<T>(condition, false);
+		OnGoingCollectionCondition<T> handle = fjpaMethodHandler.handle(whereClauseCollectionHandler);
 		return handle;
 	}
 }
