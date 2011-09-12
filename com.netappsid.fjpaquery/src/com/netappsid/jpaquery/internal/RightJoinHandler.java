@@ -5,6 +5,10 @@ public class RightJoinHandler<T> extends JoinHandler<T> {
 		super(methodHandler, proxyFactoryFactory);
 	}
 
+	public RightJoinHandler(FJPAMethodHandler fjpaMethodHandler, ProxyFactoryFactory proxyFactoryFactory, Class<T> realType) {
+		super(fjpaMethodHandler, proxyFactoryFactory, realType);
+	}
+
 	@Override
 	protected Join createJoin(QueryBuilder queryBuilder, String fieldName) {
 		return new RightJoin(queryBuilder, fieldName);
