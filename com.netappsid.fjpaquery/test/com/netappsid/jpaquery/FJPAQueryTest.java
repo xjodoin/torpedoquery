@@ -227,4 +227,12 @@ public class FJPAQueryTest {
 		assertEquals("test", select.getParameters().get("specificField_1"));
 	}
 
+	@Test
+	public void testJoinOnMap() {
+		Entity from = from(Entity.class);
+		SubEntity innerJoin = innerJoin(from.getSubEntityMap());
+		String query = select(innerJoin).getQuery();
+		assertEquals("select subEntity_1 from Entity entity_0 inner join entity_0.subEntityMap subEntity_1", query);
+	}
+
 }

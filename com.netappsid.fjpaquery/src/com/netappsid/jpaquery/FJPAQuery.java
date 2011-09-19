@@ -113,19 +113,23 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
 	}
 
-	public static <T, E extends T> E innerJoin(Collection<T> toJoin, Class<E> realType) {
-		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
-	}
-
 	public static <T> T innerJoin(Collection<T> toJoin) {
 		return getFJPAMethodHandler().handle(new InnerJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
 	}
 
-	public static <T> T leftJoin(T toJoin) {
-		return getFJPAMethodHandler().handle(new LeftJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
+	public static <T, E extends T> E innerJoin(Collection<T> toJoin, Class<E> realType) {
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
 	}
 
-	public static <T> T leftJoin(Collection<T> toJoin) {
+	public static <T> T innerJoin(Map<?, T> toJoin) {
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
+	}
+
+	public static <T, E extends T> E innerJoin(Map<?, T> toJoin, Class<E> realType) {
+		return getFJPAMethodHandler().handle(new InnerJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
+	}
+
+	public static <T> T leftJoin(T toJoin) {
 		return getFJPAMethodHandler().handle(new LeftJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
 	}
 
@@ -133,7 +137,19 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new LeftJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
 	}
 
+	public static <T> T leftJoin(Collection<T> toJoin) {
+		return getFJPAMethodHandler().handle(new LeftJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
+	}
+
 	public static <T, E extends T> E leftJoin(Collection<T> toJoin, Class<E> realType) {
+		return getFJPAMethodHandler().handle(new LeftJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
+	}
+
+	public static <T> T leftJoin(Map<?, T> toJoin) {
+		return getFJPAMethodHandler().handle(new LeftJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
+	}
+
+	public static <T, E extends T> E leftJoin(Map<?, T> toJoin, Class<E> realType) {
 		return getFJPAMethodHandler().handle(new LeftJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
 	}
 
@@ -141,15 +157,23 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new RightJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
 	}
 
-	public static <T> T rightJoin(Collection<T> toJoin) {
-		return getFJPAMethodHandler().handle(new RightJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
-	}
-
 	public static <T, E extends T> E rightJoin(T toJoin, Class<E> realType) {
 		return getFJPAMethodHandler().handle(new RightJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
 	}
 
+	public static <T> T rightJoin(Collection<T> toJoin) {
+		return getFJPAMethodHandler().handle(new RightJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
+	}
+
 	public static <T, E extends T> E rightJoin(Collection<T> toJoin, Class<E> realType) {
+		return getFJPAMethodHandler().handle(new RightJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
+	}
+
+	public static <T> T rightJoin(Map<?, T> toJoin) {
+		return getFJPAMethodHandler().handle(new RightJoinHandler<T>(getFJPAMethodHandler(), proxyFactoryFactory));
+	}
+
+	public static <T, E extends T> E rightJoin(Map<?, T> toJoin, Class<E> realType) {
 		return getFJPAMethodHandler().handle(new RightJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
 	}
 

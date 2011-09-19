@@ -36,6 +36,8 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 
 		if (Collection.class.isAssignableFrom(returnType)) {
 			returnType = (Class<?>) ((ParameterizedType) thisMethod.getGenericReturnType()).getActualTypeArguments()[0];
+		} else if (Map.class.isAssignableFrom(returnType)) {
+			returnType = (Class<?>) ((ParameterizedType) thisMethod.getGenericReturnType()).getActualTypeArguments()[1];
 		}
 
 		try {

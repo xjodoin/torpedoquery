@@ -2,6 +2,7 @@ package com.netappsid.jpaquery.test.bo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Entity {
 	private Date dateField;
@@ -36,5 +37,9 @@ public class Entity {
 
 	public Date getDateField() {
 		return dateField;
+	}
+
+	public Map<String, SubEntity> getSubEntityMap() {
+		return null;
 	}
 }
