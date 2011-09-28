@@ -19,6 +19,7 @@ import com.netappsid.jpaquery.internal.DistinctFunctionHandler;
 import com.netappsid.jpaquery.internal.DoNothingQueryConfigurator;
 import com.netappsid.jpaquery.internal.FJPAMethodHandler;
 import com.netappsid.jpaquery.internal.GroupBy;
+import com.netappsid.jpaquery.internal.GroupingConditionHandler;
 import com.netappsid.jpaquery.internal.InnerJoinHandler;
 import com.netappsid.jpaquery.internal.LeftJoinHandler;
 import com.netappsid.jpaquery.internal.MaxFunctionHandler;
@@ -153,6 +154,10 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new RightJoinHandler<E>(getFJPAMethodHandler(), proxyFactoryFactory, realType));
 	}
 
+	public static <T> OnGoingLogicalCondition where(OnGoingLogicalCondition condition) {
+		return getFJPAMethodHandler().handle(new GroupingConditionHandler<T>(new WhereQueryConfigurator<T>(), condition));
+	}
+
 	public static <T> ValueOnGoingCondition<T> where(T object) {
 		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>());
 	}
@@ -185,6 +190,10 @@ public class FJPAQuery {
 		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(new WithQueryConfigurator<T>()));
 	}
 
+	public static <T> OnGoingLogicalCondition with(OnGoingLogicalCondition condition) {
+		return getFJPAMethodHandler().handle(new GroupingConditionHandler<T>(new WithQueryConfigurator<T>(), condition));
+	}
+
 	public static <T> ValueOnGoingCondition<T> condition(T object) {
 		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>(new DoNothingQueryConfigurator<T>()));
 	}
@@ -199,6 +208,10 @@ public class FJPAQuery {
 
 	public static <T> OnGoingCollectionCondition<T> condition(Collection<T> object) {
 		return getFJPAMethodHandler().handle(new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(new DoNothingQueryConfigurator<T>()));
+	}
+
+	public static <T> OnGoingLogicalCondition condition(OnGoingLogicalCondition condition) {
+		return getFJPAMethodHandler().handle(new GroupingConditionHandler<T>(new DoNothingQueryConfigurator<T>(), condition));
 	}
 
 	public static OnGoingGroupByCondition groupBy(Object... values) {

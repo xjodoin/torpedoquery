@@ -13,8 +13,10 @@ import com.netappsid.jpaquery.ValueOnGoingCondition;
 public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 
 	private Condition condition;
+	private final QueryBuilder<?> builder;
 
-	public LogicalCondition(Condition condition) {
+	public LogicalCondition(QueryBuilder<?> builder, Condition condition) {
+		this.builder = builder;
 		this.condition = condition;
 	}
 
@@ -95,6 +97,10 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 		OnGoingCollectionCondition<T1> right = ConditionHelper.<T1, OnGoingCollectionCondition<T1>> createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
+	}
+
+	public QueryBuilder<?> getBuilder() {
+		return builder;
 	}
 
 }

@@ -216,6 +216,19 @@ public class FJPAQueryTest {
 	}
 
 	@Test
+	public void testJoinWith_with_ConditionGroupping() {
+		Entity from = from(Entity.class);
+		SubEntity innerJoin = innerJoin(from.getSubEntities());
+		OnGoingLogicalCondition withCondition = condition(innerJoin.getCode()).eq("test").or(innerJoin.getCode()).eq("test2");
+		with(withCondition);
+		com.netappsid.jpaquery.Query<SubEntity> select = select(innerJoin);
+		String query = select.getQuery();
+		assertEquals(
+				"select subEntity_1 from Entity entity_0 inner join entity_0.subEntities subEntity_1 with ( subEntity_1.code = :code_2 or subEntity_1.code = :code_3 )",
+				query);
+	}
+
+	@Test
 	public void testExtend_specificSubClassField() {
 		Entity from = from(Entity.class);
 		ExtendEntity extend = extend(from, ExtendEntity.class);
