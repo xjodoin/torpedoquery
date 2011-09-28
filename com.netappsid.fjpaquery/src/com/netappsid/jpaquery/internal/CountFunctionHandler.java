@@ -1,6 +1,5 @@
 package com.netappsid.jpaquery.internal;
 
-import java.lang.reflect.Method;
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -10,7 +9,7 @@ import com.netappsid.jpaquery.Function;
 public class CountFunctionHandler implements Function<Long>, QueryHandler<Function<Long>> {
 
 	private Object proxy;
-	private Method method;
+	private MethodCall method;
 	private QueryBuilder<?> queryBuilder;
 
 	public CountFunctionHandler(Object proxy) {
@@ -31,9 +30,8 @@ public class CountFunctionHandler implements Function<Long>, QueryHandler<Functi
 	public Function<Long> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
 
 		if (!methods.isEmpty()) {
-			MethodCall methodCall = methods.pollFirst();
-			method = methodCall.getMethod();
-			proxy = methodCall.getProxy();
+			method = methods.pollFirst();
+			proxy = method.getProxy();
 			queryBuilder = proxyQueryBuilders.get(proxy);
 		}
 

@@ -1,6 +1,5 @@
 package com.netappsid.jpaquery.internal;
 
-import java.lang.reflect.Method;
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,7 +10,7 @@ import com.netappsid.jpaquery.Function;
 public class DistinctFunctionHandler<T> implements Function<T>, QueryHandler<Function<T>> {
 
 	private Object proxy;
-	private Method method;
+	private MethodCall method;
 	private QueryBuilder queryBuilder;
 
 	public DistinctFunctionHandler(Object proxy) {
@@ -32,9 +31,8 @@ public class DistinctFunctionHandler<T> implements Function<T>, QueryHandler<Fun
 	public Function<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
 
 		if (proxy == null) {
-			MethodCall methodCall = methods.pollFirst();
-			method = methodCall.getMethod();
-			proxy = methodCall.getProxy();
+			method = methods.pollFirst();
+			proxy = method.getProxy();
 			queryBuilder = proxyQueryBuilders.get(proxy);
 		}
 

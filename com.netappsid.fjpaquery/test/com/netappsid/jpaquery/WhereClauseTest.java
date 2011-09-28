@@ -254,6 +254,17 @@ public class WhereClauseTest {
 	}
 
 	@Test
+	public void test_acceptConditionIntoCondition() {
+		Entity from = from(Entity.class);
+		OnGoingLogicalCondition onGoingLogicalCondition = condition(from.getName()).eq("test").or(from.getName()).eq("test2");
+		OnGoingLogicalCondition eq = condition(onGoingLogicalCondition).and(from.getCode()).eq("mycode");
+		where(eq);
+		Query<Entity> select = select(from);
+		String query = select.getQuery();
+		assertEquals("select entity_0 from Entity entity_0 where ( ( entity_0.name = :name_1 or entity_0.name = :name_2 ) and entity_0.code = :code_3 )", query);
+	}
+
+	@Test
 	public void test_where_three_conditions() {
 		Entity from = from(Entity.class);
 		where(from.getName()).eq("test").and(from.getIntegerField()).gt(2).and(from.getCode()).eq("test");
@@ -267,5 +278,27 @@ public class WhereClauseTest {
 		where(from.getDateField()).gt(new Date());
 		Query<Entity> select = select(from);
 		assertEquals("select entity_0 from Entity entity_0 where entity_0.dateField > :dateField_1", select.getQuery());
+	}
+
+	@Test
+	public void acceptConditionInWhere() {
+		Entity from = from(Entity.class);
+		OnGoingLogicalCondition conditon = condition(from.getCode()).eq("test").and(from.getPrimitiveInt()).gt(3);
+		where(conditon);
+		Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where ( entity_0.code = :code_1 and entity_0.primitiveInt > :primitiveInt_2 )", select.getQuery());
+
+	}
+
+	@Test
+	public void acceptConditionInWhere_plusExternalCondition() {
+		Entity from = from(Entity.class);
+		OnGoingLogicalCondition conditon = condition(from.getCode()).eq("test").and(from.getPrimitiveInt()).gt(3);
+		where(conditon).and(from.getName()).isNotNull();
+		Query<Entity> select = select(from);
+		assertEquals(
+				"select entity_0 from Entity entity_0 where ( entity_0.code = :code_1 and entity_0.primitiveInt > :primitiveInt_2 ) and entity_0.name is not null",
+				select.getQuery());
+
 	}
 }

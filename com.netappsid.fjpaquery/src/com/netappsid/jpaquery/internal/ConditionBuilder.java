@@ -19,13 +19,16 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	private Selector selector;
 	private final LogicalCondition logicalCondition;
 	private Condition condition;
+	private final QueryBuilder<T> builder;
 
-	public ConditionBuilder(Selector selector) {
-		this.logicalCondition = new LogicalCondition(this);
+	public ConditionBuilder(QueryBuilder<T> builder, Selector<?> selector) {
+		this.builder = builder;
+		this.logicalCondition = new LogicalCondition(builder, this);
 		this.selector = selector;
 	}
 
-	public ConditionBuilder(LogicalCondition logicalCondition, Selector selector) {
+	public ConditionBuilder(QueryBuilder<T> builder, LogicalCondition logicalCondition, Selector<?> selector) {
+		this.builder = builder;
 		this.logicalCondition = logicalCondition;
 		this.selector = selector;
 	}

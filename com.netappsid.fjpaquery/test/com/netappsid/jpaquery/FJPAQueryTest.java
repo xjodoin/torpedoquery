@@ -216,6 +216,19 @@ public class FJPAQueryTest {
 	}
 
 	@Test
+	public void testJoinWith_with_ConditionGroupping() {
+		Entity from = from(Entity.class);
+		SubEntity innerJoin = innerJoin(from.getSubEntities());
+		OnGoingLogicalCondition withCondition = condition(innerJoin.getCode()).eq("test").or(innerJoin.getCode()).eq("test2");
+		with(withCondition);
+		com.netappsid.jpaquery.Query<SubEntity> select = select(innerJoin);
+		String query = select.getQuery();
+		assertEquals(
+				"select subEntity_1 from Entity entity_0 inner join entity_0.subEntities subEntity_1 with ( subEntity_1.code = :code_2 or subEntity_1.code = :code_3 )",
+				query);
+	}
+
+	@Test
 	public void testExtend_specificSubClassField() {
 		Entity from = from(Entity.class);
 		ExtendEntity extend = extend(from, ExtendEntity.class);
@@ -228,11 +241,26 @@ public class FJPAQueryTest {
 	}
 
 	@Test
+	public void testSelectWithChainedMethodCall() {
+		Entity from = from(Entity.class);
+		com.netappsid.jpaquery.Query<String> select = select(from.getSubEntity().getCode());
+		assertEquals("select entity_0.subEntity.code from Entity entity_0", select.getQuery());
+	}
+
+	@Test
+	public void testWhereWithChainedMethodCall() {
+		Entity from = from(Entity.class);
+		where(from.getSubEntity().getCode()).eq("test");
+		com.netappsid.jpaquery.Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntity.code = :code_1", select.getQuery());
+		assertEquals("test", select.getParameters().get("code_1"));
+	}
+
+	@Test
 	public void testJoinOnMap() {
 		Entity from = from(Entity.class);
 		SubEntity innerJoin = innerJoin(from.getSubEntityMap());
 		String query = select(innerJoin).getQuery();
 		assertEquals("select subEntity_1 from Entity entity_0 inner join entity_0.subEntityMap subEntity_1", query);
 	}
-
 }
