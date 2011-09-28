@@ -227,4 +227,19 @@ public class FJPAQueryTest {
 		assertEquals("test", select.getParameters().get("specificField_1"));
 	}
 
+	@Test
+	public void testSelectWithChainedMethodCall() {
+		Entity from = from(Entity.class);
+		com.netappsid.jpaquery.Query<String> select = select(from.getSubEntity().getCode());
+		assertEquals("select entity_0.subEntity.code from Entity entity_0", select.getQuery());
+	}
+
+	@Test
+	public void testWhereWithChainedMethodCall() {
+		Entity from = from(Entity.class);
+		where(from.getSubEntity().getCode()).eq("test");
+		com.netappsid.jpaquery.Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntity.code = :code_1", select.getQuery());
+		assertEquals("test", select.getParameters().get("code_1"));
+	}
 }

@@ -45,7 +45,7 @@ public class FJPAQuery {
 			proxyFactory.setInterfaces(new Class[] { Proxy.class });
 
 			QueryBuilder queryBuilder = new QueryBuilder(toQuery);
-			FJPAMethodHandler fjpaMethodHandler = new FJPAMethodHandler(queryBuilder);
+			FJPAMethodHandler fjpaMethodHandler = new FJPAMethodHandler(queryBuilder, proxyFactoryFactory);
 			final T proxy = (T) proxyFactory.create(null, null, fjpaMethodHandler);
 
 			fjpaMethodHandler.addQueryBuilder(proxy, queryBuilder);

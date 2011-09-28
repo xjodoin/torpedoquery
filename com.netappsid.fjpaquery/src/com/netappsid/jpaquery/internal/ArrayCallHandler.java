@@ -49,7 +49,7 @@ public class ArrayCallHandler implements QueryHandler<Void> {
 				iterator.remove();
 				proxy = methodCall.getProxy();
 				queryBuilder = proxyQueryBuilders.get(proxy);
-				selector = new SimpleMethodCallSelector(queryBuilder, methodCall.getMethod());
+				selector = new SimpleMethodCallSelector(queryBuilder, methodCall);
 			}
 
 			handler.handle(proxy, queryBuilder, selector);

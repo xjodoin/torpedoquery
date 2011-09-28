@@ -18,6 +18,12 @@ public class MultiClassLoaderProvider implements ClassLoaderProvider {
 
 		@Override
 		public Class<?> loadClass(String name) throws ClassNotFoundException {
+
+			try {
+				return MultiClassLoaderProvider.class.getClassLoader().loadClass(name);
+			} catch (ClassNotFoundException e1) {
+			}
+
 			for (ClassLoader classLoader : classLoaders) {
 				try {
 					Class<?> loadClass = classLoader.loadClass(name);
@@ -37,12 +43,14 @@ public class MultiClassLoaderProvider implements ClassLoaderProvider {
 		Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
 
 		Class superclass = factory.getSuperclass();
-		if (superclass.getClassLoader() != null) {
+		if (superclass != null && superclass.getClassLoader() != null) {
 			classLoaders.add(superclass.getClassLoader());
 		}
 
-		for (Class clazz : interfaces) {
-			classLoaders.add(clazz.getClassLoader());
+		if (interfaces != null) {
+			for (Class clazz : interfaces) {
+				classLoaders.add(clazz.getClassLoader());
+			}
 		}
 
 		return new MultiClassLoader(classLoaders);
