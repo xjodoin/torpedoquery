@@ -11,4 +11,9 @@ public class ExtendEntity extends Entity {
 	public void setSpecificField(String specificField) {
 		this.specificField = specificField;
 	}
+
+	@Override
+	public SubEntity getSubEntity() {
+		return super.getSubEntity();
+	}
 }

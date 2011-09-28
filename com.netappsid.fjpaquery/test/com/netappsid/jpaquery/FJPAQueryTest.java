@@ -263,4 +263,13 @@ public class FJPAQueryTest {
 		String query = select(innerJoin).getQuery();
 		assertEquals("select subEntity_1 from Entity entity_0 inner join entity_0.subEntityMap subEntity_1", query);
 	}
+
+	@Test
+	public void test_innerJoinOnOverrideMethod() {
+		ExtendEntity extendEntity = from(ExtendEntity.class);
+		SubEntity innerJoin = innerJoin(extendEntity.getSubEntity());
+		com.netappsid.jpaquery.Query<SubEntity> select = select(innerJoin);
+		String query = select.getQuery();
+		assertEquals("select subEntity_1 from ExtendEntity extendEntity_0 inner join extendEntity_0.subEntity subEntity_1", query);
+	}
 }
