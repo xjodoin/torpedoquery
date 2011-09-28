@@ -40,6 +40,10 @@ public class FJPAMethodHandler implements MethodHandler, Proxy {
 			}
 		}
 
+		if (thisMethod.getDeclaringClass().equals(Object.class)) {
+			return null;
+		}
+
 		methods.addFirst(new SimpleMethodCall((Proxy) self, thisMethod));
 		FJPAQuery.setQuery((Proxy) self);
 
