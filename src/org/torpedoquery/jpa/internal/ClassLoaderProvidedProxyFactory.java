@@ -1,4 +1,4 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import javassist.util.proxy.ProxyFactory;
 

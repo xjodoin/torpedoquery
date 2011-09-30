@@ -1,8 +1,5 @@
-package com.netappsid.jpaquery;
+package org.torpedoquery.jpa.internal;
 
-import com.netappsid.jpaquery.internal.ConditionBuilder;
-import com.netappsid.jpaquery.internal.QueryBuilder;
-import com.netappsid.jpaquery.internal.QueryConfigurator;
 
 public class WithQueryConfigurator<T> implements QueryConfigurator<T> {
 

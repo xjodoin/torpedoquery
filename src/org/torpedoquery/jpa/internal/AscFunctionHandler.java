@@ -1,7 +1,7 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 
-public class AscFunctionHandler extends OrderByFunctionHandler {
+public class AscFunctionHandler<T> extends OrderByFunctionHandler<T> {
 
 	@Override
 	protected String getFunctionName() {

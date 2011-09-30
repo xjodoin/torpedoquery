@@ -1,10 +1,10 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.Deque;
 import java.util.Map;
 
-import com.netappsid.jpaquery.Function;
-import com.netappsid.jpaquery.OnGoingCondition;
+import org.torpedoquery.jpa.Function;
+import org.torpedoquery.jpa.OnGoingCondition;
 
 //TODO duplicate avec WhereClauseCollectionHandler
 public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements QueryHandler<E> {
@@ -32,7 +32,7 @@ public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements Que
 	}
 
 	@Override
-	public E handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
+	public E handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 
 		Selector<T> conditionSelector = function;
 
@@ -40,10 +40,10 @@ public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements Que
 
 		if (conditionSelector == null) {
 			MethodCall pollFirst = methodCalls.pollFirst();
-			queryImpl = proxyQueryBuilders.get(pollFirst.getProxy());
+			queryImpl = (QueryBuilder<T>) proxyQueryBuilders.get(pollFirst.getProxy());
 			conditionSelector = new SimpleMethodCallSelector<T>(queryImpl, pollFirst);
 		} else {
-			queryImpl = proxyQueryBuilders.get(function.getProxy());
+			queryImpl = (QueryBuilder<T>) proxyQueryBuilders.get(function.getProxy());
 		}
 
 		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<T>(queryImpl, logicalCondition, conditionSelector)

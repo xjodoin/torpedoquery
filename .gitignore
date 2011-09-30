@@ -1,1 +1,5 @@
 target
+.classpath
+.settings
+META-INF/MANIFEST.MF
+.project

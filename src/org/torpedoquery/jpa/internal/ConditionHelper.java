@@ -1,8 +1,7 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
-import com.netappsid.jpaquery.FJPAQuery;
-import com.netappsid.jpaquery.Function;
-import com.netappsid.jpaquery.OnGoingCondition;
+import org.torpedoquery.jpa.Function;
+import org.torpedoquery.jpa.OnGoingCondition;
 
 public class ConditionHelper {
 	public static <T, E extends OnGoingCondition<T>> E createCondition(LogicalCondition condition) {
@@ -11,7 +10,7 @@ public class ConditionHelper {
 	}
 
 	public static <T, E extends OnGoingCondition<T>> E createCondition(Function<T> function, LogicalCondition condition) {
-		FJPAMethodHandler fjpaMethodHandler = FJPAQuery.getFJPAMethodHandler();
+		TorpedoMethodHandler fjpaMethodHandler = TorpedoMagic.getTorpedoMethodHandler();
 		WhereClauseHandler<T, E> whereClauseHandler = new WhereClauseHandler<T, E>(function, condition, new DoNothingQueryConfigurator<T>());
 		E handle = fjpaMethodHandler.handle(whereClauseHandler);
 		return handle;

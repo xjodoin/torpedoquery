@@ -1,10 +1,10 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.netappsid.jpaquery.Function;
+import org.torpedoquery.jpa.Function;
 
 public class ArrayCallHandler implements QueryHandler<Void> {
 
@@ -21,7 +21,7 @@ public class ArrayCallHandler implements QueryHandler<Void> {
 	}
 
 	@Override
-	public Void handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
+	public Void handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 
 		Iterator<MethodCall> iterator = methodCalls.descendingIterator();
 

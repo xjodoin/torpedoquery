@@ -1,10 +1,10 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.Function;
+import org.torpedoquery.jpa.Function;
 
 public class ConstantFunctionHandler<T> implements Function<T>, QueryHandler<Function<T>> {
 
@@ -20,7 +20,7 @@ public class ConstantFunctionHandler<T> implements Function<T>, QueryHandler<Fun
 	}
 
 	@Override
-	public Function<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
+	public Function<T> handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods) {
 		return this;
 	}
 

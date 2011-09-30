@@ -1,12 +1,11 @@
-package com.netappsid.jpaquery;
+package org.torpedoquery.jpa;
 
-import static com.netappsid.jpaquery.FJPAQuery.*;
+import static org.torpedoquery.jpa.Torpedo.*;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.netappsid.jpaquery.test.bo.Entity;
-import com.netappsid.jpaquery.test.bo.SubEntity;
+import org.torpedoquery.jpa.test.bo.Entity;
+import org.torpedoquery.jpa.test.bo.SubEntity;
 
 public class GroupByTest {
 

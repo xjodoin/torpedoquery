@@ -1,6 +1,6 @@
-package com.netappsid.jpaquery;
+package org.torpedoquery.jpa;
 
-import com.netappsid.jpaquery.internal.Selector;
+import org.torpedoquery.jpa.internal.Selector;
 
 public interface Function<T> extends Selector<T> {
 

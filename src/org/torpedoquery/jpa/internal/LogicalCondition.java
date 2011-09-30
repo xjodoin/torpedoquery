@@ -1,14 +1,14 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.OnGoingCollectionCondition;
-import com.netappsid.jpaquery.OnGoingComparableCondition;
-import com.netappsid.jpaquery.OnGoingLogicalCondition;
-import com.netappsid.jpaquery.OnGoingStringCondition;
-import com.netappsid.jpaquery.ValueOnGoingCondition;
+import org.torpedoquery.jpa.OnGoingCollectionCondition;
+import org.torpedoquery.jpa.OnGoingComparableCondition;
+import org.torpedoquery.jpa.OnGoingLogicalCondition;
+import org.torpedoquery.jpa.OnGoingStringCondition;
+import org.torpedoquery.jpa.ValueOnGoingCondition;
 
 public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 

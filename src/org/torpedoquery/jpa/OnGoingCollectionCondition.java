@@ -1,4 +1,4 @@
-package com.netappsid.jpaquery;
+package org.torpedoquery.jpa;
 
 public interface OnGoingCollectionCondition<T> extends OnGoingCondition<T> {
 

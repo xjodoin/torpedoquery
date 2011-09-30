@@ -1,4 +1,4 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,8 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-import com.netappsid.jpaquery.PostFunction;
-import com.netappsid.jpaquery.Query;
+import org.torpedoquery.jpa.PostFunction;
+import org.torpedoquery.jpa.Query;
 
 public class QueryBuilder<T> implements Query<T> {
 	private final Class<?> toQuery;

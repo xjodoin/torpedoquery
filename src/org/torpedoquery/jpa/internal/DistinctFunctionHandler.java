@@ -1,11 +1,10 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.FJPAQuery;
-import com.netappsid.jpaquery.Function;
+import org.torpedoquery.jpa.Function;
 
 public class DistinctFunctionHandler<T> implements Function<T>, QueryHandler<Function<T>> {
 
@@ -23,12 +22,12 @@ public class DistinctFunctionHandler<T> implements Function<T>, QueryHandler<Fun
 			SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(queryBuilder, method);
 			return "distinct " + simpleMethodCallSelector.createQueryFragment(incrementor);
 		} else {
-			return "distinct " + FJPAQuery.getFJPAMethodHandler().getQueryBuilder(proxy).getAlias(incrementor);
+			return "distinct " + TorpedoMagic.getTorpedoMethodHandler().getQueryBuilder(proxy).getAlias(incrementor);
 		}
 	}
 
 	@Override
-	public Function<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
+	public Function<T> handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods) {
 
 		if (proxy == null) {
 			method = methods.pollFirst();

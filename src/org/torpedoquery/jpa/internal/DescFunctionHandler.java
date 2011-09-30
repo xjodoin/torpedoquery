@@ -1,7 +1,7 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 
-public class DescFunctionHandler extends OrderByFunctionHandler {
+public class DescFunctionHandler<T> extends OrderByFunctionHandler<T> {
 
 	@Override
 	protected String getFunctionName() {

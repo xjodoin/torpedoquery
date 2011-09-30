@@ -1,10 +1,10 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.ComparableFunction;
+import org.torpedoquery.jpa.ComparableFunction;
 
 public class ComparableConstantFunctionHandler<T> implements ComparableFunction<T>, QueryHandler<ComparableFunction<T>> {
 
@@ -20,7 +20,7 @@ public class ComparableConstantFunctionHandler<T> implements ComparableFunction<
 	}
 
 	@Override
-	public ComparableFunction<T> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
+	public ComparableFunction<T> handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods) {
 		return this;
 	}
 

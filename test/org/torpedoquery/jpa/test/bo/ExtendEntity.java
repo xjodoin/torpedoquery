@@ -1,4 +1,4 @@
-package com.netappsid.jpaquery.test.bo;
+package org.torpedoquery.jpa.test.bo;
 
 public class ExtendEntity extends Entity {
 

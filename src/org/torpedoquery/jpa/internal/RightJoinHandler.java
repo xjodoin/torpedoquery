@@ -1,11 +1,11 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 public class RightJoinHandler<T> extends JoinHandler<T> {
-	public RightJoinHandler(FJPAMethodHandler methodHandler, ProxyFactoryFactory proxyFactoryFactory) {
+	public RightJoinHandler(TorpedoMethodHandler methodHandler, ProxyFactoryFactory proxyFactoryFactory) {
 		super(methodHandler, proxyFactoryFactory);
 	}
 
-	public RightJoinHandler(FJPAMethodHandler fjpaMethodHandler, ProxyFactoryFactory proxyFactoryFactory, Class<T> realType) {
+	public RightJoinHandler(TorpedoMethodHandler fjpaMethodHandler, ProxyFactoryFactory proxyFactoryFactory, Class<T> realType) {
 		super(fjpaMethodHandler, proxyFactoryFactory, realType);
 	}
 

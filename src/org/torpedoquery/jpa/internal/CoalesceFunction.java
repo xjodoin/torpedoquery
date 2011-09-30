@@ -1,11 +1,11 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.ComparableFunction;
+import org.torpedoquery.jpa.ComparableFunction;
 
 public class CoalesceFunction<T> implements ComparableFunction<T> {
 

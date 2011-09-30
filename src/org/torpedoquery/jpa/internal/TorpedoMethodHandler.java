@@ -1,31 +1,33 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.IdentityHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 
-import com.netappsid.jpaquery.FJPAQuery;
-import com.netappsid.jpaquery.Query;
+import org.torpedoquery.jpa.Query;
 
-public class FJPAMethodHandler implements MethodHandler, Proxy {
-	private final Map<Object, QueryBuilder> proxyQueryBuilders = new IdentityHashMap<Object, QueryBuilder>();
+public class TorpedoMethodHandler implements MethodHandler, Proxy {
+	private final Map<Object, QueryBuilder<?>> proxyQueryBuilders = new IdentityHashMap<Object, QueryBuilder<?>>();
 	private final Deque<MethodCall> methods = new LinkedList<MethodCall>();
-	private final QueryBuilder root;
+	private final QueryBuilder<?> root;
 	private final ProxyFactoryFactory proxyfactoryfactory;
 
-	public FJPAMethodHandler(QueryBuilder root, ProxyFactoryFactory proxyfactoryfactory) {
+	public TorpedoMethodHandler(QueryBuilder<?> root, ProxyFactoryFactory proxyfactoryfactory) {
 		this.root = root;
 		this.proxyfactoryfactory = proxyfactoryfactory;
 	}
 
-	public QueryBuilder addQueryBuilder(Object proxy, QueryBuilder queryBuilder) {
+	public QueryBuilder<?> addQueryBuilder(Object proxy, QueryBuilder<?> queryBuilder) {
 		proxyQueryBuilders.put(proxy, queryBuilder);
 		return queryBuilder;
 	}
@@ -45,7 +47,7 @@ public class FJPAMethodHandler implements MethodHandler, Proxy {
 		}
 
 		methods.addFirst(new SimpleMethodCall((Proxy) self, thisMethod));
-		FJPAQuery.setQuery((Proxy) self);
+		TorpedoMagic.setQuery((Proxy) self);
 
 		final Class returnType = thisMethod.getReturnType();
 
@@ -95,7 +97,7 @@ public class FJPAMethodHandler implements MethodHandler, Proxy {
 		return result;
 	}
 
-	public QueryBuilder getQueryBuilder(Object proxy) {
+	public QueryBuilder<?> getQueryBuilder(Object proxy) {
 		return proxyQueryBuilders.get(proxy);
 	}
 
@@ -104,7 +106,13 @@ public class FJPAMethodHandler implements MethodHandler, Proxy {
 	}
 
 	@Override
-	public FJPAMethodHandler getFJPAMethodHandler() {
+	public TorpedoMethodHandler getTorpedoMethodHandler() {
 		return this;
 	}
+	
+	public Deque<MethodCall> getMethods() {
+		return methods;
+	}
+
+	
 }

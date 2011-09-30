@@ -1,9 +1,9 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.Deque;
 import java.util.Map;
 
-import com.netappsid.jpaquery.OnGoingLogicalCondition;
+import org.torpedoquery.jpa.OnGoingLogicalCondition;
 
 public class GroupingConditionHandler<T> implements QueryHandler<OnGoingLogicalCondition> {
 
@@ -16,7 +16,7 @@ public class GroupingConditionHandler<T> implements QueryHandler<OnGoingLogicalC
 	}
 
 	@Override
-	public OnGoingLogicalCondition handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
+	public OnGoingLogicalCondition handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods) {
 		GroupingCondition groupingCondition = new GroupingCondition(condition);
 
 		QueryBuilder<T> builder = (QueryBuilder<T>) condition.getBuilder();

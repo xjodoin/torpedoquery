@@ -1,4 +1,4 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,13 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.ComparableFunction;
-import com.netappsid.jpaquery.Function;
-import com.netappsid.jpaquery.OnGoingCollectionCondition;
-import com.netappsid.jpaquery.OnGoingComparableCondition;
-import com.netappsid.jpaquery.OnGoingGroupByCondition;
-import com.netappsid.jpaquery.OnGoingStringCondition;
-import com.netappsid.jpaquery.ValueOnGoingCondition;
+import org.torpedoquery.jpa.ComparableFunction;
+import org.torpedoquery.jpa.Function;
+import org.torpedoquery.jpa.OnGoingCollectionCondition;
+import org.torpedoquery.jpa.OnGoingComparableCondition;
+import org.torpedoquery.jpa.OnGoingGroupByCondition;
+import org.torpedoquery.jpa.OnGoingStringCondition;
+import org.torpedoquery.jpa.ValueOnGoingCondition;
 
 public class GroupBy implements OnGoingGroupByCondition {
 

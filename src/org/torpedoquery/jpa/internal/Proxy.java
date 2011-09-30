@@ -1,7 +1,7 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 
 public interface Proxy {
 
-	FJPAMethodHandler getFJPAMethodHandler();
+	TorpedoMethodHandler getTorpedoMethodHandler();
 }

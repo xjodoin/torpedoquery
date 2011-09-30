@@ -1,10 +1,10 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.Function;
+import org.torpedoquery.jpa.Function;
 
 public class CountFunctionHandler implements Function<Long>, QueryHandler<Function<Long>> {
 
@@ -27,7 +27,7 @@ public class CountFunctionHandler implements Function<Long>, QueryHandler<Functi
 	}
 
 	@Override
-	public Function<Long> handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methods) {
+	public Function<Long> handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods) {
 
 		if (!methods.isEmpty()) {
 			method = methods.pollFirst();

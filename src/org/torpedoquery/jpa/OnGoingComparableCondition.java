@@ -1,4 +1,4 @@
-package com.netappsid.jpaquery;
+package org.torpedoquery.jpa;
 
 public interface OnGoingComparableCondition<T> extends ValueOnGoingCondition<T> {
 	OnGoingLogicalCondition lt(T value);

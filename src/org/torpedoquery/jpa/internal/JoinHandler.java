@@ -1,4 +1,4 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -10,23 +10,23 @@ import javassist.util.proxy.ProxyFactory;
 
 public abstract class JoinHandler<T> implements QueryHandler<T> {
 
-	private final FJPAMethodHandler methodHandler;
+	private final TorpedoMethodHandler methodHandler;
 	private final ProxyFactoryFactory proxyFactoryFactory;
 	private Class<T> realType;
 
-	public JoinHandler(FJPAMethodHandler methodHandler, ProxyFactoryFactory proxyFactoryFactory) {
+	public JoinHandler(TorpedoMethodHandler methodHandler, ProxyFactoryFactory proxyFactoryFactory) {
 		this.methodHandler = methodHandler;
 		this.proxyFactoryFactory = proxyFactoryFactory;
 	}
 
-	public JoinHandler(FJPAMethodHandler fjpaMethodHandler, ProxyFactoryFactory proxyFactoryFactory, Class<T> realType) {
+	public JoinHandler(TorpedoMethodHandler fjpaMethodHandler, ProxyFactoryFactory proxyFactoryFactory, Class<T> realType) {
 		methodHandler = fjpaMethodHandler;
 		this.realType = realType;
 		this.proxyFactoryFactory = proxyFactoryFactory;
 	}
 
 	@Override
-	public T handleCall(Map<Object, QueryBuilder> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
+	public T handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 
 		MethodCall pollFirst = methodCalls.pollFirst();
 

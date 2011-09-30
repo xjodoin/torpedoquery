@@ -1,4 +1,4 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -6,13 +6,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netappsid.jpaquery.ComparableFunction;
-import com.netappsid.jpaquery.OnGoingCollectionCondition;
-import com.netappsid.jpaquery.OnGoingComparableCondition;
-import com.netappsid.jpaquery.OnGoingLikeCondition;
-import com.netappsid.jpaquery.OnGoingLogicalCondition;
-import com.netappsid.jpaquery.OnGoingStringCondition;
-import com.netappsid.jpaquery.Query;
+import org.torpedoquery.jpa.ComparableFunction;
+import org.torpedoquery.jpa.OnGoingCollectionCondition;
+import org.torpedoquery.jpa.OnGoingComparableCondition;
+import org.torpedoquery.jpa.OnGoingLikeCondition;
+import org.torpedoquery.jpa.OnGoingLogicalCondition;
+import org.torpedoquery.jpa.OnGoingStringCondition;
+import org.torpedoquery.jpa.Query;
 
 public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T>,
 		Condition {

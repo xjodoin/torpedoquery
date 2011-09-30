@@ -8,8 +8,8 @@
 	</properties>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.netappsid.fjpaquery</groupId>
-	<artifactId>com.netappsid.fjpaquery</artifactId>
+	<groupId>org.torpedoquery</groupId>
+	<artifactId>torpedo</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
 	<name>${bundle.symbolicName}</name>

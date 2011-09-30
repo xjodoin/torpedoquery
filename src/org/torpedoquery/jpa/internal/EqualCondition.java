@@ -1,4 +1,4 @@
-package com.netappsid.jpaquery.internal;
+package org.torpedoquery.jpa.internal;
 
 public class EqualCondition<T> extends SingleParameterCondition<T> {
 
