@@ -54,7 +54,7 @@
 				<configuration>
 					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
-						<Export-Package>com.netappsid.jpaquery</Export-Package>
+						<Export-Package>org.torpedoquery.jpa</Export-Package>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 					</instructions>
 				</configuration>
