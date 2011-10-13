@@ -43,7 +43,6 @@ public class TorpedoTest {
 	@Test
 	public void test_selectField() {
 		final Entity entity = from(Entity.class);
-
 		org.torpedoquery.jpa.Query<String> select = select(entity.getCode());
 		assertEquals("select entity_0.code from Entity entity_0", select.getQuery());
 	}

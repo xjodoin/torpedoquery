@@ -51,11 +51,61 @@ import org.torpedoquery.jpa.internal.TorpedoMethodHandler;
 import org.torpedoquery.jpa.internal.WhereClauseHandler;
 import org.torpedoquery.jpa.internal.WhereQueryConfigurator;
 import org.torpedoquery.jpa.internal.WithQueryConfigurator;
-
+/**
+ * Torpedo Query goal is to simplify how you create and maintain your HQL query.
+ * 	(http://docs.jboss.org/hibernate/core/3.3/reference/en/html/queryhql.html)	
+ * 
+ * 	(All following examples are extract from Torpedo's Tests cases)
+ * 
+ * 	First add this import static org.torpedoquery.jpa.Torpedo.*;
+ * 
+ * 	1. Create simple select
+ * 		
+ * 		final Entity entity = from(Entity.class);
+ *		org.torpedoquery.jpa.Query<Entity> select = select(entity);
+ *		
+ *	2. Create scalar queries
+ *
+ *		final Entity entity = from(Entity.class);
+ *		org.torpedoquery.jpa.Query<String> select = select(entity.getCode());	
+ *
+ *  3. How to execute your query
+ *  
+ *  	final Entity entity = from(Entity.class);
+ *		org.torpedoquery.jpa.Query<Entity> select = select(entity);
+ *		List<Entity> entityList = select.list(entityManager);
+ *
+ *	4. Create simple condition
+ *
+ *		final Entity entity = from(Entity.class);
+ *		where(entity.getCode()).eq("mycode");
+ *		org.torpedoquery.jpa.Query<Entity> select = select(entity);
+ *
+ *	5. Create join on your entities
+ *
+ *		final Entity entity = from(Entity.class);
+ *		final SubEntity subEntity = innerJoin(entity.getSubEntities());
+ *		org.torpedoquery.jpa.Query<String[]> select = select(entity.getCode(), subEntity.getName());
+ *
+ *  6. Group your conditions
+ *  
+ *  	Entity from = from(Entity.class);
+ *		OnGoingLogicalCondition condition = condition(from.getCode()).eq("test").or(from.getCode()).eq("test2");
+ *		where(from.getName()).eq("test").and(condition);
+ *		Query<Entity> select = select(from);
+ *
+ *	
+ */
 public class Torpedo {
 
 	private static final ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(new MultiClassLoaderProvider());
-
+	
+	/**
+	 * 
+	 * @param your entity class you want to create your query
+	 * @return a mock object, it serve to create your create your query
+	 *   
+	 */
 	public static <T> T from(Class<T> toQuery) {
 		try {
 			final ProxyFactory proxyFactory = proxyFactoryFactory.getProxyFactory();
@@ -76,12 +126,24 @@ public class Torpedo {
 			throw new RuntimeException(e);
 		}
 	}
-
-	public static <T, E extends T> E extend(T toExtend, Class<E> extendClass) {
+	
+	/**
+	 * 
+	 * 	In HQL you can specify field is only in subclass
+	 * 
+	 *  Entity from = from(Entity.class);
+	 *	ExtendEntity extend = extend(from, ExtendEntity.class);
+	 *	where(extend.getSpecificField()).eq("test");
+	 * 
+	 * @param toExtend
+	 * @param subclass
+	 * @return
+	 */
+	public static <T, E extends T> E extend(T toExtend, Class<E> subclass) {
 		try {
 			final ProxyFactory proxyFactory = proxyFactoryFactory.getProxyFactory();
 
-			proxyFactory.setSuperclass(extendClass);
+			proxyFactory.setSuperclass(subclass);
 			proxyFactory.setInterfaces(new Class[] { Proxy.class });
 
 			TorpedoMethodHandler fjpaMethodHandler = getTorpedoMethodHandler();
