@@ -22,7 +22,10 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 
+import org.objenesis.ObjenesisHelper;
+
 import javassist.util.proxy.ProxyFactory;
+import javassist.util.proxy.ProxyObject;
 
 public abstract class JoinHandler<T> implements QueryHandler<T> {
 
@@ -63,7 +66,10 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 			proxyFactory.setSuperclass(goodType);
 			proxyFactory.setInterfaces(new Class[] { Proxy.class });
 
-			final Proxy join = (Proxy) proxyFactory.create(null, null, methodHandler);
+			Class proxyClass = proxyFactory.createClass();
+			ProxyObject join = (ProxyObject) ObjenesisHelper.newInstance(proxyClass);
+			join.setHandler(methodHandler);
+			
 			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, new QueryBuilder(goodType));
 
 			queryImpl.addJoin(createJoin(queryBuilder, FieldUtils.getFieldName(thisMethod)));

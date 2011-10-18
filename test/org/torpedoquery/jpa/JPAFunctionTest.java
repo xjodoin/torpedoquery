@@ -19,6 +19,8 @@ package org.torpedoquery.jpa;
 import static org.junit.Assert.*;
 import static org.torpedoquery.jpa.Torpedo.*;
 
+import java.math.BigDecimal;
+
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.SubEntity;
@@ -108,6 +110,17 @@ public class JPAFunctionTest {
 		SubEntity innerJoin = innerJoin(from.getSubEntities());
 		Query<Object[]> select = select(distinct(from), innerJoin);
 		assertEquals("select distinct entity_0, subEntity_1 from Entity entity_0 inner join entity_0.subEntities subEntity_1", select.getQuery());
+	}
+	
+	@Test
+	public void testFunctionOnObjectWithoutConstructor()
+	{
+		Entity from = from(Entity.class);
+		groupBy(from.getCode());
+		Query<BigDecimal> select = select(sum(from.getBigDecimalField()));
+		
+		assertEquals("select sum(entity_0.bigDecimalField) from Entity entity_0 group by entity_0.code", select.getQuery()); 
+		
 	}
 
 }

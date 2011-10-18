@@ -22,7 +22,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import javassist.util.proxy.ProxyFactory;
+import javassist.util.proxy.ProxyObject;
 
+import org.objenesis.ObjenesisHelper;
 import org.torpedoquery.jpa.internal.ArrayCallHandler;
 import org.torpedoquery.jpa.internal.ArrayCallHandler.ValueHandler;
 import org.torpedoquery.jpa.internal.AscFunctionHandler;
@@ -115,12 +117,15 @@ public class Torpedo {
 
 			QueryBuilder queryBuilder = new QueryBuilder(toQuery);
 			TorpedoMethodHandler fjpaMethodHandler = new TorpedoMethodHandler(queryBuilder, proxyFactoryFactory);
-			final T proxy = (T) proxyFactory.create(null, null, fjpaMethodHandler);
+			
+			Class proxyClass = proxyFactory.createClass();
+			ProxyObject proxy = (ProxyObject) ObjenesisHelper.newInstance(proxyClass);
+			proxy.setHandler(fjpaMethodHandler);
 
 			fjpaMethodHandler.addQueryBuilder(proxy, queryBuilder);
 
 			setQuery((Proxy) proxy);
-			return proxy;
+			return (T) proxy;
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -147,12 +152,14 @@ public class Torpedo {
 			proxyFactory.setInterfaces(new Class[] { Proxy.class });
 
 			TorpedoMethodHandler fjpaMethodHandler = getTorpedoMethodHandler();
-			final E proxy = (E) proxyFactory.create(null, null, fjpaMethodHandler);
+			Class proxyClass = proxyFactory.createClass();
+			ProxyObject proxy = (ProxyObject) ObjenesisHelper.newInstance(proxyClass);
+			proxy.setHandler(fjpaMethodHandler);
 
 			QueryBuilder queryBuilder = fjpaMethodHandler.getQueryBuilder(toExtend);
 			fjpaMethodHandler.addQueryBuilder(proxy, queryBuilder);
 
-			return proxy;
+			return (E) proxy;
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);

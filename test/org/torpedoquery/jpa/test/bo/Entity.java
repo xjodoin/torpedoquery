@@ -16,6 +16,7 @@
  */
 package org.torpedoquery.jpa.test.bo;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,10 @@ public class Entity {
 	}
 
 	public Map<String, SubEntity> getSubEntityMap() {
+		return null;
+	}
+
+	public BigDecimal getBigDecimalField() {
 		return null;
 	}
 }

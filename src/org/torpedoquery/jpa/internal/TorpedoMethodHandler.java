@@ -29,7 +29,9 @@ import java.util.Map;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
+import javassist.util.proxy.ProxyObject;
 
+import org.objenesis.ObjenesisHelper;
 import org.torpedoquery.jpa.Query;
 
 public class TorpedoMethodHandler implements MethodHandler, Proxy {
@@ -86,7 +88,7 @@ public class TorpedoMethodHandler implements MethodHandler, Proxy {
 			proxyFactory.setSuperclass(returnType);
 		}
 
-		final Object proxy = proxyFactory.create(null, null, new MethodHandler() {
+		MethodHandler mh = new MethodHandler() {
 
 			@Override
 			public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
@@ -104,7 +106,13 @@ public class TorpedoMethodHandler implements MethodHandler, Proxy {
 					return null;
 				}
 			}
-		});
+		};
+		
+		Class proxyClass = proxyFactory.createClass();
+		
+		ProxyObject proxy = (ProxyObject) ObjenesisHelper.newInstance(proxyClass);
+		proxy.setHandler(mh);
+		
 		return proxy;
 	}
 
