@@ -24,11 +24,11 @@ import org.torpedoquery.jpa.Function;
 
 public class CountFunctionHandler implements Function<Long>, QueryHandler<Function<Long>> {
 
-	private Object proxy;
+	private Proxy proxy;
 	private MethodCall method;
 	private QueryBuilder<?> queryBuilder;
 
-	public CountFunctionHandler(Object proxy) {
+	public CountFunctionHandler(Proxy proxy) {
 		this.proxy = proxy;
 	}
 
@@ -45,7 +45,7 @@ public class CountFunctionHandler implements Function<Long>, QueryHandler<Functi
 	@Override
 	public Function<Long> handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods) {
 
-		if (!methods.isEmpty()) {
+		if (proxy == null && !methods.isEmpty()) {
 			method = methods.pollFirst();
 			proxy = method.getProxy();
 			queryBuilder = proxyQueryBuilders.get(proxy);

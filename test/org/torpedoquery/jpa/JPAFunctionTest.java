@@ -122,5 +122,15 @@ public class JPAFunctionTest {
 		assertEquals("select sum(entity_0.bigDecimalField) from Entity entity_0 group by entity_0.code", select.getQuery()); 
 		
 	}
+	
+	@Test
+	public void testSpecifyFieldBeforeFunctionCount()
+	{
+		Entity from = from(Entity.class);
+		groupBy(from.getCode());
+		Query<Object[]> select = select(from.getCode(),count(from));
+		
+		assertEquals("select entity_0.code, count(*) from Entity entity_0 group by entity_0.code", select.getQuery());
+	}
 
 }
