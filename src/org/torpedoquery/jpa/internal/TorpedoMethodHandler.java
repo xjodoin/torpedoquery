@@ -19,12 +19,9 @@ package org.torpedoquery.jpa.internal;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.IdentityHashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import javassist.util.proxy.MethodHandler;

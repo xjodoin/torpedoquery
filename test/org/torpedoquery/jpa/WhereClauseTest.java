@@ -339,4 +339,13 @@ public class WhereClauseTest {
 				select.getQuery());
 
 	}
+	
+	@Test
+	public void conditionOnRelatedField()
+	{
+		Entity from = from(Entity.class);
+		where(from.getCode()).eq(from.getName());
+		Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code = entity_0.name", select.getQuery());
+	}
 }
