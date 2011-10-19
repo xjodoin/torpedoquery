@@ -30,7 +30,7 @@ public class SimpleMethodCall implements MethodCall {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.netappsid.jpaquery.internal.MethodCallTmp#getProxy()
+	 * @see org.torpedoquery.jpa.internal.MethodCallTmp#getProxy()
 	 */
 	@Override
 	public Proxy getProxy() {
@@ -40,7 +40,7 @@ public class SimpleMethodCall implements MethodCall {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.netappsid.jpaquery.internal.MethodCallTmp#getMethod()
+	 * @see org.torpedoquery.jpa.internal.MethodCallTmp#getMethod()
 	 */
 	@Override
 	public Method getMethod() {

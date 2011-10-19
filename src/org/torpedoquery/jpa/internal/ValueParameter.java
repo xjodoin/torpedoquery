@@ -33,7 +33,7 @@ public class ValueParameter<T> implements Parameter<T> {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.netappsid.jpaquery.internal.IParameter#generate(java.util.concurrent
+	 * org.torpedoquery.jpa.internal.IParameter#generate(java.util.concurrent
 	 * .atomic.AtomicInteger)
 	 */
 	@Override

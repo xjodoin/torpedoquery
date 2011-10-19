@@ -22,30 +22,35 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 
-import org.objenesis.ObjenesisHelper;
-
+import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
-public abstract class JoinHandler<T> implements QueryHandler<T> {
+import org.objenesis.ObjenesisHelper;
+
+public abstract class JoinHandler<T> implements QueryHandler<T>
+{
 
 	private final TorpedoMethodHandler methodHandler;
 	private final ProxyFactoryFactory proxyFactoryFactory;
 	private Class<T> realType;
 
-	public JoinHandler(TorpedoMethodHandler methodHandler, ProxyFactoryFactory proxyFactoryFactory) {
+	public JoinHandler(TorpedoMethodHandler methodHandler, ProxyFactoryFactory proxyFactoryFactory)
+	{
 		this.methodHandler = methodHandler;
 		this.proxyFactoryFactory = proxyFactoryFactory;
 	}
 
-	public JoinHandler(TorpedoMethodHandler fjpaMethodHandler, ProxyFactoryFactory proxyFactoryFactory, Class<T> realType) {
+	public JoinHandler(TorpedoMethodHandler fjpaMethodHandler, ProxyFactoryFactory proxyFactoryFactory, Class<T> realType)
+	{
 		methodHandler = fjpaMethodHandler;
 		this.realType = realType;
 		this.proxyFactoryFactory = proxyFactoryFactory;
 	}
 
 	@Override
-	public T handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
+	public T handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methodCalls)
+	{
 
 		MethodCall pollFirst = methodCalls.pollFirst();
 
@@ -53,15 +58,28 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 		final Method thisMethod = pollFirst.getMethod();
 		Class<?> returnType = thisMethod.getReturnType();
 
-		if (Collection.class.isAssignableFrom(returnType)) {
+		if (Collection.class.isAssignableFrom(returnType))
+		{
 			returnType = (Class<?>) ((ParameterizedType) thisMethod.getGenericReturnType()).getActualTypeArguments()[0];
-		} else if (Map.class.isAssignableFrom(returnType)) {
+		}
+		else if (Map.class.isAssignableFrom(returnType))
+		{
 			returnType = (Class<?>) ((ParameterizedType) thisMethod.getGenericReturnType()).getActualTypeArguments()[1];
 		}
 
-		try {
+		try
+		{
 
 			final ProxyFactory proxyFactory = proxyFactoryFactory.getProxyFactory();
+			proxyFactory.setFilter(new MethodFilter()
+			{
+
+				@Override
+				public boolean isHandled(Method m)
+				{
+					return !m.getDeclaringClass().equals(Object.class);
+				}
+			});
 			Class<? extends Object> goodType = getGoodType(returnType);
 			proxyFactory.setSuperclass(goodType);
 			proxyFactory.setInterfaces(new Class[] { Proxy.class });
@@ -69,21 +87,24 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 			Class proxyClass = proxyFactory.createClass();
 			ProxyObject join = (ProxyObject) ObjenesisHelper.newInstance(proxyClass);
 			join.setHandler(methodHandler);
-			
+
 			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, new QueryBuilder(goodType));
 
 			queryImpl.addJoin(createJoin(queryBuilder, FieldUtils.getFieldName(thisMethod)));
 
 			return (T) join;
 
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 
 		return null;
 	}
 
-	private Class<? extends Object> getGoodType(Class<?> returnType) {
+	private Class<? extends Object> getGoodType(Class<?> returnType)
+	{
 		return realType != null ? realType : returnType;
 	}
 

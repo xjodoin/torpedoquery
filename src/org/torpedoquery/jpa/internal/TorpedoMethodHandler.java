@@ -24,6 +24,7 @@ import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
@@ -31,33 +32,42 @@ import javassist.util.proxy.ProxyObject;
 import org.objenesis.ObjenesisHelper;
 import org.torpedoquery.jpa.Query;
 
-public class TorpedoMethodHandler implements MethodHandler, Proxy {
+public class TorpedoMethodHandler implements MethodHandler, Proxy
+{
 	private final Map<Object, QueryBuilder<?>> proxyQueryBuilders = new IdentityHashMap<Object, QueryBuilder<?>>();
 	private final Deque<MethodCall> methods = new LinkedList<MethodCall>();
 	private final QueryBuilder<?> root;
 	private final ProxyFactoryFactory proxyfactoryfactory;
 
-	public TorpedoMethodHandler(QueryBuilder<?> root, ProxyFactoryFactory proxyfactoryfactory) {
+	public TorpedoMethodHandler(QueryBuilder<?> root, ProxyFactoryFactory proxyfactoryfactory)
+	{
 		this.root = root;
 		this.proxyfactoryfactory = proxyfactoryfactory;
 	}
 
-	public QueryBuilder<?> addQueryBuilder(Object proxy, QueryBuilder<?> queryBuilder) {
+	public QueryBuilder<?> addQueryBuilder(Object proxy, QueryBuilder<?> queryBuilder)
+	{
 		proxyQueryBuilders.put(proxy, queryBuilder);
 		return queryBuilder;
 	}
 
 	@Override
-	public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
-		if (thisMethod.getDeclaringClass().equals(Proxy.class)) {
-			try {
+	public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable
+	{
+		if (thisMethod.getDeclaringClass().equals(Proxy.class))
+		{
+			try
+			{
 				return thisMethod.invoke(this, args);
-			} catch (InvocationTargetException e) {
+			}
+			catch (InvocationTargetException e)
+			{
 				throw e.getTargetException();
 			}
 		}
 
-		if (thisMethod.getDeclaringClass().equals(Object.class)) {
+		if (thisMethod.getDeclaringClass().equals(Object.class))
+		{
 			return null;
 		}
 
@@ -66,74 +76,104 @@ public class TorpedoMethodHandler implements MethodHandler, Proxy {
 
 		final Class returnType = thisMethod.getReturnType();
 
-		if (returnType.isPrimitive()) {
+		if (returnType.isPrimitive())
+		{
 			return returnType.isAssignableFrom(boolean.class) ? false : 0;
-		} else if (!Modifier.isFinal(returnType.getModifiers())) {
+		}
+		else if (!Modifier.isFinal(returnType.getModifiers()))
+		{
 			final Object proxy = createLinkedProxy(returnType);
 			return proxy;
-		} else {
+		}
+		else
+		{
 			return null;
 		}
 	}
 
 	private Object createLinkedProxy(final Class returnType) throws NoSuchMethodException, InstantiationException, IllegalAccessException,
-			InvocationTargetException {
+			InvocationTargetException
+	{
 		ProxyFactory proxyFactory = proxyfactoryfactory.getProxyFactory();
-		if (returnType.isInterface()) {
+		if (returnType.isInterface())
+		{
 			proxyFactory.setInterfaces(new Class[] { returnType });
-		} else {
+		}
+		else
+		{
 			proxyFactory.setSuperclass(returnType);
 		}
 
-		MethodHandler mh = new MethodHandler() {
+		proxyFactory.setFilter(new MethodFilter()
+		{
 
 			@Override
-			public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
+			public boolean isHandled(Method m)
+			{
+				return !m.getDeclaringClass().equals(Object.class);
+			}
+		});
+
+		MethodHandler mh = new MethodHandler()
+		{
+
+			@Override
+			public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable
+			{
 				MethodCall pollFirst = methods.pollFirst();
 				LinkedMethodCall linkedMethodCall = new LinkedMethodCall(pollFirst, new SimpleMethodCall(pollFirst.getProxy(), thisMethod));
 				methods.addFirst(linkedMethodCall);
 				Class<?> returnType2 = thisMethod.getReturnType();
 
-				if (returnType2.isPrimitive()) {
+				if (returnType2.isPrimitive())
+				{
 					return returnType2.isAssignableFrom(boolean.class) ? false : 0;
-				} else if (!Modifier.isFinal(returnType2.getModifiers())) {
+				}
+				else if (!Modifier.isFinal(returnType2.getModifiers()))
+				{
 					final Object proxy = createLinkedProxy(returnType2);
 					return proxy;
-				} else {
+				}
+				else
+				{
 					return null;
 				}
 			}
 		};
-		
+
 		Class proxyClass = proxyFactory.createClass();
-		
+
 		ProxyObject proxy = (ProxyObject) ObjenesisHelper.newInstance(proxyClass);
 		proxy.setHandler(mh);
-		
+
 		return proxy;
 	}
 
-	public <T> T handle(QueryHandler<T> handler) {
+	public <T> T handle(QueryHandler<T> handler)
+	{
 		final T result = handler.handleCall(proxyQueryBuilders, methods);
 		return result;
 	}
 
-	public QueryBuilder<?> getQueryBuilder(Object proxy) {
+	public QueryBuilder<?> getQueryBuilder(Object proxy)
+	{
 		return proxyQueryBuilders.get(proxy);
 	}
 
-	public <T extends Query> T getRoot() {
+	public <T extends Query> T getRoot()
+	{
 		return (T) root;
 	}
 
 	@Override
-	public TorpedoMethodHandler getTorpedoMethodHandler() {
+	public TorpedoMethodHandler getTorpedoMethodHandler()
+	{
 		return this;
 	}
-	
-	public Deque<MethodCall> getMethods() {
+
+	public Deque<MethodCall> getMethods()
+	{
 		return methods;
 	}
 
-	
 }
