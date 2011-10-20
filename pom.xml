@@ -6,14 +6,14 @@
 	<artifactId>org.torpedoquery</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
-	<name>${bundle.symbolicName}</name>
+	<name>TorpedoQuery</name>
 
 	<packaging>bundle</packaging>
 
 	<scm>
-		<connection>scm:git:git@github.com:360-Innovations/FJPAQuery.git</connection>
-		<url>scm:git:git@github.com:360-Innovations/FJPAQuery.git</url>
-		<developerConnection>scm:git:git@github.com:360-Innovations/FJPAQuery.git</developerConnection>
+		<connection>scm:git:git@github.com:xjodoin/torpedo.git</connection>
+		<url>scm:git:git@github.com:xjodoin/torpedo.git</url>
+		<developerConnection>scm:git:git@github.com:xjodoin/torpedo.git</developerConnection>
 	</scm>
 
 
@@ -64,6 +64,38 @@
 				<configuration>
 					<header>torpedoquery-license.txt</header>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -123,5 +155,12 @@
 			</releases>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<distributionManagement>
+		<repository>
+			<id>nexus</id>
+			<url>http://nexus.netappsid.com:8081/nexus/content/repositories/releases</url>
+		</repository>
+	</distributionManagement>
 
 </project>
