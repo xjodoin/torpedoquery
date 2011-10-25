@@ -21,9 +21,13 @@ import java.util.Collection;
 public interface ValueOnGoingCondition<T> extends OnGoingCondition<T> {
 
 	OnGoingLogicalCondition eq(T value);
+	
+	OnGoingLogicalCondition eq(Function<T> value);
 
 	OnGoingLogicalCondition neq(T value);
 
+	OnGoingLogicalCondition neq(Function<T> value);
+	
 	OnGoingLogicalCondition isNull();
 
 	OnGoingLogicalCondition isNotNull();

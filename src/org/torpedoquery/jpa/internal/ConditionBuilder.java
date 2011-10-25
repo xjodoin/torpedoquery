@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.ComparableFunction;
+import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.OnGoingCollectionCondition;
 import org.torpedoquery.jpa.OnGoingComparableCondition;
 import org.torpedoquery.jpa.OnGoingLikeCondition;
@@ -195,25 +196,37 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 
 	@Override
 	public OnGoingLogicalCondition lt(ComparableFunction<T> value) {
-		Condition condition = new LtCondition<T>(selector, value.generateParameter(null));
+		Condition condition = new LtCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition lte(ComparableFunction<T> value) {
-		Condition condition = new LteCondition<T>(selector, value.generateParameter(null));
+		Condition condition = new LteCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition gt(ComparableFunction<T> value) {
-		Condition condition = new GtCondition<T>(selector, value.generateParameter(null));
+		Condition condition = new GtCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 
 	@Override
 	public OnGoingLogicalCondition gte(ComparableFunction<T> value) {
-		Condition condition = new GteCondition<T>(selector, value.generateParameter(null));
+		Condition condition = new GteCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(condition);
+	}
+
+	@Override
+	public OnGoingLogicalCondition eq(Function<T> value) {
+		Condition condition = new EqualCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(condition);
+	}
+
+	@Override
+	public OnGoingLogicalCondition neq(Function<T> value) {
+		Condition condition = new NotEqualCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
 }

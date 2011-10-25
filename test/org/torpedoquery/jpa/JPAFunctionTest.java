@@ -132,5 +132,36 @@ public class JPAFunctionTest {
 		
 		assertEquals("select entity_0.code, count(*) from Entity entity_0 group by entity_0.code", select.getQuery());
 	}
+	
+	@Test
+	public void testIndexFunction()
+	{
+		Entity from = from(Entity.class);
+		SubEntity innerJoin = innerJoin(from.getSubEntities());
+		Query<Object[]> select = select(innerJoin,index(innerJoin));
+		assertEquals("select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1", select.getQuery());
+	}
+	
+	@Test
+	public void testIndexFunction_in_where()
+	{
+		Entity from = from(Entity.class);
+		SubEntity innerJoin = innerJoin(from.getSubEntities());
+		where(index(innerJoin)).gt(5);
+		Query<Object[]> select = select(innerJoin,index(innerJoin));
+		assertEquals("select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1 where index(subEntity_1) > :function_2", select.getQuery());
+		assertEquals(5, select.getParameters().get("function_2"));
+	}
+	
+	@Test
+	public void testIndexFunction_in_with_equal()
+	{
+		Entity from = from(Entity.class);
+		SubEntity innerJoin = innerJoin(from.getSubEntities());
+		where(index(innerJoin)).eq(5);
+		Query<Object[]> select = select(innerJoin,index(innerJoin));
+		assertEquals("select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1 where index(subEntity_1) = :function_2", select.getQuery());
+		assertEquals(5, select.getParameters().get("function_2"));
+	}
 
 }

@@ -22,17 +22,28 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.Function;
 
-public abstract class AggregateFunctionHandler<T, F extends Function<T>> implements QueryHandler<F>, Function<T> {
+public abstract class BaseFunctionHandler<T, F extends Function<T>> implements QueryHandler<F>, Function<T> {
 
 	private MethodCall method;
 	private Object proxy;
-	private QueryBuilder queryBuilder;
+	private QueryBuilder<T> queryBuilder;
+
+	public BaseFunctionHandler() {
+	}
+
+	public BaseFunctionHandler(Object proxy) {
+		this.proxy = proxy;
+	}
 
 	@Override
 	public String createQueryFragment(AtomicInteger incrementor) {
 
-		SimpleMethodCallSelector simpleMethodCallSelector = new SimpleMethodCallSelector(queryBuilder, method);
-		return getFunctionName() + "(" + simpleMethodCallSelector.createQueryFragment(incrementor) + ")";
+		if (method != null) {
+			SimpleMethodCallSelector<T> simpleMethodCallSelector = new SimpleMethodCallSelector<T>(queryBuilder, method);
+			return getFunctionName() + "(" + simpleMethodCallSelector.createQueryFragment(incrementor) + ")";
+		} else {
+			return getFunctionName() + "(" + TorpedoMagic.getTorpedoMethodHandler().getQueryBuilder(proxy).getAlias(incrementor) + ")";
+		}
 	}
 
 	@Override
@@ -43,10 +54,10 @@ public abstract class AggregateFunctionHandler<T, F extends Function<T>> impleme
 	@Override
 	public F handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods) {
 
-		if (!methods.isEmpty()) {
+		if (proxy == null) {
 			method = methods.pollFirst();
 			proxy = method.getProxy();
-			queryBuilder = proxyQueryBuilders.get(proxy);
+			queryBuilder = (QueryBuilder<T>) proxyQueryBuilders.get(proxy);
 		}
 
 		return (F) this;
@@ -56,7 +67,12 @@ public abstract class AggregateFunctionHandler<T, F extends Function<T>> impleme
 
 	@Override
 	public Parameter<T> generateParameter(T value) {
-		return new SelectorParameter<T>(this);
+
+		if (value instanceof Function) {
+			return new SelectorParameter<T>((Selector) value);
+		} else {
+			return new ValueParameter<T>("function", value);
+		}
 	}
 
 }
