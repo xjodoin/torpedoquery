@@ -24,9 +24,13 @@ public interface OnGoingLogicalCondition {
 	<T> ValueOnGoingCondition<T> or(T property);
 
 	<V, T extends Comparable<V>> OnGoingComparableCondition<V> and(T property);
-
+	
 	<V, T extends Comparable<V>> OnGoingComparableCondition<V> or(T property);
 
+	<T> OnGoingComparableCondition<T> and(ComparableFunction<T> property);
+	
+	<T> OnGoingComparableCondition<T> or(ComparableFunction<T> property);
+	
 	<T> OnGoingCollectionCondition<T> and(Collection<T> object);
 
 	<T> OnGoingCollectionCondition<T> or(Collection<T> object);

@@ -163,5 +163,16 @@ public class JPAFunctionTest {
 		assertEquals("select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1 where index(subEntity_1) = :function_2", select.getQuery());
 		assertEquals(5, select.getParameters().get("function_2"));
 	}
+	
+	@Test
+	public void testIndexFunction_into_Or()
+	{
+		Entity from = from(Entity.class);
+		SubEntity innerJoin = innerJoin(from.getSubEntities());
+		where(index(innerJoin)).eq(5).or(index(innerJoin)).lt(2);
+		Query<Object[]> select = select(innerJoin,index(innerJoin));
+		assertEquals("select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1 where index(subEntity_1) = :function_2 or index(subEntity_1) < :function_3", select.getQuery());
+		assertEquals(2, select.getParameters().get("function_3"));
+	}
 
 }

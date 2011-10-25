@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.jpa.ComparableFunction;
 import org.torpedoquery.jpa.OnGoingCollectionCondition;
 import org.torpedoquery.jpa.OnGoingComparableCondition;
 import org.torpedoquery.jpa.OnGoingLogicalCondition;
@@ -114,9 +115,24 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
+	
+	@Override
+	public <T> OnGoingComparableCondition<T> and(ComparableFunction<T> function) {
+		OnGoingComparableCondition<T> right = ConditionHelper.<T, OnGoingComparableCondition<T>> createCondition(function,this);
+		condition = new AndCondition(condition, (Condition) right);
+		return right;
+	}
+
+	@Override
+	public <T> OnGoingComparableCondition<T> or(ComparableFunction<T> function) {
+		OnGoingComparableCondition<T> right = ConditionHelper.<T, OnGoingComparableCondition<T>> createCondition(function,this);
+		condition = new OrCondition(condition, (Condition) right);
+		return right;
+	}
 
 	public QueryBuilder<?> getBuilder() {
 		return builder;
 	}
+
 
 }
