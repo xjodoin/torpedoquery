@@ -8,7 +8,7 @@ Torpedo Query goal is to simplify how you create and maintain your HQL query.
   
 #### Quick start ####
 
-  	First add this import static org.torpedoquery.jpa.Torpedo.;
+  	First add this import static org.torpedoquery.jpa.Torpedo.*;
   
   	1. Create simple select
   		

@@ -24,12 +24,8 @@ import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
-import javassist.util.proxy.ProxyFactory;
-import javassist.util.proxy.ProxyObject;
 
-import org.objenesis.ObjenesisHelper;
 import org.torpedoquery.jpa.Query;
 
 public class TorpedoMethodHandler implements MethodHandler, Proxy
@@ -66,11 +62,6 @@ public class TorpedoMethodHandler implements MethodHandler, Proxy
 			}
 		}
 
-		if (thisMethod.getDeclaringClass().equals(Object.class))
-		{
-			return null;
-		}
-
 		methods.addFirst(new SimpleMethodCall((Proxy) self, thisMethod));
 		TorpedoMagic.setQuery((Proxy) self);
 
@@ -94,26 +85,6 @@ public class TorpedoMethodHandler implements MethodHandler, Proxy
 	private Object createLinkedProxy(final Class returnType) throws NoSuchMethodException, InstantiationException, IllegalAccessException,
 			InvocationTargetException
 	{
-		ProxyFactory proxyFactory = proxyfactoryfactory.getProxyFactory();
-		if (returnType.isInterface())
-		{
-			proxyFactory.setInterfaces(new Class[] { returnType });
-		}
-		else
-		{
-			proxyFactory.setSuperclass(returnType);
-		}
-
-		proxyFactory.setFilter(new MethodFilter()
-		{
-
-			@Override
-			public boolean isHandled(Method m)
-			{
-				return !m.getDeclaringClass().equals(Object.class);
-			}
-		});
-
 		MethodHandler mh = new MethodHandler()
 		{
 
@@ -141,12 +112,8 @@ public class TorpedoMethodHandler implements MethodHandler, Proxy
 			}
 		};
 
-		Class proxyClass = proxyFactory.createClass();
 
-		ProxyObject proxy = (ProxyObject) ObjenesisHelper.newInstance(proxyClass);
-		proxy.setHandler(mh);
-
-		return proxy;
+		return proxyfactoryfactory.createProxy(mh,returnType);
 	}
 
 	public <T> T handle(QueryHandler<T> handler)

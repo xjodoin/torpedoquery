@@ -22,12 +22,6 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 
-import javassist.util.proxy.MethodFilter;
-import javassist.util.proxy.ProxyFactory;
-import javassist.util.proxy.ProxyObject;
-
-import org.objenesis.ObjenesisHelper;
-
 public abstract class JoinHandler<T> implements QueryHandler<T>
 {
 
@@ -70,29 +64,15 @@ public abstract class JoinHandler<T> implements QueryHandler<T>
 		try
 		{
 
-			final ProxyFactory proxyFactory = proxyFactoryFactory.getProxyFactory();
-			proxyFactory.setFilter(new MethodFilter()
-			{
-
-				@Override
-				public boolean isHandled(Method m)
-				{
-					return !m.getDeclaringClass().equals(Object.class);
-				}
-			});
 			Class<? extends Object> goodType = getGoodType(returnType);
-			proxyFactory.setSuperclass(goodType);
-			proxyFactory.setInterfaces(new Class[] { Proxy.class });
 
-			Class proxyClass = proxyFactory.createClass();
-			ProxyObject join = (ProxyObject) ObjenesisHelper.newInstance(proxyClass);
-			join.setHandler(methodHandler);
+			T join = proxyFactoryFactory.createProxy(methodHandler, goodType,Proxy.class);
 
 			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, new QueryBuilder(goodType));
 
 			queryImpl.addJoin(createJoin(queryBuilder, FieldUtils.getFieldName(thisMethod)));
 
-			return (T) join;
+			return join;
 
 		}
 		catch (Exception e)

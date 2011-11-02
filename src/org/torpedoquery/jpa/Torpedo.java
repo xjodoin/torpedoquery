@@ -18,15 +18,9 @@ package org.torpedoquery.jpa;
 
 import static org.torpedoquery.jpa.internal.TorpedoMagic.*;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
-import javassist.util.proxy.MethodFilter;
-import javassist.util.proxy.ProxyFactory;
-import javassist.util.proxy.ProxyObject;
-
-import org.objenesis.ObjenesisHelper;
 import org.torpedoquery.jpa.internal.ArrayCallHandler;
 import org.torpedoquery.jpa.internal.ArrayCallHandler.ValueHandler;
 import org.torpedoquery.jpa.internal.AscFunctionHandler;
@@ -114,30 +108,17 @@ public class Torpedo {
 	 */
 	public static <T> T from(Class<T> toQuery) {
 		try {
-			final ProxyFactory proxyFactory = proxyFactoryFactory.getProxyFactory();
-
-			proxyFactory.setSuperclass(toQuery);
-			proxyFactory.setInterfaces(new Class[] { Proxy.class });
-
-			proxyFactory.setFilter(new MethodFilter() {
-
-				@Override
-				public boolean isHandled(Method m) {
-					return !m.getDeclaringClass().equals(Object.class);
-				}
-			});
 
 			QueryBuilder queryBuilder = new QueryBuilder(toQuery);
 			TorpedoMethodHandler fjpaMethodHandler = new TorpedoMethodHandler(queryBuilder, proxyFactoryFactory);
 
-			Class proxyClass = proxyFactory.createClass();
-			ProxyObject proxy = (ProxyObject) ObjenesisHelper.newInstance(proxyClass);
-			proxy.setHandler(fjpaMethodHandler);
+			T from = proxyFactoryFactory.createProxy(fjpaMethodHandler, Proxy.class, toQuery);
 
-			fjpaMethodHandler.addQueryBuilder(proxy, queryBuilder);
+			fjpaMethodHandler.addQueryBuilder(from, queryBuilder);
 
-			setQuery((Proxy) proxy);
-			return (T) proxy;
+			setQuery((Proxy) from);
+
+			return from;
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -157,28 +138,14 @@ public class Torpedo {
 	 */
 	public static <T, E extends T> E extend(T toExtend, Class<E> subclass) {
 		try {
-			final ProxyFactory proxyFactory = proxyFactoryFactory.getProxyFactory();
-
-			proxyFactory.setSuperclass(subclass);
-			proxyFactory.setInterfaces(new Class[] { Proxy.class });
-
-			proxyFactory.setFilter(new MethodFilter() {
-
-				@Override
-				public boolean isHandled(Method m) {
-					return !m.getDeclaringClass().equals(Object.class);
-				}
-			});
 
 			TorpedoMethodHandler fjpaMethodHandler = getTorpedoMethodHandler();
-			Class proxyClass = proxyFactory.createClass();
-			ProxyObject proxy = (ProxyObject) ObjenesisHelper.newInstance(proxyClass);
-			proxy.setHandler(fjpaMethodHandler);
+			E proxy = proxyFactoryFactory.createProxy(fjpaMethodHandler, Proxy.class, subclass);
 
 			QueryBuilder queryBuilder = fjpaMethodHandler.getQueryBuilder(toExtend);
 			fjpaMethodHandler.addQueryBuilder(proxy, queryBuilder);
 
-			return (E) proxy;
+			return proxy;
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
