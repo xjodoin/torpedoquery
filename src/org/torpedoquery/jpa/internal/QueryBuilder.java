@@ -212,6 +212,11 @@ public class QueryBuilder<T> implements Query<T> {
 			valueParameters.addAll(params);
 		}
 
+		if (groupBy != null) {
+			Condition groupByCondition = groupBy.getCondition();
+			feedValueParameters(valueParameters, groupByCondition);
+		}
+		
 		return valueParameters;
 	}
 

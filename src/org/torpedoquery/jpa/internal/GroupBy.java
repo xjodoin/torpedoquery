@@ -103,4 +103,9 @@ public class GroupBy implements OnGoingGroupByCondition {
 		havingCondition = (Condition) createCondition;
 		return createCondition;
 	}
+	
+	public Condition getCondition()
+	{
+		return havingCondition;
+	}
 }

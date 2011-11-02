@@ -44,6 +44,7 @@ public class GroupByTest {
 
 		Assert.assertEquals("select entity_0.name, sum(entity_0.integerField) from Entity entity_0 group by entity_0.name having entity_0.name = :name_1",
 				query);
+		Assert.assertEquals("test", select.getParameters().get("name_1"));
 	}
 
 	@Test
