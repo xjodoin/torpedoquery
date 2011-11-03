@@ -59,4 +59,19 @@ public class GroupByTest {
 				"select entity_0.name from Entity entity_0 inner join entity_0.subEntities subEntity_1 group by entity_0.name having sum(entity_0.integerField) < sum(subEntity_1.numberField)",
 				query);
 	}
+	
+	@Test
+	public void testHavingWithFunction_withProxyRelativeParameter()
+	{
+		Entity from = from(Entity.class);
+		SubEntity subEntity = innerJoin(from.getSubEntities());
+		groupBy(from.getName()).having(sum(from.getIntegerField())).lt(subEntity.getNumberField());
+		Query<String> select = select(from.getName());
+		String query = select.getQuery();
+
+		Assert.assertEquals(
+				"select entity_0.name from Entity entity_0 inner join entity_0.subEntities subEntity_1 group by entity_0.name having sum(entity_0.integerField) < subEntity_1.numberField",
+				query);
+		Assert.assertTrue(select.getParameters().isEmpty());
+	}
 }
