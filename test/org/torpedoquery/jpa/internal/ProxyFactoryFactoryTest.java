@@ -38,5 +38,18 @@ public class ProxyFactoryFactoryTest {
 
 		assertTrue(torpedoMethodHandler.getMethods().isEmpty());
 	}
+	
+	@Test
+	public void test_factoryMustUseClassCache()
+	{
+		ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(new MultiClassLoaderProvider());
+		TorpedoMethodHandler torpedoMethodHandler = new TorpedoMethodHandler(new QueryBuilder<Entity>(Entity.class), proxyFactoryFactory);
+		Entity createProxy = proxyFactoryFactory.createProxy(torpedoMethodHandler, Entity.class, Proxy.class);
+		
+		Entity createProxy2 = proxyFactoryFactory.createProxy(torpedoMethodHandler, Entity.class, Proxy.class);
+		
+		assertSame(createProxy.getClass(), createProxy2.getClass());
+	}
+	
 
 }

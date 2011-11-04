@@ -17,7 +17,6 @@
 package org.torpedoquery.jpa.internal;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
 import javassist.util.proxy.MethodFilter;
@@ -29,9 +28,17 @@ import org.objenesis.ObjenesisHelper;
 
 public class ProxyFactoryFactory {
 	private final ClassLoaderProvider classLoaderProvider;
+	private MethodFilter methodFilter;
 
 	public ProxyFactoryFactory(ClassLoaderProvider classLoaderProvider) {
 		this.classLoaderProvider = classLoaderProvider;
+		methodFilter = new MethodFilter() {
+			@Override
+			public boolean isHandled(Method m) {
+				return !m.getDeclaringClass().equals(Object.class) && !m.getName().equals("finalize") && !m.getName().equals("equals")
+						&& !m.getName().equals("hashCode") && !m.getName().equals("toString");
+			}
+		};
 	}
 
 	/**
@@ -68,13 +75,7 @@ public class ProxyFactoryFactory {
 			classLoaderProvidedProxyFactory.setInterfaces(interfaces.toArray(new Class[0]));
 		}
 
-		classLoaderProvidedProxyFactory.setFilter(new MethodFilter() {
-			@Override
-			public boolean isHandled(Method m) {
-				return !m.getDeclaringClass().equals(Object.class) && !m.getName().equals("finalize") && !m.getName().equals("equals")
-						&& !m.getName().equals("hashCode") && !m.getName().equals("toString");
-			}
-		});
+		classLoaderProvidedProxyFactory.setFilter(methodFilter);
 
 		Class proxyClass = classLoaderProvidedProxyFactory.createClass();
 

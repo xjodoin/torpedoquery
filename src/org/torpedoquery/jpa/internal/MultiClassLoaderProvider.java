@@ -18,13 +18,17 @@ package org.torpedoquery.jpa.internal;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyFactory.ClassLoaderProvider;
 
 public class MultiClassLoaderProvider implements ClassLoaderProvider {
 
+	private static final Map<Set<ClassLoader>, ClassLoader> classLoaderCache = new ConcurrentHashMap<Set<ClassLoader>, ClassLoader>();
+	
 	private class MultiClassLoader extends ClassLoader {
 		private final Collection<ClassLoader> classLoaders;
 
@@ -68,8 +72,20 @@ public class MultiClassLoaderProvider implements ClassLoaderProvider {
 				classLoaders.add(clazz.getClassLoader());
 			}
 		}
+		
+		ClassLoader multiClassLoader;
+		
+		if(classLoaderCache.containsKey(classLoaders))
+		{
+			multiClassLoader = classLoaderCache.get(classLoaders);
+		}
+		else
+		{
+			multiClassLoader = new MultiClassLoader(classLoaders);
+			classLoaderCache.put(classLoaders, multiClassLoader);
+		}
 
-		return new MultiClassLoader(classLoaders);
+		return multiClassLoader;
 	}
 
 }
