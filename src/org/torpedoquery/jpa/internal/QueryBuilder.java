@@ -280,6 +280,8 @@ public class QueryBuilder<T> implements Query<T> {
 		for (Entry<String, Object> parameter : parameters.entrySet()) {
 			query.setParameter(parameter.getKey(), parameter.getValue());
 		}
+		
+		TorpedoMagic.setQuery(null);
 
 		return query;
 	}
