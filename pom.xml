@@ -10,9 +10,9 @@
 	<packaging>bundle</packaging>
 
 	<scm>
-		<connection>scm:git:git@github.com:xjodoin/torpedo.git</connection>
-		<url>scm:git:git@github.com:xjodoin/torpedo.git</url>
-		<developerConnection>scm:git:git@github.com:xjodoin/torpedo.git</developerConnection>
+		<connection>scm:git:git@github.com:xjodoin/torpedoquery.git</connection>
+		<url>scm:git:git@github.com:xjodoin/torpedoquery.git</url>
+		<developerConnection>scm:git:git@github.com:xjodoin/torpedoquery.git</developerConnection>
 	</scm>
 
 
