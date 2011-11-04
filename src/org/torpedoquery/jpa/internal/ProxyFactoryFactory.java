@@ -17,6 +17,7 @@
 package org.torpedoquery.jpa.internal;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
 import javassist.util.proxy.MethodFilter;
@@ -39,7 +40,7 @@ public class ProxyFactoryFactory {
 	 * @param classes
 	 * @return
 	 */
-	public <T> T createProxy(MethodHandler methodHandler , Class<?>... classes) {
+	public <T> T createProxy(MethodHandler methodHandler, Class<?>... classes) {
 
 		ArrayList<Class<?>> interfaces = new ArrayList<Class<?>>();
 		Class<?> superClass = null;
@@ -66,14 +67,12 @@ public class ProxyFactoryFactory {
 		if (!interfaces.isEmpty()) {
 			classLoaderProvidedProxyFactory.setInterfaces(interfaces.toArray(new Class[0]));
 		}
-		
 
-		classLoaderProvidedProxyFactory.setFilter(new MethodFilter()
-		{
+		classLoaderProvidedProxyFactory.setFilter(new MethodFilter() {
 			@Override
-			public boolean isHandled(Method m)
-			{
-				return !m.getDeclaringClass().equals(Object.class);
+			public boolean isHandled(Method m) {
+				return !m.getDeclaringClass().equals(Object.class) && !m.getName().equals("finalize") && !m.getName().equals("equals")
+						&& !m.getName().equals("hashCode") && !m.getName().equals("toString");
 			}
 		});
 

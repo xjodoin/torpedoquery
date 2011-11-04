@@ -32,4 +32,9 @@ public class ExtendEntity extends Entity {
 	public SubEntity getSubEntity() {
 		return super.getSubEntity();
 	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+	}
 }

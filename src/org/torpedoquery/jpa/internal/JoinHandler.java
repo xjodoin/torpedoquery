@@ -77,10 +77,9 @@ public abstract class JoinHandler<T> implements QueryHandler<T>
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
-		return null;
 	}
 
 	private Class<? extends Object> getGoodType(Class<?> returnType)
