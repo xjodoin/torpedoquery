@@ -80,7 +80,6 @@
 				<configuration>
 					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
-						<Export-Package>org.torpedoquery.jpa</Export-Package>
 						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
 					</instructions>
 				</configuration>
