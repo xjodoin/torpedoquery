@@ -36,8 +36,8 @@
 	<packaging>jar</packaging>
 
 	<scm>
-		<connection>scm:git:git@github.com:xjodoin/torpedoquery.git</connection>
-		<url>scm:git:git@github.com:xjodoin/torpedoquery.git</url>
+		<url>https://github.com/xjodoin/torpedoquery</url>
+		<connection>scm:git:git://github.com/xjodoin/torpedoquery.git</connection>
 		<developerConnection>scm:git:git@github.com:xjodoin/torpedoquery.git</developerConnection>
 	</scm>
 
@@ -144,11 +144,6 @@
 			<id>com.springsource.repository.bundles.release</id>
 			<name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
 			<url>http://repository.springsource.com/maven/bundles/release</url>
-		</repository>
-		<repository>
-			<id>com.springsource.repository.bundles.external</id>
-			<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
-			<url>http://repository.springsource.com/maven/bundles/external</url>
 		</repository>
 	</repositories>
 
