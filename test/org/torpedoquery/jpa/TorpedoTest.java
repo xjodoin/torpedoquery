@@ -301,4 +301,15 @@ public class TorpedoTest {
 		String query = select.getQuery();
 		assertEquals("select subEntity_1 from ExtendEntity extendEntity_0 inner join extendEntity_0.subEntity subEntity_1", query);
 	}
+	
+	@Test
+	public void testTwoJoinOnSameProperty()
+	{
+		Entity from = from(Entity.class);
+		innerJoin(from.getSubEntity());
+		leftJoin(from.getSubEntity());
+		
+		org.torpedoquery.jpa.Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 left join entity_0.subEntity subEntity_2", select.getQuery());
+	}
 }
