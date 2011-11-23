@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class Entity {
+public class Entity extends AbstractEntity{
 	private Date dateField;
 
 	public String getCode() {
@@ -61,6 +61,11 @@ public class Entity {
 	}
 
 	public BigDecimal getBigDecimalField() {
+		return null;
+	}
+	
+	@Override
+	public ExtendEntity getAbstractEntity() {
 		return null;
 	}
 }

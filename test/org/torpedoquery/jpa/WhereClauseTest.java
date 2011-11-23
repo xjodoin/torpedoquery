@@ -348,4 +348,22 @@ public class WhereClauseTest {
 		Query<Entity> select = select(from);
 		assertEquals("select entity_0 from Entity entity_0 where entity_0.code = entity_0.name", select.getQuery());
 	}
+	
+	@Test
+	public void chainMethodCallIntoWhere()
+	{
+		Entity from = from(Entity.class);
+		where(from.getSubEntity().getName()).eq("test");
+		Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntity.name = :name_1", select.getQuery());
+	}
+	
+	@Test
+	public void chainMethodCallOnAbstractMethodOveride()
+	{
+		Entity from = from(Entity.class);
+		where(from.getAbstractEntity().getName()).eq("test");
+		Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.abstractEntity.name = :name_1", select.getQuery());
+	}
 }
