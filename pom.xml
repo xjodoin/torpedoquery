@@ -81,6 +81,7 @@
 					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
 						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Import-Package>javassist.util.proxy;version="[3.10,4)",*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -130,9 +131,9 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>org.jboss.javassist</groupId>
-			<artifactId>com.springsource.javassist</artifactId>
-			<version>3.10.0.GA</version>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.15.0-GA</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
