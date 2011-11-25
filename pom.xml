@@ -80,7 +80,6 @@
 					</execution>
 				</executions>
 				<configuration>
-					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
 						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
 						<Import-Package>javassist.util.proxy;version="[3.10,4)",*</Import-Package>
