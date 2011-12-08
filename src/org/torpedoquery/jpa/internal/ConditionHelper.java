@@ -31,5 +31,13 @@ public class ConditionHelper {
 		E handle = fjpaMethodHandler.handle(whereClauseHandler);
 		return handle;
 	}
+	
+	
+	public static Condition getConditionClause(ConditionBuilder<?> conditionBuilder) {
+		if (conditionBuilder != null) {
+			return conditionBuilder.getLogicalCondition() != null ? conditionBuilder.getLogicalCondition() : conditionBuilder;
+		}
+		return null;
+	}
 
 }

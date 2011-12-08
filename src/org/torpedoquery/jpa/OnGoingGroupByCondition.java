@@ -31,5 +31,7 @@ public interface OnGoingGroupByCondition {
 	public OnGoingStringCondition<String> having(String object);
 
 	public <T> OnGoingCollectionCondition<T> having(Collection<T> object);
+	
+	OnGoingLogicalCondition having(OnGoingLogicalCondition condition);
 
 }

@@ -26,14 +26,16 @@ import org.torpedoquery.jpa.ComparableFunction;
 import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.OnGoingCollectionCondition;
 import org.torpedoquery.jpa.OnGoingComparableCondition;
+import org.torpedoquery.jpa.OnGoingCondition;
 import org.torpedoquery.jpa.OnGoingGroupByCondition;
+import org.torpedoquery.jpa.OnGoingLogicalCondition;
 import org.torpedoquery.jpa.OnGoingStringCondition;
 import org.torpedoquery.jpa.ValueOnGoingCondition;
 
 public class GroupBy implements OnGoingGroupByCondition {
 
 	private final List<Selector> groups = new ArrayList<Selector>();
-	private Condition havingCondition;
+	private ConditionBuilder havingCondition;
 
 	public String createQueryFragment(StringBuilder builder, AtomicInteger incrementor) {
 
@@ -50,7 +52,7 @@ public class GroupBy implements OnGoingGroupByCondition {
 			}
 
 			if (havingCondition != null) {
-				builder.append(" having ").append(havingCondition.createQueryFragment(incrementor));
+				builder.append(" having ").append(ConditionHelper.getConditionClause(havingCondition).createQueryFragment(incrementor));
 			}
 
 			return builder.toString();
@@ -65,43 +67,57 @@ public class GroupBy implements OnGoingGroupByCondition {
 	@Override
 	public <T> ValueOnGoingCondition<T> having(T object) {
 		ValueOnGoingCondition<T> createCondition = ConditionHelper.<T, ValueOnGoingCondition<T>> createCondition(null);
-		havingCondition = (Condition) createCondition;
+		havingCondition = (ConditionBuilder) createCondition;
 		return createCondition;
 	}
 
 	@Override
 	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> having(T object) {
 		OnGoingComparableCondition<V> createCondition = ConditionHelper.<V, OnGoingComparableCondition<V>> createCondition(null);
-		havingCondition = (Condition) createCondition;
+		havingCondition = (ConditionBuilder) createCondition;
 		return createCondition;
 	}
 
 	@Override
 	public OnGoingStringCondition<String> having(String object) {
 		OnGoingStringCondition<String> createCondition = ConditionHelper.<String, OnGoingStringCondition<String>> createCondition(null);
-		havingCondition = (Condition) createCondition;
+		havingCondition = (ConditionBuilder) createCondition;
 		return createCondition;
 	}
 
 	@Override
 	public <T> OnGoingCollectionCondition<T> having(Collection<T> object) {
 		OnGoingCollectionCondition<T> createCollectionCondition = ConditionHelper.<T, OnGoingCollectionCondition<T>> createCondition(null);
-		havingCondition = (Condition) createCollectionCondition;
+		havingCondition = (ConditionBuilder) createCollectionCondition;
 		return createCollectionCondition;
 	}
 
 	@Override
 	public <T> ValueOnGoingCondition<T> having(Function<T> function) {
 		ValueOnGoingCondition<T> createCondition = ConditionHelper.<T, ValueOnGoingCondition<T>> createCondition(function, null);
-		havingCondition = (Condition) createCondition;
+		havingCondition = (ConditionBuilder) createCondition;
 		return createCondition;
 	}
 
 	@Override
 	public <T extends Comparable<?>> OnGoingComparableCondition<T> having(ComparableFunction<T> function) {
 		OnGoingComparableCondition<T> createCondition = ConditionHelper.<T, OnGoingComparableCondition<T>> createCondition(function, null);
-		havingCondition = (Condition) createCondition;
+		havingCondition = (ConditionBuilder) createCondition;
 		return createCondition;
+	}
+	
+	@Override
+	public OnGoingLogicalCondition having(OnGoingLogicalCondition condition) {
+		LogicalCondition logicalCondition = (LogicalCondition)condition;
+		QueryBuilder builder = (QueryBuilder) logicalCondition.getBuilder();
+		LogicalCondition groupingLogicalCondition = new LogicalCondition(builder, new GroupingCondition(logicalCondition));
+		havingCondition = new ConditionBuilder(builder, groupingLogicalCondition, null);
+		return (OnGoingLogicalCondition) groupingLogicalCondition;
+	}
+	
+	private <T> ConditionBuilder<T> createHavingCondition(OnGoingCondition<T> condition)
+	{
+		return null;
 	}
 	
 	public Condition getCondition()

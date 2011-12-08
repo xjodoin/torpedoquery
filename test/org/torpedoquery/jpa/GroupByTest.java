@@ -61,6 +61,32 @@ public class GroupByTest {
 	}
 	
 	@Test
+	public void testGroubBy_with_having_with_groupCondition() {
+		Entity from = from(Entity.class);
+		OnGoingLogicalCondition condition = condition(from.getName()).eq("test").or(from.getName()).eq("test2");
+		groupBy(from.getName()).having(condition).and(sum(from.getIntegerField())).gt(2);
+		Query<String> select = select(from.getName());
+		String query = select.getQuery();
+
+		Assert.assertEquals(
+				"select entity_0.name from Entity entity_0 group by entity_0.name having ( entity_0.name = :name_1 or entity_0.name = :name_2 ) and sum(entity_0.integerField) > :function_3",
+				query);
+	}
+	
+	@Test
+	public void testGroubBy_with_having_with_groupCondition_reverse() {
+		Entity from = from(Entity.class);
+		OnGoingLogicalCondition condition = condition(from.getName()).eq("test").or(from.getName()).eq("test2");
+		groupBy(from.getName()).having(sum(from.getIntegerField())).gt(2).and(condition);
+		Query<String> select = select(from.getName());
+		String query = select.getQuery();
+
+		Assert.assertEquals(
+				"select entity_0.name from Entity entity_0 group by entity_0.name having sum(entity_0.integerField) > :function_1 and ( entity_0.name = :name_2 or entity_0.name = :name_3 )",
+				query);
+	}
+	
+	@Test
 	public void testHavingWithFunction_withProxyRelativeParameter()
 	{
 		Entity from = from(Entity.class);

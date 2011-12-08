@@ -28,6 +28,7 @@ import javax.persistence.NoResultException;
 
 import org.torpedoquery.jpa.PostFunction;
 import org.torpedoquery.jpa.Query;
+import static org.torpedoquery.jpa.internal.ConditionHelper.*;
 
 public class QueryBuilder<T> implements Query<T> {
 	private final Class<?> toQuery;
@@ -176,12 +177,6 @@ public class QueryBuilder<T> implements Query<T> {
 		this.whereClause = whereClause;
 	}
 
-	private static Condition getConditionClause(ConditionBuilder<?> conditionBuilder) {
-		if (conditionBuilder != null) {
-			return conditionBuilder.getLogicalCondition() != null ? conditionBuilder.getLogicalCondition() : conditionBuilder;
-		}
-		return null;
-	}
 
 	@Override
 	public Map<String, Object> getParameters() {
