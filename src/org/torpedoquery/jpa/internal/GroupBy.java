@@ -115,11 +115,6 @@ public class GroupBy implements OnGoingGroupByCondition {
 		return (OnGoingLogicalCondition) groupingLogicalCondition;
 	}
 	
-	private <T> ConditionBuilder<T> createHavingCondition(OnGoingCondition<T> condition)
-	{
-		return null;
-	}
-	
 	public Condition getCondition()
 	{
 		return havingCondition;
