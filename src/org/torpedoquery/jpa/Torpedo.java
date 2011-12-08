@@ -160,11 +160,7 @@ public class Torpedo {
 		return (Query<T>) Torpedo.select(new Object[] { value });
 	}
 
-	public static <T> Query<T[]> select(Function<T>... values) {
-		return select((T[]) values);
-	}
-
-	public static <T> Query<T[]> select(T... values) {
+	public static Query<Object[]> select(Object ... values) {
 		TorpedoMethodHandler methodHandler = getTorpedoMethodHandler();
 
 		for (int i = 0; i < values.length; i++) {
@@ -182,7 +178,7 @@ public class Torpedo {
 
 		}
 
-		final QueryBuilder<T[]> root = methodHandler.getRoot();
+		final QueryBuilder<Object[]> root = methodHandler.getRoot();
 
 		methodHandler.handle(new ArrayCallHandler(new ValueHandler() {
 

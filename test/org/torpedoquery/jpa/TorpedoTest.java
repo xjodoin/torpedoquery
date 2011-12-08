@@ -51,7 +51,7 @@ public class TorpedoTest {
 	public void test_selectMultipleFields() {
 		final Entity entity = from(Entity.class);
 
-		org.torpedoquery.jpa.Query<String[]> select = select(entity.getCode(), entity.getName());
+		org.torpedoquery.jpa.Query<Object[]> select = select(entity.getCode(), entity.getName());
 		assertEquals("select entity_0.code, entity_0.name from Entity entity_0", select.getQuery());
 	}
 
@@ -60,7 +60,7 @@ public class TorpedoTest {
 		final Entity entity = from(Entity.class);
 		final SubEntity subEntity = innerJoin(entity.getSubEntity());
 
-		org.torpedoquery.jpa.Query<String[]> select = select(entity.getCode(), subEntity.getCode());
+		org.torpedoquery.jpa.Query<Object[]> select = select(entity.getCode(), subEntity.getCode());
 		assertEquals("select entity_0.code, subEntity_1.code from Entity entity_0 inner join entity_0.subEntity subEntity_1", select.getQuery());
 	}
 
@@ -69,7 +69,7 @@ public class TorpedoTest {
 		final Entity entity = from(Entity.class);
 		final SubEntity subEntity = innerJoin(entity.getSubEntity());
 
-		org.torpedoquery.jpa.Query<String[]> select = select(subEntity.getCode(), entity.getCode());
+		org.torpedoquery.jpa.Query<Object[]> select = select(subEntity.getCode(), entity.getCode());
 		assertEquals("select subEntity_1.code, entity_0.code from Entity entity_0 inner join entity_0.subEntity subEntity_1", select.getQuery());
 	}
 
@@ -108,7 +108,7 @@ public class TorpedoTest {
 		final Entity entity = from(Entity.class);
 		final SubEntity subEntity = innerJoin(entity.getSubEntity());
 
-		org.torpedoquery.jpa.Query<String[]> select = select(entity.getCode(), subEntity.getName());
+		org.torpedoquery.jpa.Query<Object[]> select = select(entity.getCode(), subEntity.getName());
 
 		assertEquals("select entity_0.code, subEntity_1.name from Entity entity_0 inner join entity_0.subEntity subEntity_1", select.getQuery());
 	}
@@ -118,7 +118,7 @@ public class TorpedoTest {
 		final Entity entity = from(Entity.class);
 		final SubEntity subEntity = innerJoin(entity.getSubEntities());
 
-		org.torpedoquery.jpa.Query<String[]> select = select(entity.getCode(), subEntity.getName());
+		org.torpedoquery.jpa.Query<Object[]> select = select(entity.getCode(), subEntity.getName());
 		assertEquals("select entity_0.code, subEntity_1.name from Entity entity_0 inner join entity_0.subEntities subEntity_1", select.getQuery());
 	}
 
@@ -218,7 +218,7 @@ public class TorpedoTest {
 	public void test_Join_Select_Come_Before_The_Root() {
 		Entity from = from(Entity.class);
 		SubEntity innerJoin = innerJoin(from.getSubEntities());
-		org.torpedoquery.jpa.Query<String[]> select = select(innerJoin.getName(), from.getCode());
+		org.torpedoquery.jpa.Query<Object[]> select = select(innerJoin.getName(), from.getCode());
 		String query = select.getQuery();
 		assertEquals("select subEntity_1.name, entity_0.code from Entity entity_0 inner join entity_0.subEntities subEntity_1", query);
 	}
