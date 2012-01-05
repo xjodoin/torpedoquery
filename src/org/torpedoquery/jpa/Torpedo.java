@@ -34,8 +34,10 @@ import org.torpedoquery.jpa.internal.DistinctFunctionHandler;
 import org.torpedoquery.jpa.internal.DoNothingQueryConfigurator;
 import org.torpedoquery.jpa.internal.GroupBy;
 import org.torpedoquery.jpa.internal.GroupingConditionHandler;
+import org.torpedoquery.jpa.internal.IndexFunctionHandler;
 import org.torpedoquery.jpa.internal.InnerJoinHandler;
 import org.torpedoquery.jpa.internal.LeftJoinHandler;
+import org.torpedoquery.jpa.internal.MathOperationHandler;
 import org.torpedoquery.jpa.internal.MaxFunctionHandler;
 import org.torpedoquery.jpa.internal.MinFunctionHandler;
 import org.torpedoquery.jpa.internal.MultiClassLoaderProvider;
@@ -424,13 +426,23 @@ public class Torpedo {
 	}
 
 	// orderBy function
-
 	public static <T> Function<T> asc(T object) {
 		return getTorpedoMethodHandler().handle(new AscFunctionHandler<T>());
 	}
 
 	public static <T> Function<T> desc(T object) {
 		return getTorpedoMethodHandler().handle(new DescFunctionHandler<T>());
+	}
+	
+	//math operation
+	public static <T> OnGoingMathOperation<T> operation(T left)
+	{
+		return getTorpedoMethodHandler().handle(new MathOperationHandler<T>(null));
+	}
+	
+	public static <T> OnGoingMathOperation<T> operation(Function<T> left)
+	{
+		return getTorpedoMethodHandler().handle(new MathOperationHandler<T>(left));
 	}
 
 }

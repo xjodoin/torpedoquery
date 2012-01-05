@@ -14,9 +14,9 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa;
+package org.torpedoquery.jpa.internal;
 
-import org.torpedoquery.jpa.internal.BaseFunctionHandler;
+import org.torpedoquery.jpa.ComparableFunction;
 
 public class IndexFunctionHandler extends BaseFunctionHandler<Integer, ComparableFunction<Integer>> implements ComparableFunction<Integer> {
 
