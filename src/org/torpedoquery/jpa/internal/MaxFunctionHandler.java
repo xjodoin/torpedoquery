@@ -20,6 +20,10 @@ import org.torpedoquery.jpa.ComparableFunction;
 
 public class MaxFunctionHandler<T> extends BaseFunctionHandler<T, ComparableFunction<T>> implements ComparableFunction<T> {
 
+	public MaxFunctionHandler(Object value) {
+		super(value);
+	}
+
 	@Override
 	protected String getFunctionName() {
 		return "max";

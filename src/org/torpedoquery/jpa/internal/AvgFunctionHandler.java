@@ -20,6 +20,10 @@ import org.torpedoquery.jpa.ComparableFunction;
 
 public class AvgFunctionHandler<T> extends BaseFunctionHandler<T, ComparableFunction<T>> implements ComparableFunction<T> {
 
+	public AvgFunctionHandler(Object value) {
+		super(value);
+	}
+
 	@Override
 	protected String getFunctionName() {
 		return "avg";

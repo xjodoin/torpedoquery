@@ -174,5 +174,21 @@ public class JPAFunctionTest {
 		assertEquals("select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1 where index(subEntity_1) = :function_2 or index(subEntity_1) < :function_3", select.getQuery());
 		assertEquals(2, select.getParameters().get("function_3"));
 	}
+	
+	@Test
+	public void testSupportCustomFunction()
+	{
+		Entity from = from(Entity.class);
+		Query<String> select = select(function("toto",String.class,from.getName()));
+		assertEquals("select toto(entity_0.name) from Entity entity_0", select.getQuery());
+	}
+	
+	@Test
+	public void testCustomFunctionWithFunction()
+	{
+		Entity from = from(Entity.class);
+		Query<String> select = select(function("toto",String.class, max(from.getIntegerField())));
+		assertEquals("select toto(max(entity_0.integerField)) from Entity entity_0", select.getQuery());
+	}
 
 }

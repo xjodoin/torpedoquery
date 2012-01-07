@@ -20,6 +20,10 @@ import org.torpedoquery.jpa.ComparableFunction;
 
 public class MinFunctionHandler<T> extends BaseFunctionHandler<T, ComparableFunction<T>> implements ComparableFunction<T> {
 
+	public MinFunctionHandler(Object value) {
+		super(value);
+	}
+
 	@Override
 	protected String getFunctionName() {
 		return "min";

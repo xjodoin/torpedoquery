@@ -22,13 +22,13 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.torpedoquery.jpa.internal.ArrayCallHandler;
-import org.torpedoquery.jpa.internal.ArrayCallHandler.ValueHandler;
 import org.torpedoquery.jpa.internal.AscFunctionHandler;
 import org.torpedoquery.jpa.internal.AvgFunctionHandler;
 import org.torpedoquery.jpa.internal.CoalesceFunction;
 import org.torpedoquery.jpa.internal.ComparableConstantFunctionHandler;
 import org.torpedoquery.jpa.internal.ConstantFunctionHandler;
 import org.torpedoquery.jpa.internal.CountFunctionHandler;
+import org.torpedoquery.jpa.internal.CustomFunctionHandler;
 import org.torpedoquery.jpa.internal.DescFunctionHandler;
 import org.torpedoquery.jpa.internal.DistinctFunctionHandler;
 import org.torpedoquery.jpa.internal.DoNothingQueryConfigurator;
@@ -48,6 +48,7 @@ import org.torpedoquery.jpa.internal.RightJoinHandler;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.SumFunctionHandler;
 import org.torpedoquery.jpa.internal.TorpedoMethodHandler;
+import org.torpedoquery.jpa.internal.ValueHandler;
 import org.torpedoquery.jpa.internal.WhereClauseHandler;
 import org.torpedoquery.jpa.internal.WhereQueryConfigurator;
 import org.torpedoquery.jpa.internal.WithQueryConfigurator;
@@ -356,19 +357,35 @@ public class Torpedo {
 	}
 
 	public static <V, T extends Comparable<V>> ComparableFunction<V> sum(T number) {
-		return getTorpedoMethodHandler().handle(new SumFunctionHandler<V>());
+		return getTorpedoMethodHandler().handle(new SumFunctionHandler<V>(number));
+	}
+	
+	public static <V, T extends Comparable<V>> ComparableFunction<V> sum(Function<T> number) {
+		return getTorpedoMethodHandler().handle(new SumFunctionHandler<V>(number));
 	}
 
 	public static <V, T extends Comparable<V>> ComparableFunction<V> min(T number) {
-		return getTorpedoMethodHandler().handle(new MinFunctionHandler<V>());
+		return getTorpedoMethodHandler().handle(new MinFunctionHandler<V>(number));
+	}
+	
+	public static <V, T extends Comparable<V>> ComparableFunction<V> min(Function<T> number) {
+		return getTorpedoMethodHandler().handle(new MinFunctionHandler<V>(number));
 	}
 
 	public static <V, T extends Comparable<V>> ComparableFunction<V> max(T number) {
-		return getTorpedoMethodHandler().handle(new MaxFunctionHandler<V>());
+		return getTorpedoMethodHandler().handle(new MaxFunctionHandler<V>(number));
 	}
 
+	public static <V, T extends Comparable<V>> ComparableFunction<V> max(Function<T> number) {
+		return getTorpedoMethodHandler().handle(new MaxFunctionHandler<V>(number));
+	}
+	
 	public static <V, T extends Comparable<V>> ComparableFunction<V> avg(T number) {
-		return getTorpedoMethodHandler().handle(new AvgFunctionHandler<V>());
+		return getTorpedoMethodHandler().handle(new AvgFunctionHandler<V>(number));
+	}
+	
+	public static <V, T extends Comparable<V>> ComparableFunction<V> avg(Function<T> number) {
+		return getTorpedoMethodHandler().handle(new AvgFunctionHandler<V>(number));
 	}
 
 	public static <T, E extends Function<T>> E coalesce(E... values) {
@@ -413,6 +430,16 @@ public class Torpedo {
 			setQuery((Proxy) object);
 		}
 		return getTorpedoMethodHandler().handle(new IndexFunctionHandler(object));
+	}
+	
+	/**
+	 *  Use this method to call functions witch are not supported natively by Torpedo
+	 *   
+	 * @return your custom function
+	 */
+	public static <T> Function<T> function(String name,Class<T> returnType,Object value) 
+	{
+		return getTorpedoMethodHandler().handle(new CustomFunctionHandler<T>(name,value));
 	}
 
 	public static void orderBy(Object... values) {

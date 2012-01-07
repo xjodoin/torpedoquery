@@ -22,28 +22,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.Function;
 
-public abstract class BaseFunctionHandler<T, F extends Function<T>> implements QueryHandler<F>, Function<T> {
+public abstract class BaseFunctionHandler<T, F extends Function<T>> extends AbstractCallHandler implements QueryHandler<F>, Function<T>, ValueHandler {
 
-	private MethodCall method;
-	private Object proxy;
+	private Selector selector;
 	private QueryBuilder<T> queryBuilder;
+	private final Object value;
+	private Proxy proxy;
 
-	public BaseFunctionHandler() {
-	}
-
-	public BaseFunctionHandler(Object proxy) {
-		this.proxy = proxy;
+	public BaseFunctionHandler(Object value) {
+		this.value = value;
 	}
 
 	@Override
 	public String createQueryFragment(AtomicInteger incrementor) {
 
-		if (method != null) {
-			SimpleMethodCallSelector<T> simpleMethodCallSelector = new SimpleMethodCallSelector<T>(queryBuilder, method);
-			return getFunctionName() + "(" + simpleMethodCallSelector.createQueryFragment(incrementor) + ")";
-		} else {
-			return getFunctionName() + "(" + TorpedoMagic.getTorpedoMethodHandler().getQueryBuilder(proxy).getAlias(incrementor) + ")";
-		}
+		return getFunctionName() + "(" + selector.createQueryFragment(incrementor) + ")";
 	}
 
 	@Override
@@ -54,13 +47,15 @@ public abstract class BaseFunctionHandler<T, F extends Function<T>> implements Q
 	@Override
 	public F handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods) {
 
-		if (proxy == null) {
-			method = methods.pollFirst();
-			proxy = method.getProxy();
-			queryBuilder = (QueryBuilder<T>) proxyQueryBuilders.get(proxy);
-		}
-
+		handleValue(this, proxyQueryBuilders, methods.iterator(), value);
 		return (F) this;
+	}
+
+	@Override
+	public void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
+		this.proxy = proxy;
+		this.queryBuilder = queryBuilder;
+		this.selector = selector;
 	}
 
 	protected abstract String getFunctionName();
@@ -70,13 +65,11 @@ public abstract class BaseFunctionHandler<T, F extends Function<T>> implements Q
 
 		TorpedoMethodHandler torpedoMethodHandler = TorpedoMagic.getTorpedoMethodHandler();
 		Deque<MethodCall> methods = torpedoMethodHandler.getMethods();
-		
-		if(!methods.isEmpty())
-		{
+
+		if (!methods.isEmpty()) {
 			MethodCall pollFirst = methods.pollFirst();
 			return new SelectorParameter<T>(new SimpleMethodCallSelector<T>(torpedoMethodHandler.getQueryBuilder(pollFirst.getProxy()), pollFirst));
-		}
-		else if (value instanceof Function) {
+		} else if (value instanceof Function) {
 			return new SelectorParameter<T>((Selector) value);
 		} else {
 			return new ValueParameter<T>("function", value);
