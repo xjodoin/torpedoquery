@@ -35,7 +35,7 @@ public class SimpleMethodCallSelector<T> implements Selector<T> {
 
 	@Override
 	public Parameter<T> generateParameter(T value) {
-		return TorpedoMagic.getTorpedoMethodHandler().handle(new ParameterQueryHandler<T>(method,value));
+		return TorpedoMagic.getTorpedoMethodHandler().handle(new ParameterQueryHandler<T>(method.getParamName(),value));
 	}
 
 }

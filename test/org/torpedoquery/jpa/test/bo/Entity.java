@@ -64,6 +64,10 @@ public class Entity extends AbstractEntity{
 		return null;
 	}
 	
+	public BigDecimal getBigDecimalField2() {
+		return null;
+	}
+	
 	@Override
 	public ExtendEntity getAbstractEntity() {
 		return null;

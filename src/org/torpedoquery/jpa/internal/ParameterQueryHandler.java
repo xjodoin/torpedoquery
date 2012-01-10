@@ -19,13 +19,15 @@ package org.torpedoquery.jpa.internal;
 import java.util.Deque;
 import java.util.Map;
 
+import org.torpedoquery.jpa.Function;
+
 public class ParameterQueryHandler<T> implements QueryHandler<Parameter<T>> {
 
-	private final MethodCall method;
 	private final T value;
+	private final String paramName;
 
-	public ParameterQueryHandler(MethodCall method, T value) {
-		this.method = method;
+	public ParameterQueryHandler(String paramName, T value) {
+		this.paramName = paramName;
 		this.value = value;
 	}
 
@@ -35,8 +37,12 @@ public class ParameterQueryHandler<T> implements QueryHandler<Parameter<T>> {
 		if (!methods.isEmpty()) {
 			MethodCall pollFirst = methods.pollFirst();
 			return new SelectorParameter<T>(new SimpleMethodCallSelector<T>(proxyQueryBuilders.get(pollFirst.getProxy()), pollFirst));
-		} else {
-			return new ValueParameter<T>(method.getParamName(), value);
+		} 
+		else if (value instanceof Function) {
+			return new SelectorParameter<T>((Selector) value);
+		}
+		else {
+			return new ValueParameter<T>(paramName, value);
 		}
 	}
 

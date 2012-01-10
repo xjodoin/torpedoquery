@@ -62,18 +62,7 @@ public abstract class BaseFunctionHandler<T, F extends Function<T>> extends Abst
 
 	@Override
 	public Parameter<T> generateParameter(T value) {
-
-		TorpedoMethodHandler torpedoMethodHandler = TorpedoMagic.getTorpedoMethodHandler();
-		Deque<MethodCall> methods = torpedoMethodHandler.getMethods();
-
-		if (!methods.isEmpty()) {
-			MethodCall pollFirst = methods.pollFirst();
-			return new SelectorParameter<T>(new SimpleMethodCallSelector<T>(torpedoMethodHandler.getQueryBuilder(pollFirst.getProxy()), pollFirst));
-		} else if (value instanceof Function) {
-			return new SelectorParameter<T>((Selector) value);
-		} else {
-			return new ValueParameter<T>("function", value);
-		}
+		return TorpedoMagic.getTorpedoMethodHandler().handle(new ParameterQueryHandler<T>("function",value));
 	}
 
 }

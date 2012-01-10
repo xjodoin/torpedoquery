@@ -18,6 +18,8 @@ package org.torpedoquery.jpa;
 
 import static org.torpedoquery.jpa.Torpedo.*;
 
+import java.math.BigDecimal;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
@@ -99,5 +101,14 @@ public class GroupByTest {
 				"select entity_0.name from Entity entity_0 inner join entity_0.subEntities subEntity_1 group by entity_0.name having sum(entity_0.integerField) < subEntity_1.numberField",
 				query);
 		Assert.assertTrue(select.getParameters().isEmpty());
+	}
+	
+	@Test
+	public void testHavingFunctionParameterMustBeConvertToString()
+	{
+		Entity from = from(Entity.class);
+		groupBy(from.getIntegerField()).having(from.getBigDecimalField()).gt(coalesce(sum(from.getBigDecimalField2()),constant(BigDecimal.ZERO)));
+		Query<Integer> select = select(sum(from.getIntegerField()));
+		Assert.assertEquals("select sum(entity_0.integerField) from Entity entity_0 group by entity_0.integerField having entity_0.bigDecimalField > coalesce(sum(entity_0.bigDecimalField2),0)", select.getQuery());
 	}
 }
