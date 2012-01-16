@@ -104,6 +104,8 @@ public class Torpedo {
 
 	/**
 	 * 
+	 * MyObject queryBuilder = from(MyObject.class);
+	 * 
 	 * @param your
 	 *            entity class you want to create your query
 	 * @return a mock object, it serve to create your create your query
@@ -155,14 +157,30 @@ public class Torpedo {
 		}
 	}
 
+	/**
+	 * @see #select(Object)
+	 */
 	public static <T> Query<T> select(Function<T> value) {
 		return (Query<T>) Torpedo.select(new Object[] { value });
 	}
 
+	
+	/**
+	 * 
+	 * in TorpedoQuery the select method finalize your query.
+	 * 
+	 * @param values ex: myObject.getMyField()
+	 * @return Return your unexecute Query object
+	 * 
+	 */
 	public static <T> Query<T> select(T value) {
 		return (Query<T>) Torpedo.select(new Object[] { value });
 	}
 
+	
+	/**
+	 * @see #select(Object)
+	 */
 	public static Query<Object[]> select(Object ... values) {
 		TorpedoMethodHandler methodHandler = getTorpedoMethodHandler();
 
