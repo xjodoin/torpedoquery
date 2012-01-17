@@ -117,6 +117,6 @@ public class GroupBy implements OnGoingGroupByCondition {
 	
 	public Condition getCondition()
 	{
-		return havingCondition;
+		return ConditionHelper.getConditionClause(havingCondition);
 	}
 }

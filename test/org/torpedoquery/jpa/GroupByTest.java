@@ -16,9 +16,11 @@
  */
 package org.torpedoquery.jpa;
 
+import static org.junit.Assert.*;
 import static org.torpedoquery.jpa.Torpedo.*;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,7 +36,7 @@ public class GroupByTest {
 		Query<Object[]> select = select(from.getName(), sum(from.getIntegerField()));
 		String query = select.getQuery();
 
-		Assert.assertEquals("select entity_0.name, sum(entity_0.integerField) from Entity entity_0 group by entity_0.name", query);
+		assertEquals("select entity_0.name, sum(entity_0.integerField) from Entity entity_0 group by entity_0.name", query);
 	}
 
 	@Test
@@ -44,9 +46,9 @@ public class GroupByTest {
 		Query<Object[]> select = select(from.getName(), sum(from.getIntegerField()));
 		String query = select.getQuery();
 
-		Assert.assertEquals("select entity_0.name, sum(entity_0.integerField) from Entity entity_0 group by entity_0.name having entity_0.name = :name_1",
+		assertEquals("select entity_0.name, sum(entity_0.integerField) from Entity entity_0 group by entity_0.name having entity_0.name = :name_1",
 				query);
-		Assert.assertEquals("test", select.getParameters().get("name_1"));
+		assertEquals("test", select.getParameters().get("name_1"));
 	}
 
 	@Test
@@ -57,7 +59,7 @@ public class GroupByTest {
 		Query<String> select = select(from.getName());
 		String query = select.getQuery();
 
-		Assert.assertEquals(
+		assertEquals(
 				"select entity_0.name from Entity entity_0 inner join entity_0.subEntities subEntity_1 group by entity_0.name having sum(entity_0.integerField) < sum(subEntity_1.numberField)",
 				query);
 	}
@@ -70,7 +72,7 @@ public class GroupByTest {
 		Query<String> select = select(from.getName());
 		String query = select.getQuery();
 
-		Assert.assertEquals(
+		assertEquals(
 				"select entity_0.name from Entity entity_0 group by entity_0.name having ( entity_0.name = :name_1 or entity_0.name = :name_2 ) and sum(entity_0.integerField) > :function_3",
 				query);
 	}
@@ -83,7 +85,7 @@ public class GroupByTest {
 		Query<String> select = select(from.getName());
 		String query = select.getQuery();
 
-		Assert.assertEquals(
+		assertEquals(
 				"select entity_0.name from Entity entity_0 group by entity_0.name having sum(entity_0.integerField) > :function_1 and ( entity_0.name = :name_2 or entity_0.name = :name_3 )",
 				query);
 	}
@@ -97,10 +99,10 @@ public class GroupByTest {
 		Query<String> select = select(from.getName());
 		String query = select.getQuery();
 
-		Assert.assertEquals(
+		assertEquals(
 				"select entity_0.name from Entity entity_0 inner join entity_0.subEntities subEntity_1 group by entity_0.name having sum(entity_0.integerField) < subEntity_1.numberField",
 				query);
-		Assert.assertTrue(select.getParameters().isEmpty());
+		assertTrue(select.getParameters().isEmpty());
 	}
 	
 	@Test
@@ -109,6 +111,23 @@ public class GroupByTest {
 		Entity from = from(Entity.class);
 		groupBy(from.getIntegerField()).having(from.getBigDecimalField()).gt(coalesce(sum(from.getBigDecimalField2()),constant(BigDecimal.ZERO)));
 		Query<Integer> select = select(sum(from.getIntegerField()));
-		Assert.assertEquals("select sum(entity_0.integerField) from Entity entity_0 group by entity_0.integerField having entity_0.bigDecimalField > coalesce(sum(entity_0.bigDecimalField2),0)", select.getQuery());
+		assertEquals("select sum(entity_0.integerField) from Entity entity_0 group by entity_0.integerField having entity_0.bigDecimalField > coalesce(sum(entity_0.bigDecimalField2),0)", select.getQuery());
+	}
+	
+	/**
+	 * GitHub -> Bug 14 
+	 */
+	@Test
+	public void groupByCombineWithConditionParameterintoHavingClause()
+	{
+		Entity from = from(Entity.class);
+		OnGoingLogicalCondition condition = condition(from.isActive()).eq(true);
+		groupBy(from.getName()).having(sum(from.getIntegerField())).gt(sum(from.getPrimitiveInt())).or(condition);
+		Query<Entity> select = select(from);
+		Map<String, Object> parameters = select.getParameters();
+		assertFalse(parameters.isEmpty());
+		assertEquals(true, parameters.get("active_1"));
+		assertEquals("select entity_0 from Entity entity_0 group by entity_0.name having sum(entity_0.integerField) > sum(entity_0.primitiveInt) or ( entity_0.active = :active_1 )", select.getQuery());
 	}
 }
+
