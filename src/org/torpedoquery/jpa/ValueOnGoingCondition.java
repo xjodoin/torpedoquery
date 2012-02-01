@@ -22,9 +22,13 @@ public interface ValueOnGoingCondition<T> extends OnGoingCondition<T> {
 
 	OnGoingLogicalCondition eq(T value);
 	
+	OnGoingLogicalCondition eq(Class<? extends T> value);
+	
 	OnGoingLogicalCondition eq(Function<T> value);
 
 	OnGoingLogicalCondition neq(T value);
+	
+	OnGoingLogicalCondition neq(Class<? extends T> value);
 
 	OnGoingLogicalCondition neq(Function<T> value);
 	

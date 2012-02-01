@@ -59,10 +59,22 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 		Condition condition = new EqualCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
+	
+	@Override
+	public OnGoingLogicalCondition eq(Class<? extends T> value) {
+		Condition condition = new EqualPolymorphicCondition<T>(selector,value);
+		return getOnGoingLogicalCondition(condition);
+	}
 
 	@Override
 	public OnGoingLogicalCondition neq(T value) {
 		Condition condition = new NotEqualCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(condition);
+	}
+	
+	@Override
+	public OnGoingLogicalCondition neq(Class<? extends T> value) {
+		Condition condition = new NotEqualPolymorphicCondition<T>(selector,value);
 		return getOnGoingLogicalCondition(condition);
 	}
 
