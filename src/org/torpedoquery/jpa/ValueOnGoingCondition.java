@@ -22,12 +22,20 @@ public interface ValueOnGoingCondition<T> extends OnGoingCondition<T> {
 
 	OnGoingLogicalCondition eq(T value);
 	
+	/**
+	 * This method is use to create polymorphic condition
+	 * ex: select myObject from MyObject myObject where myObject.class = ExtendMyObject
+	 */
 	OnGoingLogicalCondition eq(Class<? extends T> value);
 	
 	OnGoingLogicalCondition eq(Function<T> value);
 
 	OnGoingLogicalCondition neq(T value);
 	
+	/**
+	 * This method is use to create polymorphic condition
+	 * ex: select myObject from MyObject myObject where myObject.class <> ExtendMyObject
+	 */
 	OnGoingLogicalCondition neq(Class<? extends T> value);
 
 	OnGoingLogicalCondition neq(Function<T> value);

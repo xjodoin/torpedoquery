@@ -21,9 +21,9 @@ import java.util.Map;
 
 import org.torpedoquery.jpa.Function;
 
-public abstract class AbstractCallHandler {
+public abstract class AbstractCallHandler<T> {
 
-	public void handleValue(ValueHandler valueHandler, Map<Object, QueryBuilder<?>> proxyQueryBuilders, Iterator<MethodCall> iterator, Object param) {
+	public T handleValue(ValueHandler<T> valueHandler, Map<Object, QueryBuilder<?>> proxyQueryBuilders, Iterator<MethodCall> iterator, Object param) {
 		Proxy proxy;
 		QueryBuilder queryBuilder;
 		Selector selector;
@@ -47,7 +47,7 @@ public abstract class AbstractCallHandler {
 			selector = new SimpleMethodCallSelector(queryBuilder, methodCall);
 		}
 
-		valueHandler.handle(proxy, queryBuilder, selector);
+		return valueHandler.handle(proxy, queryBuilder, selector);
 	}
 	
 }

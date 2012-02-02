@@ -15,6 +15,6 @@
  *   limitations under the License.
  */
 package org.torpedoquery.jpa.internal;
-public interface ValueHandler {
-		void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector);
+public interface ValueHandler<T> {
+		T handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector);
 	}

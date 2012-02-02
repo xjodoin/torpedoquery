@@ -23,49 +23,67 @@ import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.OnGoingCondition;
 
 //TODO duplicate avec WhereClauseCollectionHandler
-public class WhereClauseHandler<T, E extends OnGoingCondition<T>> implements QueryHandler<E> {
+public class WhereClauseHandler<T, E extends OnGoingCondition<T>> extends
+		AbstractCallHandler<E> implements QueryHandler<E>, ValueHandler<E> {
 
 	private final LogicalCondition logicalCondition;
-	private final Function<T> function;
 	private final QueryConfigurator<T> configurator;
+	private final Object param;
 
-	public WhereClauseHandler() {
-		this(null, new WhereQueryConfigurator<T>());
+	public WhereClauseHandler(Object param) {
+		this(param, null, new WhereQueryConfigurator<T>());
 	}
 
-	public WhereClauseHandler(QueryConfigurator<T> configurator) {
-		this(null, configurator);
+	public WhereClauseHandler(Object param, QueryConfigurator<T> configurator) {
+		this(param, null, configurator);
 	}
 
-	public WhereClauseHandler(LogicalCondition logicalCondition, QueryConfigurator<T> configurator) {
-		this(null, logicalCondition, configurator);
-	}
-
-	public WhereClauseHandler(Function<T> function, LogicalCondition logicalCondition, QueryConfigurator<T> configurator) {
-		this.function = function;
+	public WhereClauseHandler(Object param, LogicalCondition logicalCondition,
+			QueryConfigurator<T> configurator) {
+		this.param = param;
 		this.logicalCondition = logicalCondition;
 		this.configurator = configurator;
 	}
 
 	@Override
-	public E handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
+	public E handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders,
+			Deque<MethodCall> methodCalls) {
 
-		Selector<T> conditionSelector = function;
+		return handleValue(this, proxyQueryBuilders, methodCalls.iterator(),
+				param);
 
-		final QueryBuilder<T> queryImpl;
+		// Selector<T> conditionSelector = function;
+		//
+		// final QueryBuilder<T> queryImpl;
+		//
+		// if (conditionSelector == null) {
+		// MethodCall pollFirst = methodCalls.pollFirst();
+		// queryImpl = (QueryBuilder<T>)
+		// proxyQueryBuilders.get(pollFirst.getProxy());
+		// conditionSelector = new SimpleMethodCallSelector<T>(queryImpl,
+		// pollFirst);
+		// } else {
+		// queryImpl = (QueryBuilder<T>)
+		// proxyQueryBuilders.get(function.getProxy());
+		// }
+		//
+		// final ConditionBuilder<T> whereClause = logicalCondition != null ?
+		// new ConditionBuilder<T>(queryImpl, logicalCondition,
+		// conditionSelector)
+		// : new ConditionBuilder<T>(queryImpl, conditionSelector);
+		//
+		// configurator.configure(queryImpl, whereClause);
+		//
+		// return (E) whereClause;
+	}
 
-		if (conditionSelector == null) {
-			MethodCall pollFirst = methodCalls.pollFirst();
-			queryImpl = (QueryBuilder<T>) proxyQueryBuilders.get(pollFirst.getProxy());
-			conditionSelector = new SimpleMethodCallSelector<T>(queryImpl, pollFirst);
-		} else {
-			queryImpl = (QueryBuilder<T>) proxyQueryBuilders.get(function.getProxy());
-		}
+	@Override
+	public E handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
+		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<T>(
+				queryBuilder, logicalCondition, selector)
+				: new ConditionBuilder<T>(queryBuilder, selector);
 
-		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<T>(queryImpl, logicalCondition, conditionSelector)
-				: new ConditionBuilder<T>(queryImpl, conditionSelector);
-
-		configurator.configure(queryImpl, whereClause);
+		configurator.configure(queryBuilder, whereClause);
 
 		return (E) whereClause;
 	}

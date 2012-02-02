@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.Function;
 
-public abstract class BaseFunctionHandler<T, F extends Function<T>> extends AbstractCallHandler implements QueryHandler<F>, Function<T>, ValueHandler {
+public abstract class BaseFunctionHandler<T, F extends Function<T>> extends AbstractCallHandler<F> implements QueryHandler<F>, Function<T>, ValueHandler {
 
 	private Selector selector;
 	private QueryBuilder<T> queryBuilder;
@@ -47,15 +47,15 @@ public abstract class BaseFunctionHandler<T, F extends Function<T>> extends Abst
 	@Override
 	public F handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods) {
 
-		handleValue(this, proxyQueryBuilders, methods.iterator(), value);
-		return (F) this;
+		return handleValue(this, proxyQueryBuilders, methods.iterator(), value);
 	}
 
 	@Override
-	public void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
+	public F handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
 		this.proxy = proxy;
 		this.queryBuilder = queryBuilder;
 		this.selector = selector;
+		return (F) this;
 	}
 
 	protected abstract String getFunctionName();

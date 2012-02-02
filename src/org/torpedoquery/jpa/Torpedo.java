@@ -201,11 +201,12 @@ public class Torpedo {
 
 		final QueryBuilder<Object[]> root = methodHandler.getRoot();
 
-		methodHandler.handle(new ArrayCallHandler(new ValueHandler() {
+		methodHandler.handle(new ArrayCallHandler(new ValueHandler<Void>() {
 
 			@Override
-			public void handle(Proxy query, QueryBuilder queryBuilder, Selector selector) {
+			public Void handle(Proxy query, QueryBuilder queryBuilder, Selector selector) {
 				root.addSelector(selector);
+				return null;
 			}
 		}, values));
 
@@ -290,39 +291,39 @@ public class Torpedo {
 	}
 
 	public static <T> ValueOnGoingCondition<T> where(T object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>());
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>(object));
 	}
 
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> where(T object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>());
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(object));
 	}
 
 	public static OnGoingStringCondition<String> where(String object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>());
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(object));
 	}
 
 	public static <T> OnGoingCollectionCondition<T> where(Collection<T> object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(new WhereQueryConfigurator<T>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(object,new WhereQueryConfigurator<T>()));
 	}
 
 	public static <T> OnGoingComparableCondition<T> where(ComparableFunction<T> object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, OnGoingComparableCondition<T>>(object, null, new WhereQueryConfigurator<T>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, OnGoingComparableCondition<T>>(object));
 	}
 
 	public static <T> ValueOnGoingCondition<T> with(T object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>(new WithQueryConfigurator<T>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>(object,new WithQueryConfigurator<T>()));
 	}
 
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> with(T object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(new WithQueryConfigurator<V>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(object,new WithQueryConfigurator<V>()));
 	}
 
 	public static OnGoingStringCondition<String> with(String object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(new WithQueryConfigurator<String>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(object,new WithQueryConfigurator<String>()));
 	}
 
 	public static <T> OnGoingCollectionCondition<T> with(Collection<T> object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(new WithQueryConfigurator<T>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(object,new WithQueryConfigurator<T>()));
 	}
 
 	public static <T> OnGoingLogicalCondition with(OnGoingLogicalCondition condition) {
@@ -330,19 +331,19 @@ public class Torpedo {
 	}
 
 	public static <T> ValueOnGoingCondition<T> condition(T object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>(new DoNothingQueryConfigurator<T>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>(object,new DoNothingQueryConfigurator<T>()));
 	}
 
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(T object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(new DoNothingQueryConfigurator<V>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(object,new DoNothingQueryConfigurator<V>()));
 	}
 
 	public static OnGoingStringCondition<String> condition(String object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(new DoNothingQueryConfigurator<String>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(object,new DoNothingQueryConfigurator<String>()));
 	}
 
 	public static <T> OnGoingCollectionCondition<T> condition(Collection<T> object) {
-		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(new DoNothingQueryConfigurator<T>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(object,new DoNothingQueryConfigurator<T>()));
 	}
 
 	public static <T> OnGoingLogicalCondition condition(OnGoingLogicalCondition condition) {
@@ -355,10 +356,11 @@ public class Torpedo {
 		final QueryBuilder root = fjpaMethodHandler.getRoot();
 		final GroupBy groupBy = new GroupBy();
 
-		fjpaMethodHandler.handle(new ArrayCallHandler(new ValueHandler() {
+		fjpaMethodHandler.handle(new ArrayCallHandler(new ValueHandler<Void>() {
 			@Override
-			public void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
+			public Void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
 				groupBy.addGroup(selector);
+				return null;
 			}
 		}, values));
 
@@ -418,11 +420,12 @@ public class Torpedo {
 
 	private static <T> CoalesceFunction<T> getCoalesceFunction(T... values) {
 		final CoalesceFunction coalesceFunction = new CoalesceFunction();
-		getTorpedoMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
+		getTorpedoMethodHandler().handle(new ArrayCallHandler(new ValueHandler<Void>() {
 			@Override
-			public void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
+			public Void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
 				coalesceFunction.setQuery(proxy);
 				coalesceFunction.addSelector(selector);
+				return null;
 			}
 		}, values));
 		return coalesceFunction;
@@ -461,10 +464,11 @@ public class Torpedo {
 	}
 
 	public static void orderBy(Object... values) {
-		getTorpedoMethodHandler().handle(new ArrayCallHandler(new ValueHandler() {
+		getTorpedoMethodHandler().handle(new ArrayCallHandler(new ValueHandler<Void>() {
 			@Override
-			public void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
+			public Void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
 				queryBuilder.addOrder(selector);
+				return null;
 			}
 		}, values));
 
