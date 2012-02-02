@@ -14,15 +14,27 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.utils;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.beans.Introspector;
+import java.lang.reflect.Method;
 
-
-public interface Selector<T> {
-
-	String createQueryFragment(AtomicInteger incrementor);
-
-	Parameter<T> generateParameter(T value);
-
+public class FieldUtils {
+	public static String getFieldName(Method method) {
+		
+		String name = method.getName();
+		
+		if(name.startsWith("get"))
+		{
+			name = name.substring(3);
+		}
+		else if(name.startsWith("is"))
+		{
+			name = name.substring(2);
+		}
+		
+		name = Introspector.decapitalize(name);
+			
+		return name;
+	}
 }

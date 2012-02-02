@@ -14,15 +14,14 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
-
-import java.util.concurrent.atomic.AtomicInteger;
+package org.torpedoquery.jpa.internal.handlers;
 
 
-public interface Selector<T> {
+public class DescFunctionHandler<T> extends OrderByFunctionHandler<T> {
 
-	String createQueryFragment(AtomicInteger incrementor);
-
-	Parameter<T> generateParameter(T value);
+	@Override
+	protected String getFunctionName() {
+		return "desc";
+	}
 
 }

@@ -14,15 +14,30 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.conditions;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.jpa.internal.Condition;
+import org.torpedoquery.jpa.internal.Parameter;
 
-public interface Selector<T> {
+public class GroupingCondition implements Condition {
 
-	String createQueryFragment(AtomicInteger incrementor);
+	private final Condition condition;
 
-	Parameter<T> generateParameter(T value);
+	public GroupingCondition(Condition condition) {
+		this.condition = condition;
+	}
+
+	@Override
+	public String createQueryFragment(AtomicInteger incrementor) {
+		return "( " + condition.createQueryFragment(incrementor) + " )";
+	}
+
+	@Override
+	public List<Parameter> getParameters() {
+		return condition.getParameters();
+	}
 
 }

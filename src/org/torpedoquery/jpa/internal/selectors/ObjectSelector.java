@@ -14,15 +14,31 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.selectors;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.jpa.internal.Parameter;
+import org.torpedoquery.jpa.internal.Selector;
+import org.torpedoquery.jpa.internal.query.QueryBuilder;
+import org.torpedoquery.jpa.internal.query.SelectorParameter;
 
-public interface Selector<T> {
+public class ObjectSelector<T> implements Selector<T> {
 
-	String createQueryFragment(AtomicInteger incrementor);
+	private final QueryBuilder<?> builder;
 
-	Parameter<T> generateParameter(T value);
+	public ObjectSelector(QueryBuilder<?> builder) {
+		this.builder = builder;
+	}
+
+	@Override
+	public String createQueryFragment(AtomicInteger incrementor) {
+		return builder.getAlias(incrementor);
+	}
+
+	@Override
+	public Parameter<T> generateParameter(Object value) {
+		return new SelectorParameter<T>(this);
+	}
 
 }

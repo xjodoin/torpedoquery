@@ -14,15 +14,30 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.conditions;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
 
+import org.torpedoquery.jpa.internal.Condition;
+import org.torpedoquery.jpa.internal.Parameter;
+import org.torpedoquery.jpa.internal.Selector;
 
-public interface Selector<T> {
+public abstract class AbstractCondition<T> implements Condition {
+	private final Selector selector;
+	private final List<Parameter> parameters;
 
-	String createQueryFragment(AtomicInteger incrementor);
+	public AbstractCondition(Selector selector, List<Parameter> parameters) {
+		this.selector = selector;
+		this.parameters = parameters;
+	}
 
-	Parameter<T> generateParameter(T value);
+	public Selector getSelector() {
+		return selector;
+	}
+
+	@Override
+	public List<Parameter> getParameters() {
+		return parameters;
+	}
 
 }

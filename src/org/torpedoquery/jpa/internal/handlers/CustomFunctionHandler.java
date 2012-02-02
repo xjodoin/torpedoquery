@@ -14,15 +14,22 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.handlers;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import org.torpedoquery.jpa.Function;
 
+public class CustomFunctionHandler<T> extends BaseFunctionHandler<T, Function<T>> {
 
-public interface Selector<T> {
+	private final String name;
 
-	String createQueryFragment(AtomicInteger incrementor);
+	public CustomFunctionHandler(String name, Object value) {
+		super(value);
+		this.name = name;
+	}
 
-	Parameter<T> generateParameter(T value);
+	@Override
+	protected String getFunctionName() {
+		return name;
+	}
 
 }

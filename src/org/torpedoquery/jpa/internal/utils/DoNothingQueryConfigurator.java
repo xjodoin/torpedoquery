@@ -14,15 +14,16 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.utils;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import org.torpedoquery.jpa.internal.QueryConfigurator;
+import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
+import org.torpedoquery.jpa.internal.query.QueryBuilder;
 
+public class DoNothingQueryConfigurator<T> implements QueryConfigurator<T> {
 
-public interface Selector<T> {
-
-	String createQueryFragment(AtomicInteger incrementor);
-
-	Parameter<T> generateParameter(T value);
+	@Override
+	public void configure(QueryBuilder<T> builder, ConditionBuilder<T> condition) {
+	}
 
 }

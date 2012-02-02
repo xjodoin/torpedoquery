@@ -14,15 +14,19 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.utils;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import javassist.util.proxy.ProxyFactory;
 
+public class ClassLoaderProvidedProxyFactory extends ProxyFactory {
+	private final ClassLoaderProvider classLoaderProvider;
 
-public interface Selector<T> {
+	public ClassLoaderProvidedProxyFactory(ClassLoaderProvider classLoaderProvider) {
+		this.classLoaderProvider = classLoaderProvider;
+	}
 
-	String createQueryFragment(AtomicInteger incrementor);
-
-	Parameter<T> generateParameter(T value);
-
+	@Override
+	protected ClassLoader getClassLoader() {
+		return classLoaderProvider.get(this);
+	}
 }

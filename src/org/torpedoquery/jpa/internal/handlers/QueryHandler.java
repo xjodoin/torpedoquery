@@ -14,15 +14,14 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.handlers;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Deque;
+import java.util.Map;
 
+import org.torpedoquery.jpa.internal.MethodCall;
+import org.torpedoquery.jpa.internal.query.QueryBuilder;
 
-public interface Selector<T> {
-
-	String createQueryFragment(AtomicInteger incrementor);
-
-	Parameter<T> generateParameter(T value);
-
+public interface QueryHandler<T> {
+	T handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods);
 }

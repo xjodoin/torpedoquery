@@ -14,15 +14,31 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.conditions;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.jpa.internal.Condition;
+import org.torpedoquery.jpa.internal.Selector;
 
-public interface Selector<T> {
+public class IsNotNullCondition implements Condition {
 
-	String createQueryFragment(AtomicInteger incrementor);
+	private final Selector selector;
 
-	Parameter<T> generateParameter(T value);
+	public IsNotNullCondition(Selector selector) {
+		this.selector = selector;
+	}
+
+	@Override
+	public String createQueryFragment(AtomicInteger incrementor) {
+		return selector.createQueryFragment(incrementor) + " is not null";
+	}
+
+	@Override
+	public List getParameters() {
+		return Collections.emptyList();
+	}
 
 }

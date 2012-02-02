@@ -14,15 +14,28 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.conditions;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.jpa.internal.Parameter;
+import org.torpedoquery.jpa.internal.Selector;
 
-public interface Selector<T> {
+public abstract class SingleParameterCondition<T> extends AbstractCondition<T> {
 
-	String createQueryFragment(AtomicInteger incrementor);
+	private final Parameter<T> parameter;
 
-	Parameter<T> generateParameter(T value);
+	public SingleParameterCondition(Selector selector, Parameter parameter) {
+		super(selector, Arrays.asList(parameter));
+		this.parameter = parameter;
+	}
+
+	@Override
+	public String createQueryFragment(AtomicInteger incrementor) {
+		return getSelector().createQueryFragment(incrementor) + " " + getComparator() + " " + parameter.generate(incrementor);
+	}
+
+	protected abstract String getComparator();
 
 }

@@ -14,15 +14,22 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.conditions;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import org.torpedoquery.jpa.internal.Parameter;
+import org.torpedoquery.jpa.internal.Selector;
 
+public class EqualCondition<T> extends SingleParameterCondition<T> {
 
-public interface Selector<T> {
+	public static final String EQUAL = "=";
 
-	String createQueryFragment(AtomicInteger incrementor);
+	public EqualCondition(Selector selector, Parameter<T> parameter) {
+		super(selector, parameter);
+	}
 
-	Parameter<T> generateParameter(T value);
+	@Override
+	protected String getComparator() {
+		return EQUAL;
+	}
 
 }

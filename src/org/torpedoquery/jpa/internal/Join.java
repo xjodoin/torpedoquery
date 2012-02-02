@@ -19,6 +19,8 @@ package org.torpedoquery.jpa.internal;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.jpa.internal.query.ValueParameter;
+
 public interface Join {
 
 	void appendWhereClause(StringBuilder builder, AtomicInteger incrementor);

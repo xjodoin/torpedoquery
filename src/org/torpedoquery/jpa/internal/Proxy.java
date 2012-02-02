@@ -16,6 +16,8 @@
  */
 package org.torpedoquery.jpa.internal;
 
+import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
+
 
 public interface Proxy {
 

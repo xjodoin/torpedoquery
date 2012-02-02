@@ -14,15 +14,20 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.conditions;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import org.torpedoquery.jpa.internal.Parameter;
+import org.torpedoquery.jpa.internal.Selector;
 
+public class NotInCondition<T> extends InCondition<T> {
 
-public interface Selector<T> {
+	public NotInCondition(Selector selector, Parameter<T> parameter) {
+		super(selector, parameter);
+	}
 
-	String createQueryFragment(AtomicInteger incrementor);
-
-	Parameter<T> generateParameter(T value);
+	@Override
+	protected String getFragment() {
+		return "not " + super.getFragment();
+	}
 
 }
