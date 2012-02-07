@@ -55,5 +55,9 @@ public interface ValueOnGoingCondition<T> extends OnGoingCondition<T> {
 	OnGoingLogicalCondition notIn(Collection<T> values);
 
 	OnGoingLogicalCondition notIn(Query<T> subQuery);
+	
+	OnGoingLogicalCondition between(T from,T to);
+	
+	OnGoingLogicalCondition notBetween(T from,T to);
 
 }

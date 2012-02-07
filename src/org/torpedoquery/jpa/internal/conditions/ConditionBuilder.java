@@ -34,10 +34,11 @@ import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.query.QueryBuilder;
+import org.torpedoquery.jpa.internal.selectors.NotSelector;
 import org.torpedoquery.jpa.internal.selectors.SizeSelector;
 
-public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition, OnGoingCollectionCondition<T>,
-		Condition {
+public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition,
+		OnGoingCollectionCondition<T>, Condition {
 	private Selector selector;
 	private final LogicalCondition logicalCondition;
 	private Condition condition;
@@ -64,10 +65,10 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 		Condition condition = new EqualCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
-	
+
 	@Override
 	public OnGoingLogicalCondition eq(Class<? extends T> value) {
-		Condition condition = new EqualPolymorphicCondition<T>(selector,value);
+		Condition condition = new EqualPolymorphicCondition<T>(selector, value);
 		return getOnGoingLogicalCondition(condition);
 	}
 
@@ -76,10 +77,10 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 		Condition condition = new NotEqualCondition<T>(selector, selector.generateParameter(value));
 		return getOnGoingLogicalCondition(condition);
 	}
-	
+
 	@Override
 	public OnGoingLogicalCondition neq(Class<? extends T> value) {
-		Condition condition = new NotEqualPolymorphicCondition<T>(selector,value);
+		Condition condition = new NotEqualPolymorphicCondition<T>(selector, value);
 		return getOnGoingLogicalCondition(condition);
 	}
 
@@ -244,6 +245,19 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	@Override
 	public OnGoingLogicalCondition neq(Function<T> value) {
 		Condition condition = new NotEqualCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(condition);
+	}
+
+	@Override
+	public OnGoingLogicalCondition between(T from, T to) {
+		Condition condition = new BetweenCondition<T>(selector, Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
+		return getOnGoingLogicalCondition(condition);
+	}
+
+	@Override
+	public OnGoingLogicalCondition notBetween(T from, T to) {
+		Condition condition = new BetweenCondition<T>(new NotSelector(selector), Arrays.asList(selector.generateParameter(from),
+				selector.generateParameter(to)));
 		return getOnGoingLogicalCondition(condition);
 	}
 }

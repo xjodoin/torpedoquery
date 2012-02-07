@@ -16,8 +16,11 @@
  */
 package org.torpedoquery.jpa;
 
-import static org.junit.Assert.*;
-import static org.torpedoquery.jpa.Torpedo.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.torpedoquery.jpa.Torpedo.from;
+import static org.torpedoquery.jpa.Torpedo.select;
+import static org.torpedoquery.jpa.Torpedo.where;
 
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
@@ -32,9 +35,7 @@ public class ValueOnGoingConditionTest {
 		where(from.getSubEntity()).eq(ExtendSubEntity.class);
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.subEntity.class = ExtendSubEntity",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntity.class = ExtendSubEntity", select.getQuery());
 		assertTrue(select.getParameters().isEmpty());
 	}
 
@@ -44,9 +45,7 @@ public class ValueOnGoingConditionTest {
 		where(from.getSubEntity()).neq(ExtendSubEntity.class);
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.subEntity.class <> ExtendSubEntity",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntity.class <> ExtendSubEntity", select.getQuery());
 		assertTrue(select.getParameters().isEmpty());
 	}
 
@@ -55,10 +54,28 @@ public class ValueOnGoingConditionTest {
 		Entity from = from(Entity.class);
 		where(from).eq(ExtendEntity.class);
 		Query<Entity> select = select(from);
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.class = ExtendEntity",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.class = ExtendEntity", select.getQuery());
 		assertTrue(select.getParameters().isEmpty());
+	}
+
+	@Test
+	public void testBetweenCondition() {
+		Entity from = from(Entity.class);
+		where(from.getCode()).between("A", "C");
+		Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code between :code_1 and :code_2", select.getQuery());
+		assertEquals("A", select.getParameters().get("code_1"));
+		assertEquals("C", select.getParameters().get("code_2"));
+	}
+
+	@Test
+	public void testNotBetweenCondition() {
+		Entity from = from(Entity.class);
+		where(from.getCode()).notBetween("A", "C");
+		Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code not between :code_1 and :code_2", select.getQuery());
+		assertEquals("A", select.getParameters().get("code_1"));
+		assertEquals("C", select.getParameters().get("code_2"));
 	}
 
 }
