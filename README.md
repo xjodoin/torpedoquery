@@ -1,5 +1,6 @@
 TorpedoQuery
 ============
+[![Build Status](https://secure.travis-ci.org/xjodoin/torpedoquery.png?branch=master)](http://travis-ci.org/xjodoin/torpedoquery)
 
 Torpedo Query goal is to simplify how you create and maintain your HQL query.
   	(http://docs.jboss.org/hibernate/core/3.3/reference/en/html/queryhql.html)	
