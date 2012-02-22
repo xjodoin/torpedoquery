@@ -111,24 +111,6 @@
 					<tagNameFormat>v@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>com.github.github</groupId>
-				<artifactId>downloads-maven-plugin</artifactId>
-				<version>0.3</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>upload</goal>
-						</goals>
-						<phase>install</phase>
-					</execution>
-				</executions>
-				<configuration>
-					<description>${project.version} release of ${project.name}</description>
-					<override>true</override>
-					<includeAttached>false</includeAttached>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -196,6 +178,24 @@
 								</goals>
 							</execution>
 						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.github.github</groupId>
+						<artifactId>downloads-maven-plugin</artifactId>
+						<version>0.3</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>upload</goal>
+								</goals>
+								<phase>install</phase>
+							</execution>
+						</executions>
+						<configuration>
+							<description>${project.version} release of ${project.name}</description>
+							<override>true</override>
+							<includeAttached>false</includeAttached>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
