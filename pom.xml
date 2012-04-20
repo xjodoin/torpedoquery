@@ -81,7 +81,7 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
-						<Import-Package>javassist.util.proxy;version="[3.10,4)",*</Import-Package>
+						<Import-Package>javassist.util.proxy;version="[3.9,4)",javax.persistence;version="[1.99,3)",*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
