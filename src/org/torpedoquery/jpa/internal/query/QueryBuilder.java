@@ -16,6 +16,8 @@
  */
 package org.torpedoquery.jpa.internal.query;
 
+import static org.torpedoquery.jpa.internal.conditions.ConditionHelper.getConditionClause;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +37,6 @@ import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
 
-import static org.torpedoquery.jpa.internal.conditions.ConditionHelper.*;
-
 public class QueryBuilder<T> implements Query<T> {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<Selector>();
@@ -49,6 +49,10 @@ public class QueryBuilder<T> implements Query<T> {
 	private String alias;
 	private OrderBy orderBy;
 	private GroupBy groupBy;
+
+	// paging infos
+	private int startPosition;
+	private int maxResult;
 
 	public QueryBuilder(Class<?> toQuery) {
 		this.toQuery = toQuery;
@@ -184,7 +188,6 @@ public class QueryBuilder<T> implements Query<T> {
 		this.whereClause = whereClause;
 	}
 
-
 	@Override
 	public Map<String, Object> getParameters() {
 
@@ -218,7 +221,7 @@ public class QueryBuilder<T> implements Query<T> {
 			Condition groupByCondition = groupBy.getCondition();
 			feedValueParameters(valueParameters, groupByCondition);
 		}
-		
+
 		return valueParameters;
 	}
 
@@ -277,12 +280,21 @@ public class QueryBuilder<T> implements Query<T> {
 
 	private javax.persistence.Query createJPAQuery(EntityManager entityManager) {
 		final javax.persistence.Query query = entityManager.createQuery(getQuery(new AtomicInteger()));
+
+		if (startPosition >= 0) {
+			query.setFirstResult(startPosition);
+		}
+
+		if (maxResult > 0) {
+			query.setMaxResults(maxResult);
+		}
+
 		final Map<String, Object> parameters = getParameters();
 
 		for (Entry<String, Object> parameter : parameters.entrySet()) {
 			query.setParameter(parameter.getKey(), parameter.getValue());
 		}
-		
+
 		TorpedoMagic.setQuery(null);
 
 		return query;
@@ -302,6 +314,18 @@ public class QueryBuilder<T> implements Query<T> {
 		}
 
 		return builder.toString();
+	}
+
+	@Override
+	public Query<T> setFirstResult(int startPosition) {
+		this.startPosition = startPosition;
+		return this;
+	}
+
+	@Override
+	public Query<T> setMaxResults(int maxResult) {
+		this.maxResult = maxResult;
+		return this;
 	}
 
 }

@@ -23,10 +23,10 @@ import javax.persistence.EntityManager;
 
 /**
  * 
- * Query is the result of the Torpedo.select()
- * You can retreive the data with methods get and list
- * or access to HQL String with getQuery and the related parameters with getParameters() 
- *  
+ * Query is the result of the Torpedo.select() You can retreive the data with
+ * methods get and list or access to HQL String with getQuery and the related
+ * parameters with getParameters()
+ * 
  */
 public interface Query<T> {
 
@@ -36,30 +36,51 @@ public interface Query<T> {
 
 	/**
 	 * 
-	 * Retrieve the query data and apply a transformation function on each elements
+	 * Retrieve the query data and apply a transformation function on each
+	 * elements
 	 * 
 	 * @param entityManager
 	 * @param function
 	 * @return
 	 */
-	<E> List<E> map(EntityManager entityManager,PostFunction<E,T> function);
+	<E> List<E> map(EntityManager entityManager, PostFunction<E, T> function);
 
 	/**
 	 * 
 	 * Use only when your query is suppose to return only one element
 	 * 
 	 * @param entityManager
-	 * @return 
+	 * @return
 	 */
 	T get(EntityManager entityManager);
 
 	/**
-	 *  
-	 *  Execute and return your query data
-	 *  
+	 * 
+	 * Execute and return your query data
+	 * 
 	 * @param entityManager
 	 * @return
 	 */
 	List<T> list(EntityManager entityManager);
+
+	/**
+	 * 
+	 * Set the position of the first result to retrieve.
+	 * 
+	 * @param startPosition
+	 *            - position of the first result, numbered from 0
+	 * @return the same query instance
+	 */
+	Query<T> setFirstResult(int startPosition);
+
+	/**
+	 * 
+	 * Set the maximum number of results to retrieve.
+	 * 
+	 * @param maxResult
+	 *            - maximum number of results to retrieve
+	 * @return the same query instance
+	 */
+	Query<T> setMaxResults(int maxResult);
 
 }
