@@ -26,7 +26,6 @@ import java.util.Map;
 
 import javassist.util.proxy.MethodHandler;
 
-import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Proxy;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
@@ -67,7 +66,7 @@ public class TorpedoMethodHandler implements MethodHandler, Proxy {
 		return createReturnValue(thisMethod.getReturnType());
 	}
 
-	private Object createReturnValue(final Class returnType) throws NoSuchMethodException, InstantiationException, IllegalAccessException,
+	private <T> T createReturnValue(final Class<T> returnType) throws NoSuchMethodException, InstantiationException, IllegalAccessException,
 			InvocationTargetException {
 		if (returnType.isPrimitive()) {
 			return Defaults.defaultValue(returnType);
@@ -78,7 +77,7 @@ public class TorpedoMethodHandler implements MethodHandler, Proxy {
 		}
 	}
 
-	private Object createLinkedProxy(final Class returnType) throws NoSuchMethodException, InstantiationException, IllegalAccessException,
+	private <T> T createLinkedProxy(final Class<T> returnType) throws NoSuchMethodException, InstantiationException, IllegalAccessException,
 			InvocationTargetException {
 		MethodHandler mh = new MethodHandler() {
 
@@ -103,8 +102,8 @@ public class TorpedoMethodHandler implements MethodHandler, Proxy {
 		return proxyQueryBuilders.get(proxy);
 	}
 
-	public <T extends Query> T getRoot() {
-		return (T) root;
+	public <T> QueryBuilder<T> getRoot() {
+		return (QueryBuilder<T>) root;
 	}
 
 	@Override
