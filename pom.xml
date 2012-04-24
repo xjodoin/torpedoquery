@@ -237,7 +237,6 @@
 							<includes>
 								<include>*.zip</include>
 							</includes>
-							<dryRun>true</dryRun>
 						</configuration>
 					</plugin>
 				</plugins>
