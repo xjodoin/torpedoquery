@@ -260,4 +260,19 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 				selector.generateParameter(to)));
 		return getOnGoingLogicalCondition(condition);
 	}
+
+	@Override
+	public OnGoingLogicalCondition between(ComparableFunction<T> from,
+			ComparableFunction<T> to) {
+		Condition condition = new BetweenCondition<T>(selector, Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
+		return getOnGoingLogicalCondition(condition);
+	}
+
+	@Override
+	public OnGoingLogicalCondition notBetween(ComparableFunction<T> from,
+			ComparableFunction<T> to) {
+		Condition condition = new BetweenCondition<T>(new NotSelector(selector), Arrays.asList(selector.generateParameter(from),
+				selector.generateParameter(to)));
+		return getOnGoingLogicalCondition(condition);
+	}
 }

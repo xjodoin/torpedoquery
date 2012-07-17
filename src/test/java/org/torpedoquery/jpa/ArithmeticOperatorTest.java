@@ -83,4 +83,20 @@ public class ArithmeticOperatorTest {
 				select.getQuery());
 	}
 
+	@Test
+	public void testSumInOperationAndWhereClause() {
+		Entity from = from(Entity.class);
+		where(
+				operation(from.getBigDecimalField()).subtract(
+						from.getBigDecimalField2())).gt(
+				constant(BigDecimal.ZERO));
+
+		org.torpedoquery.jpa.Query<BigDecimal> select = select(sum(operation(
+				from.getBigDecimalField()).subtract(from.getBigDecimalField2())));
+		Assert.assertEquals(
+				"select sum(entity_0.bigDecimalField - entity_0.bigDecimalField2) from Entity entity_0 where entity_0.bigDecimalField - entity_0.bigDecimalField2 > 0",
+				select.getQuery());
+		
+	}
+
 }

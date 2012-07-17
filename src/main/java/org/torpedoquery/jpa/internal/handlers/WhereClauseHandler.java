@@ -59,30 +59,6 @@ public class WhereClauseHandler<T, E extends OnGoingCondition<T>> extends
 
 		return handleValue(this, proxyQueryBuilders, methodCalls.iterator(),
 				param);
-
-		// Selector<T> conditionSelector = function;
-		//
-		// final QueryBuilder<T> queryImpl;
-		//
-		// if (conditionSelector == null) {
-		// MethodCall pollFirst = methodCalls.pollFirst();
-		// queryImpl = (QueryBuilder<T>)
-		// proxyQueryBuilders.get(pollFirst.getProxy());
-		// conditionSelector = new SimpleMethodCallSelector<T>(queryImpl,
-		// pollFirst);
-		// } else {
-		// queryImpl = (QueryBuilder<T>)
-		// proxyQueryBuilders.get(function.getProxy());
-		// }
-		//
-		// final ConditionBuilder<T> whereClause = logicalCondition != null ?
-		// new ConditionBuilder<T>(queryImpl, logicalCondition,
-		// conditionSelector)
-		// : new ConditionBuilder<T>(queryImpl, conditionSelector);
-		//
-		// configurator.configure(queryImpl, whereClause);
-		//
-		// return (E) whereClause;
 	}
 
 	@Override

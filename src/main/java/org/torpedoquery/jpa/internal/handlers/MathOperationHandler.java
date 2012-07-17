@@ -19,6 +19,7 @@ package org.torpedoquery.jpa.internal.handlers;
 import java.util.Deque;
 import java.util.Map;
 
+import org.torpedoquery.jpa.ComparableFunction;
 import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.OnGoingMathOperation;
 import org.torpedoquery.jpa.internal.MethodCall;
@@ -55,7 +56,7 @@ public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperatio
 	}
 
 	@Override
-	public Function<T> plus(T right) {
+	public ComparableFunction<T> plus(T right) {
 
 		SimpleMethodCallSelector rightSelector = handleMethodCall();
 		return createFunction(rightSelector, "+");
@@ -69,7 +70,7 @@ public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperatio
 	}
 
 	@Override
-	public Function<T> plus(Function<T> right) {
+	public ComparableFunction<T> plus(Function<T> right) {
 		return createFunction(right,"+");
 	}
 
@@ -78,35 +79,35 @@ public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperatio
 	}
 
 	@Override
-	public Function<T> subtract(T right) {
+	public ComparableFunction<T> subtract(T right) {
 		SimpleMethodCallSelector rightSelector = handleMethodCall();
 		return createFunction(rightSelector, "-");
 	}
 
 	@Override
-	public Function<T> subtract(Function<T> right) {
+	public ComparableFunction<T> subtract(Function<T> right) {
 		return createFunction(right,"-");
 	}
 
 	@Override
-	public Function<T> multiply(T right) {
+	public ComparableFunction<T> multiply(T right) {
 		SimpleMethodCallSelector rightSelector = handleMethodCall();
 		return createFunction(rightSelector, "*");
 	}
 
 	@Override
-	public Function<T> multiply(Function<T> right) {
+	public ComparableFunction<T> multiply(Function<T> right) {
 		return createFunction(right,"*");
 	}
 
 	@Override
-	public Function<T> divide(T right) {
+	public ComparableFunction<T> divide(T right) {
 		SimpleMethodCallSelector rightSelector = handleMethodCall();
 		return createFunction(rightSelector, "/");
 	}
 
 	@Override
-	public Function<T> divide(Function<T> right) {
+	public ComparableFunction<T> divide(Function<T> right) {
 		return createFunction(right,"/");
 	}
 

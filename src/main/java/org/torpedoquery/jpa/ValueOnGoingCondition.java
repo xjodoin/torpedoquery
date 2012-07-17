@@ -58,6 +58,9 @@ public interface ValueOnGoingCondition<T> extends OnGoingCondition<T> {
 	
 	OnGoingLogicalCondition between(T from,T to);
 	
+	OnGoingLogicalCondition between(ComparableFunction<T> from,ComparableFunction<T> to);
+	
 	OnGoingLogicalCondition notBetween(T from,T to);
 
+	OnGoingLogicalCondition notBetween(ComparableFunction<T> from,ComparableFunction<T> to);
 }
