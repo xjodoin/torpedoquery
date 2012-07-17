@@ -22,6 +22,9 @@ import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Proxy;
 import org.torpedoquery.jpa.internal.Selector;
+import org.torpedoquery.jpa.internal.TorpedoMagic;
+import org.torpedoquery.jpa.internal.handlers.ParameterQueryHandler;
+import org.torpedoquery.jpa.internal.query.SelectorParameter;
 
 public class MathOperationFunction<T> implements Function<T> {
 
@@ -44,7 +47,7 @@ public class MathOperationFunction<T> implements Function<T> {
 
 	@Override
 	public Parameter<T> generateParameter(T value) {
-		return null;
+		return TorpedoMagic.getTorpedoMethodHandler().handle(new ParameterQueryHandler<T>("function",value));
 	}
 
 	@Override

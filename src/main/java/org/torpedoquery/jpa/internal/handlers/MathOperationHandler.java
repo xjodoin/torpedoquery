@@ -63,7 +63,7 @@ public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperatio
 
 	private SimpleMethodCallSelector handleMethodCall() {
 		TorpedoMethodHandler torpedoMethodHandler = TorpedoMagic.getTorpedoMethodHandler();
-		MethodCall methodCall = torpedoMethodHandler.getMethods().getFirst();
+		MethodCall methodCall = torpedoMethodHandler.getMethods().pollFirst();
 		SimpleMethodCallSelector rightSelector = new SimpleMethodCallSelector(torpedoMethodHandler.getQueryBuilder(methodCall.getProxy()), methodCall);
 		return rightSelector;
 	}

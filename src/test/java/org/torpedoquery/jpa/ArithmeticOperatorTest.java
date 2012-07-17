@@ -16,41 +16,71 @@
  */
 package org.torpedoquery.jpa;
 
+import static org.torpedoquery.jpa.Torpedo.from;
+import static org.torpedoquery.jpa.Torpedo.select;
+import static org.torpedoquery.jpa.Torpedo.where;
+import static org.torpedoquery.jpa.TorpedoFunction.constant;
+import static org.torpedoquery.jpa.TorpedoFunction.operation;
+import static org.torpedoquery.jpa.TorpedoFunction.sum;
+
+import java.math.BigDecimal;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
 
-import static org.torpedoquery.jpa.Torpedo.*;
-
 public class ArithmeticOperatorTest {
 
 	@Test
-	public void testPlusOperator()
-	{
+	public void testPlusOperator() {
 		Entity from = from(Entity.class);
-		Query<Integer> select = select(operation(from.getIntegerField()).plus(from.getPrimitiveInt()));
-		Assert.assertEquals("select entity_0.integerField + entity_0.primitiveInt from Entity entity_0", select.getQuery()); 
-		
+		Query<Integer> select = select(operation(from.getIntegerField()).plus(
+				from.getPrimitiveInt()));
+		Assert.assertEquals(
+				"select entity_0.integerField + entity_0.primitiveInt from Entity entity_0",
+				select.getQuery());
+
 	}
-	
+
 	@Test
-	public void testPlusOperatorWithLeftFunction()
-	{
-		//I know it's suppose to be with group by...
+	public void testPlusOperatorWithLeftFunction() {
+		// I know it's suppose to be with group by...
 		Entity from = from(Entity.class);
-		Query<Integer> select = select(operation(sum(from.getIntegerField())).plus(from.getPrimitiveInt()));
-		Assert.assertEquals("select sum(entity_0.integerField) + entity_0.primitiveInt from Entity entity_0", select.getQuery()); 
-		
+		Query<Integer> select = select(operation(sum(from.getIntegerField()))
+				.plus(from.getPrimitiveInt()));
+		Assert.assertEquals(
+				"select sum(entity_0.integerField) + entity_0.primitiveInt from Entity entity_0",
+				select.getQuery());
+
 	}
-	
+
 	@Test
-	public void testPlusOperatorWithRightFunction()
-	{
-		//I know it's suppose to be with group by...
+	public void testPlusOperatorWithRightFunction() {
+		// I know it's suppose to be with group by...
 		Entity from = from(Entity.class);
-		Query<Integer> select = select(operation(from.getIntegerField()).plus(sum(from.getPrimitiveInt())));
-		Assert.assertEquals("select entity_0.integerField + sum(entity_0.primitiveInt) from Entity entity_0", select.getQuery()); 
-		
+		Query<Integer> select = select(operation(from.getIntegerField()).plus(
+				sum(from.getPrimitiveInt())));
+		Assert.assertEquals(
+				"select entity_0.integerField + sum(entity_0.primitiveInt) from Entity entity_0",
+				select.getQuery());
+
 	}
-	
+
+	@Test
+	public void testBetweenBug() {
+		Entity from = from(Entity.class);
+		where(
+				operation(from.getBigDecimalField()).subtract(
+						from.getBigDecimalField2())).between(
+				constant(BigDecimal.ZERO),
+				constant(BigDecimal.valueOf(Double.MAX_VALUE)));
+
+		org.torpedoquery.jpa.Query<BigDecimal> select = select(sum(operation(
+				from.getBigDecimalField()).subtract(from.getBigDecimalField2())));
+
+		Assert.assertEquals(
+				"select sum(entity_0.bigDecimalField - entity_0.bigDecimalField2) from Entity entity_0 where entity_0.bigDecimalField - entity_0.bigDecimalField2 between 0 and 1.7976931348623157E+308",
+				select.getQuery());
+	}
+
 }
