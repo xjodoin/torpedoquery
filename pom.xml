@@ -40,6 +40,9 @@
 		<developerConnection>scm:git:git@github.com:xjodoin/torpedoquery.git</developerConnection>
 	</scm>
 
+	<properties>
+  		<github.global.server>github</github.global.server>
+	</properties>
 
 	<build>
 		<plugins>
