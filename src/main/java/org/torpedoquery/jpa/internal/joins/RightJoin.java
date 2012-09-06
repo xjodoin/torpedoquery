@@ -16,7 +16,7 @@
  */
 package org.torpedoquery.jpa.internal.joins;
 
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
+import org.torpedoquery.core.QueryBuilder;
 
 public class RightJoin extends AbstractJoin {
 	public RightJoin(QueryBuilder join, String fieldName) {

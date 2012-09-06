@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.PostFunction;
 import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.Condition;

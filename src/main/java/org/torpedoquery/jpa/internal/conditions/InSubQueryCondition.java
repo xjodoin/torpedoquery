@@ -19,10 +19,10 @@ package org.torpedoquery.jpa.internal.conditions;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 
 public class InSubQueryCondition<T> implements Condition {
 

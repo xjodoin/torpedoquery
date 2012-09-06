@@ -20,9 +20,9 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Proxy;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 
 public class ArrayCallHandler extends AbstractCallHandler implements QueryHandler<Void> {
 

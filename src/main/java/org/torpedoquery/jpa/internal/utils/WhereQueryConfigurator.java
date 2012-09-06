@@ -16,9 +16,9 @@
  */
 package org.torpedoquery.jpa.internal.utils;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.QueryConfigurator;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 
 public class WhereQueryConfigurator<T> implements QueryConfigurator<T> {
 

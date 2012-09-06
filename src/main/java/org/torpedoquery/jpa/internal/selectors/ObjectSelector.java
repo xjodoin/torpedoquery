@@ -18,9 +18,9 @@ package org.torpedoquery.jpa.internal.selectors;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 import org.torpedoquery.jpa.internal.query.SelectorParameter;
 
 public class ObjectSelector<T> implements Selector<T> {

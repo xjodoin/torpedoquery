@@ -20,10 +20,10 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.ComparableFunction;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Parameter;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 import org.torpedoquery.jpa.internal.query.SelectorParameter;
 
 public class ComparableConstantFunctionHandler<T> implements ComparableFunction<T>, QueryHandler<ComparableFunction<T>> {

@@ -19,6 +19,7 @@ package org.torpedoquery.jpa;
 import static org.torpedoquery.jpa.internal.TorpedoMagic.getTorpedoMethodHandler;
 import static org.torpedoquery.jpa.internal.TorpedoMagic.setQuery;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Proxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.functions.CoalesceFunction;
@@ -37,7 +38,6 @@ import org.torpedoquery.jpa.internal.handlers.MaxFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.MinFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.SumFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.ValueHandler;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 
 public class TorpedoFunction {
 	

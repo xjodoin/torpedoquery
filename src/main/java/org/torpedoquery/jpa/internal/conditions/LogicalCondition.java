@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.ComparableFunction;
 import org.torpedoquery.jpa.OnGoingCollectionCondition;
 import org.torpedoquery.jpa.OnGoingComparableCondition;
@@ -28,7 +29,6 @@ import org.torpedoquery.jpa.OnGoingStringCondition;
 import org.torpedoquery.jpa.ValueOnGoingCondition;
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 
 public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 

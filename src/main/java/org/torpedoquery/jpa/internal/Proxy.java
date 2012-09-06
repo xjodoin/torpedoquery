@@ -22,4 +22,5 @@ import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 public interface Proxy {
 
 	TorpedoMethodHandler getTorpedoMethodHandler();
+
 }

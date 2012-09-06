@@ -19,6 +19,7 @@ package org.torpedoquery.jpa.internal.handlers;
 import java.util.Deque;
 import java.util.Map;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.OnGoingCondition;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Proxy;
@@ -26,7 +27,6 @@ import org.torpedoquery.jpa.internal.QueryConfigurator;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
 import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 import org.torpedoquery.jpa.internal.utils.WhereQueryConfigurator;
 
 //TODO duplicate avec WhereClauseCollectionHandler

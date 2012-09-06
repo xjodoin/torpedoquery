@@ -19,8 +19,8 @@ package org.torpedoquery.jpa.internal.handlers;
 import java.util.Deque;
 import java.util.Map;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.MethodCall;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 
 public interface QueryHandler<T> {
 	T handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods);

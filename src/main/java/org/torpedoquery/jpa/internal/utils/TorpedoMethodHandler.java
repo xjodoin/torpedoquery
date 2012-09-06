@@ -26,11 +26,11 @@ import java.util.Map;
 
 import javassist.util.proxy.MethodHandler;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Proxy;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.handlers.QueryHandler;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 
 import com.google.common.base.Defaults;
 

@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.ComparableFunction;
 import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.OnGoingCollectionCondition;
@@ -33,7 +34,6 @@ import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 import org.torpedoquery.jpa.internal.selectors.NotSelector;
 import org.torpedoquery.jpa.internal.selectors.SizeSelector;
 

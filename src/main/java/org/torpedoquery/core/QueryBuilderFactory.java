@@ -14,20 +14,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.torpedoquery.jpa.internal.joins;
+package org.torpedoquery.core;
 
-import org.torpedoquery.core.QueryBuilder;
-
-
-public class LeftJoin extends AbstractJoin {
-
-	public LeftJoin(QueryBuilder join, String fieldName) {
-		super(join, fieldName);
-	}
-
-	@Override
-	public String getJoinType() {
-		return "left";
-	}
-
+public interface QueryBuilderFactory {
+	public <T> QueryBuilder<T> create(Class<T> toQuery);
 }

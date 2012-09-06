@@ -19,6 +19,7 @@ package org.torpedoquery.jpa.internal.handlers;
 import java.util.Deque;
 import java.util.Map;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.ComparableFunction;
 import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.OnGoingMathOperation;
@@ -27,7 +28,6 @@ import org.torpedoquery.jpa.internal.Proxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.functions.MathOperationFunction;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 import org.torpedoquery.jpa.internal.selectors.SimpleMethodCallSelector;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 

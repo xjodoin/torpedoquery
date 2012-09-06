@@ -16,20 +16,32 @@
  */
 package org.torpedoquery.jpa.internal;
 
-import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
+import java.util.concurrent.atomic.AtomicReference;
 
+import org.torpedoquery.core.QueryBuilderFactory;
+import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 
 public class TorpedoMagic {
 
 	private static final ThreadLocal<Proxy> query = new ThreadLocal<Proxy>();
-	
+	private static AtomicReference<QueryBuilderFactory> factory = new AtomicReference<QueryBuilderFactory>(
+			new DefaultQueryBuilderFactory());
+
 	public static void setQuery(Proxy query) {
 		TorpedoMagic.query.set(query);
 	}
-	
+
 	public static TorpedoMethodHandler getTorpedoMethodHandler() {
 		Proxy internalQuery = query.get();
 		return internalQuery.getTorpedoMethodHandler();
 	}
-	
+
+	public static QueryBuilderFactory getQueryBuilderFactory() {
+		return factory.get();
+	}
+
+	public static void setup(QueryBuilderFactory queryBuilderFactory) {
+		factory.set(queryBuilderFactory);
+	}
+
 }

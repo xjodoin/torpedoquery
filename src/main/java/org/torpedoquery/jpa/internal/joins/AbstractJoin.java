@@ -19,8 +19,8 @@ package org.torpedoquery.jpa.internal.joins;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Join;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 import org.torpedoquery.jpa.internal.query.ValueParameter;
 
 public abstract class AbstractJoin implements Join {

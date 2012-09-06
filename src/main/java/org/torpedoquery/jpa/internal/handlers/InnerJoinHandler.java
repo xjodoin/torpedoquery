@@ -16,9 +16,9 @@
  */
 package org.torpedoquery.jpa.internal.handlers;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Join;
 import org.torpedoquery.jpa.internal.joins.InnerJoin;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 

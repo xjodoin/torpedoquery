@@ -16,8 +16,8 @@
  */
 package org.torpedoquery.jpa.internal.conditions;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Selector;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 
 
 public class NotInSubQueryCondition<T> extends InSubQueryCondition<T> {

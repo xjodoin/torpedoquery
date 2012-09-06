@@ -22,6 +22,7 @@ import static org.torpedoquery.jpa.internal.TorpedoMagic.setQuery;
 import java.util.Collection;
 import java.util.Map;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Proxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.handlers.ArrayCallHandler;
@@ -33,13 +34,14 @@ import org.torpedoquery.jpa.internal.handlers.ValueHandler;
 import org.torpedoquery.jpa.internal.handlers.WhereClauseHandler;
 import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.internal.query.GroupBy;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 import org.torpedoquery.jpa.internal.utils.DoNothingQueryConfigurator;
 import org.torpedoquery.jpa.internal.utils.MultiClassLoaderProvider;
 import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 import org.torpedoquery.jpa.internal.utils.WhereQueryConfigurator;
 import org.torpedoquery.jpa.internal.utils.WithQueryConfigurator;
+
+import com.google.common.base.Throwables;
 
 /**
  * Torpedo Query goal is to simplify how you create and maintain your HQL query.
@@ -89,7 +91,7 @@ import org.torpedoquery.jpa.internal.utils.WithQueryConfigurator;
 public class Torpedo extends TorpedoFunction {
 
 	private static final ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(new MultiClassLoaderProvider());
-
+	
 	/**
 	 * 
 	 * MyObject queryBuilder = from(MyObject.class);
@@ -141,7 +143,7 @@ public class Torpedo extends TorpedoFunction {
 			return proxy;
 
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw Throwables.propagate(e);
 		}
 	}
 

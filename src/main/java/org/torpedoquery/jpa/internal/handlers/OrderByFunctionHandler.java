@@ -20,10 +20,10 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Parameter;
-import org.torpedoquery.jpa.internal.query.QueryBuilder;
 import org.torpedoquery.jpa.internal.selectors.SimpleMethodCallSelector;
 
 public abstract class OrderByFunctionHandler<T> implements QueryHandler<Function<T>>, Function<T> {
