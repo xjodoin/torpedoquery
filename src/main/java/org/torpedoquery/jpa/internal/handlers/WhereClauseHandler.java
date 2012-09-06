@@ -19,7 +19,6 @@ package org.torpedoquery.jpa.internal.handlers;
 import java.util.Deque;
 import java.util.Map;
 
-import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.OnGoingCondition;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Proxy;

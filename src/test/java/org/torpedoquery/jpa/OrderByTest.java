@@ -16,8 +16,13 @@
  */
 package org.torpedoquery.jpa;
 
-import static org.junit.Assert.*;
-import static org.torpedoquery.jpa.Torpedo.*;
+import static org.junit.Assert.assertEquals;
+import static org.torpedoquery.jpa.Torpedo.from;
+import static org.torpedoquery.jpa.Torpedo.innerJoin;
+import static org.torpedoquery.jpa.Torpedo.orderBy;
+import static org.torpedoquery.jpa.Torpedo.select;
+import static org.torpedoquery.jpa.TorpedoFunction.asc;
+import static org.torpedoquery.jpa.TorpedoFunction.desc;
 
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;

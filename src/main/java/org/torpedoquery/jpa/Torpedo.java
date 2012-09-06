@@ -31,6 +31,7 @@ import org.torpedoquery.jpa.internal.handlers.LeftJoinHandler;
 import org.torpedoquery.jpa.internal.handlers.RightJoinHandler;
 import org.torpedoquery.jpa.internal.handlers.ValueHandler;
 import org.torpedoquery.jpa.internal.handlers.WhereClauseHandler;
+import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.internal.query.GroupBy;
 import org.torpedoquery.jpa.internal.query.QueryBuilder;
 import org.torpedoquery.jpa.internal.utils.DoNothingQueryConfigurator;
@@ -101,7 +102,7 @@ public class Torpedo extends TorpedoFunction {
 	public static <T> T from(Class<T> toQuery) {
 		try {
 
-			QueryBuilder queryBuilder = new QueryBuilder(toQuery);
+			DefaultQueryBuilder queryBuilder = new DefaultQueryBuilder(toQuery);
 			TorpedoMethodHandler fjpaMethodHandler = new TorpedoMethodHandler(queryBuilder, proxyFactoryFactory);
 
 			T from = proxyFactoryFactory.createProxy(fjpaMethodHandler, Proxy.class, toQuery);

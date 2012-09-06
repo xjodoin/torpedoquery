@@ -26,7 +26,6 @@ import org.torpedoquery.jpa.ComparableFunction;
 import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.OnGoingCollectionCondition;
 import org.torpedoquery.jpa.OnGoingComparableCondition;
-import org.torpedoquery.jpa.OnGoingCondition;
 import org.torpedoquery.jpa.OnGoingGroupByCondition;
 import org.torpedoquery.jpa.OnGoingLogicalCondition;
 import org.torpedoquery.jpa.OnGoingStringCondition;

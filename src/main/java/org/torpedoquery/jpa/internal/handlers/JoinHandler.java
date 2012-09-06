@@ -25,10 +25,13 @@ import java.util.Map;
 import org.torpedoquery.jpa.internal.Join;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.internal.query.QueryBuilder;
 import org.torpedoquery.jpa.internal.utils.FieldUtils;
 import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
+
+import com.google.common.base.Throwables;
 
 public abstract class JoinHandler<T> implements QueryHandler<T>
 {
@@ -76,7 +79,7 @@ public abstract class JoinHandler<T> implements QueryHandler<T>
 
 			T join = proxyFactoryFactory.createProxy(methodHandler, goodType,Proxy.class);
 
-			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, new QueryBuilder(goodType));
+			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, new DefaultQueryBuilder(goodType));
 
 			queryImpl.addJoin(createJoin(queryBuilder, FieldUtils.getFieldName(thisMethod)));
 
@@ -85,7 +88,7 @@ public abstract class JoinHandler<T> implements QueryHandler<T>
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeException(e);
+			throw Throwables.propagate(e);
 		}
 
 	}

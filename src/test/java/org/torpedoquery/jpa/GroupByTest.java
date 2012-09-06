@@ -16,13 +16,21 @@
  */
 package org.torpedoquery.jpa;
 
-import static org.junit.Assert.*;
-import static org.torpedoquery.jpa.Torpedo.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.torpedoquery.jpa.Torpedo.condition;
+import static org.torpedoquery.jpa.Torpedo.from;
+import static org.torpedoquery.jpa.Torpedo.groupBy;
+import static org.torpedoquery.jpa.Torpedo.innerJoin;
+import static org.torpedoquery.jpa.Torpedo.select;
+import static org.torpedoquery.jpa.TorpedoFunction.coalesce;
+import static org.torpedoquery.jpa.TorpedoFunction.constant;
+import static org.torpedoquery.jpa.TorpedoFunction.sum;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.SubEntity;

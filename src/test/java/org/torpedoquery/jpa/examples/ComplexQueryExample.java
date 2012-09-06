@@ -16,7 +16,10 @@
  */
 package org.torpedoquery.jpa.examples;
 
-import static org.torpedoquery.jpa.Torpedo.*;
+import static org.torpedoquery.jpa.Torpedo.from;
+import static org.torpedoquery.jpa.Torpedo.innerJoin;
+import static org.torpedoquery.jpa.Torpedo.select;
+import static org.torpedoquery.jpa.Torpedo.with;
 
 import java.util.List;
 

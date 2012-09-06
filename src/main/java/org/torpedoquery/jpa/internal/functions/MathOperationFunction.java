@@ -19,13 +19,11 @@ package org.torpedoquery.jpa.internal.functions;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.ComparableFunction;
-import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Proxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.handlers.ParameterQueryHandler;
-import org.torpedoquery.jpa.internal.query.SelectorParameter;
 
 public class MathOperationFunction<T> implements ComparableFunction<T> {
 

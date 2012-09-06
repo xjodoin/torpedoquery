@@ -30,8 +30,16 @@ import javax.persistence.EntityManager;
  */
 public interface Query<T> {
 
+	/**
+	 * 
+	 * @return the generated query string
+	 */
 	String getQuery();
 
+	/**
+	 * 
+	 * @return query parameters
+	 */
 	Map<String, Object> getParameters();
 
 	/**

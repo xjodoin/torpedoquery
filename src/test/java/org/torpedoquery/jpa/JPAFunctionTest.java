@@ -16,8 +16,21 @@
  */
 package org.torpedoquery.jpa;
 
-import static org.junit.Assert.*;
-import static org.torpedoquery.jpa.Torpedo.*;
+import static org.junit.Assert.assertEquals;
+import static org.torpedoquery.jpa.Torpedo.from;
+import static org.torpedoquery.jpa.Torpedo.groupBy;
+import static org.torpedoquery.jpa.Torpedo.innerJoin;
+import static org.torpedoquery.jpa.Torpedo.select;
+import static org.torpedoquery.jpa.Torpedo.where;
+import static org.torpedoquery.jpa.TorpedoFunction.avg;
+import static org.torpedoquery.jpa.TorpedoFunction.coalesce;
+import static org.torpedoquery.jpa.TorpedoFunction.count;
+import static org.torpedoquery.jpa.TorpedoFunction.distinct;
+import static org.torpedoquery.jpa.TorpedoFunction.function;
+import static org.torpedoquery.jpa.TorpedoFunction.index;
+import static org.torpedoquery.jpa.TorpedoFunction.max;
+import static org.torpedoquery.jpa.TorpedoFunction.min;
+import static org.torpedoquery.jpa.TorpedoFunction.sum;
 
 import java.math.BigDecimal;
 

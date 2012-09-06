@@ -20,7 +20,6 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Proxy;
 import org.torpedoquery.jpa.internal.query.QueryBuilder;
