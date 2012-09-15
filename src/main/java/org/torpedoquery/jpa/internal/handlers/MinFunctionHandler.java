@@ -25,8 +25,8 @@ public class MinFunctionHandler<T> extends BaseFunctionHandler<T, ComparableFunc
 	}
 
 	@Override
-	protected String getFunctionName() {
-		return "min";
+	protected String getFunctionFormat() {
+		return "min(%1$s)";
 	}
 
 }

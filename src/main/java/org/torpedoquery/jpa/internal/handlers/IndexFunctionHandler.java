@@ -25,8 +25,8 @@ public class IndexFunctionHandler extends BaseFunctionHandler<Integer, Comparabl
 	}
 
 	@Override
-	protected String getFunctionName() {
-		return "index";
+	protected String getFunctionFormat() {
+		return "index(%1$s)";
 	}
 
 }

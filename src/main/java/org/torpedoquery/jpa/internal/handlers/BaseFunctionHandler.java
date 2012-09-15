@@ -41,8 +41,7 @@ public abstract class BaseFunctionHandler<T, F extends Function<T>> extends Abst
 
 	@Override
 	public String createQueryFragment(AtomicInteger incrementor) {
-
-		return getFunctionName() + "(" + selector.createQueryFragment(incrementor) + ")";
+		return String.format(getFunctionFormat(), selector.createQueryFragment(incrementor));
 	}
 
 	@Override
@@ -64,7 +63,7 @@ public abstract class BaseFunctionHandler<T, F extends Function<T>> extends Abst
 		return (F) this;
 	}
 
-	protected abstract String getFunctionName();
+	protected abstract String getFunctionFormat();
 
 	@Override
 	public Parameter<T> generateParameter(T value) {

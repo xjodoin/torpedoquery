@@ -25,8 +25,8 @@ public class MaxFunctionHandler<T> extends BaseFunctionHandler<T, ComparableFunc
 	}
 
 	@Override
-	protected String getFunctionName() {
-		return "max";
+	protected String getFunctionFormat() {
+		return "max(%1$s)";
 	}
 
 }

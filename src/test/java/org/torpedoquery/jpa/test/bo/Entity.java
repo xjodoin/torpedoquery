@@ -16,6 +16,7 @@
  */
 package org.torpedoquery.jpa.test.bo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +51,10 @@ public class Entity extends AbstractEntity {
 
 	public int getPrimitiveInt() {
 		return 0;
+	}
+	
+	public Serializable getInterface() {
+		return null;
 	}
 
 	public Date getDateField() {

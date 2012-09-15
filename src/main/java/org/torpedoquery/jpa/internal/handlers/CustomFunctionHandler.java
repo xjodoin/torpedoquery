@@ -18,9 +18,11 @@ package org.torpedoquery.jpa.internal.handlers;
 
 import org.torpedoquery.jpa.Function;
 
-public class CustomFunctionHandler<T> extends BaseFunctionHandler<T, Function<T>> {
+public class CustomFunctionHandler<T> extends
+		BaseFunctionHandler<T, Function<T>> {
 
 	private final String name;
+	private String functionFormat;
 
 	public CustomFunctionHandler(String name, Object value) {
 		super(value);
@@ -28,8 +30,12 @@ public class CustomFunctionHandler<T> extends BaseFunctionHandler<T, Function<T>
 	}
 
 	@Override
-	protected String getFunctionName() {
-		return name;
+	protected String getFunctionFormat() {
+		return functionFormat != null ? functionFormat : name + "(%1$s)";
+	}
+
+	public void setFunctionFormat(String functionFormat) {
+		this.functionFormat = functionFormat;
 	}
 
 }

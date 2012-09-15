@@ -25,8 +25,8 @@ public class AvgFunctionHandler<T> extends BaseFunctionHandler<T, ComparableFunc
 	}
 
 	@Override
-	protected String getFunctionName() {
-		return "avg";
+	protected String getFunctionFormat() {
+		return "avg(%1$s)";
 	}
 
 }
