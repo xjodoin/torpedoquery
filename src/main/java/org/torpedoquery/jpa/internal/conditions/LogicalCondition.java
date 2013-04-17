@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.ComparableFunction;
+import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.OnGoingCollectionCondition;
 import org.torpedoquery.jpa.OnGoingComparableCondition;
 import org.torpedoquery.jpa.OnGoingLogicalCondition;
@@ -43,28 +44,34 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 	@Override
 	public <T1> ValueOnGoingCondition<T1> and(T1 property) {
 
-		ValueOnGoingCondition<T1> right = ConditionHelper.<T1, ValueOnGoingCondition<T1>> createCondition(this);
+		ValueOnGoingCondition<T1> right = ConditionHelper
+				.<T1, ValueOnGoingCondition<T1>> createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public <T1> ValueOnGoingCondition<T1> or(T1 property) {
-		ValueOnGoingCondition<T1> right = ConditionHelper.<T1, ValueOnGoingCondition<T1>> createCondition(this);
+		ValueOnGoingCondition<T1> right = ConditionHelper
+				.<T1, ValueOnGoingCondition<T1>> createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
-	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> and(T property) {
-		OnGoingComparableCondition<V> right = ConditionHelper.<V, OnGoingComparableCondition<V>> createCondition(this);
+	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> and(
+			T property) {
+		OnGoingComparableCondition<V> right = ConditionHelper
+				.<V, OnGoingComparableCondition<V>> createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
-	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> or(T property) {
-		OnGoingComparableCondition<V> right = ConditionHelper.<V, OnGoingComparableCondition<V>> createCondition(this);
+	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> or(
+			T property) {
+		OnGoingComparableCondition<V> right = ConditionHelper
+				.<V, OnGoingComparableCondition<V>> createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
@@ -81,54 +88,82 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 
 	@Override
 	public OnGoingLogicalCondition and(OnGoingLogicalCondition condition) {
-		this.condition = new AndCondition(this.condition, new GroupingCondition((Condition) condition));
+		this.condition = new AndCondition(this.condition,
+				new GroupingCondition((Condition) condition));
 		return this;
 	}
 
 	@Override
 	public OnGoingLogicalCondition or(OnGoingLogicalCondition condition) {
-		this.condition = new OrCondition(this.condition, new GroupingCondition((Condition) condition));
+		this.condition = new OrCondition(this.condition, new GroupingCondition(
+				(Condition) condition));
 		return this;
 	}
 
 	@Override
 	public OnGoingStringCondition<String> and(String property) {
-		OnGoingStringCondition<String> right = ConditionHelper.<String, OnGoingStringCondition<String>> createCondition(this);
+		OnGoingStringCondition<String> right = ConditionHelper
+				.<String, OnGoingStringCondition<String>> createCondition(this);
+		condition = new AndCondition(condition, (Condition) right);
+		return right;
+	}
+
+	@Override
+	public OnGoingStringCondition<String> and(Function<String> function) {
+		OnGoingStringCondition<String> right = ConditionHelper
+				.<String, OnGoingStringCondition<String>> createCondition(
+						function, this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public OnGoingStringCondition<String> or(String property) {
-		OnGoingStringCondition<String> right = ConditionHelper.<String, OnGoingStringCondition<String>> createCondition(this);
+		OnGoingStringCondition<String> right = ConditionHelper
+				.<String, OnGoingStringCondition<String>> createCondition(this);
+		condition = new OrCondition(condition, (Condition) right);
+		return right;
+	}
+
+	@Override
+	public OnGoingStringCondition<String> or(Function<String> function) {
+		OnGoingStringCondition<String> right = ConditionHelper
+				.<String, OnGoingStringCondition<String>> createCondition(
+						function, this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public <T1> OnGoingCollectionCondition<T1> and(Collection<T1> object) {
-		OnGoingCollectionCondition<T1> right = ConditionHelper.<T1, OnGoingCollectionCondition<T1>> createCondition(this);
+		OnGoingCollectionCondition<T1> right = ConditionHelper
+				.<T1, OnGoingCollectionCondition<T1>> createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public <T1> OnGoingCollectionCondition<T1> or(Collection<T1> object) {
-		OnGoingCollectionCondition<T1> right = ConditionHelper.<T1, OnGoingCollectionCondition<T1>> createCondition(this);
+		OnGoingCollectionCondition<T1> right = ConditionHelper
+				.<T1, OnGoingCollectionCondition<T1>> createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
-	
+
 	@Override
 	public <T> OnGoingComparableCondition<T> and(ComparableFunction<T> function) {
-		OnGoingComparableCondition<T> right = ConditionHelper.<T, OnGoingComparableCondition<T>> createCondition(function,this);
+		OnGoingComparableCondition<T> right = ConditionHelper
+				.<T, OnGoingComparableCondition<T>> createCondition(function,
+						this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	@Override
 	public <T> OnGoingComparableCondition<T> or(ComparableFunction<T> function) {
-		OnGoingComparableCondition<T> right = ConditionHelper.<T, OnGoingComparableCondition<T>> createCondition(function,this);
+		OnGoingComparableCondition<T> right = ConditionHelper
+				.<T, OnGoingComparableCondition<T>> createCondition(function,
+						this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
@@ -136,6 +171,5 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 	public QueryBuilder<?> getBuilder() {
 		return builder;
 	}
-
 
 }

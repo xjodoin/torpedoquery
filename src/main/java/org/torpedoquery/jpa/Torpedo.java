@@ -387,6 +387,10 @@ public class Torpedo extends TorpedoFunction {
 	public static OnGoingStringCondition<String> where(String object) {
 		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(object));
 	}
+	
+	public static OnGoingStringCondition<String> where(Function<String> function) {
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(function));
+	}
 
 	/**
 	 * @see #where(Object) 

@@ -36,8 +36,12 @@ public interface OnGoingLogicalCondition {
 	<T> OnGoingCollectionCondition<T> or(Collection<T> object);
 
 	OnGoingStringCondition<String> and(String property);
+	
+	OnGoingStringCondition<String> and(Function<String> function);
 
 	OnGoingStringCondition<String> or(String property);
+	
+	OnGoingStringCondition<String> or(Function<String> function);
 
 	OnGoingLogicalCondition and(OnGoingLogicalCondition condition);
 
