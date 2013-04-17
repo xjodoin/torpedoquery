@@ -25,8 +25,8 @@ public class SumFunctionHandler<T> extends BaseFunctionHandler<T, ComparableFunc
 	}
 
 	@Override
-	protected String getFunctionName() {
-		return "sum";
+	protected String getFunctionFormat() {
+		return "sum(%1$s)";
 	}
 
 }

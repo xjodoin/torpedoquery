@@ -51,70 +51,83 @@ public class JPAFunctionTest {
 	public void testCountFunction_withSpecifiedField() {
 		Entity from = from(Entity.class);
 		Query<Long> select = select(count(from.getCode()));
-		assertEquals("select count(entity_0.code) from Entity entity_0", select.getQuery());
+		assertEquals("select count(entity_0.code) from Entity entity_0",
+				select.getQuery());
 	}
 
 	@Test
 	public void testCountFunction_withSpecifiedField_plusOneSelect() {
 		Entity from = from(Entity.class);
 		Query<Object[]> select = select(count(from.getCode()), from.getCode());
-		assertEquals("select count(entity_0.code), entity_0.code from Entity entity_0", select.getQuery());
+		assertEquals(
+				"select count(entity_0.code), entity_0.code from Entity entity_0",
+				select.getQuery());
 	}
 
 	@Test
 	public void testCountFunction_withSpecifiedField_plusOneSelect_inverse() {
 		Entity from = from(Entity.class);
 		Query<Object[]> select = select(from.getCode(), count(from.getCode()));
-		assertEquals("select entity_0.code, count(entity_0.code) from Entity entity_0", select.getQuery());
+		assertEquals(
+				"select entity_0.code, count(entity_0.code) from Entity entity_0",
+				select.getQuery());
 	}
 
 	@Test
 	public void testSumFunction() {
 		Entity from = from(Entity.class);
 		Query<Integer> select = select(sum(from.getIntegerField()));
-		assertEquals("select sum(entity_0.integerField) from Entity entity_0", select.getQuery());
+		assertEquals("select sum(entity_0.integerField) from Entity entity_0",
+				select.getQuery());
 	}
 
 	@Test
 	public void testMinFunction() {
 		Entity from = from(Entity.class);
 		Query<Integer> select = select(min(from.getIntegerField()));
-		assertEquals("select min(entity_0.integerField) from Entity entity_0", select.getQuery());
+		assertEquals("select min(entity_0.integerField) from Entity entity_0",
+				select.getQuery());
 	}
 
 	@Test
 	public void testMaxFunction() {
 		Entity from = from(Entity.class);
 		Query<Integer> select = select(max(from.getIntegerField()));
-		assertEquals("select max(entity_0.integerField) from Entity entity_0", select.getQuery());
+		assertEquals("select max(entity_0.integerField) from Entity entity_0",
+				select.getQuery());
 	}
 
 	@Test
 	public void testAvgFunction() {
 		Entity from = from(Entity.class);
 		Query<Integer> select = select(avg(from.getIntegerField()));
-		assertEquals("select avg(entity_0.integerField) from Entity entity_0", select.getQuery());
+		assertEquals("select avg(entity_0.integerField) from Entity entity_0",
+				select.getQuery());
 	}
 
 	@Test
 	public void testCoalesceFunction() {
 		Entity from = from(Entity.class);
 		Query<String> select = select(coalesce(from.getCode(), from.getName()));
-		assertEquals("select coalesce(entity_0.code,entity_0.name) from Entity entity_0", select.getQuery());
+		assertEquals(
+				"select coalesce(entity_0.code,entity_0.name) from Entity entity_0",
+				select.getQuery());
 	}
 
 	@Test
 	public void testDistinctEntity() {
 		Entity from = from(Entity.class);
 		Query<Entity> select = select(distinct(from));
-		assertEquals("select distinct entity_0 from Entity entity_0", select.getQuery());
+		assertEquals("select distinct entity_0 from Entity entity_0",
+				select.getQuery());
 	}
 
 	@Test
 	public void testDistinctOnField() {
 		Entity from = from(Entity.class);
 		Query<String> select = select(distinct(from.getCode()));
-		assertEquals("select distinct entity_0.code from Entity entity_0", select.getQuery());
+		assertEquals("select distinct entity_0.code from Entity entity_0",
+				select.getQuery());
 	}
 
 	@Test
@@ -122,86 +135,106 @@ public class JPAFunctionTest {
 		Entity from = from(Entity.class);
 		SubEntity innerJoin = innerJoin(from.getSubEntities());
 		Query<Object[]> select = select(distinct(from), innerJoin);
-		assertEquals("select distinct entity_0, subEntity_1 from Entity entity_0 inner join entity_0.subEntities subEntity_1", select.getQuery());
+		assertEquals(
+				"select distinct entity_0, subEntity_1 from Entity entity_0 inner join entity_0.subEntities subEntity_1",
+				select.getQuery());
 	}
-	
+
 	@Test
-	public void testFunctionOnObjectWithoutConstructor()
-	{
+	public void testFunctionOnObjectWithoutConstructor() {
 		Entity from = from(Entity.class);
 		groupBy(from.getCode());
 		Query<BigDecimal> select = select(sum(from.getBigDecimalField()));
-		
-		assertEquals("select sum(entity_0.bigDecimalField) from Entity entity_0 group by entity_0.code", select.getQuery()); 
-		
+
+		assertEquals(
+				"select sum(entity_0.bigDecimalField) from Entity entity_0 group by entity_0.code",
+				select.getQuery());
+
 	}
-	
+
 	@Test
-	public void testSpecifyFieldBeforeFunctionCount()
-	{
+	public void testSpecifyFieldBeforeFunctionCount() {
 		Entity from = from(Entity.class);
 		groupBy(from.getCode());
-		Query<Object[]> select = select(from.getCode(),count(from));
-		
-		assertEquals("select entity_0.code, count(*) from Entity entity_0 group by entity_0.code", select.getQuery());
+		Query<Object[]> select = select(from.getCode(), count(from));
+
+		assertEquals(
+				"select entity_0.code, count(*) from Entity entity_0 group by entity_0.code",
+				select.getQuery());
 	}
-	
+
 	@Test
-	public void testIndexFunction()
-	{
+	public void testIndexFunction() {
 		Entity from = from(Entity.class);
 		SubEntity innerJoin = innerJoin(from.getSubEntities());
-		Query<Object[]> select = select(innerJoin,index(innerJoin));
-		assertEquals("select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1", select.getQuery());
+		Query<Object[]> select = select(innerJoin, index(innerJoin));
+		assertEquals(
+				"select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1",
+				select.getQuery());
 	}
-	
+
 	@Test
-	public void testIndexFunction_in_where()
-	{
+	public void testIndexFunction_in_where() {
 		Entity from = from(Entity.class);
 		SubEntity innerJoin = innerJoin(from.getSubEntities());
 		where(index(innerJoin)).gt(5);
-		Query<Object[]> select = select(innerJoin,index(innerJoin));
-		assertEquals("select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1 where index(subEntity_1) > :function_2", select.getQuery());
+		Query<Object[]> select = select(innerJoin, index(innerJoin));
+		assertEquals(
+				"select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1 where index(subEntity_1) > :function_2",
+				select.getQuery());
 		assertEquals(5, select.getParameters().get("function_2"));
 	}
-	
+
 	@Test
-	public void testIndexFunction_in_with_equal()
-	{
+	public void testIndexFunction_in_with_equal() {
 		Entity from = from(Entity.class);
 		SubEntity innerJoin = innerJoin(from.getSubEntities());
 		where(index(innerJoin)).eq(5);
-		Query<Object[]> select = select(innerJoin,index(innerJoin));
-		assertEquals("select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1 where index(subEntity_1) = :function_2", select.getQuery());
+		Query<Object[]> select = select(innerJoin, index(innerJoin));
+		assertEquals(
+				"select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1 where index(subEntity_1) = :function_2",
+				select.getQuery());
 		assertEquals(5, select.getParameters().get("function_2"));
 	}
-	
+
 	@Test
-	public void testIndexFunction_into_Or()
-	{
+	public void testIndexFunction_into_Or() {
 		Entity from = from(Entity.class);
 		SubEntity innerJoin = innerJoin(from.getSubEntities());
 		where(index(innerJoin)).eq(5).or(index(innerJoin)).lt(2);
-		Query<Object[]> select = select(innerJoin,index(innerJoin));
-		assertEquals("select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1 where index(subEntity_1) = :function_2 or index(subEntity_1) < :function_3", select.getQuery());
+		Query<Object[]> select = select(innerJoin, index(innerJoin));
+		assertEquals(
+				"select subEntity_1, index(subEntity_1) from Entity entity_0 inner join entity_0.subEntities subEntity_1 where index(subEntity_1) = :function_2 or index(subEntity_1) < :function_3",
+				select.getQuery());
 		assertEquals(2, select.getParameters().get("function_3"));
 	}
-	
+
 	@Test
-	public void testSupportCustomFunction()
-	{
+	public void testSupportCustomFunction() {
 		Entity from = from(Entity.class);
-		Query<String> select = select(function("toto",String.class,from.getName()));
-		assertEquals("select toto(entity_0.name) from Entity entity_0", select.getQuery());
+		Query<String> select = select(function("toto", String.class,
+				from.getName()));
+		assertEquals("select toto(entity_0.name) from Entity entity_0",
+				select.getQuery());
 	}
-	
+
 	@Test
-	public void testCustomFunctionWithFunction()
-	{
+	public void testCustomFunctionWithFunction() {
 		Entity from = from(Entity.class);
-		Query<String> select = select(function("toto",String.class, max(from.getIntegerField())));
-		assertEquals("select toto(max(entity_0.integerField)) from Entity entity_0", select.getQuery());
+		Query<String> select = select(function("toto", String.class,
+				max(from.getIntegerField())));
+		assertEquals(
+				"select toto(max(entity_0.integerField)) from Entity entity_0",
+				select.getQuery());
+	}
+
+	@Test
+	public void testDistinctOnInterface() {
+		Entity fromOrder = from(Entity.class);
+		Query select = select(distinct(fromOrder.getInterface()));
+		assertEquals(
+				"select distinct entity_0.interface from Entity entity_0",
+				select.getQuery());
 	}
 
 }
