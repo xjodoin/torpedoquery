@@ -16,14 +16,18 @@
  */
 package org.torpedoquery.jpa;
 
-import static org.junit.Assert.*;
-import static org.torpedoquery.jpa.Torpedo.*;
-
-import java.math.BigDecimal;
+import static org.junit.Assert.assertEquals;
+import static org.torpedoquery.jpa.Torpedo.from;
+import static org.torpedoquery.jpa.Torpedo.select;
+import static org.torpedoquery.jpa.Torpedo.where;
+import static org.torpedoquery.jpa.TorpedoFunction.length;
+import static org.torpedoquery.jpa.TorpedoFunction.lower;
+import static org.torpedoquery.jpa.TorpedoFunction.substring;
+import static org.torpedoquery.jpa.TorpedoFunction.trim;
+import static org.torpedoquery.jpa.TorpedoFunction.upper;
 
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
-import org.torpedoquery.jpa.test.bo.SubEntity;
 
 /**
  * 
@@ -75,12 +79,11 @@ public class StringFunctionsTest {
 		assertEquals("select entity_0 from Entity entity_0 where lower(entity_0.code) like '%test%'", select.getQuery());
 	}
 	
-//	@Test
+	@Test
 	public void testSubstringFunction() {
-		//TODO add substring handler
-//		Entity from = from(Entity.class);
-//		Query<String> select = select(substring(from.getCode(),2,4));
-//		assertEquals("select upper(entity_0.code,2,4) from Entity entity_0", select.getQuery());
+		Entity from = from(Entity.class);
+		Query<String> select = select(substring(from.getCode(),2,4));
+		assertEquals("select substring(entity_0.code,2,4) from Entity entity_0", select.getQuery());
 	}
 	
 }

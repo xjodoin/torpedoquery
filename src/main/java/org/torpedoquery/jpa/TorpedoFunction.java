@@ -36,6 +36,7 @@ import org.torpedoquery.jpa.internal.handlers.IndexFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.MathOperationHandler;
 import org.torpedoquery.jpa.internal.handlers.MaxFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.MinFunctionHandler;
+import org.torpedoquery.jpa.internal.handlers.SubstringFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.SumFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.ValueHandler;
 
@@ -216,6 +217,10 @@ public class TorpedoFunction {
 	
 	public static Function<Integer> length(Function<String> function) {
 		return function("length", Integer.class, function);
+	}
+	
+	public static Function<String> substring(String param,int beginIndex, int endIndex) {
+		return getTorpedoMethodHandler().handle(new SubstringFunctionHandler(param, beginIndex, endIndex));
 	}
 
 }
