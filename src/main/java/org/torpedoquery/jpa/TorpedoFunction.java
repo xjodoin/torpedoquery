@@ -222,5 +222,9 @@ public class TorpedoFunction {
 	public static Function<String> substring(String param,int beginIndex, int endIndex) {
 		return getTorpedoMethodHandler().handle(new SubstringFunctionHandler(param, beginIndex, endIndex));
 	}
+	
+	public static Function<String> substring(Function<String> param,int beginIndex, int endIndex) {
+		return getTorpedoMethodHandler().handle(new SubstringFunctionHandler(param, beginIndex, endIndex));
+	}
 
 }
