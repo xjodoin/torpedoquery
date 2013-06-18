@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory.ClassLoaderProvider;
-import javassist.util.proxy.ProxyObject;
 
 import org.objenesis.ObjenesisHelper;
 
@@ -35,8 +35,11 @@ public class ProxyFactoryFactory {
 		methodFilter = new MethodFilter() {
 			@Override
 			public boolean isHandled(Method m) {
-				return !m.getDeclaringClass().equals(Object.class) && !m.getName().equals("finalize") && !m.getName().equals("equals")
-						&& !m.getName().equals("hashCode") && !m.getName().equals("toString");
+				return !m.getDeclaringClass().equals(Object.class)
+						&& !m.getName().equals("finalize")
+						&& !m.getName().equals("equals")
+						&& !m.getName().equals("hashCode")
+						&& !m.getName().equals("toString");
 			}
 		};
 	}
@@ -58,28 +61,31 @@ public class ProxyFactoryFactory {
 				interfaces.add(class1);
 			} else {
 				if (superClass != null) {
-					throw new IllegalArgumentException("You only can pass one super class other can be interface");
+					throw new IllegalArgumentException(
+							"You only can pass one super class other can be interface");
 				} else {
 					superClass = class1;
 				}
 			}
 		}
 
-		ClassLoaderProvidedProxyFactory classLoaderProvidedProxyFactory = new ClassLoaderProvidedProxyFactory(classLoaderProvider);
+		ClassLoaderProvidedProxyFactory classLoaderProvidedProxyFactory = new ClassLoaderProvidedProxyFactory(
+				classLoaderProvider);
 
 		if (superClass != null) {
 			classLoaderProvidedProxyFactory.setSuperclass(superClass);
 		}
 
 		if (!interfaces.isEmpty()) {
-			classLoaderProvidedProxyFactory.setInterfaces(interfaces.toArray(new Class[0]));
+			classLoaderProvidedProxyFactory.setInterfaces(interfaces
+					.toArray(new Class[0]));
 		}
 
 		classLoaderProvidedProxyFactory.setFilter(methodFilter);
 
 		Class proxyClass = classLoaderProvidedProxyFactory.createClass();
 
-		ProxyObject proxy = (ProxyObject) ObjenesisHelper.newInstance(proxyClass);
+		Proxy proxy = (Proxy) ObjenesisHelper.newInstance(proxyClass);
 		proxy.setHandler(methodHandler);
 
 		return (T) proxy;

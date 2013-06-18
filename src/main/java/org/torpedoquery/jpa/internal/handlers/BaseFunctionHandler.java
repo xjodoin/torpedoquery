@@ -24,7 +24,7 @@ import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Parameter;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 
@@ -33,7 +33,7 @@ public abstract class BaseFunctionHandler<T, F extends Function<T>> extends Abst
 	private Selector selector;
 	private QueryBuilder<T> queryBuilder;
 	private final Object value;
-	private Proxy proxy;
+	private TorpedoProxy proxy;
 
 	public BaseFunctionHandler(Object value) {
 		this.value = value;
@@ -56,7 +56,7 @@ public abstract class BaseFunctionHandler<T, F extends Function<T>> extends Abst
 	}
 
 	@Override
-	public F handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
+	public F handle(TorpedoProxy proxy, QueryBuilder queryBuilder, Selector selector) {
 		this.proxy = proxy;
 		this.queryBuilder = queryBuilder;
 		this.selector = selector;

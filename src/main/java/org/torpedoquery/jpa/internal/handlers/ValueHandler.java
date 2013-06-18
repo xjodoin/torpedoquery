@@ -17,9 +17,9 @@
 package org.torpedoquery.jpa.internal.handlers;
 
 import org.torpedoquery.core.QueryBuilder;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
 
 public interface ValueHandler<T> {
-		T handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector);
+		T handle(TorpedoProxy proxy, QueryBuilder queryBuilder, Selector selector);
 	}

@@ -24,7 +24,7 @@ import org.torpedoquery.jpa.ComparableFunction;
 import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.OnGoingMathOperation;
 import org.torpedoquery.jpa.internal.MethodCall;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.functions.MathOperationFunction;
@@ -34,12 +34,12 @@ import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperation<T>>, OnGoingMathOperation<T> {
 
 	private Selector<T> leftSelector;
-	private Proxy proxy;
+	private TorpedoProxy proxy;
 
 	public MathOperationHandler(Function<T> left) {
 		leftSelector = left;
 		if (left != null) {
-			proxy = (Proxy) left.getProxy();
+			proxy = (TorpedoProxy) left.getProxy();
 		}
 	}
 

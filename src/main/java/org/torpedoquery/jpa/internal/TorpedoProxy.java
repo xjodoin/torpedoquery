@@ -19,7 +19,7 @@ package org.torpedoquery.jpa.internal;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 
 
-public interface Proxy {
+public interface TorpedoProxy {
 
 	TorpedoMethodHandler getTorpedoMethodHandler();
 

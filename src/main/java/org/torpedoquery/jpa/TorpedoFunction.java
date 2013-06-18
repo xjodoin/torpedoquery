@@ -20,7 +20,7 @@ import static org.torpedoquery.jpa.internal.TorpedoMagic.getTorpedoMethodHandler
 import static org.torpedoquery.jpa.internal.TorpedoMagic.setQuery;
 
 import org.torpedoquery.core.QueryBuilder;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.functions.CoalesceFunction;
 import org.torpedoquery.jpa.internal.handlers.ArrayCallHandler;
@@ -44,12 +44,12 @@ public class TorpedoFunction {
 
 	// JPA Functions
 	public static Function<Long> count(Object object) {
-		if (object instanceof Proxy) {
-			setQuery((Proxy) object);
+		if (object instanceof TorpedoProxy) {
+			setQuery((TorpedoProxy) object);
 		}
 		return getTorpedoMethodHandler().handle(
 				new CountFunctionHandler(
-						object instanceof Proxy ? (Proxy) object : null));
+						object instanceof TorpedoProxy ? (TorpedoProxy) object : null));
 	}
 
 	public static <V, T extends Comparable<V>> ComparableFunction<V> sum(
@@ -115,7 +115,7 @@ public class TorpedoFunction {
 		getTorpedoMethodHandler().handle(
 				new ArrayCallHandler(new ValueHandler<Void>() {
 					@Override
-					public Void handle(Proxy proxy, QueryBuilder queryBuilder,
+					public Void handle(TorpedoProxy proxy, QueryBuilder queryBuilder,
 							Selector selector) {
 						coalesceFunction.setQuery(proxy);
 						coalesceFunction.addSelector(selector);
@@ -126,8 +126,8 @@ public class TorpedoFunction {
 	}
 
 	public static <T> Function<T> distinct(T object) {
-		if (object instanceof Proxy) {
-			setQuery((Proxy) object);
+		if (object instanceof TorpedoProxy) {
+			setQuery((TorpedoProxy) object);
 		}
 		return getTorpedoMethodHandler().handle(
 				new DistinctFunctionHandler<T>(object));
@@ -145,8 +145,8 @@ public class TorpedoFunction {
 	}
 
 	public static <T> ComparableFunction<Integer> index(T object) {
-		if (object instanceof Proxy) {
-			setQuery((Proxy) object);
+		if (object instanceof TorpedoProxy) {
+			setQuery((TorpedoProxy) object);
 		}
 		return getTorpedoMethodHandler().handle(
 				new IndexFunctionHandler(object));

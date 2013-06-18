@@ -22,7 +22,7 @@ import java.util.Map;
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.internal.MethodCall;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.selectors.ObjectSelector;
 import org.torpedoquery.jpa.internal.selectors.SimpleMethodCallSelector;
@@ -30,18 +30,18 @@ import org.torpedoquery.jpa.internal.selectors.SimpleMethodCallSelector;
 public abstract class AbstractCallHandler<T> {
 
 	public T handleValue(ValueHandler<T> valueHandler, Map<Object, QueryBuilder<?>> proxyQueryBuilders, Iterator<MethodCall> iterator, Object param) {
-		Proxy proxy;
+		TorpedoProxy proxy;
 		QueryBuilder queryBuilder;
 		Selector selector;
 
 		if (param instanceof Function) {
 			Function function = (Function) param;
 			selector = function;
-			proxy = (Proxy) function.getProxy();
+			proxy = (TorpedoProxy) function.getProxy();
 			queryBuilder = proxyQueryBuilders.get(proxy);
 
-		} else if (param instanceof Proxy) {
-			proxy = (Proxy) param;
+		} else if (param instanceof TorpedoProxy) {
+			proxy = (TorpedoProxy) param;
 			queryBuilder = proxyQueryBuilders.get(proxy);
 			selector = new ObjectSelector(queryBuilder);
 		} else {

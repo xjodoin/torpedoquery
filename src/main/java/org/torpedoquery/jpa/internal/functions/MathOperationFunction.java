@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.ComparableFunction;
 import org.torpedoquery.jpa.internal.Parameter;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.handlers.ParameterQueryHandler;
@@ -30,9 +30,9 @@ public class MathOperationFunction<T> implements ComparableFunction<T> {
 	private final Selector<T> leftOperand;
 	private final String operator;
 	private final Selector<T> rightOperand;
-	private final Proxy proxy;
+	private final TorpedoProxy proxy;
 
-	public MathOperationFunction(Proxy proxy, Selector<T> leftOperand, String operator, Selector<T> rightOperand) {
+	public MathOperationFunction(TorpedoProxy proxy, Selector<T> leftOperand, String operator, Selector<T> rightOperand) {
 		this.proxy = proxy;
 		this.leftOperand = leftOperand;
 		this.operator = operator;

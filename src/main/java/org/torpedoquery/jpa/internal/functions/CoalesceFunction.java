@@ -23,14 +23,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.ComparableFunction;
 import org.torpedoquery.jpa.internal.Parameter;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.query.SelectorParameter;
 
 public class CoalesceFunction<T> implements ComparableFunction<T> {
 
 	private final List<Selector> selectors = new ArrayList<Selector>();
-	private Proxy proxy;
+	private TorpedoProxy proxy;
 
 	@Override
 	public String createQueryFragment(AtomicInteger incrementor) {
@@ -59,7 +59,7 @@ public class CoalesceFunction<T> implements ComparableFunction<T> {
 		selectors.add(selector);
 	}
 
-	public void setQuery(Proxy proxy) {
+	public void setQuery(TorpedoProxy proxy) {
 		this.proxy = proxy;
 
 	}

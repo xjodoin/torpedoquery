@@ -28,13 +28,13 @@ import javassist.util.proxy.MethodHandler;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.MethodCall;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.handlers.QueryHandler;
 
 import com.google.common.base.Defaults;
 
-public class TorpedoMethodHandler implements MethodHandler, Proxy {
+public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	private final Map<Object, QueryBuilder<?>> proxyQueryBuilders = new IdentityHashMap<Object, QueryBuilder<?>>();
 	private final Deque<MethodCall> methods = new LinkedList<MethodCall>();
 	private final QueryBuilder<?> root;
@@ -52,7 +52,7 @@ public class TorpedoMethodHandler implements MethodHandler, Proxy {
 
 	@Override
 	public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
-		if (thisMethod.getDeclaringClass().equals(Proxy.class)) {
+		if (thisMethod.getDeclaringClass().equals(TorpedoProxy.class)) {
 			try {
 				return thisMethod.invoke(this, args);
 			} catch (InvocationTargetException e) {
@@ -60,8 +60,8 @@ public class TorpedoMethodHandler implements MethodHandler, Proxy {
 			}
 		}
 
-		methods.addFirst(new SimpleMethodCall((Proxy) self, thisMethod));
-		TorpedoMagic.setQuery((Proxy) self);
+		methods.addFirst(new SimpleMethodCall((TorpedoProxy) self, thisMethod));
+		TorpedoMagic.setQuery((TorpedoProxy) self);
 
 		return createReturnValue(thisMethod.getReturnType());
 	}

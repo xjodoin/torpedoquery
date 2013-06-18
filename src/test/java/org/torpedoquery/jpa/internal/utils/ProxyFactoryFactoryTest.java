@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.junit.Test;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.ExtendEntity;
@@ -36,7 +36,7 @@ public class ProxyFactoryFactoryTest {
 
 		ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(new MultiClassLoaderProvider());
 		TorpedoMethodHandler torpedoMethodHandler = new TorpedoMethodHandler(new DefaultQueryBuilder<Entity>(Entity.class), proxyFactoryFactory);
-		Entity createProxy = proxyFactoryFactory.createProxy(torpedoMethodHandler, Entity.class, Proxy.class);
+		Entity createProxy = proxyFactoryFactory.createProxy(torpedoMethodHandler, Entity.class, TorpedoProxy.class);
 		Method method = Object.class.getDeclaredMethod("finalize");
 		method.setAccessible(true);
 		method.invoke(createProxy);
@@ -50,7 +50,7 @@ public class ProxyFactoryFactoryTest {
 
 		ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(new MultiClassLoaderProvider());
 		TorpedoMethodHandler torpedoMethodHandler = new TorpedoMethodHandler(new DefaultQueryBuilder<ExtendEntity>(ExtendEntity.class), proxyFactoryFactory);
-		ExtendEntity createProxy = proxyFactoryFactory.createProxy(torpedoMethodHandler, ExtendEntity.class, Proxy.class);
+		ExtendEntity createProxy = proxyFactoryFactory.createProxy(torpedoMethodHandler, ExtendEntity.class, TorpedoProxy.class);
 		Method method = Object.class.getDeclaredMethod("finalize");
 		method.setAccessible(true);
 		method.invoke(createProxy);
@@ -63,9 +63,9 @@ public class ProxyFactoryFactoryTest {
 	{
 		ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(new MultiClassLoaderProvider());
 		TorpedoMethodHandler torpedoMethodHandler = new TorpedoMethodHandler(new DefaultQueryBuilder<Entity>(Entity.class), proxyFactoryFactory);
-		Entity createProxy = proxyFactoryFactory.createProxy(torpedoMethodHandler, Entity.class, Proxy.class);
+		Entity createProxy = proxyFactoryFactory.createProxy(torpedoMethodHandler, Entity.class, TorpedoProxy.class);
 		
-		Entity createProxy2 = proxyFactoryFactory.createProxy(torpedoMethodHandler, Entity.class, Proxy.class);
+		Entity createProxy2 = proxyFactoryFactory.createProxy(torpedoMethodHandler, Entity.class, TorpedoProxy.class);
 		
 		assertSame(createProxy.getClass(), createProxy2.getClass());
 	}

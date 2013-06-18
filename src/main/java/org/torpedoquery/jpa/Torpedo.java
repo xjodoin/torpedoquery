@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.torpedoquery.core.QueryBuilder;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.handlers.ArrayCallHandler;
 import org.torpedoquery.jpa.internal.handlers.GroupingConditionHandler;
@@ -107,11 +107,11 @@ public class Torpedo extends TorpedoFunction {
 			DefaultQueryBuilder queryBuilder = new DefaultQueryBuilder(toQuery);
 			TorpedoMethodHandler fjpaMethodHandler = new TorpedoMethodHandler(queryBuilder, proxyFactoryFactory);
 
-			T from = proxyFactoryFactory.createProxy(fjpaMethodHandler, Proxy.class, toQuery);
+			T from = proxyFactoryFactory.createProxy(fjpaMethodHandler, TorpedoProxy.class, toQuery);
 
 			fjpaMethodHandler.addQueryBuilder(from, queryBuilder);
 
-			setQuery((Proxy) from);
+			setQuery((TorpedoProxy) from);
 
 			return from;
 
@@ -135,7 +135,7 @@ public class Torpedo extends TorpedoFunction {
 		try {
 
 			TorpedoMethodHandler fjpaMethodHandler = getTorpedoMethodHandler();
-			E proxy = proxyFactoryFactory.createProxy(fjpaMethodHandler, Proxy.class, subclass);
+			E proxy = proxyFactoryFactory.createProxy(fjpaMethodHandler, TorpedoProxy.class, subclass);
 
 			QueryBuilder queryBuilder = fjpaMethodHandler.getQueryBuilder(toExtend);
 			fjpaMethodHandler.addQueryBuilder(proxy, queryBuilder);
@@ -180,10 +180,10 @@ public class Torpedo extends TorpedoFunction {
 
 			if (param instanceof Function) {
 				Function function = (Function) values[i];
-				Proxy proxy = (Proxy) function.getProxy();
+				TorpedoProxy proxy = (TorpedoProxy) function.getProxy();
 				methodHandler = proxy.getTorpedoMethodHandler();
-			} else if (param instanceof Proxy) {
-				Proxy proxy = (Proxy) param;
+			} else if (param instanceof TorpedoProxy) {
+				TorpedoProxy proxy = (TorpedoProxy) param;
 				methodHandler = proxy.getTorpedoMethodHandler();
 			}
 
@@ -194,7 +194,7 @@ public class Torpedo extends TorpedoFunction {
 		methodHandler.handle(new ArrayCallHandler(new ValueHandler<Void>() {
 
 			@Override
-			public Void handle(Proxy query, QueryBuilder queryBuilder, Selector selector) {
+			public Void handle(TorpedoProxy query, QueryBuilder queryBuilder, Selector selector) {
 				root.addSelector(selector);
 				return null;
 			}
@@ -503,7 +503,7 @@ public class Torpedo extends TorpedoFunction {
 
 		fjpaMethodHandler.handle(new ArrayCallHandler(new ValueHandler<Void>() {
 			@Override
-			public Void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
+			public Void handle(TorpedoProxy proxy, QueryBuilder queryBuilder, Selector selector) {
 				groupBy.addGroup(selector);
 				return null;
 			}
@@ -521,7 +521,7 @@ public class Torpedo extends TorpedoFunction {
 	public static void orderBy(Object... values) {
 		getTorpedoMethodHandler().handle(new ArrayCallHandler(new ValueHandler<Void>() {
 			@Override
-			public Void handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
+			public Void handle(TorpedoProxy proxy, QueryBuilder queryBuilder, Selector selector) {
 				queryBuilder.addOrder(selector);
 				return null;
 			}

@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.MethodCall;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 
 public class ArrayCallHandler extends AbstractCallHandler implements QueryHandler<Void> {
 
@@ -39,7 +39,7 @@ public class ArrayCallHandler extends AbstractCallHandler implements QueryHandle
 
 		Iterator<MethodCall> iterator = methodCalls.descendingIterator();
 
-		Proxy proxy = null;
+		TorpedoProxy proxy = null;
 
 		for (int i = 0; i < values.length; i++) {
 

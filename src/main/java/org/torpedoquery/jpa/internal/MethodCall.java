@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 
 public interface MethodCall {
 
-	public abstract Proxy getProxy();
+	public abstract TorpedoProxy getProxy();
 
 	public abstract Method getMethod();
 

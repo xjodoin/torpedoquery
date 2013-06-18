@@ -19,7 +19,7 @@ package org.torpedoquery.jpa.internal.utils;
 import java.lang.reflect.Method;
 
 import org.torpedoquery.jpa.internal.MethodCall;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 
 public class LinkedMethodCall implements MethodCall {
 
@@ -32,7 +32,7 @@ public class LinkedMethodCall implements MethodCall {
 	}
 
 	@Override
-	public Proxy getProxy() {
+	public TorpedoProxy getProxy() {
 		return previous.getProxy();
 	}
 

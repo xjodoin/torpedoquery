@@ -23,16 +23,16 @@ import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 
 public class TorpedoMagic {
 
-	private static final ThreadLocal<Proxy> query = new ThreadLocal<Proxy>();
+	private static final ThreadLocal<TorpedoProxy> query = new ThreadLocal<TorpedoProxy>();
 	private static AtomicReference<QueryBuilderFactory> factory = new AtomicReference<QueryBuilderFactory>(
 			new DefaultQueryBuilderFactory());
 
-	public static void setQuery(Proxy query) {
+	public static void setQuery(TorpedoProxy query) {
 		TorpedoMagic.query.set(query);
 	}
 
 	public static TorpedoMethodHandler getTorpedoMethodHandler() {
-		Proxy internalQuery = query.get();
+		TorpedoProxy internalQuery = query.get();
 		return internalQuery.getTorpedoMethodHandler();
 	}
 

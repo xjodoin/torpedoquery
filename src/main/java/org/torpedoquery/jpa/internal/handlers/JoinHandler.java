@@ -25,7 +25,7 @@ import java.util.Map;
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Join;
 import org.torpedoquery.jpa.internal.MethodCall;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.internal.utils.FieldUtils;
 import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
@@ -77,7 +77,7 @@ public abstract class JoinHandler<T> implements QueryHandler<T>
 
 			Class<? extends Object> goodType = getGoodType(returnType);
 
-			T join = proxyFactoryFactory.createProxy(methodHandler, goodType,Proxy.class);
+			T join = proxyFactoryFactory.createProxy(methodHandler, goodType,TorpedoProxy.class);
 
 			final QueryBuilder queryBuilder = methodHandler.addQueryBuilder(join, new DefaultQueryBuilder(goodType));
 

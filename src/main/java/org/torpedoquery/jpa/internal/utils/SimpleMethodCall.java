@@ -19,13 +19,13 @@ package org.torpedoquery.jpa.internal.utils;
 import java.lang.reflect.Method;
 
 import org.torpedoquery.jpa.internal.MethodCall;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 
 public class SimpleMethodCall implements MethodCall {
-	private final Proxy proxy;
+	private final TorpedoProxy proxy;
 	private final Method method;
 
-	public SimpleMethodCall(Proxy proxy, Method method) {
+	public SimpleMethodCall(TorpedoProxy proxy, Method method) {
 		this.proxy = proxy;
 		this.method = method;
 	}
@@ -36,7 +36,7 @@ public class SimpleMethodCall implements MethodCall {
 	 * @see org.torpedoquery.jpa.internal.MethodCallTmp#getProxy()
 	 */
 	@Override
-	public Proxy getProxy() {
+	public TorpedoProxy getProxy() {
 		return proxy;
 	}
 

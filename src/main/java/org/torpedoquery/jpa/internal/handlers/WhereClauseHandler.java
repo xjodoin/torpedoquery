@@ -22,7 +22,7 @@ import java.util.Map;
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.OnGoingCondition;
 import org.torpedoquery.jpa.internal.MethodCall;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.QueryConfigurator;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
@@ -61,7 +61,7 @@ public class WhereClauseHandler<T, E extends OnGoingCondition<T>> extends
 	}
 
 	@Override
-	public E handle(Proxy proxy, QueryBuilder queryBuilder, Selector selector) {
+	public E handle(TorpedoProxy proxy, QueryBuilder queryBuilder, Selector selector) {
 		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<T>(
 				queryBuilder, logicalCondition, selector)
 				: new ConditionBuilder<T>(queryBuilder, selector);

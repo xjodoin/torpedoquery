@@ -24,17 +24,17 @@ import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.Function;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Parameter;
-import org.torpedoquery.jpa.internal.Proxy;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.query.SelectorParameter;
 import org.torpedoquery.jpa.internal.selectors.SimpleMethodCallSelector;
 
 public class CountFunctionHandler implements Function<Long>, QueryHandler<Function<Long>> {
 
-	private Proxy proxy;
+	private TorpedoProxy proxy;
 	private MethodCall method;
 	private QueryBuilder<?> queryBuilder;
 
-	public CountFunctionHandler(Proxy proxy) {
+	public CountFunctionHandler(TorpedoProxy proxy) {
 		this.proxy = proxy;
 	}
 
