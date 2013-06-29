@@ -45,3 +45,8 @@ Torpedo Query goal is to simplify how you create and maintain your HQL query.
  		OnGoingLogicalCondition condition = condition(from.getCode()).eq("test").or(from.getCode()).eq("test2");
  		where(from.getName()).eq("test").and(condition);
  		Query<Entity> select = select(from);
+
+
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/2d5ab2cb91c7289d22767c22616eb063 "githalytics.com")](http://githalytics.com/xjodoin/torpedoquery)
+
