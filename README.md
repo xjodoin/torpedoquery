@@ -2,7 +2,8 @@ TorpedoQuery
 ============
 [![Build Status](https://secure.travis-ci.org/xjodoin/torpedoquery.png?branch=master)](http://travis-ci.org/xjodoin/torpedoquery)
 
-Torpedo Query goal is to simplify how you create and maintain your HQL query.
+Simple and powerful query builder for your project. Can be use with any existing Hibernate or JPA application.  
+Stop wasting your time to maintain complex HQL queries and start today with the new generation of query builder.
  
 #### Maven ####
 ```xml
@@ -53,7 +54,4 @@ Torpedo Query goal is to simplify how you create and maintain your HQL query.
  		where(from.getName()).eq("test").and(condition);
  		Query<Entity> select = select(from);
 
-
-
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/2d5ab2cb91c7289d22767c22616eb063 "githalytics.com")](http://githalytics.com/xjodoin/torpedoquery)
 
