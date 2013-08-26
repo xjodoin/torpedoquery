@@ -28,7 +28,7 @@
 		<developer>
 			<id>xjodoin</id>
 			<name>Xavier Jodoin</name>
-			<email>xjodoin@gmail.com</email>
+			<email>xjodoin@torpedoquery.org</email>
 		</developer>
 	</developers>
 
@@ -227,27 +227,6 @@
 					             </goals>
 							</execution>
 						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.github.github</groupId>
-						<artifactId>downloads-maven-plugin</artifactId>
-						<version>0.5</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>upload</goal>
-								</goals>
-								<phase>package</phase>
-							</execution>
-						</executions>
-						<configuration>
-							<description>${project.version} release of ${project.name}</description>
-							<override>true</override>
-							<includeAttached>false</includeAttached>
-							<includes>
-								<include>*.zip</include>
-							</includes>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
