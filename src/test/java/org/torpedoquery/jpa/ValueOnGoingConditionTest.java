@@ -17,11 +17,10 @@ package org.torpedoquery.jpa;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.torpedoquery.jpa.Torpedo.from;
-import static org.torpedoquery.jpa.Torpedo.select;
-import static org.torpedoquery.jpa.Torpedo.where;
+import static org.torpedoquery.jpa.Torpedo.*;
 
 import org.junit.Test;
+import org.mockito.internal.configuration.injection.filter.OngoingInjecter;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.ExtendEntity;
 import org.torpedoquery.jpa.test.bo.ExtendSubEntity;
@@ -75,6 +74,24 @@ public class ValueOnGoingConditionTest {
 		assertEquals("select entity_0 from Entity entity_0 where entity_0.code not between :code_1 and :code_2", select.getQuery());
 		assertEquals("A", select.getParameters().get("code_1"));
 		assertEquals("C", select.getParameters().get("code_2"));
+	}
+	
+	@Test
+	public void testLowerFunctionInCondition() {
+		Entity entity = from(Entity.class);
+		OnGoingLogicalCondition condition = condition(lower(entity.getCode())).like().any("test");
+		where(condition);
+		Query<Entity> select = select(entity);
+		assertEquals("select entity_0 from Entity entity_0 where ( lower(entity_0.code) like '%test%'  )", select.getQuery());
+	}
+	
+	@Test
+	public void testComparableFunctionInCondition() {
+		Entity entity = from(Entity.class);
+		OnGoingLogicalCondition condition = condition(length(entity.getCode())).gt(5);
+		where(condition);
+		Query<Entity> select = select(entity);
+		assertEquals("select entity_0 from Entity entity_0 where ( length(entity_0.code) > :function_1 )", select.getQuery());
 	}
 
 }

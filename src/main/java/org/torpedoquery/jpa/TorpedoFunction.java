@@ -19,8 +19,8 @@ import static org.torpedoquery.jpa.internal.TorpedoMagic.getTorpedoMethodHandler
 import static org.torpedoquery.jpa.internal.TorpedoMagic.setQuery;
 
 import org.torpedoquery.core.QueryBuilder;
-import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.functions.CoalesceFunction;
 import org.torpedoquery.jpa.internal.handlers.ArrayCallHandler;
 import org.torpedoquery.jpa.internal.handlers.AscFunctionHandler;
@@ -48,7 +48,8 @@ public class TorpedoFunction {
 		}
 		return getTorpedoMethodHandler().handle(
 				new CountFunctionHandler(
-						object instanceof TorpedoProxy ? (TorpedoProxy) object : null));
+						object instanceof TorpedoProxy ? (TorpedoProxy) object
+								: null));
 	}
 
 	public static <V, T extends Comparable<V>> ComparableFunction<V> sum(
@@ -114,8 +115,8 @@ public class TorpedoFunction {
 		getTorpedoMethodHandler().handle(
 				new ArrayCallHandler(new ValueHandler<Void>() {
 					@Override
-					public Void handle(TorpedoProxy proxy, QueryBuilder queryBuilder,
-							Selector selector) {
+					public Void handle(TorpedoProxy proxy,
+							QueryBuilder queryBuilder, Selector selector) {
 						coalesceFunction.setQuery(proxy);
 						coalesceFunction.addSelector(selector);
 						return null;
@@ -163,6 +164,12 @@ public class TorpedoFunction {
 				new CustomFunctionHandler<T>(name, value));
 	}
 
+	public static <V, T extends Comparable<V>> ComparableFunction<V> comparableFunction(
+			String name, Class<V> returnType, Object value) {
+		return getTorpedoMethodHandler().handle(
+				new CustomFunctionHandler<V>(name, value));
+	}
+
 	// orderBy function
 	public static <T> Function<T> asc(T object) {
 		return getTorpedoMethodHandler().handle(new AscFunctionHandler<T>());
@@ -185,45 +192,49 @@ public class TorpedoFunction {
 
 	// string functions
 	// substring(), trim(), lower(), upper(), length()
-	
+
 	public static Function<String> trim(String field) {
 		return function("trim", String.class, field);
 	}
-	
+
 	public static Function<String> trim(Function<String> function) {
 		return function("trim", String.class, function);
 	}
-	
+
 	public static Function<String> lower(String field) {
 		return function("lower", String.class, field);
 	}
-	
+
 	public static Function<String> lower(Function<String> function) {
 		return function("lower", String.class, function);
 	}
-	
+
 	public static Function<String> upper(String field) {
 		return function("upper", String.class, field);
 	}
-	
+
 	public static Function<String> upper(Function<String> function) {
 		return function("upper", String.class, function);
 	}
-	
-	public static Function<Integer> length(String field) {
-		return function("length", Integer.class, field);
+
+	public static ComparableFunction<Integer> length(String field) {
+		return comparableFunction("length", Integer.class, field);
 	}
-	
-	public static Function<Integer> length(Function<String> function) {
-		return function("length", Integer.class, function);
+
+	public static ComparableFunction<Integer> length(Function<String> function) {
+		return comparableFunction("length", Integer.class, function);
 	}
-	
-	public static Function<String> substring(String param,int beginIndex, int endIndex) {
-		return getTorpedoMethodHandler().handle(new SubstringFunctionHandler(param, beginIndex, endIndex));
+
+	public static Function<String> substring(String param, int beginIndex,
+			int endIndex) {
+		return getTorpedoMethodHandler().handle(
+				new SubstringFunctionHandler(param, beginIndex, endIndex));
 	}
-	
-	public static Function<String> substring(Function<String> param,int beginIndex, int endIndex) {
-		return getTorpedoMethodHandler().handle(new SubstringFunctionHandler(param, beginIndex, endIndex));
+
+	public static Function<String> substring(Function<String> param,
+			int beginIndex, int endIndex) {
+		return getTorpedoMethodHandler().handle(
+				new SubstringFunctionHandler(param, beginIndex, endIndex));
 	}
 
 }

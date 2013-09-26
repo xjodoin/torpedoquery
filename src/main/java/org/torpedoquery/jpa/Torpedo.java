@@ -459,11 +459,18 @@ public class Torpedo extends TorpedoFunction {
 	public static <T> ValueOnGoingCondition<T> condition(T object) {
 		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>(object,new DoNothingQueryConfigurator<T>()));
 	}
-
+	
 	/**
 	 * @see #condition(Object) 
 	 */
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(T object) {
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(object,new DoNothingQueryConfigurator<V>()));
+	}
+	
+	/**
+	 * @see #condition(Object) 
+	 */
+	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(ComparableFunction<T> object) {
 		return getTorpedoMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(object,new DoNothingQueryConfigurator<V>()));
 	}
 
@@ -471,6 +478,13 @@ public class Torpedo extends TorpedoFunction {
 	 * @see #condition(Object) 
 	 */
 	public static OnGoingStringCondition<String> condition(String object) {
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(object,new DoNothingQueryConfigurator<String>()));
+	}
+	
+	/**
+	 * @see #condition(Object) 
+	 */
+	public static OnGoingStringCondition<String> condition(Function<String> object) {
 		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(object,new DoNothingQueryConfigurator<String>()));
 	}
 

@@ -15,10 +15,10 @@
  */
 package org.torpedoquery.jpa.internal.handlers;
 
-import org.torpedoquery.jpa.Function;
+import org.torpedoquery.jpa.ComparableFunction;
 
 public class CustomFunctionHandler<T> extends
-		BaseFunctionHandler<T, Function<T>> {
+		BaseFunctionHandler<T, ComparableFunction<T>> {
 
 	private final String name;
 	private String functionFormat;
