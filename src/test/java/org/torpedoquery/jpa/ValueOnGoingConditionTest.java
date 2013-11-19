@@ -17,10 +17,18 @@ package org.torpedoquery.jpa;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.torpedoquery.jpa.Torpedo.*;
+import static org.torpedoquery.jpa.Torpedo.and;
+import static org.torpedoquery.jpa.Torpedo.condition;
+import static org.torpedoquery.jpa.Torpedo.from;
+import static org.torpedoquery.jpa.Torpedo.or;
+import static org.torpedoquery.jpa.Torpedo.select;
+import static org.torpedoquery.jpa.Torpedo.where;
+import static org.torpedoquery.jpa.TorpedoFunction.length;
+import static org.torpedoquery.jpa.TorpedoFunction.lower;
+
+import java.util.Arrays;
 
 import org.junit.Test;
-import org.mockito.internal.configuration.injection.filter.OngoingInjecter;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.ExtendEntity;
 import org.torpedoquery.jpa.test.bo.ExtendSubEntity;
@@ -33,7 +41,9 @@ public class ValueOnGoingConditionTest {
 		where(from.getSubEntity()).eq(ExtendSubEntity.class);
 		Query<Entity> select = select(from);
 
-		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntity.class = ExtendSubEntity", select.getQuery());
+		assertEquals(
+				"select entity_0 from Entity entity_0 where entity_0.subEntity.class = ExtendSubEntity",
+				select.getQuery());
 		assertTrue(select.getParameters().isEmpty());
 	}
 
@@ -43,7 +53,9 @@ public class ValueOnGoingConditionTest {
 		where(from.getSubEntity()).neq(ExtendSubEntity.class);
 		Query<Entity> select = select(from);
 
-		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntity.class <> ExtendSubEntity", select.getQuery());
+		assertEquals(
+				"select entity_0 from Entity entity_0 where entity_0.subEntity.class <> ExtendSubEntity",
+				select.getQuery());
 		assertTrue(select.getParameters().isEmpty());
 	}
 
@@ -52,7 +64,9 @@ public class ValueOnGoingConditionTest {
 		Entity from = from(Entity.class);
 		where(from).eq(ExtendEntity.class);
 		Query<Entity> select = select(from);
-		assertEquals("select entity_0 from Entity entity_0 where entity_0.class = ExtendEntity", select.getQuery());
+		assertEquals(
+				"select entity_0 from Entity entity_0 where entity_0.class = ExtendEntity",
+				select.getQuery());
 		assertTrue(select.getParameters().isEmpty());
 	}
 
@@ -61,7 +75,9 @@ public class ValueOnGoingConditionTest {
 		Entity from = from(Entity.class);
 		where(from.getCode()).between("A", "C");
 		Query<Entity> select = select(from);
-		assertEquals("select entity_0 from Entity entity_0 where entity_0.code between :code_1 and :code_2", select.getQuery());
+		assertEquals(
+				"select entity_0 from Entity entity_0 where entity_0.code between :code_1 and :code_2",
+				select.getQuery());
 		assertEquals("A", select.getParameters().get("code_1"));
 		assertEquals("C", select.getParameters().get("code_2"));
 	}
@@ -71,27 +87,65 @@ public class ValueOnGoingConditionTest {
 		Entity from = from(Entity.class);
 		where(from.getCode()).notBetween("A", "C");
 		Query<Entity> select = select(from);
-		assertEquals("select entity_0 from Entity entity_0 where entity_0.code not between :code_1 and :code_2", select.getQuery());
+		assertEquals(
+				"select entity_0 from Entity entity_0 where entity_0.code not between :code_1 and :code_2",
+				select.getQuery());
 		assertEquals("A", select.getParameters().get("code_1"));
 		assertEquals("C", select.getParameters().get("code_2"));
 	}
-	
+
 	@Test
 	public void testLowerFunctionInCondition() {
 		Entity entity = from(Entity.class);
-		OnGoingLogicalCondition condition = condition(lower(entity.getCode())).like().any("test");
+		OnGoingLogicalCondition condition = condition(lower(entity.getCode()))
+				.like().any("test");
 		where(condition);
 		Query<Entity> select = select(entity);
-		assertEquals("select entity_0 from Entity entity_0 where ( lower(entity_0.code) like '%test%'  )", select.getQuery());
+		assertEquals(
+				"select entity_0 from Entity entity_0 where ( lower(entity_0.code) like '%test%'  )",
+				select.getQuery());
 	}
-	
+
 	@Test
 	public void testComparableFunctionInCondition() {
 		Entity entity = from(Entity.class);
-		OnGoingLogicalCondition condition = condition(length(entity.getCode())).gt(5);
+		OnGoingLogicalCondition condition = condition(length(entity.getCode()))
+				.gt(5);
 		where(condition);
 		Query<Entity> select = select(entity);
-		assertEquals("select entity_0 from Entity entity_0 where ( length(entity_0.code) > :function_1 )", select.getQuery());
+		assertEquals(
+				"select entity_0 from Entity entity_0 where ( length(entity_0.code) > :function_1 )",
+				select.getQuery());
+	}
+
+	@Test
+	public void testOrMultipleOnGoingLogicalConditions() {
+		Entity entity = from(Entity.class);
+		OnGoingLogicalCondition condition = condition(entity.getCode()).eq(
+				"test");
+		OnGoingLogicalCondition condition2 = condition(entity.getCode()).eq(
+				"test2");
+
+		where(or(condition, condition2));
+		Query<Entity> select = select(entity);
+		assertEquals(
+				"select entity_0 from Entity entity_0 where ( ( entity_0.code = :code_1 ) or ( entity_0.code = :code_2 ) )",
+				select.getQuery());
+	}
+
+	@Test
+	public void testAndMultipleOnGoingLogicalConditions2() {
+		Entity entity = from(Entity.class);
+		OnGoingLogicalCondition condition = condition(entity.getCode()).eq(
+				"test");
+		OnGoingLogicalCondition condition2 = condition(entity.getCode()).eq(
+				"test2");
+
+		where(and(Arrays.asList(condition, condition2)));
+		Query<Entity> select = select(entity);
+		assertEquals(
+				"select entity_0 from Entity entity_0 where ( ( entity_0.code = :code_1 ) and ( entity_0.code = :code_2 ) )",
+				select.getQuery());
 	}
 
 }
