@@ -10,7 +10,7 @@ Stop wasting your time to maintain complex HQL queries and start today with the 
 <dependency>
 		<groupId>org.torpedoquery</groupId>
 		<artifactId>org.torpedoquery</artifactId>
-		<version>1.5.1</version>
+		<version>1.6.0</version>
 </dependency>
 ```
  
