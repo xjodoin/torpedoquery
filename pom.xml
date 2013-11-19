@@ -10,7 +10,7 @@
 
 	<groupId>org.torpedoquery</groupId>
 	<artifactId>org.torpedoquery</artifactId>
-	<version>1.6.0</version>
+	<version>1.6.1-SNAPSHOT</version>
 
 	<name>TorpedoQuery</name>
 	<url>http://torpedoquery.org</url>
