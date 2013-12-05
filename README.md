@@ -70,3 +70,7 @@ Stop wasting your time to maintain complex HQL queries and start today with the 
   limitations under the License.
 
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/xjodoin/torpedoquery/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
