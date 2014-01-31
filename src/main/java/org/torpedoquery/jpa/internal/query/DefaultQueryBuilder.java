@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
@@ -69,7 +70,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private String freezeQuery(AtomicInteger incrementor) {
 
 		if (freezeQuery == null) {
-			String from = " from " + toQuery.getSimpleName() + " " + getAlias(incrementor);
+			String from = " from " + getEntityName() + " " + getAlias(incrementor);
 			StringBuilder builder = new StringBuilder();
 
 			appendSelect(builder, incrementor);
@@ -88,6 +89,15 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 
 		}
 		return freezeQuery;
+	}
+
+	private String getEntityName() {
+		
+		Entity e = toQuery.getAnnotation(Entity.class);
+		if (e!=null&&e.name()!=null)
+			return e.name();
+		else
+		return toQuery.getSimpleName();
 	}
 
 	@Override
@@ -172,7 +182,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	@Override
 	public String getAlias(AtomicInteger incrementor) {
 		if (alias == null) {
-			final char[] charArray = toQuery.getSimpleName().toCharArray();
+			final char[] charArray = getEntityName().toCharArray();
 
 			charArray[0] = Character.toLowerCase(charArray[0]);
 			alias = new String(charArray) + "_" + incrementor.getAndIncrement();
