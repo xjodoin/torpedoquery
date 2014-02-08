@@ -33,6 +33,7 @@ import static org.torpedoquery.jpa.TorpedoFunction.sum;
 
 import java.math.BigDecimal;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.SubEntity;
@@ -235,5 +236,25 @@ public class JPAFunctionTest {
 				"select distinct entity_0.interface from Entity entity_0",
 				select.getQuery());
 	}
+	
+	@Test
+	public void testCountDistinctWorkaround() {
+		Entity fromOrder = from(Entity.class);
+		Query<Long> select = select(function("count", Long.class,
+				distinct(fromOrder.getInterface())));
+		assertEquals(
+				"select count(distinct entity_0.interface) from Entity entity_0",
+				select.getQuery());
+	}
 
+	@Test @Ignore
+	public void testCountDistinct() {
+		Entity fromOrder = from(Entity.class);
+		// throws an NPE
+		Query<Long> select = select(count(distinct(fromOrder.getInterface())));
+		assertEquals(
+				"select count(distinct entity_0.interface) from Entity entity_0",
+				select.getQuery());
+	}
+	
 }
