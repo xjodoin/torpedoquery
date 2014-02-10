@@ -33,7 +33,6 @@ import static org.torpedoquery.jpa.TorpedoFunction.sum;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.SubEntity;
@@ -44,7 +43,7 @@ public class JPAFunctionTest {
 	public void testCountFunction_defaultCount() {
 		Entity from = from(Entity.class);
 		Query<Long> select = select(count(from));
-		assertEquals("select count(*) from Entity entity_0", select.getQuery());
+		assertEquals("select count(entity_0) from Entity entity_0", select.getQuery());
 	}
 
 	@Test
@@ -159,7 +158,7 @@ public class JPAFunctionTest {
 		Query<Object[]> select = select(from.getCode(), count(from));
 
 		assertEquals(
-				"select entity_0.code, count(*) from Entity entity_0 group by entity_0.code",
+				"select entity_0.code, count(entity_0) from Entity entity_0 group by entity_0.code",
 				select.getQuery());
 	}
 
@@ -247,7 +246,7 @@ public class JPAFunctionTest {
 				select.getQuery());
 	}
 
-	@Test @Ignore
+	@Test
 	public void testCountDistinct() {
 		Entity fromOrder = from(Entity.class);
 		// throws an NPE

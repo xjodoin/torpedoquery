@@ -27,7 +27,6 @@ import org.torpedoquery.jpa.internal.handlers.AscFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.AvgFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.ComparableConstantFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.ConstantFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.CountFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.CustomFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.DescFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.DistinctFunctionHandler;
@@ -43,13 +42,7 @@ public class TorpedoFunction {
 
 	// JPA Functions
 	public static Function<Long> count(Object object) {
-		if (object instanceof TorpedoProxy) {
-			setQuery((TorpedoProxy) object);
-		}
-		return getTorpedoMethodHandler().handle(
-				new CountFunctionHandler(
-						object instanceof TorpedoProxy ? (TorpedoProxy) object
-								: null));
+		return function("count", Long.class, object);
 	}
 
 	public static <V, T extends Comparable<V>> ComparableFunction<V> sum(
@@ -155,7 +148,7 @@ public class TorpedoFunction {
 	/**
 	 * Use this method to call functions witch are not supported natively by
 	 * Torpedo
-	 * 
+	 *
 	 * @return your custom function
 	 */
 	public static <T> Function<T> function(String name, Class<T> returnType,
