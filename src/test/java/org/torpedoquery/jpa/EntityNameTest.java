@@ -56,11 +56,29 @@ public class EntityNameTest {
 		}
 	}
 
+	@javax.persistence.Entity()
+	public static class EntityWithAnnotationWithoutName {
+		@Id
+		private String id = UUID.randomUUID().toString();
+
+		public String getId() {
+			return id;
+		}
+	}
+
 	@Test
-	public void test_createQuery() {
+	public void test_createQueryWithName() {
 		final EntityWithAnnotationName entity = from(EntityWithAnnotationName.class);
 		org.torpedoquery.jpa.Query<EntityWithAnnotationName> select = select(entity);
 		assertEquals("select myEntity_0 from myEntity myEntity_0",
+				select.getQuery());
+	}
+	
+	@Test
+	public void test_createQueryWithoutName() {
+		final EntityWithAnnotationWithoutName entity = from(EntityWithAnnotationWithoutName.class);
+		org.torpedoquery.jpa.Query<EntityWithAnnotationWithoutName> select = select(entity);
+		assertEquals("select entityWithAnnotationWithoutName_0 from EntityWithAnnotationWithoutName entityWithAnnotationWithoutName_0",
 				select.getQuery());
 	}
 }

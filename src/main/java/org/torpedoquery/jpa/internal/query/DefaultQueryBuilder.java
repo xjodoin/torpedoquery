@@ -94,7 +94,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private String getEntityName() {
 		
 		Entity e = toQuery.getAnnotation(Entity.class);
-		if (e!=null&&e.name()!=null)
+		if (e!=null && e.name()!=null && !e.name().trim().isEmpty() )
 			return e.name();
 		else
 		return toQuery.getSimpleName();
