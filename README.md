@@ -55,6 +55,15 @@ Stop wasting your time to maintain complex HQL queries and start today with the 
  		Query<Entity> select = select(from);
 
 
+#### How to Improve It ####
+
+Create your own fork of [xjodoin/torpedoquery](https://github.com/xjodoin/torpedoquery)
+
+To share your changes, [submit a pull request](https://github.com/xjodoin/torpedoquery/pull/new/master).
+
+Don't forget to add new units tests on your change.
+
+
 #### License ####
 
   Licensed under the Apache License, Version 2.0 (the "License");
