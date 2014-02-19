@@ -27,7 +27,7 @@ import javax.persistence.EntityManager;
  * parameters with getParameters()
  * 
  */
-public interface Query<T> {
+public interface Query<T> extends ComparableFunction<T>{
 
 	/**
 	 * 

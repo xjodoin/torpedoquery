@@ -20,10 +20,12 @@ import java.util.Map;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.Function;
+import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.query.SelectorParameter;
+import org.torpedoquery.jpa.internal.query.SubqueryValueParameters;
 import org.torpedoquery.jpa.internal.query.ValueParameter;
 import org.torpedoquery.jpa.internal.selectors.SimpleMethodCallSelector;
 
@@ -43,7 +45,10 @@ public class ParameterQueryHandler<T> implements QueryHandler<Parameter<T>> {
 		if (!methods.isEmpty()) {
 			MethodCall pollFirst = methods.pollFirst();
 			return new SelectorParameter<T>(new SimpleMethodCallSelector<T>(proxyQueryBuilders.get(pollFirst.getProxy()), pollFirst));
-		} 
+		}
+        else if (value instanceof Query) {
+            return new SubqueryValueParameters<T>((Query) value);
+        }
 		else if (value instanceof Function) {
 			return new SelectorParameter<T>((Selector) value);
 		}
