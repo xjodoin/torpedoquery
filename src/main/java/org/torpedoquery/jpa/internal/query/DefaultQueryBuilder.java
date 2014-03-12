@@ -290,6 +290,9 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 				if (parameter instanceof ValueParameter) {
 					valueParameters.add((ValueParameter) parameter);
 				}
+                else if(parameter instanceof SubqueryValueParameters) {
+                    valueParameters.addAll(((SubqueryValueParameters) parameter).getParameters());
+                }
 			}
 		}
 	}
@@ -406,4 +409,18 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return this;
 	}
 
+    @Override
+    public Object getProxy() {
+        return null;
+    }
+
+    @Override
+    public String createQueryFragment(AtomicInteger incrementor) {
+        return "( " + getQuery(incrementor) +" )";
+    }
+
+    @Override
+    public Parameter<T> generateParameter(T value) {
+        return null;
+    }
 }
