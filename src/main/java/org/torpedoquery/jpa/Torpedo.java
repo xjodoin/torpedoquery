@@ -184,8 +184,8 @@ public class Torpedo extends TorpedoFunction {
 
 			Object param = values[i];
 
-			if (param instanceof Function ) {
-				Function function = (Function) values[i];
+			if (param instanceof Function && !(param instanceof Query)) {
+				Function function = (Function) param;
 				TorpedoProxy proxy = (TorpedoProxy) function.getProxy();
 				methodHandler = proxy.getTorpedoMethodHandler();
 			} else if (param instanceof TorpedoProxy) {
@@ -616,6 +616,7 @@ public class Torpedo extends TorpedoFunction {
 
 	/**
 	 * Group expressions together in a single conjunction (A and B and C...)
+	 * 
 	 * @param conditions
 	 * @return OnGoingLogicalCondition
 	 */
@@ -635,7 +636,8 @@ public class Torpedo extends TorpedoFunction {
 	}
 
 	/**
-	 * Group expressions together in a single disjunction (A or B or C...)  
+	 * Group expressions together in a single disjunction (A or B or C...)
+	 * 
 	 * @param conditions
 	 * @return OnGoingLogicalCondition
 	 */

@@ -39,18 +39,21 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	private final QueryBuilder<?> root;
 	private final ProxyFactoryFactory proxyfactoryfactory;
 
-	public TorpedoMethodHandler(QueryBuilder<?> root, ProxyFactoryFactory proxyfactoryfactory) {
+	public TorpedoMethodHandler(QueryBuilder<?> root,
+			ProxyFactoryFactory proxyfactoryfactory) {
 		this.root = root;
 		this.proxyfactoryfactory = proxyfactoryfactory;
 	}
 
-	public QueryBuilder<?> addQueryBuilder(Object proxy, QueryBuilder<?> queryBuilder) {
+	public QueryBuilder<?> addQueryBuilder(Object proxy,
+			QueryBuilder<?> queryBuilder) {
 		proxyQueryBuilders.put(proxy, queryBuilder);
 		return queryBuilder;
 	}
 
 	@Override
-	public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
+	public Object invoke(Object self, Method thisMethod, Method proceed,
+			Object[] args) throws Throwable {
 		if (thisMethod.getDeclaringClass().equals(TorpedoProxy.class)) {
 			try {
 				return thisMethod.invoke(this, args);
@@ -65,8 +68,9 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 		return createReturnValue(thisMethod.getReturnType());
 	}
 
-	private <T> T createReturnValue(final Class<T> returnType) throws NoSuchMethodException, InstantiationException, IllegalAccessException,
-			InvocationTargetException {
+	private <T> T createReturnValue(final Class<T> returnType)
+			throws NoSuchMethodException, InstantiationException,
+			IllegalAccessException, InvocationTargetException {
 		if (returnType.isPrimitive()) {
 			return Defaults.defaultValue(returnType);
 		} else if (!Modifier.isFinal(returnType.getModifiers())) {
@@ -76,14 +80,18 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 		}
 	}
 
-	private <T> T createLinkedProxy(final Class<T> returnType) throws NoSuchMethodException, InstantiationException, IllegalAccessException,
-			InvocationTargetException {
+	private <T> T createLinkedProxy(final Class<T> returnType)
+			throws NoSuchMethodException, InstantiationException,
+			IllegalAccessException, InvocationTargetException {
 		MethodHandler mh = new MethodHandler() {
 
 			@Override
-			public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
+			public Object invoke(Object self, Method thisMethod,
+					Method proceed, Object[] args) throws Throwable {
 				MethodCall pollFirst = methods.pollFirst();
-				LinkedMethodCall linkedMethodCall = new LinkedMethodCall(pollFirst, new SimpleMethodCall(pollFirst.getProxy(), thisMethod));
+				LinkedMethodCall linkedMethodCall = new LinkedMethodCall(
+						pollFirst, new SimpleMethodCall(pollFirst.getProxy(),
+								thisMethod));
 				methods.addFirst(linkedMethodCall);
 				return createReturnValue(thisMethod.getReturnType());
 			}
