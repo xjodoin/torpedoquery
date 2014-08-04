@@ -229,5 +229,10 @@ public class TorpedoFunction {
 		return getTorpedoMethodHandler().handle(
 				new SubstringFunctionHandler(param, beginIndex, endIndex));
 	}
+	
+	public static <T> Function<T> dyn(T val) {
+		getTorpedoMethodHandler().handle(
+				new SubstringFunctionHandler(val));
+	}
 
 }
