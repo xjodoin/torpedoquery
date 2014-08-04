@@ -35,7 +35,8 @@ public class InCondition<T> extends AbstractCondition<List<T>> {
 
 	@Override
 	public String createQueryFragment(AtomicInteger incrementor) {
-		return selector.createQueryFragment(incrementor) + " " + getFragment() + " ( " + parameter.generate(incrementor) + " ) ";
+	    // dont add brackets around IN parameter as it breaks current eclipselink (2.5.0 - 2.5.2) impls.
+		return selector.createQueryFragment(incrementor) + " " + getFragment() + " " + parameter.generate(incrementor);
 	}
 
 	protected String getFragment() {
