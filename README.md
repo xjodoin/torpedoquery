@@ -81,5 +81,4 @@ Don't forget to add new units tests on your change.
 
 
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/xjodoin/torpedoquery/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
