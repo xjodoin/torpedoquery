@@ -15,8 +15,6 @@
  */
 package org.torpedoquery.jpa;
 
-import static org.torpedoquery.jpa.Torpedo.param;
-import static org.torpedoquery.jpa.TorpedoFunction.dyn;
 import static org.torpedoquery.jpa.internal.TorpedoMagic.getTorpedoMethodHandler;
 import static org.torpedoquery.jpa.internal.TorpedoMagic.setQuery;
 
@@ -41,7 +39,6 @@ import org.torpedoquery.jpa.internal.handlers.SubstringFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.SumFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.ValueHandler;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
-import org.torpedoquery.jpa.test.bo.ProjectionEntity;
 
 public class TorpedoFunction {
 
