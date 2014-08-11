@@ -705,5 +705,11 @@ public class Torpedo extends TorpedoFunction {
 				}, values));
 
 	}
+	
+	public static <T> T param(T param) {
+		getTorpedoMethodHandler().addParam(param);
+		return param;
+	}
+	
 
 }

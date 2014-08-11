@@ -18,9 +18,11 @@ package org.torpedoquery.jpa.internal.utils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.IdentityHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javassist.util.proxy.MethodHandler;
@@ -38,6 +40,7 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	private final Deque<MethodCall> methods = new LinkedList<MethodCall>();
 	private final QueryBuilder<?> root;
 	private final ProxyFactoryFactory proxyfactoryfactory;
+	private List<Object> params = new ArrayList<Object>();
 
 	public TorpedoMethodHandler(QueryBuilder<?> root,
 			ProxyFactoryFactory proxyfactoryfactory) {
@@ -120,6 +123,16 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 
 	public Deque<MethodCall> getMethods() {
 		return methods;
+	}
+
+	public void addParam(Object param) {
+		params.add(param);
+	}
+
+	public Object[] params() {
+		Object[] array = params.toArray();
+		params.clear();
+		return array;
 	}
 
 }

@@ -15,6 +15,8 @@
  */
 package org.torpedoquery.jpa;
 
+import static org.torpedoquery.jpa.Torpedo.param;
+import static org.torpedoquery.jpa.TorpedoFunction.dyn;
 import static org.torpedoquery.jpa.internal.TorpedoMagic.getTorpedoMethodHandler;
 import static org.torpedoquery.jpa.internal.TorpedoMagic.setQuery;
 
@@ -22,6 +24,7 @@ import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.functions.CoalesceFunction;
+import org.torpedoquery.jpa.internal.functions.DynamicInstantiationFunction;
 import org.torpedoquery.jpa.internal.handlers.ArrayCallHandler;
 import org.torpedoquery.jpa.internal.handlers.AscFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.AvgFunctionHandler;
@@ -37,6 +40,8 @@ import org.torpedoquery.jpa.internal.handlers.MinFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.SubstringFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.SumFunctionHandler;
 import org.torpedoquery.jpa.internal.handlers.ValueHandler;
+import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
+import org.torpedoquery.jpa.test.bo.ProjectionEntity;
 
 public class TorpedoFunction {
 
@@ -116,6 +121,37 @@ public class TorpedoFunction {
 					}
 				}, values));
 		return coalesceFunction;
+	}
+	
+	private static <T> DynamicInstantiationFunction<T> getDynamicInstantiationFunction(T val) {
+		final DynamicInstantiationFunction<T> dynFunction = new DynamicInstantiationFunction<T>(val);
+		TorpedoMethodHandler torpedoMethodHandler = getTorpedoMethodHandler();
+		Object[] params = torpedoMethodHandler.params();
+		torpedoMethodHandler.handle(
+				new ArrayCallHandler(new ValueHandler<Void>() {
+					@Override
+					public Void handle(TorpedoProxy proxy,
+							QueryBuilder queryBuilder, Selector selector) {
+						dynFunction.setQuery(proxy);
+						dynFunction.addSelector(selector);
+						return null;
+					}
+				}, params));
+		return dynFunction;
+	}
+	/**
+	 * 
+	 * Hibernate calls this "dynamic instantiation". JPQL supports some of this feature and calls it a "constructor expression". 
+	 * 
+	 * dyn(new ProjectionEntity(
+				param(entity.getCode()), param(entity.getIntegerField())
+	 * 
+	 * Important: you need to wrap each constructor parameter with a param() call
+	 * 
+	 */
+	public static <T> Function<T> dyn(T val) {
+		final DynamicInstantiationFunction<T> dynFunction = getDynamicInstantiationFunction(val);
+		return dynFunction;
 	}
 
 	public static <T> Function<T> distinct(T object) {
@@ -230,9 +266,5 @@ public class TorpedoFunction {
 				new SubstringFunctionHandler(param, beginIndex, endIndex));
 	}
 	
-	public static <T> Function<T> dyn(T val) {
-		getTorpedoMethodHandler().handle(
-				new SubstringFunctionHandler(val));
-	}
 
 }
