@@ -110,6 +110,32 @@
 					<tagNameFormat>v@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-javadoc-plugin</artifactId>
+			    <version>2.9.1</version>
+			    <configuration>
+				<aggregate>true</aggregate>
+				<show>public</show>
+				<nohelp>true</nohelp>
+				<header>TorpedoQuery, ${project.version}</header>
+				<footer>TorpedoQuery, ${project.version}</footer>
+				<doctitle>TorpedoQuery, ${project.version}</doctitle>
+			    </configuration>
+			</plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-scm-publish-plugin</artifactId>
+			    <version>1.1</version>
+			    <configuration>
+				<checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
+				<checkinComment>Publishing javadoc for ${project.artifactId}:${project.version}</checkinComment>
+				<content>${project.reporting.outputDirectory}/apidocs</content>
+				<skipDeletedFiles>true</skipDeletedFiles>
+				<pubScmUrl>scm:git:git@github.com:xjodoin/torpedoquery.git</pubScmUrl>
+				<scmBranch>gh-pages</scmBranch> <!-- branch with static site -->
+			    </configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
