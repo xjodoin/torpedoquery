@@ -23,6 +23,10 @@ import java.util.Map;
 
 public class Entity extends AbstractEntity {
 	private Date dateField;
+	
+	public String getId(){
+		return null;
+	}
 
 	public String getCode() {
 		return null;
