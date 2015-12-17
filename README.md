@@ -1,5 +1,6 @@
 TorpedoQuery
 ============
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.torpedoquery/org.torpedoquery/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.torpedoquery/org.torpedoquery)
 [![Build Status](https://secure.travis-ci.org/xjodoin/torpedoquery.png?branch=master)](http://travis-ci.org/xjodoin/torpedoquery)
 
 Simple and powerful query builder for your project. Can be use with any existing Hibernate or JPA application.  
