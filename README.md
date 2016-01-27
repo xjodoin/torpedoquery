@@ -1,7 +1,12 @@
 TorpedoQuery
 ============
+
+## Status
+
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.torpedoquery/org.torpedoquery/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.torpedoquery/org.torpedoquery)
 [![Build Status](https://secure.travis-ci.org/xjodoin/torpedoquery.png?branch=master)](http://travis-ci.org/xjodoin/torpedoquery)
+[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/org.torpedoquery/org.torpedoquery/badge.svg)](http://www.javadoc.io/doc/org.torpedoquery/org.torpedoquery)
+
 
 Simple and powerful query builder for your project. Can be use with any existing Hibernate or JPA application.  
 Stop wasting your time to maintain complex HQL queries and start today with the new generation of query builder.
