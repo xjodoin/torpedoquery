@@ -15,18 +15,21 @@
  */
 package org.torpedoquery.jpa;
 
-import static org.torpedoquery.jpa.internal.TorpedoMagic.getTorpedoMethodHandler;
-import static org.torpedoquery.jpa.internal.TorpedoMagic.setQuery;
+import static org.torpedoquery.jpa.internal.TorpedoMagic.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.core.QueryBuilder;
-import org.torpedoquery.jpa.internal.TorpedoProxy;
+import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.handlers.ArrayCallHandler;
 import org.torpedoquery.jpa.internal.handlers.GroupingConditionHandler;
 import org.torpedoquery.jpa.internal.handlers.InnerJoinHandler;
@@ -36,6 +39,7 @@ import org.torpedoquery.jpa.internal.handlers.ValueHandler;
 import org.torpedoquery.jpa.internal.handlers.WhereClauseHandler;
 import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.internal.query.GroupBy;
+import org.torpedoquery.jpa.internal.query.SelectorParameter;
 import org.torpedoquery.jpa.internal.utils.DoNothingQueryConfigurator;
 import org.torpedoquery.jpa.internal.utils.MultiClassLoaderProvider;
 import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
@@ -44,6 +48,7 @@ import org.torpedoquery.jpa.internal.utils.WhereQueryConfigurator;
 import org.torpedoquery.jpa.internal.utils.WithQueryConfigurator;
 
 import com.google.common.base.Throwables;
+
 
 /**
  * Torpedo Query goal is to simplify how you create and maintain your HQL query.
@@ -712,4 +717,86 @@ public class Torpedo extends TorpedoFunction {
 	}
 	
 
+	
+
+    private static <X> ConstructFunction<X> getConstructFunction(Class<X> x, Object firstValue,
+            Object... additionalValues) {
+        Objects.requireNonNull(x);
+        Objects.requireNonNull(firstValue);
+
+        List<Object> l = new ArrayList<Object>();
+        l.add(firstValue);
+
+        if (additionalValues != null && additionalValues.length > 0) {
+            l.addAll(Arrays.asList(additionalValues));
+        }
+
+        final ConstructFunction<X> f = new ConstructFunction<X>(x);
+        getTorpedoMethodHandler().handle(new ArrayCallHandler(new ValueHandler<Void>() {
+            @SuppressWarnings("rawtypes")
+            @Override
+            public Void handle(TorpedoProxy proxy, QueryBuilder queryBuilder, Selector selector) {
+                f.setQuery(proxy);
+                f.addSelector(selector);
+                return null;
+            }
+        }, l.toArray()));
+        return f;
+    }
+
+    public static <X> Function<X> construct(Class<X> valueClass, Object first,
+            Object... optionalAdditionalValues) {
+        Objects.requireNonNull(valueClass);
+        Objects.requireNonNull(first);
+        return getConstructFunction(valueClass, first, optionalAdditionalValues);
+    }
+
+    static class ConstructFunction<T> implements ComparableFunction<T> {
+
+        private final List<Selector<?>> selectors = new ArrayList<Selector<?>>();
+
+        private TorpedoProxy proxy;
+
+        private Class<T> x;
+
+        public ConstructFunction(Class<T> x) {
+            this.x = x;
+        }
+
+        @Override
+        public String createQueryFragment(AtomicInteger incrementor) {
+            StringBuffer stringBuffer = new StringBuffer();
+            Iterator<Selector<?>> iterator = selectors.iterator();
+            Selector<?> first = iterator.next();
+            stringBuffer.append("new " + x.getName() + "(").append(
+                    first.createQueryFragment(incrementor));
+
+            while (iterator.hasNext()) {
+                Selector<?> selector = iterator.next();
+                stringBuffer.append(", ").append(selector.createQueryFragment(incrementor));
+            }
+
+            stringBuffer.append(")");
+
+            return stringBuffer.toString();
+        }
+
+        @Override
+        public Object getProxy() {
+            return proxy;
+        }
+
+        public void addSelector(Selector<?> selector) {
+            selectors.add(selector);
+        }
+
+        public void setQuery(TorpedoProxy proxy) {
+            this.proxy = proxy;
+        }
+
+        @Override
+        public Parameter<T> generateParameter(T value) {
+            return new SelectorParameter<T>(this);
+        }
+    }
 }

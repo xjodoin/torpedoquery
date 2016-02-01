@@ -147,7 +147,7 @@ public class WhereClauseTest {
 		Query<Entity> select = select(from);
 
 		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.primitiveInt in ( :primitiveInt_1 )",
+				"select entity_0 from Entity entity_0 where entity_0.primitiveInt in :primitiveInt_1",
 				select.getQuery());
 
 	}
@@ -173,7 +173,7 @@ public class WhereClauseTest {
 		Query<Entity> select = select(from);
 
 		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.primitiveInt not in ( :primitiveInt_1 )",
+				"select entity_0 from Entity entity_0 where entity_0.primitiveInt not in :primitiveInt_1",
 				select.getQuery());
 
 	}
