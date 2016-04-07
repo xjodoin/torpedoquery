@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.persistence.Entity;
@@ -29,6 +30,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 import org.torpedoquery.core.QueryBuilder;
+import org.torpedoquery.jpa.OnGoingLogicalCondition;
 import org.torpedoquery.jpa.PostFunction;
 import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.Condition;
@@ -42,8 +44,8 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<Selector>();
 	private final List<Join> joins = new ArrayList<Join>();
-	private ConditionBuilder<?> whereClause;
-	private ConditionBuilder<?> withClause;
+	private ConditionBuilder<T> whereClause;
+	private ConditionBuilder<T> withClause;
 
 	private String freezeQuery;
 
@@ -59,8 +61,11 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		this.toQuery = toQuery;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getQuery(java.util.concurrent.atomic.AtomicInteger)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getQuery(java.util.
+	 * concurrent.atomic.AtomicInteger)
 	 */
 	@Override
 	public String getQuery(AtomicInteger incrementor) {
@@ -92,12 +97,12 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	}
 
 	private String getEntityName() {
-		
+
 		Entity e = toQuery.getAnnotation(Entity.class);
-		if (e!=null && e.name()!=null && !e.name().trim().isEmpty() )
+		if (e != null && e.name() != null && !e.name().trim().isEmpty())
 			return e.name();
 		else
-		return toQuery.getSimpleName();
+			return toQuery.getSimpleName();
 	}
 
 	@Override
@@ -105,8 +110,12 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return getQuery(new AtomicInteger());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#appendOrderBy(java.lang.StringBuilder, java.util.concurrent.atomic.AtomicInteger)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.torpedoquery.jpa.internal.query.QueryBuilder#appendOrderBy(java.lang.
+	 * StringBuilder, java.util.concurrent.atomic.AtomicInteger)
 	 */
 	@Override
 	public String appendOrderBy(StringBuilder builder, AtomicInteger incrementor) {
@@ -122,8 +131,12 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return builder.toString();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#appendGroupBy(java.lang.StringBuilder, java.util.concurrent.atomic.AtomicInteger)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.torpedoquery.jpa.internal.query.QueryBuilder#appendGroupBy(java.lang.
+	 * StringBuilder, java.util.concurrent.atomic.AtomicInteger)
 	 */
 	@Override
 	public String appendGroupBy(StringBuilder builder, AtomicInteger incrementor) {
@@ -139,8 +152,12 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return builder.toString();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#appendWhereClause(java.lang.StringBuilder, java.util.concurrent.atomic.AtomicInteger)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.torpedoquery.jpa.internal.query.QueryBuilder#appendWhereClause(java.
+	 * lang.StringBuilder, java.util.concurrent.atomic.AtomicInteger)
 	 */
 	@Override
 	public StringBuilder appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
@@ -162,8 +179,12 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return builder;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#appendSelect(java.lang.StringBuilder, java.util.concurrent.atomic.AtomicInteger)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.torpedoquery.jpa.internal.query.QueryBuilder#appendSelect(java.lang.
+	 * StringBuilder, java.util.concurrent.atomic.AtomicInteger)
 	 */
 	@Override
 	public void appendSelect(StringBuilder builder, AtomicInteger incrementor) {
@@ -176,8 +197,11 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getAlias(java.util.concurrent.atomic.AtomicInteger)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getAlias(java.util.
+	 * concurrent.atomic.AtomicInteger)
 	 */
 	@Override
 	public String getAlias(AtomicInteger incrementor) {
@@ -190,23 +214,32 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return alias;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#addSelector(org.torpedoquery.jpa.internal.Selector)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#addSelector(org.
+	 * torpedoquery.jpa.internal.Selector)
 	 */
 	@Override
 	public void addSelector(Selector selector) {
 		toSelect.add(selector);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#addJoin(org.torpedoquery.jpa.internal.Join)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.torpedoquery.jpa.internal.query.QueryBuilder#addJoin(org.torpedoquery
+	 * .jpa.internal.Join)
 	 */
 	@Override
 	public void addJoin(Join innerJoin) {
 		joins.add(innerJoin);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#hasSubJoin()
 	 */
 	@Override
@@ -214,8 +247,11 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return !joins.isEmpty();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getJoins(java.util.concurrent.atomic.AtomicInteger)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getJoins(java.util.
+	 * concurrent.atomic.AtomicInteger)
 	 */
 	@Override
 	public String getJoins(AtomicInteger incrementor) {
@@ -229,11 +265,14 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return builder.toString();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#setWhereClause(org.torpedoquery.jpa.internal.conditions.ConditionBuilder)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#setWhereClause(org.
+	 * torpedoquery.jpa.internal.conditions.ConditionBuilder)
 	 */
 	@Override
-	public void setWhereClause(ConditionBuilder<?> whereClause) {
+	public void setWhereClause(ConditionBuilder<T> whereClause) {
 
 		if (this.whereClause != null) {
 			throw new IllegalArgumentException("You cannot have more than one WhereClause by query");
@@ -255,8 +294,11 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return params;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getValueParameters()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.torpedoquery.jpa.internal.query.QueryBuilder#getValueParameters()
 	 */
 	@Override
 	public List<ValueParameter> getValueParameters() {
@@ -289,16 +331,18 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 			for (Parameter parameter : parameters) {
 				if (parameter instanceof ValueParameter) {
 					valueParameters.add((ValueParameter) parameter);
+				} else if (parameter instanceof SubqueryValueParameters) {
+					valueParameters.addAll(((SubqueryValueParameters) parameter).getParameters());
 				}
-                else if(parameter instanceof SubqueryValueParameters) {
-                    valueParameters.addAll(((SubqueryValueParameters) parameter).getParameters());
-                }
 			}
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#addOrder(org.torpedoquery.jpa.internal.Selector)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#addOrder(org.
+	 * torpedoquery.jpa.internal.Selector)
 	 */
 	@Override
 	public void addOrder(Selector selector) {
@@ -310,19 +354,25 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#setGroupBy(org.torpedoquery.jpa.internal.query.GroupBy)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#setGroupBy(org.
+	 * torpedoquery.jpa.internal.query.GroupBy)
 	 */
 	@Override
 	public void setGroupBy(GroupBy groupBy) {
 		this.groupBy = groupBy;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#setWithClause(org.torpedoquery.jpa.internal.conditions.ConditionBuilder)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#setWithClause(org.
+	 * torpedoquery.jpa.internal.conditions.ConditionBuilder)
 	 */
 	@Override
-	public void setWithClause(ConditionBuilder<?> withClause) {
+	public void setWithClause(ConditionBuilder<T> withClause) {
 		this.withClause = withClause;
 	}
 
@@ -373,7 +423,9 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return query;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#hasWithClause()
 	 */
 	@Override
@@ -381,8 +433,12 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return withClause != null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getWithClause(java.util.concurrent.atomic.AtomicInteger)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.torpedoquery.jpa.internal.query.QueryBuilder#getWithClause(java.util.
+	 * concurrent.atomic.AtomicInteger)
 	 */
 	@Override
 	public String getWithClause(AtomicInteger incrementor) {
@@ -409,18 +465,23 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return this;
 	}
 
-    @Override
-    public Object getProxy() {
-        return null;
-    }
+	@Override
+	public Object getProxy() {
+		return null;
+	}
 
-    @Override
-    public String createQueryFragment(AtomicInteger incrementor) {
-        return "( " + getQuery(incrementor) +" )";
-    }
+	@Override
+	public String createQueryFragment(AtomicInteger incrementor) {
+		return "( " + getQuery(incrementor) + " )";
+	}
 
-    @Override
-    public Parameter<T> generateParameter(T value) {
-        return null;
-    }
+	@Override
+	public Parameter<T> generateParameter(T value) {
+		return null;
+	}
+
+	@Override
+	public Optional<OnGoingLogicalCondition> conditon() {
+		return Optional.ofNullable(Optional.ofNullable(whereClause).orElse(withClause)).map(ConditionBuilder::getLogicalCondition);
+	}
 }

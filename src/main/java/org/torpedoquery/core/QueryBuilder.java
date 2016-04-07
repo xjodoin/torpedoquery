@@ -48,7 +48,7 @@ public interface QueryBuilder<T> extends Query<T> {
 
 	public String getJoins(AtomicInteger incrementor);
 
-	public void setWhereClause(ConditionBuilder<?> whereClause);
+	public void setWhereClause(ConditionBuilder<T> whereClause);
 
 	public List<ValueParameter> getValueParameters();
 
@@ -56,7 +56,7 @@ public interface QueryBuilder<T> extends Query<T> {
 
 	public void setGroupBy(GroupBy groupBy);
 
-	public void setWithClause(ConditionBuilder<?> withClause);
+	public void setWithClause(ConditionBuilder<T> withClause);
 
 	public boolean hasWithClause();
 

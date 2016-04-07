@@ -17,6 +17,7 @@ package org.torpedoquery.jpa;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
@@ -89,5 +90,10 @@ public interface Query<T> extends ComparableFunction<T>{
 	 * @return the same query instance
 	 */
 	Query<T> setMaxResults(int maxResult);
+
+	/**
+	 * @return the current condition builder
+	 */
+	Optional<OnGoingLogicalCondition> conditon();
 
 }

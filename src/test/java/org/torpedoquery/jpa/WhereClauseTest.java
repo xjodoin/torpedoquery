@@ -26,6 +26,7 @@ import static org.torpedoquery.jpa.TorpedoFunction.max;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
@@ -38,9 +39,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getCode()).eq("test");
 		Query<Entity> select = select(from);
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.code = :code_1",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code = :code_1", select.getQuery());
 
 	}
 
@@ -50,9 +49,7 @@ public class WhereClauseTest {
 		where(from.getCode()).neq("test");
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.code <> :code_1",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code <> :code_1", select.getQuery());
 
 	}
 
@@ -62,8 +59,7 @@ public class WhereClauseTest {
 		where(from.getIntegerField()).lt(2);
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.integerField < :integerField_1",
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.integerField < :integerField_1",
 				select.getQuery());
 
 	}
@@ -74,8 +70,7 @@ public class WhereClauseTest {
 		where(from.getIntegerField()).lte(2);
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.integerField <= :integerField_1",
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.integerField <= :integerField_1",
 				select.getQuery());
 
 	}
@@ -86,8 +81,7 @@ public class WhereClauseTest {
 		where(from.getIntegerField()).gt(2);
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.integerField > :integerField_1",
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.integerField > :integerField_1",
 				select.getQuery());
 
 	}
@@ -98,8 +92,7 @@ public class WhereClauseTest {
 		where(from.getIntegerField()).gte(2);
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.integerField >= :integerField_1",
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.integerField >= :integerField_1",
 				select.getQuery());
 
 	}
@@ -110,8 +103,7 @@ public class WhereClauseTest {
 		where(from.getPrimitiveInt()).gte(2);
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.primitiveInt >= :primitiveInt_1",
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.primitiveInt >= :primitiveInt_1",
 				select.getQuery());
 
 	}
@@ -122,9 +114,7 @@ public class WhereClauseTest {
 		where(from.getCode()).isNull();
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.code is null",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code is null", select.getQuery());
 
 	}
 
@@ -134,9 +124,7 @@ public class WhereClauseTest {
 		where(from.getCode()).isNotNull();
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.code is not null",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code is not null", select.getQuery());
 
 	}
 
@@ -146,8 +134,7 @@ public class WhereClauseTest {
 		where(from.getPrimitiveInt()).in(3, 4);
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.primitiveInt in ( :primitiveInt_1 )",
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.primitiveInt in ( :primitiveInt_1 )",
 				select.getQuery());
 
 	}
@@ -172,8 +159,7 @@ public class WhereClauseTest {
 		where(from.getPrimitiveInt()).notIn(3, 4);
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.primitiveInt not in ( :primitiveInt_1 )",
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.primitiveInt not in ( :primitiveInt_1 )",
 				select.getQuery());
 
 	}
@@ -213,8 +199,7 @@ public class WhereClauseTest {
 		Entity subSelect = from(Entity.class);
 
 		Entity from = from(Entity.class);
-		where(from.getIntegerField()).gt(
-				select((avg(subSelect.getIntegerField()))));
+		where(from.getIntegerField()).gt(select((avg(subSelect.getIntegerField()))));
 		Query<Entity> select = select(from);
 
 		assertEquals(
@@ -229,8 +214,7 @@ public class WhereClauseTest {
 		where(subSelect.getCode()).eq("toto");
 
 		Entity from = from(Entity.class);
-		where(from.getIntegerField()).gt(
-				select(avg(subSelect.getIntegerField())));
+		where(from.getIntegerField()).gt(select(avg(subSelect.getIntegerField())));
 		Query<Entity> select = select(from);
 
 		assertEquals(
@@ -259,8 +243,7 @@ public class WhereClauseTest {
 		Entity subSelect = from(Entity.class);
 
 		Entity from = from(Entity.class);
-		where(from.getIntegerField()).gt(
-				select(avg(subSelect.getIntegerField())));
+		where(from.getIntegerField()).gt(select(avg(subSelect.getIntegerField())));
 		Query<String> select = select(from.getName());
 
 		assertEquals(
@@ -297,9 +280,7 @@ public class WhereClauseTest {
 		where(from.getCode()).like().any("test");
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.code like '%test%'",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code like '%test%'", select.getQuery());
 	}
 
 	@Test
@@ -308,9 +289,7 @@ public class WhereClauseTest {
 		where(from.getCode()).like().startsWith("test");
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.code like 'test%'",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code like 'test%'", select.getQuery());
 	}
 
 	@Test
@@ -319,9 +298,7 @@ public class WhereClauseTest {
 		where(from.getCode()).like().endsWith("test");
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.code like '%test'",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code like '%test'", select.getQuery());
 	}
 
 	@Test
@@ -330,9 +307,7 @@ public class WhereClauseTest {
 		where(from.getSubEntities()).isEmpty();
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.subEntities is empty",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntities is empty", select.getQuery());
 	}
 
 	@Test
@@ -341,9 +316,7 @@ public class WhereClauseTest {
 		where(from.getSubEntities()).isNotEmpty();
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.subEntities is not empty",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntities is not empty", select.getQuery());
 	}
 
 	@Test
@@ -352,16 +325,14 @@ public class WhereClauseTest {
 		where(from.getSubEntities()).size().gt(2);
 		Query<Entity> select = select(from);
 
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.subEntities.size > :subEntities_1",
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntities.size > :subEntities_1",
 				select.getQuery());
 	}
 
 	@Test
 	public void test_where_with_condition_and() {
 		Entity from = from(Entity.class);
-		OnGoingLogicalCondition condition = condition(from.getCode())
-				.eq("test").or(from.getCode()).eq("test2");
+		OnGoingLogicalCondition condition = condition(from.getCode()).eq("test").or(from.getCode()).eq("test2");
 		where(from.getName()).eq("test").and(condition);
 		Query<Entity> select = select(from);
 
@@ -373,8 +344,7 @@ public class WhereClauseTest {
 	@Test
 	public void test_where_with_condition_or() {
 		Entity from = from(Entity.class);
-		OnGoingLogicalCondition condition = condition(from.getCode())
-				.eq("test").or(from.getCode()).eq("test2");
+		OnGoingLogicalCondition condition = condition(from.getCode()).eq("test").or(from.getCode()).eq("test2");
 		where(from.getName()).eq("test").or(condition);
 		Query<Entity> select = select(from);
 
@@ -386,9 +356,7 @@ public class WhereClauseTest {
 	@Test
 	public void test_where_with_condition_or_inline() {
 		Entity from = from(Entity.class);
-		where(from.getName()).eq("test").or(
-				condition(from.getCode()).eq("test").or(from.getCode())
-						.eq("test2"));
+		where(from.getName()).eq("test").or(condition(from.getCode()).eq("test").or(from.getCode()).eq("test2"));
 		Query<Entity> select = select(from);
 
 		assertEquals(
@@ -401,8 +369,7 @@ public class WhereClauseTest {
 
 		Entity entity = from(Entity.class);
 		SubEntity subEntity = innerJoin(entity.getSubEntities());
-		OnGoingLogicalCondition condition = condition(entity.getCode())
-				.eq("test1").or(subEntity.getCode()).eq("test2");
+		OnGoingLogicalCondition condition = condition(entity.getCode()).eq("test1").or(subEntity.getCode()).eq("test2");
 		where(entity.getIntegerField()).gt(10).and(condition);
 
 		Query<Entity> select = select(entity);
@@ -415,10 +382,9 @@ public class WhereClauseTest {
 	@Test
 	public void test_acceptConditionIntoCondition() {
 		Entity from = from(Entity.class);
-		OnGoingLogicalCondition onGoingLogicalCondition = condition(
-				from.getName()).eq("test").or(from.getName()).eq("test2");
-		OnGoingLogicalCondition eq = condition(onGoingLogicalCondition).and(
-				from.getCode()).eq("mycode");
+		OnGoingLogicalCondition onGoingLogicalCondition = condition(from.getName()).eq("test").or(from.getName())
+				.eq("test2");
+		OnGoingLogicalCondition eq = condition(onGoingLogicalCondition).and(from.getCode()).eq("mycode");
 		where(eq);
 		Query<Entity> select = select(from);
 		String query = select.getQuery();
@@ -430,8 +396,7 @@ public class WhereClauseTest {
 	@Test
 	public void test_where_three_conditions() {
 		Entity from = from(Entity.class);
-		where(from.getName()).eq("test").and(from.getIntegerField()).gt(2)
-				.and(from.getCode()).eq("test");
+		where(from.getName()).eq("test").and(from.getIntegerField()).gt(2).and(from.getCode()).eq("test");
 		Query<Entity> select = select(from);
 
 		assertEquals(
@@ -444,16 +409,13 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getDateField()).gt(new Date());
 		Query<Entity> select = select(from);
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.dateField > :dateField_1",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.dateField > :dateField_1", select.getQuery());
 	}
 
 	@Test
 	public void acceptConditionInWhere() {
 		Entity from = from(Entity.class);
-		OnGoingLogicalCondition conditon = condition(from.getCode()).eq("test")
-				.and(from.getPrimitiveInt()).gt(3);
+		OnGoingLogicalCondition conditon = condition(from.getCode()).eq("test").and(from.getPrimitiveInt()).gt(3);
 		where(conditon);
 		Query<Entity> select = select(from);
 		assertEquals(
@@ -465,8 +427,7 @@ public class WhereClauseTest {
 	@Test
 	public void acceptConditionInWhere_plusExternalCondition() {
 		Entity from = from(Entity.class);
-		OnGoingLogicalCondition conditon = condition(from.getCode()).eq("test")
-				.and(from.getPrimitiveInt()).gt(3);
+		OnGoingLogicalCondition conditon = condition(from.getCode()).eq("test").and(from.getPrimitiveInt()).gt(3);
 		where(conditon).and(from.getName()).isNotNull();
 		Query<Entity> select = select(from);
 		assertEquals(
@@ -480,9 +441,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getCode()).eq(from.getName());
 		Query<Entity> select = select(from);
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.code = entity_0.name",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code = entity_0.name", select.getQuery());
 	}
 
 	@Test
@@ -490,9 +449,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getSubEntity().getName()).eq("test");
 		Query<Entity> select = select(from);
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.subEntity.name = :name_1",
-				select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntity.name = :name_1", select.getQuery());
 	}
 
 	@Test
@@ -500,8 +457,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getAbstractEntity().getName()).eq("test");
 		Query<Entity> select = select(from);
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.abstractEntity.name = :name_1",
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.abstractEntity.name = :name_1",
 				select.getQuery());
 	}
 
@@ -510,8 +466,39 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		where(from.getSmallChar()).eq('c');
 		Query<Entity> select2 = select(from);
-		assertEquals(
-				"select entity_0 from Entity entity_0 where entity_0.smallChar = :smallChar_1",
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.smallChar = :smallChar_1",
 				select2.getQuery());
 	}
+
+	@Test
+	public void testGetTheConditionQuery() {
+		Entity from = from(Entity.class);
+		where(from.getSmallChar()).eq('c');
+		Query<String> select2 = select(from.getName());
+
+		OnGoingLogicalCondition condition = select2.conditon().get();
+		condition.and(from.getId()).eq("test");
+
+		assertEquals(
+				"select entity_0.name from Entity entity_0 where entity_0.smallChar = :smallChar_1 and entity_0.id = :id_2",
+				select2.getQuery());
+	}
+
+	@Test
+	public void testGetEmptyConditionQuery() {
+		Entity from = from(Entity.class);
+		Query<String> select2 = select(from.getName());
+
+		Optional<OnGoingLogicalCondition> condition = select2.conditon();
+
+		if (condition.isPresent()) {
+			condition.get().and(from.getSmallChar()).eq('c');
+		} else {
+			where(from.getSmallChar()).eq('c');
+		}
+
+		assertEquals("select entity_0.name from Entity entity_0 where entity_0.smallChar = :smallChar_1",
+				select2.getQuery());
+	}
+
 }
