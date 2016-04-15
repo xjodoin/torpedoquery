@@ -476,7 +476,7 @@ public class WhereClauseTest {
 		where(from.getSmallChar()).eq('c');
 		Query<String> select2 = select(from.getName());
 
-		OnGoingLogicalCondition condition = select2.conditon().get();
+		OnGoingLogicalCondition condition = select2.condition().get();
 		condition.and(from.getId()).eq("test");
 
 		assertEquals(
@@ -489,7 +489,7 @@ public class WhereClauseTest {
 		Entity from = from(Entity.class);
 		Query<String> select2 = select(from.getName());
 
-		Optional<OnGoingLogicalCondition> condition = select2.conditon();
+		Optional<OnGoingLogicalCondition> condition = select2.condition();
 
 		if (condition.isPresent()) {
 			condition.get().and(from.getSmallChar()).eq('c');

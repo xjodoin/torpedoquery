@@ -94,6 +94,6 @@ public interface Query<T> extends ComparableFunction<T>{
 	/**
 	 * @return the current condition builder
 	 */
-	Optional<OnGoingLogicalCondition> conditon();
+	Optional<OnGoingLogicalCondition> condition();
 
 }
