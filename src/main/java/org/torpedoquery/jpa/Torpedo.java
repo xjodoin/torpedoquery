@@ -20,13 +20,11 @@ import static org.torpedoquery.jpa.internal.TorpedoMagic.setQuery;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.torpedoquery.core.QueryBuilder;
-import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
-import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.handlers.ArrayCallHandler;
 import org.torpedoquery.jpa.internal.handlers.GroupingConditionHandler;
 import org.torpedoquery.jpa.internal.handlers.InnerJoinHandler;

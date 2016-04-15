@@ -18,6 +18,7 @@ package org.torpedoquery.jpa;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import javax.persistence.EntityManager;
 
@@ -51,7 +52,7 @@ public interface Query<T> extends ComparableFunction<T>{
 	 * @param function
 	 * @return
 	 */
-	<E> List<E> map(EntityManager entityManager, PostFunction<E, T> function);
+	<E> List<E> map(EntityManager entityManager, Function<T,E> function);
 
 	/**
 	 * 
@@ -60,7 +61,7 @@ public interface Query<T> extends ComparableFunction<T>{
 	 * @param entityManager
 	 * @return
 	 */
-	T get(EntityManager entityManager);
+	Optional<T> get(EntityManager entityManager);
 
 	/**
 	 * 

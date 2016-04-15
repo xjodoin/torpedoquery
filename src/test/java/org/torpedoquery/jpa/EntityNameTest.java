@@ -16,33 +16,14 @@
 package org.torpedoquery.jpa;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.torpedoquery.jpa.Torpedo.condition;
-import static org.torpedoquery.jpa.Torpedo.extend;
 import static org.torpedoquery.jpa.Torpedo.from;
-import static org.torpedoquery.jpa.Torpedo.innerJoin;
-import static org.torpedoquery.jpa.Torpedo.leftJoin;
-import static org.torpedoquery.jpa.Torpedo.rightJoin;
 import static org.torpedoquery.jpa.Torpedo.select;
-import static org.torpedoquery.jpa.Torpedo.where;
-import static org.torpedoquery.jpa.Torpedo.with;
 
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.UUID;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Id;
-import javax.persistence.Query;
 
 import org.junit.Test;
-import org.torpedoquery.jpa.test.bo.Entity;
-import org.torpedoquery.jpa.test.bo.ExtendEntity;
-import org.torpedoquery.jpa.test.bo.SubEntity;
 
 public class EntityNameTest {
 

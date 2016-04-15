@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -31,7 +32,6 @@ import javax.persistence.NoResultException;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.OnGoingLogicalCondition;
-import org.torpedoquery.jpa.PostFunction;
 import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Join;
@@ -377,11 +377,11 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	}
 
 	@Override
-	public T get(EntityManager entityManager) {
+	public Optional<T> get(EntityManager entityManager) {
 		try {
-			return (T) createJPAQuery(entityManager).getSingleResult();
+			return Optional.<T>ofNullable((T)createJPAQuery(entityManager).getSingleResult());
 		} catch (NoResultException e) {
-			return null;
+			return Optional.empty();
 		}
 	}
 
@@ -391,12 +391,12 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	}
 
 	@Override
-	public <E> List<E> map(EntityManager entityManager, PostFunction<E, T> function) {
+	public <E> List<E> map(EntityManager entityManager, Function<T,E> function) {
 		List<T> toConvert = list(entityManager);
 		List<E> result = new ArrayList<E>();
 
 		for (T value : toConvert) {
-			result.add(function.execute(value));
+			result.add(function.apply(value));
 		}
 		return result;
 	}

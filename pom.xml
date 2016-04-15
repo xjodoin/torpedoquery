@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
-		<version>7</version>
+		<version>9</version>
 	</parent>
 
 	<groupId>org.torpedoquery</groupId>
@@ -29,7 +29,6 @@
 		<developer>
 			<id>xjodoin</id>
 			<name>Xavier Jodoin</name>
-			<email>xjodoin@torpedoquery.org</email>
 		</developer>
 	</developers>
 
@@ -94,20 +93,6 @@
 					<doctitle>TorpedoQuery, ${project.version}</doctitle>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-scm-publish-plugin</artifactId>
-				<version>1.1</version>
-				<configuration>
-					<checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
-					<checkinComment>Publishing javadoc for
-						${project.artifactId}:${project.version}</checkinComment>
-					<content>${project.reporting.outputDirectory}/apidocs</content>
-					<skipDeletedFiles>true</skipDeletedFiles>
-					<pubScmUrl>scm:git:git@github.com:xjodoin/torpedoquery.git</pubScmUrl>
-					<scmBranch>gh-pages</scmBranch> <!-- branch with static site -->
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -130,18 +115,18 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>11.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>1.9.0-rc1</version>
-			<scope>test</scope>
+			<version>19.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>1.10.19</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
