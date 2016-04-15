@@ -1,5 +1,6 @@
 target
 .classpath
 .settings
+.idea
 META-INF/MANIFEST.MF
 .project

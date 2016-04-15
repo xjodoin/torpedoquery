@@ -481,7 +481,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	}
 
 	@Override
-	public Optional<OnGoingLogicalCondition> conditon() {
+	public Optional<OnGoingLogicalCondition> condition() {
 		return Optional.ofNullable(Optional.ofNullable(whereClause).orElse(withClause)).map(ConditionBuilder::getLogicalCondition);
 	}
 }
