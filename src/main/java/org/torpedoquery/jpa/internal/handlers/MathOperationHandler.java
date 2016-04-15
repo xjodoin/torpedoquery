@@ -1,18 +1,19 @@
 /**
- *   Copyright Xavier Jodoin xjodoin@torpedoquery.org
+ * Copyright (C) ${project.inceptionYear} Xavier Jodoin (xavier@jodoin.me)
  *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.torpedoquery.jpa.internal.handlers;
 
 import java.util.Deque;
@@ -29,12 +30,16 @@ import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.functions.MathOperationFunction;
 import org.torpedoquery.jpa.internal.selectors.SimpleMethodCallSelector;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
-
 public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperation<T>>, OnGoingMathOperation<T> {
 
 	private Selector<T> leftSelector;
 	private TorpedoProxy proxy;
 
+	/**
+	 * <p>Constructor for MathOperationHandler.</p>
+	 *
+	 * @param left a {@link org.torpedoquery.jpa.Function} object.
+	 */
 	public MathOperationHandler(Function<T> left) {
 		leftSelector = left;
 		if (left != null) {
@@ -42,6 +47,7 @@ public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperatio
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public OnGoingMathOperation<T> handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methods) {
 
@@ -54,6 +60,7 @@ public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperatio
 		return this;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ComparableFunction<T> plus(T right) {
 
@@ -68,6 +75,7 @@ public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperatio
 		return rightSelector;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ComparableFunction<T> plus(Function<T> right) {
 		return createFunction(right,"+");
@@ -77,34 +85,40 @@ public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperatio
 		return new MathOperationFunction<T>(proxy, leftSelector, operator, right);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ComparableFunction<T> subtract(T right) {
 		SimpleMethodCallSelector rightSelector = handleMethodCall();
 		return createFunction(rightSelector, "-");
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ComparableFunction<T> subtract(Function<T> right) {
 		return createFunction(right,"-");
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ComparableFunction<T> multiply(T right) {
 		SimpleMethodCallSelector rightSelector = handleMethodCall();
 		return createFunction(rightSelector, "*");
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ComparableFunction<T> multiply(Function<T> right) {
 		return createFunction(right,"*");
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ComparableFunction<T> divide(T right) {
 		SimpleMethodCallSelector rightSelector = handleMethodCall();
 		return createFunction(rightSelector, "/");
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ComparableFunction<T> divide(Function<T> right) {
 		return createFunction(right,"/");

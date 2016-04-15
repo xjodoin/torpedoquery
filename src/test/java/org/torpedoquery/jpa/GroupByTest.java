@@ -1,4 +1,20 @@
 /**
+ * Copyright (C) ${project.inceptionYear} Xavier Jodoin (xavier@jodoin.me)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  *   Copyright Xavier Jodoin xjodoin@torpedoquery.org
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +28,10 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
+ *
+ * @author xjodoin
+ * @version $Id: $Id
+ * @since 2.0.0
  */
 package org.torpedoquery.jpa;
 
@@ -33,9 +53,11 @@ import java.util.Map;
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.SubEntity;
-
 public class GroupByTest {
 
+	/**
+	 * <p>testSingleGroubBy.</p>
+	 */
 	@Test
 	public void testSingleGroubBy() {
 		Entity from = from(Entity.class);
@@ -46,6 +68,9 @@ public class GroupByTest {
 		assertEquals("select entity_0.name, sum(entity_0.integerField) from Entity entity_0 group by entity_0.name", query);
 	}
 
+	/**
+	 * <p>testGroubBy_with_having_clause.</p>
+	 */
 	@Test
 	public void testGroubBy_with_having_clause() {
 		Entity from = from(Entity.class);
@@ -58,6 +83,9 @@ public class GroupByTest {
 		assertEquals("test", select.getParameters().get("name_1"));
 	}
 
+	/**
+	 * <p>testGroubBy_with_having_with_function.</p>
+	 */
 	@Test
 	public void testGroubBy_with_having_with_function() {
 		Entity from = from(Entity.class);
@@ -71,6 +99,9 @@ public class GroupByTest {
 				query);
 	}
 	
+	/**
+	 * <p>testGroubBy_with_having_with_groupCondition.</p>
+	 */
 	@Test
 	public void testGroubBy_with_having_with_groupCondition() {
 		Entity from = from(Entity.class);
@@ -84,6 +115,9 @@ public class GroupByTest {
 				query);
 	}
 	
+	/**
+	 * <p>testGroubBy_with_having_with_groupCondition_reverse.</p>
+	 */
 	@Test
 	public void testGroubBy_with_having_with_groupCondition_reverse() {
 		Entity from = from(Entity.class);
@@ -97,6 +131,9 @@ public class GroupByTest {
 				query);
 	}
 	
+	/**
+	 * <p>testHavingWithFunction_withProxyRelativeParameter.</p>
+	 */
 	@Test
 	public void testHavingWithFunction_withProxyRelativeParameter()
 	{
@@ -112,6 +149,9 @@ public class GroupByTest {
 		assertTrue(select.getParameters().isEmpty());
 	}
 	
+	/**
+	 * <p>testHavingFunctionParameterMustBeConvertToString.</p>
+	 */
 	@Test
 	public void testHavingFunctionParameterMustBeConvertToString()
 	{
@@ -122,7 +162,7 @@ public class GroupByTest {
 	}
 	
 	/**
-	 * GitHub -> Bug 14 
+	 * GitHub -> Bug 14
 	 */
 	@Test
 	public void groupByCombineWithConditionParameterintoHavingClause()

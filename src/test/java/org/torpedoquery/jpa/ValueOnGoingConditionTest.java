@@ -1,4 +1,20 @@
 /**
+ * Copyright (C) ${project.inceptionYear} Xavier Jodoin (xavier@jodoin.me)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  *   Copyright Xavier Jodoin xjodoin@torpedoquery.org
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +28,10 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
+ *
+ * @author xjodoin
+ * @version $Id: $Id
+ * @since 2.0.0
  */
 package org.torpedoquery.jpa;
 
@@ -32,9 +52,11 @@ import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.ExtendEntity;
 import org.torpedoquery.jpa.test.bo.ExtendSubEntity;
-
 public class ValueOnGoingConditionTest {
 
+	/**
+	 * <p>testEqClassOfQextendsT.</p>
+	 */
 	@Test
 	public void testEqClassOfQextendsT() {
 		Entity from = from(Entity.class);
@@ -47,6 +69,9 @@ public class ValueOnGoingConditionTest {
 		assertTrue(select.getParameters().isEmpty());
 	}
 
+	/**
+	 * <p>testNeqClassOfQextendsT.</p>
+	 */
 	@Test
 	public void testNeqClassOfQextendsT() {
 		Entity from = from(Entity.class);
@@ -59,6 +84,9 @@ public class ValueOnGoingConditionTest {
 		assertTrue(select.getParameters().isEmpty());
 	}
 
+	/**
+	 * <p>testEdClassWithFromProxy.</p>
+	 */
 	@Test
 	public void testEdClassWithFromProxy() {
 		Entity from = from(Entity.class);
@@ -70,6 +98,9 @@ public class ValueOnGoingConditionTest {
 		assertTrue(select.getParameters().isEmpty());
 	}
 
+	/**
+	 * <p>testBetweenCondition.</p>
+	 */
 	@Test
 	public void testBetweenCondition() {
 		Entity from = from(Entity.class);
@@ -82,6 +113,9 @@ public class ValueOnGoingConditionTest {
 		assertEquals("C", select.getParameters().get("code_2"));
 	}
 
+	/**
+	 * <p>testNotBetweenCondition.</p>
+	 */
 	@Test
 	public void testNotBetweenCondition() {
 		Entity from = from(Entity.class);
@@ -94,6 +128,9 @@ public class ValueOnGoingConditionTest {
 		assertEquals("C", select.getParameters().get("code_2"));
 	}
 
+	/**
+	 * <p>testLowerFunctionInCondition.</p>
+	 */
 	@Test
 	public void testLowerFunctionInCondition() {
 		Entity entity = from(Entity.class);
@@ -106,6 +143,9 @@ public class ValueOnGoingConditionTest {
 				select.getQuery());
 	}
 
+	/**
+	 * <p>testComparableFunctionInCondition.</p>
+	 */
 	@Test
 	public void testComparableFunctionInCondition() {
 		Entity entity = from(Entity.class);
@@ -118,6 +158,9 @@ public class ValueOnGoingConditionTest {
 				select.getQuery());
 	}
 
+	/**
+	 * <p>testOrMultipleOnGoingLogicalConditions.</p>
+	 */
 	@Test
 	public void testOrMultipleOnGoingLogicalConditions() {
 		Entity entity = from(Entity.class);
@@ -133,6 +176,9 @@ public class ValueOnGoingConditionTest {
 				select.getQuery());
 	}
 
+	/**
+	 * <p>testAndMultipleOnGoingLogicalConditions2.</p>
+	 */
 	@Test
 	public void testAndMultipleOnGoingLogicalConditions2() {
 		Entity entity = from(Entity.class);

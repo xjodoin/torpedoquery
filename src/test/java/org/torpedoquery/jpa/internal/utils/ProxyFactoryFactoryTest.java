@@ -1,4 +1,20 @@
 /**
+ * Copyright (C) ${project.inceptionYear} Xavier Jodoin (xavier@jodoin.me)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  *   Copyright Xavier Jodoin xjodoin@torpedoquery.org
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +28,10 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
+ *
+ * @author xjodoin
+ * @version $Id: $Id
+ * @since 2.0.0
  */
 package org.torpedoquery.jpa.internal.utils;
 
@@ -26,9 +46,17 @@ import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.ExtendEntity;
-
 public class ProxyFactoryFactoryTest {
 
+	/**
+	 * <p>test_dont_track_finalize.</p>
+	 *
+	 * @throws java.lang.NoSuchMethodException if any.
+	 * @throws java.lang.SecurityException if any.
+	 * @throws java.lang.IllegalAccessException if any.
+	 * @throws java.lang.IllegalArgumentException if any.
+	 * @throws java.lang.reflect.InvocationTargetException if any.
+	 */
 	@Test
 	public void test_dont_track_finalize() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException {
@@ -43,6 +71,15 @@ public class ProxyFactoryFactoryTest {
 		assertTrue(torpedoMethodHandler.getMethods().isEmpty());
 	}
 
+	/**
+	 * <p>test_dont_track_finalize_when_extends.</p>
+	 *
+	 * @throws java.lang.NoSuchMethodException if any.
+	 * @throws java.lang.SecurityException if any.
+	 * @throws java.lang.IllegalAccessException if any.
+	 * @throws java.lang.IllegalArgumentException if any.
+	 * @throws java.lang.reflect.InvocationTargetException if any.
+	 */
 	@Test
 	public void test_dont_track_finalize_when_extends() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException {
@@ -57,6 +94,9 @@ public class ProxyFactoryFactoryTest {
 		assertTrue(torpedoMethodHandler.getMethods().isEmpty());
 	}
 	
+	/**
+	 * <p>test_factoryMustUseClassCache.</p>
+	 */
 	@Test
 	public void test_factoryMustUseClassCache()
 	{
