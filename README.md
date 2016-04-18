@@ -11,15 +11,6 @@ TorpedoQuery
 Simple and powerful query builder for your project. Can be use with any existing Hibernate or JPA application.  
 Stop wasting your time to maintain complex HQL queries and start today with the new generation of query builder.
  
-#### Maven ####
-```xml
-<dependency>
-		<groupId>org.torpedoquery</groupId>
-		<artifactId>org.torpedoquery</artifactId>
-		<version>1.7.0</version>
-</dependency>
-```
- 
   
 #### Quick start ####
 
