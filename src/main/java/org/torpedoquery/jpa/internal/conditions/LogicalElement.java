@@ -41,7 +41,7 @@ public abstract class LogicalElement implements Condition {
 	/** {@inheritDoc} */
 	@Override
 	public List<Parameter> getParameters() {
-		List<Parameter> parameters = new ArrayList<Parameter>();
+		List<Parameter> parameters = new ArrayList<>();
 		parameters.addAll(left.getParameters());
 		parameters.addAll(right.getParameters());
 		return parameters;

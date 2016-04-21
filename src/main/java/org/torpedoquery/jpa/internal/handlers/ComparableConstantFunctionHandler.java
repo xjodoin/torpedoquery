@@ -59,6 +59,6 @@ public class ComparableConstantFunctionHandler<T> implements ComparableFunction<
 	/** {@inheritDoc} */
 	@Override
 	public Parameter<T> generateParameter(T value) {
-		return new SelectorParameter<T>(this);
+		return new SelectorParameter<>(this);
 	}
 }

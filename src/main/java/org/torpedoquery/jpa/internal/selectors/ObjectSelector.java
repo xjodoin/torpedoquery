@@ -44,7 +44,7 @@ public class ObjectSelector<T> implements Selector<T> {
 	/** {@inheritDoc} */
 	@Override
 	public Parameter<T> generateParameter(Object value) {
-		return new SelectorParameter<T>(this);
+		return new SelectorParameter<>(this);
 	}
 
 }

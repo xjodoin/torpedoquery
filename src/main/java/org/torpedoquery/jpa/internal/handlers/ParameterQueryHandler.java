@@ -51,16 +51,16 @@ public class ParameterQueryHandler<T> implements QueryHandler<Parameter<T>> {
 
 		if (!methods.isEmpty()) {
 			MethodCall pollFirst = methods.pollFirst();
-			return new SelectorParameter<T>(new SimpleMethodCallSelector<T>(proxyQueryBuilders.get(pollFirst.getProxy()), pollFirst));
+			return new SelectorParameter<>(new SimpleMethodCallSelector<T>(proxyQueryBuilders.get(pollFirst.getProxy()), pollFirst));
 		}
         else if (value instanceof Query) {
-            return new SubqueryValueParameters<T>((Query) value);
+            return new SubqueryValueParameters<>((Query) value);
         }
 		else if (value instanceof Function) {
-			return new SelectorParameter<T>((Selector) value);
+			return new SelectorParameter<>((Selector) value);
 		}
 		else {
-			return new ValueParameter<T>(paramName, value);
+			return new ValueParameter<>(paramName, value);
 		}
 	}
 

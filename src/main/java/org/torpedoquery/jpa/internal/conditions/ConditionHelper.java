@@ -48,7 +48,7 @@ public class ConditionHelper {
 	 */
 	public static <T, E extends OnGoingCondition<T>> E createCondition(Function<T> function, LogicalCondition condition) {
 		TorpedoMethodHandler fjpaMethodHandler = TorpedoMagic.getTorpedoMethodHandler();
-		WhereClauseHandler<T, E> whereClauseHandler = new WhereClauseHandler<T, E>(function, condition, new DoNothingQueryConfigurator<T>());
+		WhereClauseHandler<T, E> whereClauseHandler = new WhereClauseHandler<>(function, condition, new DoNothingQueryConfigurator<>());
 		E handle = fjpaMethodHandler.handle(whereClauseHandler);
 		return handle;
 	}

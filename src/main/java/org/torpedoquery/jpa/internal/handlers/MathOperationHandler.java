@@ -82,7 +82,7 @@ public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperatio
 	}
 
 	private MathOperationFunction<T> createFunction(Selector<T> right,String operator) {
-		return new MathOperationFunction<T>(proxy, leftSelector, operator, right);
+		return new MathOperationFunction<>(proxy, leftSelector, operator, right);
 	}
 
 	/** {@inheritDoc} */

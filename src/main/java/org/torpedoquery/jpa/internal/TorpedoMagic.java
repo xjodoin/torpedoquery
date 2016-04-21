@@ -22,8 +22,8 @@ import org.torpedoquery.core.QueryBuilderFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 public class TorpedoMagic {
 
-	private static final ThreadLocal<TorpedoProxy> query = new ThreadLocal<TorpedoProxy>();
-	private static AtomicReference<QueryBuilderFactory> factory = new AtomicReference<QueryBuilderFactory>(
+	private static final ThreadLocal<TorpedoProxy> query = new ThreadLocal<>();
+	private static AtomicReference<QueryBuilderFactory> factory = new AtomicReference<>(
 			new DefaultQueryBuilderFactory());
 
 	/**

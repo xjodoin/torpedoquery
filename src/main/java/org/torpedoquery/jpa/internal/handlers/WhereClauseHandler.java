@@ -82,9 +82,9 @@ public class WhereClauseHandler<T, E extends OnGoingCondition<T>> extends
 	/** {@inheritDoc} */
 	@Override
 	public E handle(TorpedoProxy proxy, QueryBuilder queryBuilder, Selector selector) {
-		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<T>(
+		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<>(
 				queryBuilder, logicalCondition, selector)
-				: new ConditionBuilder<T>(queryBuilder, selector);
+				: new ConditionBuilder<>(queryBuilder, selector);
 
 		configurator.configure(queryBuilder, whereClause);
 
