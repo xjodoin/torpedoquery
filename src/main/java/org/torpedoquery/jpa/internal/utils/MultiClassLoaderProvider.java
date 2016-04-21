@@ -26,7 +26,7 @@ import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyFactory.ClassLoaderProvider;
 public class MultiClassLoaderProvider implements ClassLoaderProvider {
 
-	private static final Map<Set<ClassLoader>, ClassLoader> classLoaderCache = new ConcurrentHashMap<Set<ClassLoader>, ClassLoader>();
+	private static final Map<Set<ClassLoader>, ClassLoader> classLoaderCache = new ConcurrentHashMap<>();
 	
 	private class MultiClassLoader extends ClassLoader {
 		private final Collection<ClassLoader> classLoaders;
@@ -60,7 +60,7 @@ public class MultiClassLoaderProvider implements ClassLoaderProvider {
 	@Override
 	public ClassLoader get(ProxyFactory factory) {
 		Class[] interfaces = factory.getInterfaces();
-		Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
+		Set<ClassLoader> classLoaders = new HashSet<>();
 
 		Class superclass = factory.getSuperclass();
 		if (superclass != null && superclass.getClassLoader() != null) {

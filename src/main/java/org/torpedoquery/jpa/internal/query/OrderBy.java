@@ -25,7 +25,7 @@ import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Selector;
 public class OrderBy {
 
-	private final List<Selector> orders = new ArrayList<Selector>();
+	private final List<Selector> orders = new ArrayList<>();
 
 	/**
 	 * <p>addOrder.</p>

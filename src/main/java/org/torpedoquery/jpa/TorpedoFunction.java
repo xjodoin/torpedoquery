@@ -206,7 +206,7 @@ public class TorpedoFunction {
 	}
 	
 	private static <T> DynamicInstantiationFunction<T> getDynamicInstantiationFunction(T val) {
-		final DynamicInstantiationFunction<T> dynFunction = new DynamicInstantiationFunction<T>(val);
+		final DynamicInstantiationFunction<T> dynFunction = new DynamicInstantiationFunction<>(val);
 		TorpedoMethodHandler torpedoMethodHandler = getTorpedoMethodHandler();
 		Object[] params = torpedoMethodHandler.params();
 		torpedoMethodHandler.handle(

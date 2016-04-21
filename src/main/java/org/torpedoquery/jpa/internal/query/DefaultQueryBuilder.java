@@ -42,8 +42,8 @@ import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
 public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private final Class<?> toQuery;
-	private final List<Selector> toSelect = new ArrayList<Selector>();
-	private final List<Join> joins = new ArrayList<Join>();
+	private final List<Selector> toSelect = new ArrayList<>();
+	private final List<Join> joins = new ArrayList<>();
 	private ConditionBuilder<T> whereClause;
 	private ConditionBuilder<T> withClause;
 
@@ -304,7 +304,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 
 		freezeQuery(new AtomicInteger());
 
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		List<ValueParameter> parameters = getValueParameters();
 		for (ValueParameter parameter : parameters) {
 			params.put(parameter.getName(), parameter.getValue());
@@ -321,7 +321,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	/** {@inheritDoc} */
 	@Override
 	public List<ValueParameter> getValueParameters() {
-		List<ValueParameter> valueParameters = new ArrayList<ValueParameter>();
+		List<ValueParameter> valueParameters = new ArrayList<>();
 
 		Condition whereClauseCondition = getConditionClause(whereClause);
 
@@ -418,7 +418,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	@Override
 	public <E> List<E> map(EntityManager entityManager, Function<T,E> function) {
 		List<T> toConvert = list(entityManager);
-		List<E> result = new ArrayList<E>();
+		List<E> result = new ArrayList<>();
 
 		for (T value : toConvert) {
 			result.add(function.apply(value));

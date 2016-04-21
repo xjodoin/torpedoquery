@@ -58,7 +58,7 @@ public class ProxyFactoryFactory {
 	 */
 	public <T> T createProxy(MethodHandler methodHandler, Class<?>... classes) {
 
-		ArrayList<Class<?>> interfaces = new ArrayList<Class<?>>();
+		ArrayList<Class<?>> interfaces = new ArrayList<>();
 		Class<?> superClass = null;
 
 		for (Class<?> class1 : classes) {

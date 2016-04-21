@@ -80,71 +80,71 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition eq(T value) {
-		Condition condition = new EqualCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new EqualCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition eq(Class<? extends T> value) {
-		Condition condition = new EqualPolymorphicCondition<T>(selector, value);
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new EqualPolymorphicCondition<T>(selector, value);
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition neq(T value) {
-		Condition condition = new NotEqualCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new NotEqualCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition neq(Class<? extends T> value) {
-		Condition condition = new NotEqualPolymorphicCondition<T>(selector, value);
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new NotEqualPolymorphicCondition<T>(selector, value);
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition lt(T value) {
-		Condition condition = new LtCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new LtCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition lte(T value) {
-		Condition condition = new LteCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new LteCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition gt(T value) {
-		Condition condition = new GtCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new GtCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition gte(T value) {
-		Condition condition = new GteCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new GteCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition isNull() {
-		Condition condition = new IsNullCondition(selector);
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new IsNullCondition(selector);
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition isNotNull() {
-		Condition condition = new IsNotNullCondition(selector);
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new IsNotNullCondition(selector);
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
@@ -156,15 +156,15 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition in(Collection<T> values) {
-		Condition condition = new InCondition<T>(selector, selector.generateParameter(values));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new InCondition<T>(selector, selector.generateParameter(values));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition in(Query<T> query) {
-		Condition condition = new InSubQueryCondition<T>(selector, (QueryBuilder) query);
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new InSubQueryCondition<T>(selector, (QueryBuilder) query);
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
@@ -257,74 +257,74 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition lt(ComparableFunction<T> value) {
-		Condition condition = new LtCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new LtCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition lte(ComparableFunction<T> value) {
-		Condition condition = new LteCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new LteCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition gt(ComparableFunction<T> value) {
-		Condition condition = new GtCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new GtCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition gte(ComparableFunction<T> value) {
-		Condition condition = new GteCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new GteCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition eq(Function<T> value) {
-		Condition condition = new EqualCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new EqualCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition neq(Function<T> value) {
-		Condition condition = new NotEqualCondition<T>(selector, selector.generateParameter(value));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new NotEqualCondition<T>(selector, selector.generateParameter(value));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition between(T from, T to) {
-		Condition condition = new BetweenCondition<T>(selector, Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new BetweenCondition<T>(selector, Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition notBetween(T from, T to) {
-		Condition condition = new BetweenCondition<T>(new NotSelector(selector), Arrays.asList(selector.generateParameter(from),
+		Condition conditionLocal = new BetweenCondition<T>(new NotSelector(selector), Arrays.asList(selector.generateParameter(from),
 				selector.generateParameter(to)));
-		return getOnGoingLogicalCondition(condition);
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition between(ComparableFunction<T> from,
 			ComparableFunction<T> to) {
-		Condition condition = new BetweenCondition<T>(selector, Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
-		return getOnGoingLogicalCondition(condition);
+		Condition conditionLocal = new BetweenCondition<T>(selector, Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition notBetween(ComparableFunction<T> from,
 			ComparableFunction<T> to) {
-		Condition condition = new BetweenCondition<T>(new NotSelector(selector), Arrays.asList(selector.generateParameter(from),
+		Condition conditionLocal = new BetweenCondition<T>(new NotSelector(selector), Arrays.asList(selector.generateParameter(from),
 				selector.generateParameter(to)));
-		return getOnGoingLogicalCondition(condition);
+		return getOnGoingLogicalCondition(conditionLocal);
 	}
 }

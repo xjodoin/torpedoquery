@@ -28,7 +28,7 @@ import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.query.SelectorParameter;
 public class CoalesceFunction<T> implements ComparableFunction<T> {
 
-	private final List<Selector> selectors = new ArrayList<Selector>();
+	private final List<Selector> selectors = new ArrayList<>();
 	private TorpedoProxy proxy;
 
 	/** {@inheritDoc} */
@@ -78,7 +78,7 @@ public class CoalesceFunction<T> implements ComparableFunction<T> {
 	/** {@inheritDoc} */
 	@Override
 	public Parameter<T> generateParameter(T value) {
-		return new SelectorParameter<T>(this);
+		return new SelectorParameter<>(this);
 	}
 
 }

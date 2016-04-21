@@ -59,6 +59,6 @@ public class ConstantFunctionHandler<T> implements Function<T>, QueryHandler<Fun
 	/** {@inheritDoc} */
 	@Override
 	public Parameter<T> generateParameter(T value) {
-		return new SelectorParameter<T>(this);
+		return new SelectorParameter<>(this);
 	}
 }

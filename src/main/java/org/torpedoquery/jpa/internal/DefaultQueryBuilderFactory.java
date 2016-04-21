@@ -24,7 +24,7 @@ public class DefaultQueryBuilderFactory implements QueryBuilderFactory {
 	/** {@inheritDoc} */
 	@Override
 	public <T> QueryBuilder<T> create(Class<T> toQuery) {
-		return new DefaultQueryBuilder<T>(toQuery);
+		return new DefaultQueryBuilder<>(toQuery);
 	}
 
 }

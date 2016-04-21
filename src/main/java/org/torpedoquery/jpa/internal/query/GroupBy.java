@@ -39,7 +39,7 @@ import org.torpedoquery.jpa.internal.conditions.GroupingCondition;
 import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
 public class GroupBy implements OnGoingGroupByCondition {
 
-	private final List<Selector> groups = new ArrayList<Selector>();
+	private final List<Selector> groups = new ArrayList<>();
 	private ConditionBuilder havingCondition;
 
 	/**
