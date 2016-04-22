@@ -27,7 +27,7 @@ import javassist.util.proxy.ProxyFactory.ClassLoaderProvider;
 import org.objenesis.ObjenesisHelper;
 public class ProxyFactoryFactory {
 	private final ClassLoaderProvider classLoaderProvider;
-	private MethodFilter methodFilter;
+	private final MethodFilter methodFilter;
 
 	/**
 	 * <p>Constructor for ProxyFactoryFactory.</p>

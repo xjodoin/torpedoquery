@@ -86,15 +86,15 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 
 			appendSelect(builder, incrementor);
 
-			builder.append(from);
+			builder.append(from)
 
-			builder.append(getJoins(incrementor));
+					.append(getJoins(incrementor))
 
-			builder.append(appendWhereClause(new StringBuilder(), incrementor));
+					.append(appendWhereClause(new StringBuilder(), incrementor))
 
-			builder.append(appendOrderBy(new StringBuilder(), incrementor));
+					.append(appendOrderBy(new StringBuilder(), incrementor))
 
-			builder.append(appendGroupBy(new StringBuilder(), incrementor));
+					.append(appendGroupBy(new StringBuilder(), incrementor));
 
 			freezeQuery = builder.toString().trim();
 
@@ -176,9 +176,9 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 
 		if (whereClauseCondition != null) {
 			if (builder.length() == 0) {
-				builder.append(" where ").append(whereClauseCondition.createQueryFragment(incrementor)).append(" ");
+				builder.append(" where ").append(whereClauseCondition.createQueryFragment(incrementor)).append(' ');
 			} else {
-				builder.append("and ").append(whereClauseCondition.createQueryFragment(incrementor)).append(" ");
+				builder.append("and ").append(whereClauseCondition.createQueryFragment(incrementor)).append(' ');
 			}
 		}
 
@@ -474,7 +474,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		Condition with = getConditionClause(withClause);
 
 		if (with != null) {
-			builder.append(" with ").append(with.createQueryFragment(incrementor)).append(" ");
+			builder.append(" with ").append(with.createQueryFragment(incrementor)).append(' ');
 		}
 
 		return builder.toString();

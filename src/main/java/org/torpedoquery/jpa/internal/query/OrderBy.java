@@ -55,7 +55,7 @@ public class OrderBy {
 
 			while (iterator.hasNext()) {
 				Selector selector = iterator.next();
-				builder.append(",").append(selector.createQueryFragment(incrementor));
+				builder.append(',').append(selector.createQueryFragment(incrementor));
 			}
 
 			return builder.toString();

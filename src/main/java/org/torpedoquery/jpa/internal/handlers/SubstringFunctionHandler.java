@@ -20,8 +20,8 @@ import org.torpedoquery.jpa.Function;
 public class SubstringFunctionHandler extends
 		BaseFunctionHandler<String, Function<String>> {
 
-	private int beginIndex;
-	private int endIndex;
+	private final int beginIndex;
+	private final int endIndex;
 
 	/**
 	 * <p>Constructor for SubstringFunctionHandler.</p>
