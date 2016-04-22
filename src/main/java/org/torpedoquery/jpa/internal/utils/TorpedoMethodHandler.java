@@ -40,7 +40,7 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	private final Deque<MethodCall> methods = new LinkedList<>();
 	private final QueryBuilder<?> root;
 	private final ProxyFactoryFactory proxyfactoryfactory;
-	private List<Object> params = new ArrayList<>();
+	private final List<Object> params = new ArrayList<>();
 
 	/**
 	 * <p>Constructor for TorpedoMethodHandler.</p>

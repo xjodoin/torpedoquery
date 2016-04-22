@@ -60,7 +60,7 @@ public class GroupBy implements OnGoingGroupByCondition {
 
 			while (iterator.hasNext()) {
 				Selector selector = iterator.next();
-				builder.append(",").append(selector.createQueryFragment(incrementor));
+				builder.append(',').append(selector.createQueryFragment(incrementor));
 			}
 
 			if (havingCondition != null) {

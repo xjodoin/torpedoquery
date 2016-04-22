@@ -42,10 +42,10 @@ public class CoalesceFunction<T> implements ComparableFunction<T> {
 
 		while (iterator.hasNext()) {
 			Selector selector = iterator.next();
-			stringBuffer.append(",").append(selector.createQueryFragment(incrementor));
+			stringBuffer.append(',').append(selector.createQueryFragment(incrementor));
 		}
 
-		stringBuffer.append(")");
+		stringBuffer.append(')');
 
 		return stringBuffer.toString();
 	}

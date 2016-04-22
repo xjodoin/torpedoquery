@@ -29,8 +29,8 @@ import org.torpedoquery.jpa.internal.query.SelectorParameter;
 public class DynamicInstantiationFunction<T> implements ComparableFunction<T> {
 
 	private final List<Selector> selectors = new ArrayList<>();
+	private final T object;
 	private TorpedoProxy proxy;
-	private T object;
 
 	/**
 	 * <p>Constructor for DynamicInstantiationFunction.</p>
@@ -52,10 +52,10 @@ public class DynamicInstantiationFunction<T> implements ComparableFunction<T> {
 
 		while (iterator.hasNext()) {
 			Selector selector = iterator.next();
-			stringBuffer.append(",").append(selector.createQueryFragment(incrementor));
+			stringBuffer.append(',').append(selector.createQueryFragment(incrementor));
 		}
 
-		stringBuffer.append(")");
+		stringBuffer.append(')');
 
 		return stringBuffer.toString();
 	}
