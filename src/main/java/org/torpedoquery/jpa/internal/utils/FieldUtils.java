@@ -18,7 +18,11 @@ package org.torpedoquery.jpa.internal.utils;
 
 import java.beans.Introspector;
 import java.lang.reflect.Method;
-public class FieldUtils {
+public final class FieldUtils {
+
+	private FieldUtils() {
+	}
+
 	/**
 	 * <p>getFieldName.</p>
 	 *

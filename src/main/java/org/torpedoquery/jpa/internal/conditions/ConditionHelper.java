@@ -23,7 +23,11 @@ import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.handlers.WhereClauseHandler;
 import org.torpedoquery.jpa.internal.utils.DoNothingQueryConfigurator;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
-public class ConditionHelper {
+public final class ConditionHelper {
+
+	private ConditionHelper() {
+	}
+
 	/**
 	 * <p>createCondition.</p>
 	 *
