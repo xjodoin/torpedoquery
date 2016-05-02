@@ -20,11 +20,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.torpedoquery.core.QueryBuilderFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
-public class TorpedoMagic {
+public final class TorpedoMagic {
 
 	private static final ThreadLocal<TorpedoProxy> query = new ThreadLocal<>();
 	private static AtomicReference<QueryBuilderFactory> factory = new AtomicReference<>(
 			new DefaultQueryBuilderFactory());
+
+	private TorpedoMagic() {
+	}
 
 	/**
 	 * <p>Setter for the field <code>query</code>.</p>
