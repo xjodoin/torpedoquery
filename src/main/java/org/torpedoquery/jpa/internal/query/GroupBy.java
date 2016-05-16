@@ -133,10 +133,10 @@ public class GroupBy implements OnGoingGroupByCondition {
 	@Override
 	public OnGoingLogicalCondition having(OnGoingLogicalCondition condition) {
 		LogicalCondition logicalCondition = (LogicalCondition)condition;
-		QueryBuilder builder = (QueryBuilder) logicalCondition.getBuilder();
+		QueryBuilder builder = logicalCondition.getBuilder();
 		LogicalCondition groupingLogicalCondition = new LogicalCondition(builder, new GroupingCondition(logicalCondition));
 		havingCondition = new ConditionBuilder(builder, groupingLogicalCondition, null);
-		return (OnGoingLogicalCondition) groupingLogicalCondition;
+		return groupingLogicalCondition;
 	}
 	
 	/**

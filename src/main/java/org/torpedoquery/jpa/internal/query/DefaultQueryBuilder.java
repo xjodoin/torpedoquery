@@ -344,7 +344,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return valueParameters;
 	}
 
-	private void feedValueParameters(List<ValueParameter> valueParameters, Condition clauseCondition) {
+	private static void feedValueParameters(List<ValueParameter> valueParameters, Condition clauseCondition) {
 		if (clauseCondition != null) {
 			List<Parameter> parameters = clauseCondition.getParameters();
 			for (Parameter parameter : parameters) {

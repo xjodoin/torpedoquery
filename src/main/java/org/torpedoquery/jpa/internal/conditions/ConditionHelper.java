@@ -37,8 +37,7 @@ public final class ConditionHelper {
 	 * @return a E object.
 	 */
 	public static <T, E extends OnGoingCondition<T>> E createCondition(LogicalCondition condition) {
-		E handle = ConditionHelper.<T, E> createCondition(null, condition);
-		return handle;
+		return ConditionHelper.<T, E> createCondition(null, condition);
 	}
 
 	/**
@@ -53,8 +52,7 @@ public final class ConditionHelper {
 	public static <T, E extends OnGoingCondition<T>> E createCondition(Function<T> function, LogicalCondition condition) {
 		TorpedoMethodHandler fjpaMethodHandler = TorpedoMagic.getTorpedoMethodHandler();
 		WhereClauseHandler<T, E> whereClauseHandler = new WhereClauseHandler<>(function, condition, new DoNothingQueryConfigurator<>());
-		E handle = fjpaMethodHandler.handle(whereClauseHandler);
-		return handle;
+		return fjpaMethodHandler.handle(whereClauseHandler);
 	}
 	
 	

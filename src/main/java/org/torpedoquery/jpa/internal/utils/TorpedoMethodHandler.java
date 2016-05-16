@@ -125,8 +125,7 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	 * @return a T object.
 	 */
 	public <T> T handle(QueryHandler<T> handler) {
-		final T result = handler.handleCall(proxyQueryBuilders, methods);
-		return result;
+		return handler.handleCall(proxyQueryBuilders, methods);
 	}
 
 	/**
