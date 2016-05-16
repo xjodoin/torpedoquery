@@ -35,19 +35,19 @@ public class CoalesceFunction<T> implements ComparableFunction<T> {
 	@Override
 	public String createQueryFragment(AtomicInteger incrementor) {
 
-		StringBuffer stringBuffer = new StringBuffer();
+		StringBuilder stringBuilder = new StringBuilder();
 		Iterator<Selector> iterator = selectors.iterator();
 		Selector first = iterator.next();
-		stringBuffer.append("coalesce(").append(first.createQueryFragment(incrementor));
+		stringBuilder.append("coalesce(").append(first.createQueryFragment(incrementor));
 
 		while (iterator.hasNext()) {
 			Selector selector = iterator.next();
-			stringBuffer.append(',').append(selector.createQueryFragment(incrementor));
+			stringBuilder.append(',').append(selector.createQueryFragment(incrementor));
 		}
 
-		stringBuffer.append(')');
+		stringBuilder.append(')');
 
-		return stringBuffer.toString();
+		return stringBuilder.toString();
 	}
 
 	/** {@inheritDoc} */
