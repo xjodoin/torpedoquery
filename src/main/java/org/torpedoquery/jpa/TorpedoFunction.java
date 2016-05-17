@@ -186,8 +186,7 @@ public class TorpedoFunction {
 	 * @return a {@link org.torpedoquery.jpa.Function} object.
 	 */
 	public static <T> Function<T> coalesce(T... values) {
-		final CoalesceFunction<T> coalesceFunction = getCoalesceFunction(values);
-		return coalesceFunction;
+		return getCoalesceFunction(values);
 	}
 
 	private static <T> CoalesceFunction<T> getCoalesceFunction(T... values) {
@@ -235,8 +234,7 @@ public class TorpedoFunction {
 	 * @return a {@link org.torpedoquery.jpa.Function} object.
 	 */
 	public static <T> Function<T> dyn(T object) {
-		final DynamicInstantiationFunction<T> dynFunction = getDynamicInstantiationFunction(object);
-		return dynFunction;
+		return getDynamicInstantiationFunction(object);
 	}
 
 	/**

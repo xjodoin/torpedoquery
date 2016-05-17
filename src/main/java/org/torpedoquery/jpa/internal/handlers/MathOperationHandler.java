@@ -68,11 +68,10 @@ public class MathOperationHandler<T> implements QueryHandler<OnGoingMathOperatio
 		return createFunction(rightSelector, "+");
 	}
 
-	private SimpleMethodCallSelector handleMethodCall() {
+	private static SimpleMethodCallSelector handleMethodCall() {
 		TorpedoMethodHandler torpedoMethodHandler = TorpedoMagic.getTorpedoMethodHandler();
 		MethodCall methodCall = torpedoMethodHandler.getMethods().pollFirst();
-		SimpleMethodCallSelector rightSelector = new SimpleMethodCallSelector(torpedoMethodHandler.getQueryBuilder(methodCall.getProxy()), methodCall);
-		return rightSelector;
+		return new SimpleMethodCallSelector(torpedoMethodHandler.getQueryBuilder(methodCall.getProxy()), methodCall);
 	}
 
 	/** {@inheritDoc} */

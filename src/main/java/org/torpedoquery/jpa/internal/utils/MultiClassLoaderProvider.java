@@ -39,7 +39,7 @@ public class MultiClassLoaderProvider implements ClassLoaderProvider {
 		public Class<?> loadClass(String name) throws ClassNotFoundException {
 
 			try {
-				return MultiClassLoaderProvider.class.getClassLoader().loadClass(name);
+				return Thread.currentThread().getContextClassLoader().loadClass(name);
 			} catch (ClassNotFoundException e1) {
 			}
 
