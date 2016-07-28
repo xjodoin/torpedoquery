@@ -249,6 +249,12 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 
 	/** {@inheritDoc} */
 	@Override
+	public OnGoingLogicalCondition memberOf(T member) {
+		return getOnGoingLogicalCondition(new MemberOfCondition<>(selector, selector.generateParameter(member)));
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public OnGoingComparableCondition<Integer> size() {
 		selector = new SizeSelector(selector);
 		return (OnGoingComparableCondition<Integer>) this;
