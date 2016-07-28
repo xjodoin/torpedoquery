@@ -38,4 +38,10 @@ public interface OnGoingCollectionCondition<T> extends OnGoingCondition<T> {
 	 */
 	OnGoingComparableCondition<Integer> size();
 
+	/**
+	 * <p>memberOf.</p>
+	 *
+	 * @return a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
+	 */
+	OnGoingLogicalCondition memberOf(T member);
 }

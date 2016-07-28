@@ -51,6 +51,7 @@ import java.util.Optional;
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.SubEntity;
+
 public class WhereClauseTest {
 
 	/**
@@ -424,6 +425,18 @@ public class WhereClauseTest {
 
 		assertEquals("select entity_0 from Entity entity_0 where entity_0.subEntities.size > :subEntities_1",
 				select.getQuery());
+	}
+
+	/**
+	 * <p>test_member_of.</p>
+	 */
+	@Test
+	public void test_member_of() {
+		Entity fromEntity = from(Entity.class);
+		where(fromEntity.getValueCollection()).memberOf("VALUE");
+		Query<Entity> query = select(fromEntity);
+
+		assertEquals("select entity_0 from Entity entity_0 where :valueCollection_1 member of entity_0.valueCollection", query.getQuery());
 	}
 
 	/**

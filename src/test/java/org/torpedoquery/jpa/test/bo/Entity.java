@@ -142,6 +142,10 @@ public class Entity extends AbstractEntity {
 		return null;
 	}
 
+	public List<String> getValueCollection() {
+		return null;
+	}
+
 	/**
 	 * <p>getBigDecimalField.</p>
 	 *
