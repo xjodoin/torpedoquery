@@ -1,5 +1,5 @@
 /**
- * Copyright (C) ${project.inceptionYear} Xavier Jodoin (xavier@jodoin.me)
+ * Copyright (C) 2011 Xavier Jodoin (xavier@jodoin.me)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.torpedoquery.jpa.internal.handlers;
 public class AscFunctionHandler<T> extends OrderByFunctionHandler<T> {
 

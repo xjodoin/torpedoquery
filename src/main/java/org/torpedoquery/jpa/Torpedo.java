@@ -1,5 +1,5 @@
 /**
- * Copyright (C) ${project.inceptionYear} Xavier Jodoin (xavier@jodoin.me)
+ * Copyright (C) 2011 Xavier Jodoin (xavier@jodoin.me)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

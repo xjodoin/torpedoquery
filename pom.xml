@@ -20,6 +20,7 @@
 	<groupId>org.torpedoquery</groupId>
 	<artifactId>org.torpedoquery</artifactId>
 	<version>2.1.1-SNAPSHOT</version>
+	<inceptionYear>2011</inceptionYear>
 
 	<name>TorpedoQuery</name>
 	<url>http://torpedoquery.org</url>
