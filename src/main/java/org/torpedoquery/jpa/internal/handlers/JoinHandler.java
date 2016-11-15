@@ -32,7 +32,6 @@ import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 
 import com.google.common.base.Throwables;
-
 public abstract class JoinHandler<T> implements QueryHandler<T> {
 
 	private final TorpedoMethodHandler methodHandler;
@@ -60,10 +59,6 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 	 * @param fjpaMethodHandler
 	 *            a
 	 *            {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler}
-	 *            object.
-	 * @param proxyFactoryFactory
-	 *            a
-	 *            {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory}
 	 *            object.
 	 * @param realType
 	 *            a {@link java.lang.Class} object.

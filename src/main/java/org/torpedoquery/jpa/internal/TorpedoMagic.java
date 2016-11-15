@@ -70,6 +70,11 @@ public final class TorpedoMagic {
 		factory.set(queryBuilderFactory);
 	}
 
+	/**
+	 * <p>getProxyfactoryfactory.</p>
+	 *
+	 * @return a {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory} object.
+	 */
 	public static ProxyFactoryFactory getProxyfactoryfactory() {
 		return proxyFactoryFactory;
 	}

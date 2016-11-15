@@ -32,7 +32,6 @@ public interface OnGoingGroupByCondition extends Serializable {
 	 * <p>having.</p>
 	 *
 	 * @param object a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
 	 */
 	public <T extends Comparable<?>> OnGoingComparableCondition<T> having(ComparableFunction<T> object);
@@ -51,7 +50,6 @@ public interface OnGoingGroupByCondition extends Serializable {
 	 *
 	 * @param object a T object.
 	 * @param <V> a V object.
-	 * @param <T> a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
 	 */
 	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> having(T object);

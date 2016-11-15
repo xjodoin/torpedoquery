@@ -25,7 +25,6 @@ import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
 import org.torpedoquery.jpa.internal.query.GroupBy;
 import org.torpedoquery.jpa.internal.query.ValueParameter;
-
 public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 
 	/**
@@ -214,6 +213,9 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 */
 	public String getWithClause(AtomicInteger incrementor);
 
+	/**
+	 * <p>clearSelectors.</p>
+	 */
 	void clearSelectors();
 
 }

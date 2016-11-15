@@ -21,7 +21,6 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import com.google.common.base.Throwables;
-
 public class SerializableMethod implements Serializable {
 
 	private static final long serialVersionUID = 6005610965006048445L;
@@ -34,6 +33,11 @@ public class SerializableMethod implements Serializable {
 	private final boolean isVarArgs;
 	private final boolean isAbstract;
 
+	/**
+	 * <p>Constructor for SerializableMethod.</p>
+	 *
+	 * @param method a {@link java.lang.reflect.Method} object.
+	 */
 	public SerializableMethod(Method method) {
 		declaringClass = method.getDeclaringClass();
 		methodName = method.getName();
@@ -44,30 +48,65 @@ public class SerializableMethod implements Serializable {
 		isAbstract = (method.getModifiers() & Modifier.ABSTRACT) != 0;
 	}
 
+	/**
+	 * <p>getName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getName() {
 		return methodName;
 	}
 
+	/**
+	 * <p>Getter for the field <code>returnType</code>.</p>
+	 *
+	 * @return a {@link java.lang.Class} object.
+	 */
 	public Class<?> getReturnType() {
 		return returnType;
 	}
 
+	/**
+	 * <p>Getter for the field <code>parameterTypes</code>.</p>
+	 *
+	 * @return an array of {@link java.lang.Class} objects.
+	 */
 	public Class<?>[] getParameterTypes() {
 		return parameterTypes;
 	}
 
+	/**
+	 * <p>Getter for the field <code>exceptionTypes</code>.</p>
+	 *
+	 * @return an array of {@link java.lang.Class} objects.
+	 */
 	public Class<?>[] getExceptionTypes() {
 		return exceptionTypes;
 	}
 
+	/**
+	 * <p>isVarArgs.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isVarArgs() {
 		return isVarArgs;
 	}
 
+	/**
+	 * <p>isAbstract.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isAbstract() {
 		return isAbstract;
 	}
 
+	/**
+	 * <p>getJavaMethod.</p>
+	 *
+	 * @return a {@link java.lang.reflect.Method} object.
+	 */
 	public Method getJavaMethod() {
 		try {
 			return declaringClass.getDeclaredMethod(methodName, parameterTypes);
@@ -76,11 +115,13 @@ public class SerializableMethod implements Serializable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		return 1;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

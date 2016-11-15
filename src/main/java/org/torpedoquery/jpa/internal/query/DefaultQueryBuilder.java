@@ -40,7 +40,6 @@ import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
-
 public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<>();
@@ -523,11 +522,17 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 				.map(ConditionBuilder::getLogicalCondition);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void clearSelectors() {
 		toSelect.clear();
 	}
 
+	/**
+	 * <p>freeze.</p>
+	 *
+	 * @return a {@link org.torpedoquery.jpa.Query} object.
+	 */
 	public Query<T> freeze() {
 		QueryBuilder clone = SerializationUtils.clone(this);
 		return clone;

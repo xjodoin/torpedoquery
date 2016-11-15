@@ -34,7 +34,6 @@ import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.handlers.QueryHandler;
 
 import com.google.common.base.Defaults;
-
 public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	private final Map<Object, QueryBuilder<?>> proxyQueryBuilders = new IdentityHashMap<>();
 	private final Deque<MethodCall> methods = new LinkedList<>();
@@ -48,10 +47,6 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	 *
 	 * @param root
 	 *            a {@link org.torpedoquery.core.QueryBuilder} object.
-	 * @param proxyfactoryfactory
-	 *            a
-	 *            {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory}
-	 *            object.
 	 */
 	public TorpedoMethodHandler(QueryBuilder<?> root) {
 		this.root = root;

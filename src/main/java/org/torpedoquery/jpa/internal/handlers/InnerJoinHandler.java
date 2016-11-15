@@ -19,7 +19,6 @@ import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Join;
 import org.torpedoquery.jpa.internal.joins.InnerJoin;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
-
 public class InnerJoinHandler<T> extends JoinHandler<T> {
 	/**
 	 * <p>
@@ -43,10 +42,6 @@ public class InnerJoinHandler<T> extends JoinHandler<T> {
 	 * @param fjpaMethodHandler
 	 *            a
 	 *            {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler}
-	 *            object.
-	 * @param proxyFactoryFactory
-	 *            a
-	 *            {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory}
 	 *            object.
 	 * @param realType
 	 *            a {@link java.lang.Class} object.

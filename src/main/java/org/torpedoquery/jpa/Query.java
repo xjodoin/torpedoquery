@@ -116,7 +116,8 @@ public interface Query<T> extends ComparableFunction<T>, Cloneable {
 	Optional<OnGoingLogicalCondition> condition();
 	
 	/**
-	 * 
+	 * <p>freeze.</p>
+	 *
 	 * @return return the a freeze
 	 */
 	Query<T> freeze();

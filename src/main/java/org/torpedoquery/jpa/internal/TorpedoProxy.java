@@ -18,7 +18,6 @@ package org.torpedoquery.jpa.internal;
 import java.io.Serializable;
 
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
-
 public interface TorpedoProxy extends Serializable {
 
 	/**

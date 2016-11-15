@@ -32,7 +32,6 @@ public final class ConditionHelper {
 	 *
 	 * @param condition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
 	 * @param <T> a T object.
-	 * @param <E> a E object.
 	 * @return a E object.
 	 */
 	public static <T, E extends OnGoingCondition<T>> E createCondition(LogicalCondition condition) {
@@ -45,7 +44,6 @@ public final class ConditionHelper {
 	 * @param function a {@link org.torpedoquery.jpa.Function} object.
 	 * @param condition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
 	 * @param <T> a T object.
-	 * @param <E> a E object.
 	 * @return a E object.
 	 */
 	public static <T, E extends OnGoingCondition<T>> E createCondition(Function<T> function, LogicalCondition condition) {

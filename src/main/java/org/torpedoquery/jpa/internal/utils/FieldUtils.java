@@ -24,7 +24,7 @@ public final class FieldUtils {
 	/**
 	 * <p>getFieldName.</p>
 	 *
-	 * @param method a {@link SerializableMethod} object.
+	 * @param method a {@link org.torpedoquery.jpa.internal.utils.SerializableMethod} object.
 	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getFieldName(SerializableMethod method) {

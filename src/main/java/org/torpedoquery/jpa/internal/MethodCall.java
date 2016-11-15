@@ -31,7 +31,7 @@ public interface MethodCall extends Serializable {
 	/**
 	 * <p>getMethod.</p>
 	 *
-	 * @return a {@link SerializableMethod} object.
+	 * @return a {@link org.torpedoquery.jpa.internal.utils.SerializableMethod} object.
 	 */
 	public abstract SerializableMethod getMethod();
 

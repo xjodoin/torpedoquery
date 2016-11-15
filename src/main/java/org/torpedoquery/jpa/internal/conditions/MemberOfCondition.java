@@ -20,12 +20,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-
 public class MemberOfCondition<T> extends AbstractCondition<T> {
+    /**
+     * <p>Constructor for MemberOfCondition.</p>
+     *
+     * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
+     * @param parameter a {@link org.torpedoquery.jpa.internal.Parameter} object.
+     */
     public MemberOfCondition(Selector selector, Parameter parameter) {
         super(selector, Collections.singletonList(parameter));
     }
 
+    /** {@inheritDoc} */
     @Override
     public String createQueryFragment(AtomicInteger increment) {
         return getParameters().get(0).generate(increment) + " member of " + getSelector().createQueryFragment(increment);

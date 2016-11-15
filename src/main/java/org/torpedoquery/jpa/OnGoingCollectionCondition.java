@@ -41,6 +41,7 @@ public interface OnGoingCollectionCondition<T> extends OnGoingCondition<T> {
 	 * <p>memberOf.</p>
 	 *
 	 * @return a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
+	 * @param member a T object.
 	 */
 	OnGoingLogicalCondition memberOf(T member);
 }
