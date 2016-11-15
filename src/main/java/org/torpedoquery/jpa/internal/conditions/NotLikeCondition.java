@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package org.torpedoquery.jpa.internal;
+package org.torpedoquery.jpa.internal.conditions;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-public interface Condition extends Serializable  {
+import org.torpedoquery.jpa.internal.Selector;
 
-	/**
-	 * <p>createQueryFragment.</p>
-	 *
-	 * @param incrementor a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	String createQueryFragment(AtomicInteger incrementor);
+public class NotLikeCondition extends LikeCondition {
 
-	/**
-	 * <p>getParameters.</p>
-	 *
-	 * @return a {@link java.util.List} object.
-	 */
-	List<Parameter> getParameters();
+	public NotLikeCondition(Type type, Selector selector, String toMatch) {
+		super(type, selector, toMatch);
+	}
+
+	@Override
+	protected String getLike() {
+		return "not " + super.getLike();
+	}
+
 }

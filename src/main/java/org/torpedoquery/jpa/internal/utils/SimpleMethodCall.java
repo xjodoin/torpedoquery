@@ -22,7 +22,7 @@ import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.TorpedoProxy;
 public class SimpleMethodCall implements MethodCall {
 	private final TorpedoProxy proxy;
-	private final Method method;
+	private final SerializableMethod method;
 
 	/**
 	 * <p>Constructor for SimpleMethodCall.</p>
@@ -32,7 +32,7 @@ public class SimpleMethodCall implements MethodCall {
 	 */
 	public SimpleMethodCall(TorpedoProxy proxy, Method method) {
 		this.proxy = proxy;
-		this.method = method;
+		this.method = new SerializableMethod(method);
 	}
 
 	/*
@@ -53,7 +53,7 @@ public class SimpleMethodCall implements MethodCall {
 	 */
 	/** {@inheritDoc} */
 	@Override
-	public Method getMethod() {
+	public SerializableMethod getMethod() {
 		return method;
 	}
 

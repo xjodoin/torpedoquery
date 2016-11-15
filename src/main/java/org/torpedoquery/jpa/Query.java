@@ -31,17 +31,21 @@ import javax.persistence.EntityManager;
  * @author xjodoin
  * @version $Id: $Id
  */
-public interface Query<T> extends ComparableFunction<T>{
+public interface Query<T> extends ComparableFunction<T>, Cloneable {
 
 	/**
-	 * <p>getQuery.</p>
+	 * <p>
+	 * getQuery.
+	 * </p>
 	 *
 	 * @return the generated query string
 	 */
 	String getQuery();
 
 	/**
-	 * <p>getParameters.</p>
+	 * <p>
+	 * getParameters.
+	 * </p>
 	 *
 	 * @return query parameters
 	 */
@@ -52,18 +56,22 @@ public interface Query<T> extends ComparableFunction<T>{
 	 * Retrieve the query data and apply a transformation function on each
 	 * elements
 	 *
-	 * @param entityManager a {@link javax.persistence.EntityManager} object.
-	 * @param function a {@link java.util.function.Function} object.
-	 * @param <E> a E object.
+	 * @param entityManager
+	 *            a {@link javax.persistence.EntityManager} object.
+	 * @param function
+	 *            a {@link java.util.function.Function} object.
+	 * @param <E>
+	 *            a E object.
 	 * @return a {@link java.util.List} object.
 	 */
-	<E> List<E> map(EntityManager entityManager, Function<T,E> function);
+	<E> List<E> map(EntityManager entityManager, Function<T, E> function);
 
 	/**
 	 *
 	 * Use only when your query is suppose to return only one element
 	 *
-	 * @param entityManager a {@link javax.persistence.EntityManager} object.
+	 * @param entityManager
+	 *            a {@link javax.persistence.EntityManager} object.
 	 * @return a {@link java.util.Optional} object.
 	 */
 	Optional<T> get(EntityManager entityManager);
@@ -72,7 +80,8 @@ public interface Query<T> extends ComparableFunction<T>{
 	 *
 	 * Execute and return your query data
 	 *
-	 * @param entityManager a {@link javax.persistence.EntityManager} object.
+	 * @param entityManager
+	 *            a {@link javax.persistence.EntityManager} object.
 	 * @return a {@link java.util.List} object.
 	 */
 	List<T> list(EntityManager entityManager);
@@ -98,10 +107,18 @@ public interface Query<T> extends ComparableFunction<T>{
 	Query<T> setMaxResults(int maxResult);
 
 	/**
-	 * <p>condition.</p>
+	 * <p>
+	 * condition.
+	 * </p>
 	 *
 	 * @return the current condition builder
 	 */
 	Optional<OnGoingLogicalCondition> condition();
+	
+	/**
+	 * 
+	 * @return return the a freeze
+	 */
+	Query<T> freeze();
 
 }

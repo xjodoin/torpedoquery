@@ -16,8 +16,9 @@
 
 package org.torpedoquery.jpa.internal;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
-public interface Selector<T> {
+public interface Selector<T> extends Serializable {
 
 	/**
 	 * <p>createQueryFragment.</p>

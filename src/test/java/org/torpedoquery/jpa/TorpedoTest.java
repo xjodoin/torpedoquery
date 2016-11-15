@@ -36,6 +36,7 @@
 package org.torpedoquery.jpa;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -61,9 +62,12 @@ import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.ExtendEntity;
 import org.torpedoquery.jpa.test.bo.SubEntity;
+
 public class TorpedoTest {
 	/**
-	 * <p>test_createQuery.</p>
+	 * <p>
+	 * test_createQuery.
+	 * </p>
 	 */
 	@Test
 	public void test_createQuery() {
@@ -73,7 +77,36 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>test_selectField.</p>
+	 * <p>
+	 * test_createQuery.
+	 * </p>
+	 */
+	@Test
+	public void test_createFreezeQuery() {
+		final Entity entity = from(Entity.class);
+		org.torpedoquery.jpa.Query<Entity> select = select(entity).freeze();
+		org.torpedoquery.jpa.Query<String> select2 = select(entity.getName());
+		assertEquals("select entity_0 from Entity entity_0", select.getQuery());
+		assertEquals("select entity_0.name from Entity entity_0", select2.getQuery());
+	}
+
+	@Test
+	public void test_createQueryTwiceWithDifferentCondition() {
+		final Entity entity = from(Entity.class);
+		org.torpedoquery.jpa.Query<Entity> select = select(entity).freeze();
+		where(entity.getIntegerField()).eq(10);
+		org.torpedoquery.jpa.Query<String> select2 = select(entity.getName());
+		assertEquals("select entity_0 from Entity entity_0", select.getQuery());
+		assertEquals("select entity_0.name from Entity entity_0 where entity_0.integerField = :integerField_1",
+				select2.getQuery());
+		assertNull(select.getParameters().get("integerField_1"));
+		assertEquals(10, select2.getParameters().get("integerField_1"));
+	}
+
+	/**
+	 * <p>
+	 * test_selectField.
+	 * </p>
 	 */
 	@Test
 	public void test_selectField() {
@@ -83,7 +116,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>test_selectMultipleFields.</p>
+	 * <p>
+	 * test_selectMultipleFields.
+	 * </p>
 	 */
 	@Test
 	public void test_selectMultipleFields() {
@@ -94,7 +129,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>test_selectMultipleFieldsFromDifferentEntities.</p>
+	 * <p>
+	 * test_selectMultipleFieldsFromDifferentEntities.
+	 * </p>
 	 */
 	@Test
 	public void test_selectMultipleFieldsFromDifferentEntities() {
@@ -102,11 +139,15 @@ public class TorpedoTest {
 		final SubEntity subEntity = innerJoin(entity.getSubEntity());
 
 		org.torpedoquery.jpa.Query<Object[]> select = select(entity.getCode(), subEntity.getCode());
-		assertEquals("select entity_0.code, subEntity_1.code from Entity entity_0 inner join entity_0.subEntity subEntity_1", select.getQuery());
+		assertEquals(
+				"select entity_0.code, subEntity_1.code from Entity entity_0 inner join entity_0.subEntity subEntity_1",
+				select.getQuery());
 	}
 
 	/**
-	 * <p>test_select_multipleFields_keepsOrder.</p>
+	 * <p>
+	 * test_select_multipleFields_keepsOrder.
+	 * </p>
 	 */
 	@Test
 	public void test_select_multipleFields_keepsOrder() {
@@ -114,11 +155,15 @@ public class TorpedoTest {
 		final SubEntity subEntity = innerJoin(entity.getSubEntity());
 
 		org.torpedoquery.jpa.Query<Object[]> select = select(subEntity.getCode(), entity.getCode());
-		assertEquals("select subEntity_1.code, entity_0.code from Entity entity_0 inner join entity_0.subEntity subEntity_1", select.getQuery());
+		assertEquals(
+				"select subEntity_1.code, entity_0.code from Entity entity_0 inner join entity_0.subEntity subEntity_1",
+				select.getQuery());
 	}
 
 	/**
-	 * <p>test_innerJoin.</p>
+	 * <p>
+	 * test_innerJoin.
+	 * </p>
 	 */
 	@Test
 	public void test_innerJoin() {
@@ -127,11 +172,14 @@ public class TorpedoTest {
 		innerJoin(entity.getSubEntity());
 		org.torpedoquery.jpa.Query<Entity> select = select(entity);
 
-		assertEquals("select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1", select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1",
+				select.getQuery());
 	}
 
 	/**
-	 * <p>test_leftJoin.</p>
+	 * <p>
+	 * test_leftJoin.
+	 * </p>
 	 */
 	@Test
 	public void test_leftJoin() {
@@ -140,11 +188,14 @@ public class TorpedoTest {
 		leftJoin(entity.getSubEntity());
 		org.torpedoquery.jpa.Query<Entity> select = select(entity);
 
-		assertEquals("select entity_0 from Entity entity_0 left join entity_0.subEntity subEntity_1", select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 left join entity_0.subEntity subEntity_1",
+				select.getQuery());
 	}
 
 	/**
-	 * <p>test_rightJoin.</p>
+	 * <p>
+	 * test_rightJoin.
+	 * </p>
 	 */
 	@Test
 	public void test_rightJoin() {
@@ -153,11 +204,14 @@ public class TorpedoTest {
 		rightJoin(entity.getSubEntity());
 		org.torpedoquery.jpa.Query<Entity> select = select(entity);
 
-		assertEquals("select entity_0 from Entity entity_0 right join entity_0.subEntity subEntity_1", select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 right join entity_0.subEntity subEntity_1",
+				select.getQuery());
 	}
 
 	/**
-	 * <p>test_innerJoin_withSelect.</p>
+	 * <p>
+	 * test_innerJoin_withSelect.
+	 * </p>
 	 */
 	@Test
 	public void test_innerJoin_withSelect() {
@@ -166,11 +220,15 @@ public class TorpedoTest {
 
 		org.torpedoquery.jpa.Query<Object[]> select = select(entity.getCode(), subEntity.getName());
 
-		assertEquals("select entity_0.code, subEntity_1.name from Entity entity_0 inner join entity_0.subEntity subEntity_1", select.getQuery());
+		assertEquals(
+				"select entity_0.code, subEntity_1.name from Entity entity_0 inner join entity_0.subEntity subEntity_1",
+				select.getQuery());
 	}
 
 	/**
-	 * <p>test_innerJoin_withList.</p>
+	 * <p>
+	 * test_innerJoin_withList.
+	 * </p>
 	 */
 	@Test
 	public void test_innerJoin_withList() {
@@ -178,11 +236,15 @@ public class TorpedoTest {
 		final SubEntity subEntity = innerJoin(entity.getSubEntities());
 
 		org.torpedoquery.jpa.Query<Object[]> select = select(entity.getCode(), subEntity.getName());
-		assertEquals("select entity_0.code, subEntity_1.name from Entity entity_0 inner join entity_0.subEntities subEntity_1", select.getQuery());
+		assertEquals(
+				"select entity_0.code, subEntity_1.name from Entity entity_0 inner join entity_0.subEntities subEntity_1",
+				select.getQuery());
 	}
 
 	/**
-	 * <p>test_simpleWhere.</p>
+	 * <p>
+	 * test_simpleWhere.
+	 * </p>
 	 */
 	@Test
 	public void test_simpleWhere() {
@@ -197,7 +259,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>test_isNullWhere.</p>
+	 * <p>
+	 * test_isNullWhere.
+	 * </p>
 	 */
 	@Test
 	public void test_isNullWhere() {
@@ -210,7 +274,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>test_where_primitiveType.</p>
+	 * <p>
+	 * test_where_primitiveType.
+	 * </p>
 	 */
 	@Test
 	public void test_where_primitiveType() {
@@ -223,7 +289,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>test_multipleWhereRestrictionsResultInConjunction.</p>
+	 * <p>
+	 * test_multipleWhereRestrictionsResultInConjunction.
+	 * </p>
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void test_multipleWhereRestrictionsResultInConjunction() {
@@ -233,7 +301,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>test_singleResult.</p>
+	 * <p>
+	 * test_singleResult.
+	 * </p>
 	 */
 	@Test
 	public void test_singleResult() {
@@ -253,7 +323,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>test_resultList.</p>
+	 * <p>
+	 * test_resultList.
+	 * </p>
 	 */
 	@Test
 	public void test_resultList() {
@@ -273,7 +345,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>test_condition_only_on_join.</p>
+	 * <p>
+	 * test_condition_only_on_join.
+	 * </p>
 	 */
 	@Test
 	public void test_condition_only_on_join() {
@@ -282,11 +356,15 @@ public class TorpedoTest {
 
 		where(innerJoin.getCode()).eq("test");
 		org.torpedoquery.jpa.Query<Entity> select = select(from);
-		assertEquals("select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 where subEntity_1.code = :code_2", select.getQuery());
+		assertEquals(
+				"select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 where subEntity_1.code = :code_2",
+				select.getQuery());
 	}
 
 	/**
-	 * <p>test_the_bo.</p>
+	 * <p>
+	 * test_the_bo.
+	 * </p>
 	 */
 	@Test
 	public void test_the_bo() {
@@ -294,11 +372,15 @@ public class TorpedoTest {
 		org.torpedoquery.jpa.Query<Entity> select = select(from);
 		SubEntity innerJoin = innerJoin(from.getSubEntity());
 		where(innerJoin.getCode()).eq("test");
-		assertEquals("select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 where subEntity_1.code = :code_2", select.getQuery());
+		assertEquals(
+				"select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 where subEntity_1.code = :code_2",
+				select.getQuery());
 	}
 
 	/**
-	 * <p>test_Join_Select_Come_Before_The_Root.</p>
+	 * <p>
+	 * test_Join_Select_Come_Before_The_Root.
+	 * </p>
 	 */
 	@Test
 	public void test_Join_Select_Come_Before_The_Root() {
@@ -306,11 +388,15 @@ public class TorpedoTest {
 		SubEntity innerJoin = innerJoin(from.getSubEntities());
 		org.torpedoquery.jpa.Query<Object[]> select = select(innerJoin.getName(), from.getCode());
 		String query = select.getQuery();
-		assertEquals("select subEntity_1.name, entity_0.code from Entity entity_0 inner join entity_0.subEntities subEntity_1", query);
+		assertEquals(
+				"select subEntity_1.name, entity_0.code from Entity entity_0 inner join entity_0.subEntities subEntity_1",
+				query);
 	}
 
 	/**
-	 * <p>test_parameters_must_not_be_empty_if_ask_before_string.</p>
+	 * <p>
+	 * test_parameters_must_not_be_empty_if_ask_before_string.
+	 * </p>
 	 */
 	@Test
 	public void test_parameters_must_not_be_empty_if_ask_before_string() {
@@ -322,7 +408,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>testJoinWith_with_Condition.</p>
+	 * <p>
+	 * testJoinWith_with_Condition.
+	 * </p>
 	 */
 	@Test
 	public void testJoinWith_with_Condition() {
@@ -332,18 +420,23 @@ public class TorpedoTest {
 		org.torpedoquery.jpa.Query<SubEntity> select = select(innerJoin);
 		String query = select.getQuery();
 		Map<String, Object> parameters = select.getParameters();
-		assertEquals("select subEntity_1 from Entity entity_0 inner join entity_0.subEntities subEntity_1 with subEntity_1.code = :code_2", query);
+		assertEquals(
+				"select subEntity_1 from Entity entity_0 inner join entity_0.subEntities subEntity_1 with subEntity_1.code = :code_2",
+				query);
 		assertEquals("test", parameters.get("code_2"));
 	}
 
 	/**
-	 * <p>testJoinWith_with_ConditionGroupping.</p>
+	 * <p>
+	 * testJoinWith_with_ConditionGroupping.
+	 * </p>
 	 */
 	@Test
 	public void testJoinWith_with_ConditionGroupping() {
 		Entity from = from(Entity.class);
 		SubEntity innerJoin = innerJoin(from.getSubEntities());
-		OnGoingLogicalCondition withCondition = condition(innerJoin.getCode()).eq("test").or(innerJoin.getCode()).eq("test2");
+		OnGoingLogicalCondition withCondition = condition(innerJoin.getCode()).eq("test").or(innerJoin.getCode())
+				.eq("test2");
 		with(withCondition);
 		org.torpedoquery.jpa.Query<SubEntity> select = select(innerJoin);
 		String query = select.getQuery();
@@ -353,7 +446,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>testExtend_specificSubClassField.</p>
+	 * <p>
+	 * testExtend_specificSubClassField.
+	 * </p>
 	 */
 	@Test
 	public void testExtend_specificSubClassField() {
@@ -363,12 +458,15 @@ public class TorpedoTest {
 
 		org.torpedoquery.jpa.Query<Entity> select = select(from);
 
-		assertEquals("select entity_0 from Entity entity_0 where entity_0.specificField = :specificField_1", select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.specificField = :specificField_1",
+				select.getQuery());
 		assertEquals("test", select.getParameters().get("specificField_1"));
 	}
 
 	/**
-	 * <p>testSelectWithChainedMethodCall.</p>
+	 * <p>
+	 * testSelectWithChainedMethodCall.
+	 * </p>
 	 */
 	@Test
 	public void testSelectWithChainedMethodCall() {
@@ -378,7 +476,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>testWhereWithChainedMethodCall.</p>
+	 * <p>
+	 * testWhereWithChainedMethodCall.
+	 * </p>
 	 */
 	@Test
 	public void testWhereWithChainedMethodCall() {
@@ -390,7 +490,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>testJoinOnMap.</p>
+	 * <p>
+	 * testJoinOnMap.
+	 * </p>
 	 */
 	@Test
 	public void testJoinOnMap() {
@@ -401,7 +503,9 @@ public class TorpedoTest {
 	}
 
 	/**
-	 * <p>test_innerJoinOnOverrideMethod.</p>
+	 * <p>
+	 * test_innerJoinOnOverrideMethod.
+	 * </p>
 	 */
 	@Test
 	public void test_innerJoinOnOverrideMethod() {
@@ -409,20 +513,25 @@ public class TorpedoTest {
 		SubEntity innerJoin = innerJoin(extendEntity.getSubEntity());
 		org.torpedoquery.jpa.Query<SubEntity> select = select(innerJoin);
 		String query = select.getQuery();
-		assertEquals("select subEntity_1 from ExtendEntity extendEntity_0 inner join extendEntity_0.subEntity subEntity_1", query);
+		assertEquals(
+				"select subEntity_1 from ExtendEntity extendEntity_0 inner join extendEntity_0.subEntity subEntity_1",
+				query);
 	}
-	
+
 	/**
-	 * <p>testTwoJoinOnSameProperty.</p>
+	 * <p>
+	 * testTwoJoinOnSameProperty.
+	 * </p>
 	 */
 	@Test
-	public void testTwoJoinOnSameProperty()
-	{
+	public void testTwoJoinOnSameProperty() {
 		Entity from = from(Entity.class);
 		innerJoin(from.getSubEntity());
 		leftJoin(from.getSubEntity());
-		
+
 		org.torpedoquery.jpa.Query<Entity> select = select(from);
-		assertEquals("select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 left join entity_0.subEntity subEntity_2", select.getQuery());
+		assertEquals(
+				"select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 left join entity_0.subEntity subEntity_2",
+				select.getQuery());
 	}
 }

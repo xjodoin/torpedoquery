@@ -22,4 +22,11 @@ public interface OnGoingStringCondition<T> extends ValueOnGoingCondition<T> {
 	 * @return a {@link org.torpedoquery.jpa.OnGoingLikeCondition} object.
 	 */
 	OnGoingLikeCondition like();
+	
+	/**
+	 * <p>like.</p>
+	 *
+	 * @return a {@link org.torpedoquery.jpa.OnGoingLikeCondition} object.
+	 */
+	OnGoingLikeCondition notLike();
 }

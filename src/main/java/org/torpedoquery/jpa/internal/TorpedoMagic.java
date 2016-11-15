@@ -19,12 +19,17 @@ package org.torpedoquery.jpa.internal;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.torpedoquery.core.QueryBuilderFactory;
+import org.torpedoquery.jpa.internal.utils.MultiClassLoaderProvider;
+import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 public final class TorpedoMagic {
 
 	private static final ThreadLocal<TorpedoProxy> query = new ThreadLocal<>();
 	private static AtomicReference<QueryBuilderFactory> factory = new AtomicReference<>(
 			new DefaultQueryBuilderFactory());
+	
+	private static final ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(
+			new MultiClassLoaderProvider());
 
 	private TorpedoMagic() {
 	}
@@ -64,6 +69,10 @@ public final class TorpedoMagic {
 	 */
 	public static void setup(QueryBuilderFactory queryBuilderFactory) {
 		factory.set(queryBuilderFactory);
+	}
+
+	public static ProxyFactoryFactory getProxyfactoryfactory() {
+		return proxyFactoryFactory;
 	}
 
 }

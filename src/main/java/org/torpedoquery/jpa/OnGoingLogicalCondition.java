@@ -16,8 +16,9 @@
 
 package org.torpedoquery.jpa;
 
+import java.io.Serializable;
 import java.util.Collection;
-public interface OnGoingLogicalCondition {
+public interface OnGoingLogicalCondition extends Serializable {
 	/**
 	 * <p>and.</p>
 	 *

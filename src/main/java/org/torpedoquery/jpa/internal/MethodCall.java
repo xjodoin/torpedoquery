@@ -16,8 +16,11 @@
 
 package org.torpedoquery.jpa.internal;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
-public interface MethodCall {
+
+import org.torpedoquery.jpa.internal.utils.SerializableMethod;
+public interface MethodCall extends Serializable {
 
 	/**
 	 * <p>getProxy.</p>
@@ -29,9 +32,9 @@ public interface MethodCall {
 	/**
 	 * <p>getMethod.</p>
 	 *
-	 * @return a {@link java.lang.reflect.Method} object.
+	 * @return a {@link SerializableMethod} object.
 	 */
-	public abstract Method getMethod();
+	public abstract SerializableMethod getMethod();
 
 	/**
 	 * <p>getFullPath.</p>

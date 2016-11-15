@@ -16,6 +16,7 @@
 
 package org.torpedoquery.jpa.internal.conditions;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,20 +35,27 @@ import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
+import org.torpedoquery.jpa.internal.conditions.LikeCondition.Type;
 import org.torpedoquery.jpa.internal.selectors.NotSelector;
 import org.torpedoquery.jpa.internal.selectors.SizeSelector;
-public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoingStringCondition<T>, OnGoingLikeCondition,
-		OnGoingCollectionCondition<T>, Condition {
+
+public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoingStringCondition<T>,
+		OnGoingLikeCondition, OnGoingCollectionCondition<T>, Condition, Serializable {
 	private Selector selector;
 	private final LogicalCondition logicalCondition;
 	private Condition condition;
 	private final QueryBuilder<T> builder;
+	private boolean notLike;
 
 	/**
-	 * <p>Constructor for ConditionBuilder.</p>
+	 * <p>
+	 * Constructor for ConditionBuilder.
+	 * </p>
 	 *
-	 * @param builder a {@link org.torpedoquery.core.QueryBuilder} object.
-	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
+	 * @param builder
+	 *            a {@link org.torpedoquery.core.QueryBuilder} object.
+	 * @param selector
+	 *            a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 */
 	public ConditionBuilder(QueryBuilder<T> builder, Selector<?> selector) {
 		this.builder = builder;
@@ -56,11 +64,18 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	}
 
 	/**
-	 * <p>Constructor for ConditionBuilder.</p>
+	 * <p>
+	 * Constructor for ConditionBuilder.
+	 * </p>
 	 *
-	 * @param builder a {@link org.torpedoquery.core.QueryBuilder} object.
-	 * @param logicalCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
-	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
+	 * @param builder
+	 *            a {@link org.torpedoquery.core.QueryBuilder} object.
+	 * @param logicalCondition
+	 *            a
+	 *            {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition}
+	 *            object.
+	 * @param selector
+	 *            a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 */
 	public ConditionBuilder(QueryBuilder<T> builder, LogicalCondition logicalCondition, Selector<?> selector) {
 		this.builder = builder;
@@ -69,9 +84,13 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	}
 
 	/**
-	 * <p>Getter for the field <code>logicalCondition</code>.</p>
+	 * <p>
+	 * Getter for the field <code>logicalCondition</code>.
+	 * </p>
 	 *
-	 * @return a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @return a
+	 *         {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition}
+	 *         object.
 	 */
 	public LogicalCondition getLogicalCondition() {
 		return logicalCondition;
@@ -219,20 +238,35 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 
 	/** {@inheritDoc} */
 	@Override
+	public OnGoingLikeCondition notLike() {
+		notLike = true;
+		return this;
+	}
+
+	private LikeCondition createLike(Type type, String toMatch) {
+		if (notLike) {
+			return new NotLikeCondition(type, selector, toMatch);
+		} else {
+			return new LikeCondition(type, selector, toMatch);
+		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public OnGoingLogicalCondition any(String toMatch) {
-		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.ANY, selector, toMatch));
+		return getOnGoingLogicalCondition(createLike(LikeCondition.Type.ANY, toMatch));
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition startsWith(String toMatch) {
-		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.STARTSWITH, selector, toMatch));
+		return getOnGoingLogicalCondition(createLike(LikeCondition.Type.STARTSWITH, toMatch));
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition endsWith(String toMatch) {
-		return getOnGoingLogicalCondition(new LikeCondition(LikeCondition.Type.ENDSWITH, selector, toMatch));
+		return getOnGoingLogicalCondition(createLike(LikeCondition.Type.ENDSWITH, toMatch));
 	}
 
 	/** {@inheritDoc} */
@@ -305,32 +339,32 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition between(T from, T to) {
-		Condition conditionLocal = new BetweenCondition<T>(selector, Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
+		Condition conditionLocal = new BetweenCondition<T>(selector,
+				Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
 		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition notBetween(T from, T to) {
-		Condition conditionLocal = new BetweenCondition<T>(new NotSelector(selector), Arrays.asList(selector.generateParameter(from),
-				selector.generateParameter(to)));
+		Condition conditionLocal = new BetweenCondition<T>(new NotSelector(selector),
+				Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
 		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public OnGoingLogicalCondition between(ComparableFunction<T> from,
-			ComparableFunction<T> to) {
-		Condition conditionLocal = new BetweenCondition<T>(selector, Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
+	public OnGoingLogicalCondition between(ComparableFunction<T> from, ComparableFunction<T> to) {
+		Condition conditionLocal = new BetweenCondition<T>(selector,
+				Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
 		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public OnGoingLogicalCondition notBetween(ComparableFunction<T> from,
-			ComparableFunction<T> to) {
-		Condition conditionLocal = new BetweenCondition<T>(new NotSelector(selector), Arrays.asList(selector.generateParameter(from),
-				selector.generateParameter(to)));
+	public OnGoingLogicalCondition notBetween(ComparableFunction<T> from, ComparableFunction<T> to) {
+		Condition conditionLocal = new BetweenCondition<T>(new NotSelector(selector),
+				Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
 		return getOnGoingLogicalCondition(conditionLocal);
 	}
 }

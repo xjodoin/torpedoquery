@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Selector;
+import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.handlers.ArrayCallHandler;
 import org.torpedoquery.jpa.internal.handlers.GroupingConditionHandler;
@@ -44,38 +45,40 @@ import org.torpedoquery.jpa.internal.utils.WithQueryConfigurator;
 import com.google.common.base.Throwables;
 
 /**
- * Torpedo Query goal is to simplify how you create and maintain your HQL and JPA-QL query.
+ * Torpedo Query goal is to simplify how you create and maintain your HQL and
+ * JPA-QL query.
  *
  *
  * First add this import static org.torpedoquery.jpa.Torpedo.*;
  *
  * 1. Create simple select
  *
- * final Entity entity = from(Entity.class); org.torpedoquery.jpa.Query&lt;Entity&gt;
- * select = select(entity);
+ * final Entity entity = from(Entity.class);
+ * org.torpedoquery.jpa.Query&lt;Entity&gt; select = select(entity);
  *
  * 2. Create scalar queries
  *
- * final Entity entity = from(Entity.class); org.torpedoquery.jpa.Query&lt;String&gt;
- * select = select(entity.getCode());
+ * final Entity entity = from(Entity.class);
+ * org.torpedoquery.jpa.Query&lt;String&gt; select = select(entity.getCode());
  *
  * 3. How to execute your query
  *
- * final Entity entity = from(Entity.class); org.torpedoquery.jpa.Query&lt;Entity&gt;
- * select = select(entity); List&lt;Entity&gt; entityList =
- * select.list(entityManager);
+ * final Entity entity = from(Entity.class);
+ * org.torpedoquery.jpa.Query&lt;Entity&gt; select = select(entity);
+ * List&lt;Entity&gt; entityList = select.list(entityManager);
  *
  * 4. Create simple condition
  *
  * final Entity entity = from(Entity.class);
- * where(entity.getCode()).eq("mycode"); org.torpedoquery.jpa.Query&lt;Entity&gt;
- * select = select(entity);
+ * where(entity.getCode()).eq("mycode");
+ * org.torpedoquery.jpa.Query&lt;Entity&gt; select = select(entity);
  *
  * 5. Create join on your entities
  *
  * final Entity entity = from(Entity.class); final SubEntity subEntity =
- * innerJoin(entity.getSubEntities()); org.torpedoquery.jpa.Query&lt;String[]&gt;
- * select = select(entity.getCode(), subEntity.getName());
+ * innerJoin(entity.getSubEntities());
+ * org.torpedoquery.jpa.Query&lt;String[]&gt; select = select(entity.getCode(),
+ * subEntity.getName());
  *
  * 6. Group your conditions
  *
@@ -89,26 +92,23 @@ import com.google.common.base.Throwables;
  */
 public class Torpedo extends TorpedoFunction {
 
-	private static final ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(
-			new MultiClassLoaderProvider());
-
 	/**
 	 *
 	 * MyObject queryBuilder = from(MyObject.class);
 	 *
 	 * @return a query builder proxy
-	 * @param toQuery a {@link java.lang.Class} object.
-	 * @param <T> a T object.
+	 * @param toQuery
+	 *            a {@link java.lang.Class} object.
+	 * @param <T>
+	 *            a T object.
 	 */
 	public static <T> T from(Class<T> toQuery) {
 		try {
 
 			DefaultQueryBuilder queryBuilder = new DefaultQueryBuilder(toQuery);
-			TorpedoMethodHandler fjpaMethodHandler = new TorpedoMethodHandler(
-					queryBuilder, proxyFactoryFactory);
+			TorpedoMethodHandler fjpaMethodHandler = new TorpedoMethodHandler(queryBuilder);
 
-			T from = proxyFactoryFactory.createProxy(fjpaMethodHandler,
-					TorpedoProxy.class, toQuery);
+			T from = TorpedoMagic.getProxyfactoryfactory().createProxy(fjpaMethodHandler, TorpedoProxy.class, toQuery);
 
 			fjpaMethodHandler.addQueryBuilder(from, queryBuilder);
 
@@ -128,21 +128,23 @@ public class Torpedo extends TorpedoFunction {
 	 * Entity from = from(Entity.class); ExtendEntity extend = extend(from,
 	 * ExtendEntity.class); where(extend.getSpecificField()).eq("test");
 	 *
-	 * @param toExtend a T object.
-	 * @param subclass a {@link java.lang.Class} object.
-	 * @param <T> a T object.
-	 * @param <E> a E object.
+	 * @param toExtend
+	 *            a T object.
+	 * @param subclass
+	 *            a {@link java.lang.Class} object.
+	 * @param <T>
+	 *            a T object.
+	 * @param <E>
+	 *            a E object.
 	 * @return a E object.
 	 */
 	public static <T, E extends T> E extend(T toExtend, Class<E> subclass) {
 		try {
 
 			TorpedoMethodHandler fjpaMethodHandler = getTorpedoMethodHandler();
-			E proxy = proxyFactoryFactory.createProxy(fjpaMethodHandler,
-					TorpedoProxy.class, subclass);
+			E proxy = TorpedoMagic.getProxyfactoryfactory().createProxy(fjpaMethodHandler, TorpedoProxy.class, subclass);
 
-			QueryBuilder queryBuilder = fjpaMethodHandler
-					.getQueryBuilder(toExtend);
+			QueryBuilder queryBuilder = fjpaMethodHandler.getQueryBuilder(toExtend);
 			fjpaMethodHandler.addQueryBuilder(proxy, queryBuilder);
 
 			return proxy;
@@ -153,11 +155,15 @@ public class Torpedo extends TorpedoFunction {
 	}
 
 	/**
-	 * <p>select.</p>
+	 * <p>
+	 * select.
+	 * </p>
 	 *
 	 * @see #select(Object)
-	 * @param value a {@link org.torpedoquery.jpa.Function} object.
-	 * @param <T> a T object.
+	 * @param value
+	 *            a {@link org.torpedoquery.jpa.Function} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.jpa.Query} object.
 	 */
 	public static <T> Query<T> select(Function<T> value) {
@@ -169,18 +175,23 @@ public class Torpedo extends TorpedoFunction {
 	 * in TorpedoQuery the select method finalize your query.
 	 *
 	 * @return Return your unexecute Query object
-	 * @param value a T object.
-	 * @param <T> a T object.
+	 * @param value
+	 *            a T object.
+	 * @param <T>
+	 *            a T object.
 	 */
 	public static <T> Query<T> select(T value) {
 		return (Query<T>) Torpedo.select(new Object[] { value });
 	}
 
 	/**
-	 * <p>select.</p>
+	 * <p>
+	 * select.
+	 * </p>
 	 *
 	 * @see #select(Object)
-	 * @param values a {@link java.lang.Object} object.
+	 * @param values
+	 *            a {@link java.lang.Object} object.
 	 * @return a {@link org.torpedoquery.jpa.Query} object.
 	 */
 	public static Query<Object[]> select(Object... values) {
@@ -201,13 +212,13 @@ public class Torpedo extends TorpedoFunction {
 
 		}
 
-		final QueryBuilder<Object[]> root = methodHandler.getRoot();
+		final QueryBuilder root = methodHandler.getRoot();
+		root.clearSelectors();
 
 		methodHandler.handle(new ArrayCallHandler(new ValueHandler<Void>() {
 
 			@Override
-			public Void handle(TorpedoProxy query, QueryBuilder queryBuilder,
-					Selector selector) {
+			public Void handle(TorpedoProxy query, QueryBuilder queryBuilder, Selector selector) {
 				root.addSelector(selector);
 				return null;
 			}
@@ -221,282 +232,332 @@ public class Torpedo extends TorpedoFunction {
 	 * Create HQL inner join
 	 *
 	 * @return a query builder proxy
-	 * @param toJoin a T object.
-	 * @param <T> a T object.
+	 * @param toJoin
+	 *            a T object.
+	 * @param <T>
+	 *            a T object.
 	 */
 	public static <T> T innerJoin(T toJoin) {
-		return getTorpedoMethodHandler().handle(
-				new InnerJoinHandler<T>(getTorpedoMethodHandler(),
-						proxyFactoryFactory));
+		return getTorpedoMethodHandler().handle(new InnerJoinHandler<T>(getTorpedoMethodHandler()));
 	}
 
 	/**
 	 * Create HQL inner join
 	 *
 	 * @return a query builder proxy
-	 * @param toJoin a T object.
-	 * @param realType a {@link java.lang.Class} object.
-	 * @param <T> a T object.
-	 * @param <E> a E object.
+	 * @param toJoin
+	 *            a T object.
+	 * @param realType
+	 *            a {@link java.lang.Class} object.
+	 * @param <T>
+	 *            a T object.
+	 * @param <E>
+	 *            a E object.
 	 */
 	public static <T, E extends T> E innerJoin(T toJoin, Class<E> realType) {
-		return getTorpedoMethodHandler().handle(
-				new InnerJoinHandler<E>(getTorpedoMethodHandler(),
-						proxyFactoryFactory, realType));
+		return getTorpedoMethodHandler().handle(new InnerJoinHandler<E>(getTorpedoMethodHandler(), realType));
 	}
 
 	/**
-	 * <p>innerJoin.</p>
+	 * <p>
+	 * innerJoin.
+	 * </p>
 	 *
 	 * @see #innerJoin(Object)
-	 * @param toJoin a {@link java.util.Collection} object.
-	 * @param <T> a T object.
+	 * @param toJoin
+	 *            a {@link java.util.Collection} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a T object.
 	 */
 	public static <T> T innerJoin(Collection<T> toJoin) {
-		return getTorpedoMethodHandler().handle(
-				new InnerJoinHandler<T>(getTorpedoMethodHandler(),
-						proxyFactoryFactory));
+		return getTorpedoMethodHandler()
+				.handle(new InnerJoinHandler<T>(getTorpedoMethodHandler()));
 	}
 
 	/**
-	 * <p>innerJoin.</p>
+	 * <p>
+	 * innerJoin.
+	 * </p>
 	 *
 	 * @see #innerJoin(Object, Class)
-	 * @param toJoin a {@link java.util.Collection} object.
-	 * @param realType a {@link java.lang.Class} object.
-	 * @param <T> a T object.
-	 * @param <E> a E object.
+	 * @param toJoin
+	 *            a {@link java.util.Collection} object.
+	 * @param realType
+	 *            a {@link java.lang.Class} object.
+	 * @param <T>
+	 *            a T object.
+	 * @param <E>
+	 *            a E object.
 	 * @return a E object.
 	 */
-	public static <T, E extends T> E innerJoin(Collection<T> toJoin,
-			Class<E> realType) {
-		return getTorpedoMethodHandler().handle(
-				new InnerJoinHandler<E>(getTorpedoMethodHandler(),
-						proxyFactoryFactory, realType));
+	public static <T, E extends T> E innerJoin(Collection<T> toJoin, Class<E> realType) {
+		return getTorpedoMethodHandler()
+				.handle(new InnerJoinHandler<E>(getTorpedoMethodHandler(), realType));
 	}
 
 	/**
-	 * <p>innerJoin.</p>
+	 * <p>
+	 * innerJoin.
+	 * </p>
 	 *
 	 * @see #innerJoin(Object)
-	 * @param toJoin a {@link java.util.Map} object.
-	 * @param <T> a T object.
+	 * @param toJoin
+	 *            a {@link java.util.Map} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a T object.
 	 */
 	public static <T> T innerJoin(Map<?, T> toJoin) {
-		return getTorpedoMethodHandler().handle(
-				new InnerJoinHandler<T>(getTorpedoMethodHandler(),
-						proxyFactoryFactory));
+		return getTorpedoMethodHandler()
+				.handle(new InnerJoinHandler<T>(getTorpedoMethodHandler()));
 	}
 
 	/**
-	 * <p>innerJoin.</p>
+	 * <p>
+	 * innerJoin.
+	 * </p>
 	 *
 	 * @see #innerJoin(Object, Class)
-	 * @param toJoin a {@link java.util.Map} object.
-	 * @param realType a {@link java.lang.Class} object.
-	 * @param <T> a T object.
-	 * @param <E> a E object.
+	 * @param toJoin
+	 *            a {@link java.util.Map} object.
+	 * @param realType
+	 *            a {@link java.lang.Class} object.
+	 * @param <T>
+	 *            a T object.
+	 * @param <E>
+	 *            a E object.
 	 * @return a E object.
 	 */
-	public static <T, E extends T> E innerJoin(Map<?, T> toJoin,
-			Class<E> realType) {
-		return getTorpedoMethodHandler().handle(
-				new InnerJoinHandler<E>(getTorpedoMethodHandler(),
-						proxyFactoryFactory, realType));
+	public static <T, E extends T> E innerJoin(Map<?, T> toJoin, Class<E> realType) {
+		return getTorpedoMethodHandler()
+				.handle(new InnerJoinHandler<E>(getTorpedoMethodHandler(), realType));
 	}
 
 	/**
 	 * Create HQL left join
 	 *
 	 * @return a query builder proxy
-	 * @param toJoin a T object.
-	 * @param <T> a T object.
+	 * @param toJoin
+	 *            a T object.
+	 * @param <T>
+	 *            a T object.
 	 */
 	public static <T> T leftJoin(T toJoin) {
-		return getTorpedoMethodHandler().handle(
-				new LeftJoinHandler<T>(getTorpedoMethodHandler(),
-						proxyFactoryFactory));
+		return getTorpedoMethodHandler().handle(new LeftJoinHandler<T>(getTorpedoMethodHandler()));
 	}
 
 	/**
 	 * Create HQL left join
 	 *
 	 * @return a query builder proxy
-	 * @param toJoin a T object.
-	 * @param realType a {@link java.lang.Class} object.
-	 * @param <T> a T object.
-	 * @param <E> a E object.
+	 * @param toJoin
+	 *            a T object.
+	 * @param realType
+	 *            a {@link java.lang.Class} object.
+	 * @param <T>
+	 *            a T object.
+	 * @param <E>
+	 *            a E object.
 	 */
 	public static <T, E extends T> E leftJoin(T toJoin, Class<E> realType) {
-		return getTorpedoMethodHandler().handle(
-				new LeftJoinHandler<E>(getTorpedoMethodHandler(),
-						proxyFactoryFactory, realType));
+		return getTorpedoMethodHandler()
+				.handle(new LeftJoinHandler<E>(getTorpedoMethodHandler(), realType));
 	}
 
 	/**
-	 * <p>leftJoin.</p>
+	 * <p>
+	 * leftJoin.
+	 * </p>
 	 *
 	 * @see #leftJoin(Object)
-	 * @param toJoin a {@link java.util.Collection} object.
-	 * @param <T> a T object.
+	 * @param toJoin
+	 *            a {@link java.util.Collection} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a T object.
 	 */
 	public static <T> T leftJoin(Collection<T> toJoin) {
-		return getTorpedoMethodHandler().handle(
-				new LeftJoinHandler<T>(getTorpedoMethodHandler(),
-						proxyFactoryFactory));
+		return getTorpedoMethodHandler().handle(new LeftJoinHandler<T>(getTorpedoMethodHandler()));
 	}
 
 	/**
-	 * <p>leftJoin.</p>
+	 * <p>
+	 * leftJoin.
+	 * </p>
 	 *
 	 * @see #leftJoin(Object, Class)
-	 * @param toJoin a {@link java.util.Collection} object.
-	 * @param realType a {@link java.lang.Class} object.
-	 * @param <T> a T object.
-	 * @param <E> a E object.
+	 * @param toJoin
+	 *            a {@link java.util.Collection} object.
+	 * @param realType
+	 *            a {@link java.lang.Class} object.
+	 * @param <T>
+	 *            a T object.
+	 * @param <E>
+	 *            a E object.
 	 * @return a E object.
 	 */
-	public static <T, E extends T> E leftJoin(Collection<T> toJoin,
-			Class<E> realType) {
-		return getTorpedoMethodHandler().handle(
-				new LeftJoinHandler<E>(getTorpedoMethodHandler(),
-						proxyFactoryFactory, realType));
+	public static <T, E extends T> E leftJoin(Collection<T> toJoin, Class<E> realType) {
+		return getTorpedoMethodHandler()
+				.handle(new LeftJoinHandler<E>(getTorpedoMethodHandler(), realType));
 	}
 
 	/**
-	 * <p>leftJoin.</p>
+	 * <p>
+	 * leftJoin.
+	 * </p>
 	 *
 	 * @see #leftJoin(Object)
-	 * @param toJoin a {@link java.util.Map} object.
-	 * @param <T> a T object.
+	 * @param toJoin
+	 *            a {@link java.util.Map} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a T object.
 	 */
 	public static <T> T leftJoin(Map<?, T> toJoin) {
-		return getTorpedoMethodHandler().handle(
-				new LeftJoinHandler<T>(getTorpedoMethodHandler(),
-						proxyFactoryFactory));
+		return getTorpedoMethodHandler().handle(new LeftJoinHandler<T>(getTorpedoMethodHandler()));
 	}
 
 	/**
-	 * <p>leftJoin.</p>
+	 * <p>
+	 * leftJoin.
+	 * </p>
 	 *
 	 * @see #leftJoin(Object, Class)
-	 * @param toJoin a {@link java.util.Map} object.
-	 * @param realType a {@link java.lang.Class} object.
-	 * @param <T> a T object.
-	 * @param <E> a E object.
+	 * @param toJoin
+	 *            a {@link java.util.Map} object.
+	 * @param realType
+	 *            a {@link java.lang.Class} object.
+	 * @param <T>
+	 *            a T object.
+	 * @param <E>
+	 *            a E object.
 	 * @return a E object.
 	 */
-	public static <T, E extends T> E leftJoin(Map<?, T> toJoin,
-			Class<E> realType) {
-		return getTorpedoMethodHandler().handle(
-				new LeftJoinHandler<E>(getTorpedoMethodHandler(),
-						proxyFactoryFactory, realType));
+	public static <T, E extends T> E leftJoin(Map<?, T> toJoin, Class<E> realType) {
+		return getTorpedoMethodHandler()
+				.handle(new LeftJoinHandler<E>(getTorpedoMethodHandler(), realType));
 	}
 
 	/**
 	 * Create HQL right join
 	 *
 	 * @return a query builder proxy
-	 * @param toJoin a T object.
-	 * @param <T> a T object.
+	 * @param toJoin
+	 *            a T object.
+	 * @param <T>
+	 *            a T object.
 	 */
 	public static <T> T rightJoin(T toJoin) {
-		return getTorpedoMethodHandler().handle(
-				new RightJoinHandler<T>(getTorpedoMethodHandler(),
-						proxyFactoryFactory));
+		return getTorpedoMethodHandler()
+				.handle(new RightJoinHandler<T>(getTorpedoMethodHandler()));
 	}
 
 	/**
 	 * Create HQL right join
 	 *
 	 * @return a query builder proxy
-	 * @param toJoin a T object.
-	 * @param realType a {@link java.lang.Class} object.
-	 * @param <T> a T object.
-	 * @param <E> a E object.
+	 * @param toJoin
+	 *            a T object.
+	 * @param realType
+	 *            a {@link java.lang.Class} object.
+	 * @param <T>
+	 *            a T object.
+	 * @param <E>
+	 *            a E object.
 	 */
 	public static <T, E extends T> E rightJoin(T toJoin, Class<E> realType) {
-		return getTorpedoMethodHandler().handle(
-				new RightJoinHandler<E>(getTorpedoMethodHandler(),
-						proxyFactoryFactory, realType));
+		return getTorpedoMethodHandler()
+				.handle(new RightJoinHandler<E>(getTorpedoMethodHandler(), realType));
 	}
 
 	/**
-	 * <p>rightJoin.</p>
+	 * <p>
+	 * rightJoin.
+	 * </p>
 	 *
 	 * @see #rightJoin(Object)
-	 * @param toJoin a {@link java.util.Collection} object.
-	 * @param <T> a T object.
+	 * @param toJoin
+	 *            a {@link java.util.Collection} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a T object.
 	 */
 	public static <T> T rightJoin(Collection<T> toJoin) {
-		return getTorpedoMethodHandler().handle(
-				new RightJoinHandler<T>(getTorpedoMethodHandler(),
-						proxyFactoryFactory));
+		return getTorpedoMethodHandler()
+				.handle(new RightJoinHandler<T>(getTorpedoMethodHandler()));
 	}
 
 	/**
-	 * <p>rightJoin.</p>
+	 * <p>
+	 * rightJoin.
+	 * </p>
 	 *
 	 * @see #rightJoin(Object, Class)
-	 * @param toJoin a {@link java.util.Collection} object.
-	 * @param realType a {@link java.lang.Class} object.
-	 * @param <T> a T object.
-	 * @param <E> a E object.
+	 * @param toJoin
+	 *            a {@link java.util.Collection} object.
+	 * @param realType
+	 *            a {@link java.lang.Class} object.
+	 * @param <T>
+	 *            a T object.
+	 * @param <E>
+	 *            a E object.
 	 * @return a E object.
 	 */
-	public static <T, E extends T> E rightJoin(Collection<T> toJoin,
-			Class<E> realType) {
-		return getTorpedoMethodHandler().handle(
-				new RightJoinHandler<E>(getTorpedoMethodHandler(),
-						proxyFactoryFactory, realType));
+	public static <T, E extends T> E rightJoin(Collection<T> toJoin, Class<E> realType) {
+		return getTorpedoMethodHandler()
+				.handle(new RightJoinHandler<E>(getTorpedoMethodHandler(), realType));
 	}
 
 	/**
-	 * <p>rightJoin.</p>
+	 * <p>
+	 * rightJoin.
+	 * </p>
 	 *
 	 * @see #rightJoin(Object)
-	 * @param toJoin a {@link java.util.Map} object.
-	 * @param <T> a T object.
+	 * @param toJoin
+	 *            a {@link java.util.Map} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a T object.
 	 */
 	public static <T> T rightJoin(Map<?, T> toJoin) {
-		return getTorpedoMethodHandler().handle(
-				new RightJoinHandler<T>(getTorpedoMethodHandler(),
-						proxyFactoryFactory));
+		return getTorpedoMethodHandler()
+				.handle(new RightJoinHandler<T>(getTorpedoMethodHandler()));
 	}
 
 	/**
-	 * <p>rightJoin.</p>
+	 * <p>
+	 * rightJoin.
+	 * </p>
 	 *
 	 * @see #rightJoin(Object, Class)
-	 * @param toJoin a {@link java.util.Map} object.
-	 * @param realType a {@link java.lang.Class} object.
-	 * @param <T> a T object.
-	 * @param <E> a E object.
+	 * @param toJoin
+	 *            a {@link java.util.Map} object.
+	 * @param realType
+	 *            a {@link java.lang.Class} object.
+	 * @param <T>
+	 *            a T object.
+	 * @param <E>
+	 *            a E object.
 	 * @return a E object.
 	 */
-	public static <T, E extends T> E rightJoin(Map<?, T> toJoin,
-			Class<E> realType) {
-		return getTorpedoMethodHandler().handle(
-				new RightJoinHandler<E>(getTorpedoMethodHandler(),
-						proxyFactoryFactory, realType));
+	public static <T, E extends T> E rightJoin(Map<?, T> toJoin, Class<E> realType) {
+		return getTorpedoMethodHandler()
+				.handle(new RightJoinHandler<E>(getTorpedoMethodHandler(), realType));
 	}
 
 	/**
 	 * Apply where condition to the query relative to the parameter.
 	 *
 	 * @return a condition builder
-	 * @param object a T object.
-	 * @param <T> a T object.
+	 * @param object
+	 *            a T object.
+	 * @param <T>
+	 *            a T object.
 	 */
 	public static <T> ValueOnGoingCondition<T> where(T object) {
-		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<T, ValueOnGoingCondition<T>>(object));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>(object));
 	}
 
 	/**
@@ -505,83 +566,91 @@ public class Torpedo extends TorpedoFunction {
 	 * @param condition
 	 *            group create by @see {@link #condition(Object)}
 	 * @return a condition builder
-	 * @param <T> a T object.
+	 * @param <T>
+	 *            a T object.
 	 */
-	public static <T> OnGoingLogicalCondition where(
-			OnGoingLogicalCondition condition) {
-		return getTorpedoMethodHandler().handle(
-				new GroupingConditionHandler<T>(
-						new WhereQueryConfigurator<T>(), condition));
+	public static <T> OnGoingLogicalCondition where(OnGoingLogicalCondition condition) {
+		return getTorpedoMethodHandler()
+				.handle(new GroupingConditionHandler<T>(new WhereQueryConfigurator<T>(), condition));
 	}
 
 	/**
-	 * <p>where.</p>
+	 * <p>
+	 * where.
+	 * </p>
 	 *
 	 * @see #where(Object)
-	 * @param object a T object.
-	 * @param <V> a V object.
-	 * @param <T> a T object.
+	 * @param object
+	 *            a T object.
+	 * @param <V>
+	 *            a V object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
 	 */
-	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> where(
-			T object) {
-		return getTorpedoMethodHandler()
-				.handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(
-						object));
+	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> where(T object) {
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(object));
 	}
 
 	/**
-	 * <p>where.</p>
+	 * <p>
+	 * where.
+	 * </p>
 	 *
 	 * @see #where(Object)
-	 * @param object a {@link java.lang.String} object.
+	 * @param object
+	 *            a {@link java.lang.String} object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingStringCondition} object.
 	 */
 	public static OnGoingStringCondition<String> where(String object) {
-		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<String, OnGoingStringCondition<String>>(
-						object));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(object));
 	}
 
 	/**
-	 * <p>where.</p>
+	 * <p>
+	 * where.
+	 * </p>
 	 *
-	 * @param function a {@link org.torpedoquery.jpa.Function} object.
+	 * @param function
+	 *            a {@link org.torpedoquery.jpa.Function} object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingStringCondition} object.
 	 */
 	public static OnGoingStringCondition<String> where(Function<String> function) {
-		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<String, OnGoingStringCondition<String>>(
-						function));
+		return getTorpedoMethodHandler()
+				.handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(function));
 	}
 
 	/**
-	 * <p>where.</p>
+	 * <p>
+	 * where.
+	 * </p>
 	 *
 	 * @see #where(Object)
-	 * @param object a {@link java.util.Collection} object.
-	 * @param <T> a T object.
+	 * @param object
+	 *            a {@link java.util.Collection} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingCollectionCondition} object.
 	 */
 	public static <T> OnGoingCollectionCondition<T> where(Collection<T> object) {
 		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(
-						object, new WhereQueryConfigurator<T>()));
+				new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(object, new WhereQueryConfigurator<T>()));
 	}
 
 	/**
-	 * <p>where.</p>
+	 * <p>
+	 * where.
+	 * </p>
 	 *
 	 * @see #where(Object)
-	 * @param object a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
+	 * @param object
+	 *            a {@link org.torpedoquery.jpa.ComparableFunction} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
 	 */
-	public static <T> OnGoingComparableCondition<T> where(
-			ComparableFunction<T> object) {
-		return getTorpedoMethodHandler()
-				.handle(new WhereClauseHandler<T, OnGoingComparableCondition<T>>(
-						object));
+	public static <T> OnGoingComparableCondition<T> where(ComparableFunction<T> object) {
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<T, OnGoingComparableCondition<T>>(object));
 	}
 
 	/**
@@ -591,198 +660,226 @@ public class Torpedo extends TorpedoFunction {
 	 * joinObject.myField is not null
 	 *
 	 * @return a condition builder
-	 * @param object a T object.
-	 * @param <T> a T object.
+	 * @param object
+	 *            a T object.
+	 * @param <T>
+	 *            a T object.
 	 */
 	public static <T> ValueOnGoingCondition<T> with(T object) {
-		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<T, ValueOnGoingCondition<T>>(object,
-						new WithQueryConfigurator<T>()));
+		return getTorpedoMethodHandler()
+				.handle(new WhereClauseHandler<T, ValueOnGoingCondition<T>>(object, new WithQueryConfigurator<T>()));
 	}
 
 	/**
-	 * <p>with.</p>
+	 * <p>
+	 * with.
+	 * </p>
 	 *
 	 * @see #with(Object)
-	 * @param object a T object.
-	 * @param <V> a V object.
-	 * @param <T> a T object.
+	 * @param object
+	 *            a T object.
+	 * @param <V>
+	 *            a V object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
 	 */
-	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> with(
-			T object) {
+	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> with(T object) {
 		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<V, OnGoingComparableCondition<V>>(
-						object, new WithQueryConfigurator<V>()));
+				new WhereClauseHandler<V, OnGoingComparableCondition<V>>(object, new WithQueryConfigurator<V>()));
 	}
 
 	/**
-	 * <p>with.</p>
+	 * <p>
+	 * with.
+	 * </p>
 	 *
 	 * @see #with(Object)
-	 * @param object a {@link java.lang.String} object.
+	 * @param object
+	 *            a {@link java.lang.String} object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingStringCondition} object.
 	 */
 	public static OnGoingStringCondition<String> with(String object) {
-		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<String, OnGoingStringCondition<String>>(
-						object, new WithQueryConfigurator<String>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(object,
+				new WithQueryConfigurator<String>()));
 	}
 
 	/**
-	 * <p>with.</p>
+	 * <p>
+	 * with.
+	 * </p>
 	 *
 	 * @see #with(Object)
-	 * @param object a {@link java.util.Collection} object.
-	 * @param <T> a T object.
+	 * @param object
+	 *            a {@link java.util.Collection} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingCollectionCondition} object.
 	 */
 	public static <T> OnGoingCollectionCondition<T> with(Collection<T> object) {
 		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(
-						object, new WithQueryConfigurator<T>()));
+				new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(object, new WithQueryConfigurator<T>()));
 	}
 
 	/**
-	 * <p>with.</p>
+	 * <p>
+	 * with.
+	 * </p>
 	 *
 	 * @see #with(Object)
-	 * @param condition a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
-	 * @param <T> a T object.
+	 * @param condition
+	 *            a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
 	 */
-	public static <T> OnGoingLogicalCondition with(
-			OnGoingLogicalCondition condition) {
-		return getTorpedoMethodHandler().handle(
-				new GroupingConditionHandler<T>(new WithQueryConfigurator<T>(),
-						condition));
+	public static <T> OnGoingLogicalCondition with(OnGoingLogicalCondition condition) {
+		return getTorpedoMethodHandler()
+				.handle(new GroupingConditionHandler<T>(new WithQueryConfigurator<T>(), condition));
 	}
 
 	/**
 	 * Create a group condition ex: (myObject.myField is not null and
 	 * myObject.intField &gt; 2)
 	 *
-	 * this condition is not bind to any query builder until you pass it to the @see
-	 * {@link #where(Object)} or to a ValueOnGoingCondition create by a where
+	 * this condition is not bind to any query builder until you pass it to
+	 * the @see {@link #where(Object)} or to a ValueOnGoingCondition create by a
+	 * where
 	 *
 	 * @return a condition builder
-	 * @param object a T object.
-	 * @param <T> a T object.
+	 * @param object
+	 *            a T object.
+	 * @param <T>
+	 *            a T object.
 	 */
 	public static <T> ValueOnGoingCondition<T> condition(T object) {
 		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<T, ValueOnGoingCondition<T>>(object,
-						new DoNothingQueryConfigurator<T>()));
+				new WhereClauseHandler<T, ValueOnGoingCondition<T>>(object, new DoNothingQueryConfigurator<T>()));
 	}
 
 	/**
-	 * <p>condition.</p>
+	 * <p>
+	 * condition.
+	 * </p>
 	 *
 	 * @see #condition(Object)
-	 * @param object a T object.
-	 * @param <V> a V object.
-	 * @param <T> a T object.
+	 * @param object
+	 *            a T object.
+	 * @param <V>
+	 *            a V object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
 	 */
-	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(
-			T object) {
+	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(T object) {
 		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<V, OnGoingComparableCondition<V>>(
-						object, new DoNothingQueryConfigurator<V>()));
+				new WhereClauseHandler<V, OnGoingComparableCondition<V>>(object, new DoNothingQueryConfigurator<V>()));
 	}
 
 	/**
-	 * <p>condition.</p>
+	 * <p>
+	 * condition.
+	 * </p>
 	 *
 	 * @see #condition(Object)
-	 * @param object a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <V> a V object.
-	 * @param <T> a T object.
+	 * @param object
+	 *            a {@link org.torpedoquery.jpa.ComparableFunction} object.
+	 * @param <V>
+	 *            a V object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
 	 */
-	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(
-			ComparableFunction<T> object) {
+	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(ComparableFunction<T> object) {
 		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<V, OnGoingComparableCondition<V>>(
-						object, new DoNothingQueryConfigurator<V>()));
+				new WhereClauseHandler<V, OnGoingComparableCondition<V>>(object, new DoNothingQueryConfigurator<V>()));
 	}
 
 	/**
-	 * <p>condition.</p>
+	 * <p>
+	 * condition.
+	 * </p>
 	 *
 	 * @see #condition(Object)
-	 * @param object a {@link java.lang.String} object.
+	 * @param object
+	 *            a {@link java.lang.String} object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingStringCondition} object.
 	 */
 	public static OnGoingStringCondition<String> condition(String object) {
-		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<String, OnGoingStringCondition<String>>(
-						object, new DoNothingQueryConfigurator<String>()));
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(object,
+				new DoNothingQueryConfigurator<String>()));
 	}
 
 	/**
-	 * <p>condition.</p>
+	 * <p>
+	 * condition.
+	 * </p>
 	 *
 	 * @see #condition(Object)
-	 * @param object a {@link org.torpedoquery.jpa.Function} object.
+	 * @param object
+	 *            a {@link org.torpedoquery.jpa.Function} object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingStringCondition} object.
 	 */
-	public static OnGoingStringCondition<String> condition(
-			Function<String> object) {
-		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<String, OnGoingStringCondition<String>>(
-						object, new DoNothingQueryConfigurator<String>()));
+	public static OnGoingStringCondition<String> condition(Function<String> object) {
+		return getTorpedoMethodHandler().handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(object,
+				new DoNothingQueryConfigurator<String>()));
 	}
 
 	/**
-	 * <p>condition.</p>
+	 * <p>
+	 * condition.
+	 * </p>
 	 *
 	 * @see #condition(Object)
-	 * @param object a {@link java.util.Collection} object.
-	 * @param <T> a T object.
+	 * @param object
+	 *            a {@link java.util.Collection} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingCollectionCondition} object.
 	 */
-	public static <T> OnGoingCollectionCondition<T> condition(
-			Collection<T> object) {
+	public static <T> OnGoingCollectionCondition<T> condition(Collection<T> object) {
 		return getTorpedoMethodHandler().handle(
-				new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(
-						object, new DoNothingQueryConfigurator<T>()));
+				new WhereClauseHandler<T, OnGoingCollectionCondition<T>>(object, new DoNothingQueryConfigurator<T>()));
 	}
 
 	/**
-	 * <p>condition.</p>
+	 * <p>
+	 * condition.
+	 * </p>
 	 *
 	 * @see #condition(Object)
-	 * @param condition a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
-	 * @param <T> a T object.
+	 * @param condition
+	 *            a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
 	 */
-	public static <T> OnGoingLogicalCondition condition(
-			OnGoingLogicalCondition condition) {
-		return getTorpedoMethodHandler().handle(
-				new GroupingConditionHandler<T>(
-						new DoNothingQueryConfigurator<T>(), condition));
+	public static <T> OnGoingLogicalCondition condition(OnGoingLogicalCondition condition) {
+		return getTorpedoMethodHandler()
+				.handle(new GroupingConditionHandler<T>(new DoNothingQueryConfigurator<T>(), condition));
 	}
 
 	/**
-	 * <p>and.</p>
+	 * <p>
+	 * and.
+	 * </p>
 	 *
-	 * @param conditions a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
+	 * @param conditions
+	 *            a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
 	 */
-	public static OnGoingLogicalCondition and(
-			OnGoingLogicalCondition... conditions) {
+	public static OnGoingLogicalCondition and(OnGoingLogicalCondition... conditions) {
 		return and(Arrays.asList(conditions));
 	}
 
 	/**
 	 * Group expressions together in a single conjunction (A and B and C...)
 	 *
-	 * @param conditions a {@link java.lang.Iterable} object.
+	 * @param conditions
+	 *            a {@link java.lang.Iterable} object.
 	 * @return OnGoingLogicalCondition
 	 */
-	public static OnGoingLogicalCondition and(
-			Iterable<OnGoingLogicalCondition> conditions) {
+	public static OnGoingLogicalCondition and(Iterable<OnGoingLogicalCondition> conditions) {
 		OnGoingLogicalCondition andCondition = null;
 
 		for (OnGoingLogicalCondition condition : conditions) {
@@ -799,22 +896,24 @@ public class Torpedo extends TorpedoFunction {
 	/**
 	 * Group expressions together in a single disjunction (A or B or C...)
 	 *
-	 * @param conditions a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
+	 * @param conditions
+	 *            a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
 	 * @return OnGoingLogicalCondition
 	 */
-	public static OnGoingLogicalCondition or(
-			OnGoingLogicalCondition... conditions) {
+	public static OnGoingLogicalCondition or(OnGoingLogicalCondition... conditions) {
 		return or(Arrays.asList(conditions));
 	}
 
 	/**
-	 * <p>or.</p>
+	 * <p>
+	 * or.
+	 * </p>
 	 *
-	 * @param conditions a {@link java.lang.Iterable} object.
+	 * @param conditions
+	 *            a {@link java.lang.Iterable} object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
 	 */
-	public static OnGoingLogicalCondition or(
-			Iterable<OnGoingLogicalCondition> conditions) {
+	public static OnGoingLogicalCondition or(Iterable<OnGoingLogicalCondition> conditions) {
 		OnGoingLogicalCondition orCondition = null;
 
 		for (OnGoingLogicalCondition condition : conditions) {
@@ -832,7 +931,8 @@ public class Torpedo extends TorpedoFunction {
 	 * Add group by to the relative query builder
 	 *
 	 * @return group by condition builder
-	 * @param values a {@link java.lang.Object} object.
+	 * @param values
+	 *            a {@link java.lang.Object} object.
 	 */
 	public static OnGoingGroupByCondition groupBy(Object... values) {
 
@@ -842,8 +942,7 @@ public class Torpedo extends TorpedoFunction {
 
 		fjpaMethodHandler.handle(new ArrayCallHandler(new ValueHandler<Void>() {
 			@Override
-			public Void handle(TorpedoProxy proxy, QueryBuilder queryBuilder,
-					Selector selector) {
+			public Void handle(TorpedoProxy proxy, QueryBuilder queryBuilder, Selector selector) {
 				groupBy.addGroup(selector);
 				return null;
 			}
@@ -856,32 +955,34 @@ public class Torpedo extends TorpedoFunction {
 	/**
 	 * Add order by to the relative query
 	 *
-	 * @param values a {@link java.lang.Object} object.
+	 * @param values
+	 *            a {@link java.lang.Object} object.
 	 */
 	public static void orderBy(Object... values) {
-		getTorpedoMethodHandler().handle(
-				new ArrayCallHandler(new ValueHandler<Void>() {
-					@Override
-					public Void handle(TorpedoProxy proxy,
-							QueryBuilder queryBuilder, Selector selector) {
-						queryBuilder.addOrder(selector);
-						return null;
-					}
-				}, values));
+		getTorpedoMethodHandler().handle(new ArrayCallHandler(new ValueHandler<Void>() {
+			@Override
+			public Void handle(TorpedoProxy proxy, QueryBuilder queryBuilder, Selector selector) {
+				queryBuilder.addOrder(selector);
+				return null;
+			}
+		}, values));
 
 	}
-	
+
 	/**
-	 * <p>param.</p>
+	 * <p>
+	 * param.
+	 * </p>
 	 *
-	 * @param param a T object.
-	 * @param <T> a T object.
+	 * @param param
+	 *            a T object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a T object.
 	 */
 	public static <T> T param(T param) {
 		getTorpedoMethodHandler().addParam(param);
 		return param;
 	}
-	
 
 }

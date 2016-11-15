@@ -31,6 +31,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.OnGoingLogicalCondition;
 import org.torpedoquery.jpa.Query;
@@ -40,6 +41,7 @@ import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
+
 public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<>();
@@ -58,9 +60,12 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private int maxResult;
 
 	/**
-	 * <p>Constructor for DefaultQueryBuilder.</p>
+	 * <p>
+	 * Constructor for DefaultQueryBuilder.
+	 * </p>
 	 *
-	 * @param toQuery a {@link java.lang.Class} object.
+	 * @param toQuery
+	 *            a {@link java.lang.Class} object.
 	 */
 	public DefaultQueryBuilder(Class<?> toQuery) {
 		this.toQuery = toQuery;
@@ -402,7 +407,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	@Override
 	public Optional<T> get(EntityManager entityManager) {
 		try {
-			return Optional.<T>ofNullable((T)createJPAQuery(entityManager).getSingleResult());
+			return Optional.<T>ofNullable((T) createJPAQuery(entityManager).getSingleResult());
 		} catch (NoResultException e) {
 			return Optional.empty();
 		}
@@ -416,7 +421,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 
 	/** {@inheritDoc} */
 	@Override
-	public <E> List<E> map(EntityManager entityManager, Function<T,E> function) {
+	public <E> List<E> map(EntityManager entityManager, Function<T, E> function) {
 		List<T> toConvert = list(entityManager);
 		List<E> result = new ArrayList<>();
 
@@ -515,6 +520,18 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	/** {@inheritDoc} */
 	@Override
 	public Optional<OnGoingLogicalCondition> condition() {
-		return Optional.ofNullable(Optional.ofNullable(whereClause).orElse(withClause)).map(ConditionBuilder::getLogicalCondition);
+		return Optional.ofNullable(Optional.ofNullable(whereClause).orElse(withClause))
+				.map(ConditionBuilder::getLogicalCondition);
 	}
+
+	@Override
+	public void clearSelectors() {
+		toSelect.clear();
+	}
+
+	public Query<T> freeze() {
+		QueryBuilder clone = SerializationUtils.clone(this);
+		return clone;
+	}
+
 }

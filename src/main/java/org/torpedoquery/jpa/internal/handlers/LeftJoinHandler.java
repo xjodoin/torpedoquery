@@ -29,8 +29,8 @@ public class LeftJoinHandler<T> extends JoinHandler<T> {
 	 * @param methodHandler a {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler} object.
 	 * @param proxyFactoryFactory a {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory} object.
 	 */
-	public LeftJoinHandler(TorpedoMethodHandler methodHandler, ProxyFactoryFactory proxyFactoryFactory) {
-		super(methodHandler, proxyFactoryFactory);
+	public LeftJoinHandler(TorpedoMethodHandler methodHandler) {
+		super(methodHandler);
 	}
 
 	/**
@@ -40,8 +40,8 @@ public class LeftJoinHandler<T> extends JoinHandler<T> {
 	 * @param proxyFactoryFactory a {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory} object.
 	 * @param realType a {@link java.lang.Class} object.
 	 */
-	public LeftJoinHandler(TorpedoMethodHandler fjpaMethodHandler, ProxyFactoryFactory proxyFactoryFactory, Class<T> realType) {
-		super(fjpaMethodHandler, proxyFactoryFactory, realType);
+	public LeftJoinHandler(TorpedoMethodHandler fjpaMethodHandler, Class<T> realType) {
+		super(fjpaMethodHandler, realType);
 	}
 
 	/** {@inheritDoc} */

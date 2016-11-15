@@ -16,13 +16,20 @@
 
 package org.torpedoquery.jpa.internal;
 
+import java.io.Serializable;
+
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
-public interface TorpedoProxy {
+
+public interface TorpedoProxy extends Serializable {
 
 	/**
-	 * <p>getTorpedoMethodHandler.</p>
+	 * <p>
+	 * getTorpedoMethodHandler.
+	 * </p>
 	 *
-	 * @return a {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler} object.
+	 * @return a
+	 *         {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler}
+	 *         object.
 	 */
 	TorpedoMethodHandler getTorpedoMethodHandler();
 

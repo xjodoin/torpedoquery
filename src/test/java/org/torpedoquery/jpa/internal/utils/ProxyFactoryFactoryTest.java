@@ -42,6 +42,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.junit.Test;
+import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.test.bo.Entity;
@@ -62,7 +63,7 @@ public class ProxyFactoryFactoryTest {
 			InvocationTargetException {
 
 		ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(new MultiClassLoaderProvider());
-		TorpedoMethodHandler torpedoMethodHandler = new TorpedoMethodHandler(new DefaultQueryBuilder<Entity>(Entity.class), proxyFactoryFactory);
+		TorpedoMethodHandler torpedoMethodHandler = new TorpedoMethodHandler(new DefaultQueryBuilder<Entity>(Entity.class));
 		Entity createProxy = proxyFactoryFactory.createProxy(torpedoMethodHandler, Entity.class, TorpedoProxy.class);
 		Method method = Object.class.getDeclaredMethod("finalize");
 		method.setAccessible(true);
@@ -84,8 +85,8 @@ public class ProxyFactoryFactoryTest {
 	public void test_dont_track_finalize_when_extends() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException {
 
-		ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(new MultiClassLoaderProvider());
-		TorpedoMethodHandler torpedoMethodHandler = new TorpedoMethodHandler(new DefaultQueryBuilder<ExtendEntity>(ExtendEntity.class), proxyFactoryFactory);
+		ProxyFactoryFactory proxyFactoryFactory = TorpedoMagic.getProxyfactoryfactory();
+		TorpedoMethodHandler torpedoMethodHandler = new TorpedoMethodHandler(new DefaultQueryBuilder<ExtendEntity>(ExtendEntity.class));
 		ExtendEntity createProxy = proxyFactoryFactory.createProxy(torpedoMethodHandler, ExtendEntity.class, TorpedoProxy.class);
 		Method method = Object.class.getDeclaredMethod("finalize");
 		method.setAccessible(true);
@@ -100,8 +101,8 @@ public class ProxyFactoryFactoryTest {
 	@Test
 	public void test_factoryMustUseClassCache()
 	{
-		ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(new MultiClassLoaderProvider());
-		TorpedoMethodHandler torpedoMethodHandler = new TorpedoMethodHandler(new DefaultQueryBuilder<Entity>(Entity.class), proxyFactoryFactory);
+		ProxyFactoryFactory proxyFactoryFactory = TorpedoMagic.getProxyfactoryfactory();
+		TorpedoMethodHandler torpedoMethodHandler = new TorpedoMethodHandler(new DefaultQueryBuilder<Entity>(Entity.class));
 		Entity createProxy = proxyFactoryFactory.createProxy(torpedoMethodHandler, Entity.class, TorpedoProxy.class);
 		
 		Entity createProxy2 = proxyFactoryFactory.createProxy(torpedoMethodHandler, Entity.class, TorpedoProxy.class);

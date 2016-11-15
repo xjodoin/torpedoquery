@@ -16,6 +16,7 @@
 
 package org.torpedoquery.jpa.internal.query;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Selector;
-public class OrderBy {
+public class OrderBy implements Serializable {
 
 	private final List<Selector> orders = new ArrayList<>();
 

@@ -35,42 +35,48 @@ import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.handlers.QueryHandler;
 
 import com.google.common.base.Defaults;
+
 public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	private final Map<Object, QueryBuilder<?>> proxyQueryBuilders = new IdentityHashMap<>();
 	private final Deque<MethodCall> methods = new LinkedList<>();
 	private final QueryBuilder<?> root;
-	private final ProxyFactoryFactory proxyfactoryfactory;
 	private final List<Object> params = new ArrayList<>();
 
 	/**
-	 * <p>Constructor for TorpedoMethodHandler.</p>
+	 * <p>
+	 * Constructor for TorpedoMethodHandler.
+	 * </p>
 	 *
-	 * @param root a {@link org.torpedoquery.core.QueryBuilder} object.
-	 * @param proxyfactoryfactory a {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory} object.
+	 * @param root
+	 *            a {@link org.torpedoquery.core.QueryBuilder} object.
+	 * @param proxyfactoryfactory
+	 *            a
+	 *            {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory}
+	 *            object.
 	 */
-	public TorpedoMethodHandler(QueryBuilder<?> root,
-			ProxyFactoryFactory proxyfactoryfactory) {
+	public TorpedoMethodHandler(QueryBuilder<?> root) {
 		this.root = root;
-		this.proxyfactoryfactory = proxyfactoryfactory;
 	}
 
 	/**
-	 * <p>addQueryBuilder.</p>
+	 * <p>
+	 * addQueryBuilder.
+	 * </p>
 	 *
-	 * @param proxy a {@link java.lang.Object} object.
-	 * @param queryBuilder a {@link org.torpedoquery.core.QueryBuilder} object.
+	 * @param proxy
+	 *            a {@link java.lang.Object} object.
+	 * @param queryBuilder
+	 *            a {@link org.torpedoquery.core.QueryBuilder} object.
 	 * @return a {@link org.torpedoquery.core.QueryBuilder} object.
 	 */
-	public QueryBuilder<?> addQueryBuilder(Object proxy,
-			QueryBuilder<?> queryBuilder) {
+	public QueryBuilder<?> addQueryBuilder(Object proxy, QueryBuilder<?> queryBuilder) {
 		proxyQueryBuilders.put(proxy, queryBuilder);
 		return queryBuilder;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public Object invoke(Object self, Method thisMethod, Method proceed,
-			Object[] args) throws Throwable {
+	public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
 		if (thisMethod.getDeclaringClass().equals(TorpedoProxy.class)) {
 			try {
 				return thisMethod.invoke(this, args);
@@ -86,11 +92,11 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	}
 
 	private <T> T createReturnValue(final Class<T> returnType)
-			throws NoSuchMethodException, InstantiationException,
-			IllegalAccessException, InvocationTargetException {
+			throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		if (returnType.isPrimitive()) {
 			return Defaults.defaultValue(returnType);
-		} else if (!Modifier.isFinal(returnType.getModifiers())) {
+		} else if (!Modifier.isFinal(returnType.getModifiers())
+				&& !returnType.getPackage().getName().startsWith("java")) {
 			return createLinkedProxy(returnType);
 		} else {
 			return null;
@@ -98,30 +104,32 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	}
 
 	private <T> T createLinkedProxy(final Class<T> returnType)
-			throws NoSuchMethodException, InstantiationException,
-			IllegalAccessException, InvocationTargetException {
-		MethodHandler mh = new MethodHandler() {
+			throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+		MethodHandler mh = new SerializableMethodHandler() {
 
 			@Override
-			public Object invoke(Object self, Method thisMethod,
-					Method proceed, Object[] args) throws Throwable {
+			public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
 				MethodCall pollFirst = methods.pollFirst();
-				LinkedMethodCall linkedMethodCall = new LinkedMethodCall(
-						pollFirst, new SimpleMethodCall(pollFirst.getProxy(),
-								thisMethod));
+				LinkedMethodCall linkedMethodCall = new LinkedMethodCall(pollFirst,
+						new SimpleMethodCall(pollFirst.getProxy(), thisMethod));
 				methods.addFirst(linkedMethodCall);
 				return createReturnValue(thisMethod.getReturnType());
 			}
 		};
 
-		return proxyfactoryfactory.createProxy(mh, returnType);
+		return TorpedoMagic.getProxyfactoryfactory().createProxy(mh, returnType);
 	}
 
 	/**
-	 * <p>handle.</p>
+	 * <p>
+	 * handle.
+	 * </p>
 	 *
-	 * @param handler a {@link org.torpedoquery.jpa.internal.handlers.QueryHandler} object.
-	 * @param <T> a T object.
+	 * @param handler
+	 *            a {@link org.torpedoquery.jpa.internal.handlers.QueryHandler}
+	 *            object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a T object.
 	 */
 	public <T> T handle(QueryHandler<T> handler) {
@@ -129,9 +137,12 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	}
 
 	/**
-	 * <p>getQueryBuilder.</p>
+	 * <p>
+	 * getQueryBuilder.
+	 * </p>
 	 *
-	 * @param proxy a {@link java.lang.Object} object.
+	 * @param proxy
+	 *            a {@link java.lang.Object} object.
 	 * @return a {@link org.torpedoquery.core.QueryBuilder} object.
 	 */
 	public QueryBuilder<?> getQueryBuilder(Object proxy) {
@@ -139,9 +150,12 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	}
 
 	/**
-	 * <p>Getter for the field <code>root</code>.</p>
+	 * <p>
+	 * Getter for the field <code>root</code>.
+	 * </p>
 	 *
-	 * @param <T> a T object.
+	 * @param <T>
+	 *            a T object.
 	 * @return a {@link org.torpedoquery.core.QueryBuilder} object.
 	 */
 	public <T> QueryBuilder<T> getRoot() {
@@ -155,7 +169,9 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	}
 
 	/**
-	 * <p>Getter for the field <code>methods</code>.</p>
+	 * <p>
+	 * Getter for the field <code>methods</code>.
+	 * </p>
 	 *
 	 * @return a {@link java.util.Deque} object.
 	 */
@@ -164,16 +180,21 @@ public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	}
 
 	/**
-	 * <p>addParam.</p>
+	 * <p>
+	 * addParam.
+	 * </p>
 	 *
-	 * @param param a {@link java.lang.Object} object.
+	 * @param param
+	 *            a {@link java.lang.Object} object.
 	 */
 	public void addParam(Object param) {
 		params.add(param);
 	}
 
 	/**
-	 * <p>params.</p>
+	 * <p>
+	 * params.
+	 * </p>
 	 *
 	 * @return an array of {@link java.lang.Object} objects.
 	 */

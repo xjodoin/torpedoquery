@@ -19,28 +19,41 @@ package org.torpedoquery.jpa.internal.handlers;
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Join;
 import org.torpedoquery.jpa.internal.joins.InnerJoin;
-import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
+
 public class InnerJoinHandler<T> extends JoinHandler<T> {
 	/**
-	 * <p>Constructor for InnerJoinHandler.</p>
+	 * <p>
+	 * Constructor for InnerJoinHandler.
+	 * </p>
 	 *
-	 * @param methodHandler a {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler} object.
-	 * @param proxyFactoryFactory a {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory} object.
+	 * @param methodHandler
+	 *            a
+	 *            {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler}
+	 *            object.
 	 */
-	public InnerJoinHandler(TorpedoMethodHandler methodHandler, ProxyFactoryFactory proxyFactoryFactory) {
-		super(methodHandler, proxyFactoryFactory);
+	public InnerJoinHandler(TorpedoMethodHandler methodHandler) {
+		super(methodHandler);
 	}
 
 	/**
-	 * <p>Constructor for InnerJoinHandler.</p>
+	 * <p>
+	 * Constructor for InnerJoinHandler.
+	 * </p>
 	 *
-	 * @param fjpaMethodHandler a {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler} object.
-	 * @param proxyFactoryFactory a {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory} object.
-	 * @param realType a {@link java.lang.Class} object.
+	 * @param fjpaMethodHandler
+	 *            a
+	 *            {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler}
+	 *            object.
+	 * @param proxyFactoryFactory
+	 *            a
+	 *            {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory}
+	 *            object.
+	 * @param realType
+	 *            a {@link java.lang.Class} object.
 	 */
-	public InnerJoinHandler(TorpedoMethodHandler fjpaMethodHandler, ProxyFactoryFactory proxyFactoryFactory, Class<T> realType) {
-		super(fjpaMethodHandler, proxyFactoryFactory, realType);
+	public InnerJoinHandler(TorpedoMethodHandler fjpaMethodHandler, Class<T> realType) {
+		super(fjpaMethodHandler, realType);
 	}
 
 	/** {@inheritDoc} */

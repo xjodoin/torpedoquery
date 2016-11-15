@@ -17,7 +17,6 @@
 package org.torpedoquery.jpa.internal.utils;
 
 import java.beans.Introspector;
-import java.lang.reflect.Method;
 public final class FieldUtils {
 
 	private FieldUtils() {
@@ -26,10 +25,10 @@ public final class FieldUtils {
 	/**
 	 * <p>getFieldName.</p>
 	 *
-	 * @param method a {@link java.lang.reflect.Method} object.
+	 * @param method a {@link SerializableMethod} object.
 	 * @return a {@link java.lang.String} object.
 	 */
-	public static String getFieldName(Method method) {
+	public static String getFieldName(SerializableMethod method) {
 		
 		String name = method.getName();
 		

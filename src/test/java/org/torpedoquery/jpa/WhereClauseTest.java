@@ -365,6 +365,18 @@ public class WhereClauseTest {
 
 		assertEquals("select entity_0 from Entity entity_0 where entity_0.code like '%test%'", select.getQuery());
 	}
+	
+	/**
+	 * <p>test_like_any.</p>
+	 */
+	@Test
+	public void test_notLike_any() {
+		Entity from = from(Entity.class);
+		where(from.getCode()).notLike().any("test");
+		Query<Entity> select = select(from);
+
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code not like '%test%'", select.getQuery());
+	}
 
 	/**
 	 * <p>test_like_startsWith.</p>
@@ -377,6 +389,15 @@ public class WhereClauseTest {
 
 		assertEquals("select entity_0 from Entity entity_0 where entity_0.code like 'test%'", select.getQuery());
 	}
+	
+	@Test
+	public void test_notLike_startsWith() {
+		Entity from = from(Entity.class);
+		where(from.getCode()).notLike().startsWith("test");
+		Query<Entity> select = select(from);
+
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code not like 'test%'", select.getQuery());
+	}
 
 	/**
 	 * <p>test_like_endsWith.</p>
@@ -388,6 +409,18 @@ public class WhereClauseTest {
 		Query<Entity> select = select(from);
 
 		assertEquals("select entity_0 from Entity entity_0 where entity_0.code like '%test'", select.getQuery());
+	}
+	
+	/**
+	 * <p>test_like_endsWith.</p>
+	 */
+	@Test
+	public void test_notLike_endsWith() {
+		Entity from = from(Entity.class);
+		where(from.getCode()).notLike().endsWith("test");
+		Query<Entity> select = select(from);
+
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.code not like '%test'", select.getQuery());
 	}
 
 	/**

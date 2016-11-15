@@ -16,11 +16,12 @@
 
 package org.torpedoquery.jpa.internal;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.internal.query.ValueParameter;
-public interface Join {
+public interface Join extends Serializable {
 
 	/**
 	 * <p>appendWhereClause.</p>

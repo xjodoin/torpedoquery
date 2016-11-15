@@ -16,8 +16,9 @@
 
 package org.torpedoquery.jpa;
 
+import java.io.Serializable;
 import java.util.Collection;
-public interface OnGoingGroupByCondition {
+public interface OnGoingGroupByCondition extends Serializable {
 
 	/**
 	 * <p>having.</p>
