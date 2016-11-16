@@ -122,7 +122,7 @@ public class TorpedoTest {
 		where(entity.getPrimitiveInt()).eq(10).and(entity.getIntegerField()).eq(20);
 		org.torpedoquery.jpa.Query<Long> select = select(count(entity)).freeze();
 		
-		assertEquals("select count(entity_0) from Entity entity_0 where entity_0.primitiveInt = :primitiveInt_1",
+		assertEquals("select count(entity_0) from Entity entity_0 where entity_0.primitiveInt = :primitiveInt_1 and entity_0.integerField = :integerField_2",
 				select.getQuery());
 		assertEquals(10, select.getParameters().get("primitiveInt_1"));
 	}

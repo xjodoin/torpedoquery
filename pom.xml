@@ -66,16 +66,17 @@
 						<owner>Xavier Jodoin</owner>
 						<email>xavier@jodoin.me</email>
 					</properties>
+					<useDefaultExcludes>true</useDefaultExcludes>
 					<excludes>
 						<exclude>**/README</exclude>
-						<exclude>pom.xml</exclude>
+						<exclude>**/pom.xml</exclude>
 						<exclude>src/test/resources/**</exclude>
 						<exclude>src/main/resources/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
 					<execution>
-						<phase>test</phase>
+						<phase>prepare-package</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>
