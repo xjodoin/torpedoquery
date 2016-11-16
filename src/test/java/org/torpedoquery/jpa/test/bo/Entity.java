@@ -96,6 +96,15 @@ public class Entity extends AbstractEntity {
 	}
 	
 	/**
+	 * <p>getPrimitiveLong.</p>
+	 *
+	 * @return a long.
+	 */
+	public long getPrimitiveLong() {
+		return 1L;
+	}
+	
+	/**
 	 * <p>getInterface.</p>
 	 *
 	 * @return a {@link java.io.Serializable} object.

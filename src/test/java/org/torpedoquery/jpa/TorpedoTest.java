@@ -22,7 +22,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.torpedoquery.jpa.Torpedo.condition;
+import static org.torpedoquery.jpa.Torpedo.*;
 import static org.torpedoquery.jpa.Torpedo.extend;
 import static org.torpedoquery.jpa.Torpedo.from;
 import static org.torpedoquery.jpa.Torpedo.innerJoin;
@@ -81,6 +81,50 @@ public class TorpedoTest {
 				select2.getQuery());
 		assertNull(select.getParameters().get("integerField_1"));
 		assertEquals(10, select2.getParameters().get("integerField_1"));
+	}
+	
+	@Test
+	public void test_createFeeezeWithPrimitive() {
+		final Entity entity = from(Entity.class);
+		where(entity.getPrimitiveInt()).eq(10);
+		org.torpedoquery.jpa.Query<Entity> select = select(entity).freeze();
+		
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.primitiveInt = :primitiveInt_1",
+				select.getQuery());
+		assertEquals(10, select.getParameters().get("primitiveInt_1"));
+	}
+	
+	@Test
+	public void test_createFeeezeWithPrimitiveLong() {
+		final Entity entity = from(Entity.class);
+		where(entity.getPrimitiveLong()).eq(10L);
+		org.torpedoquery.jpa.Query<Entity> select = select(entity).freeze();
+		
+		assertEquals("select entity_0 from Entity entity_0 where entity_0.primitiveLong = :primitiveLong_1",
+				select.getQuery());
+		assertEquals(10L, select.getParameters().get("primitiveLong_1"));
+	}
+	
+	@Test
+	public void test_createFeeezeWithCountFunction() {
+		final Entity entity = from(Entity.class);
+		where(entity.getPrimitiveInt()).eq(10);
+		org.torpedoquery.jpa.Query<Long> select = select(count(entity)).freeze();
+		
+		assertEquals("select count(entity_0) from Entity entity_0 where entity_0.primitiveInt = :primitiveInt_1",
+				select.getQuery());
+		assertEquals(10, select.getParameters().get("primitiveInt_1"));
+	}
+	
+	@Test
+	public void test_createFeeezeAndCondition() {
+		final Entity entity = from(Entity.class);
+		where(entity.getPrimitiveInt()).eq(10).and(entity.getIntegerField()).eq(20);
+		org.torpedoquery.jpa.Query<Long> select = select(count(entity)).freeze();
+		
+		assertEquals("select count(entity_0) from Entity entity_0 where entity_0.primitiveInt = :primitiveInt_1",
+				select.getQuery());
+		assertEquals(10, select.getParameters().get("primitiveInt_1"));
 	}
 
 	/**
