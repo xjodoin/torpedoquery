@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 
 /**
  *
@@ -122,4 +123,5 @@ public interface Query<T> extends ComparableFunction<T>, Cloneable {
 	 */
 	Query<T> freeze();
 
+	Query<T> setLockMode(LockModeType lockMode);
 }
