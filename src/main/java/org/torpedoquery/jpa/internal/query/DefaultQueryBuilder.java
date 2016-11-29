@@ -28,6 +28,7 @@ import java.util.function.Function;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
 
 import org.apache.commons.lang3.SerializationUtils;
@@ -56,6 +57,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	// paging infos
 	private int startPosition;
 	private int maxResult;
+	private LockModeType lockMode;
 
 	/**
 	 * <p>
@@ -440,6 +442,10 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 			query.setMaxResults(maxResult);
 		}
 
+		if (lockMode != null) {
+			query.setLockMode(lockMode);
+		}
+
 		final Map<String, Object> parameters = getParameters();
 
 		for (Entry<String, Object> parameter : parameters.entrySet()) {
@@ -538,4 +544,10 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return clone;
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public Query<T> setLockMode(LockModeType lockMode) {
+		this.lockMode = lockMode;
+		return this;
+	}
 }
