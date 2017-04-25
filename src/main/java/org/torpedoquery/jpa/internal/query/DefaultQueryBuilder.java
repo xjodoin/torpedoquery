@@ -107,7 +107,8 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return freezeQuery;
 	}
 
-	private String getEntityName() {
+	@Override
+	public String getEntityName() {
 
 		Entity e = toQuery.getAnnotation(Entity.class);
 		if (e != null && e.name() != null && !e.name().trim().isEmpty())

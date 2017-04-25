@@ -33,11 +33,12 @@ import org.torpedoquery.jpa.internal.handlers.LeftJoinHandler;
 import org.torpedoquery.jpa.internal.handlers.RightJoinHandler;
 import org.torpedoquery.jpa.internal.handlers.ValueHandler;
 import org.torpedoquery.jpa.internal.handlers.WhereClauseHandler;
+import org.torpedoquery.jpa.internal.joins.InnerJoinBuilder;
+import org.torpedoquery.jpa.internal.joins.LeftJoinBuilder;
+import org.torpedoquery.jpa.internal.joins.RightJoinBuilder;
 import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.internal.query.GroupBy;
 import org.torpedoquery.jpa.internal.utils.DoNothingQueryConfigurator;
-import org.torpedoquery.jpa.internal.utils.MultiClassLoaderProvider;
-import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 import org.torpedoquery.jpa.internal.utils.WhereQueryConfigurator;
 import org.torpedoquery.jpa.internal.utils.WithQueryConfigurator;
@@ -324,6 +325,42 @@ public class Torpedo extends TorpedoFunction {
 	public static <T, E extends T> E innerJoin(Map<?, T> toJoin, Class<E> realType) {
 		return getTorpedoMethodHandler()
 				.handle(new InnerJoinHandler<E>(getTorpedoMethodHandler(), realType));
+	}
+	
+	/**
+	 * <p>
+	 * innerJoin.
+	 * </p>
+	 *
+	 * @param entity class to join on 
+	 * @return a query builder T object.
+	 */
+	public static <T> JoinBuilder<T> innerJoin(Class<T> toJoin) {
+		return new InnerJoinBuilder<>(toJoin, getTorpedoMethodHandler());
+	}
+	
+	/**
+	 * <p>
+	 * leftJoin.
+	 * </p>
+	 *
+	 * @param entity class to join on 
+	 * @return a query builder T object.
+	 */
+	public static <T> JoinBuilder<T> leftJoin(Class<T> toJoin) {
+		return new LeftJoinBuilder<>(toJoin, getTorpedoMethodHandler());
+	}
+	
+	/**
+	 * <p>
+	 * rightJoin.
+	 * </p>
+	 *
+	 * @param entity class to join on 
+	 * @return a query builder T object.
+	 */
+	public static <T> JoinBuilder<T> rightJoin(Class<T> toJoin) {
+		return new RightJoinBuilder<>(toJoin, getTorpedoMethodHandler());
 	}
 
 	/**

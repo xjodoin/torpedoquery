@@ -13,28 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.torpedoquery.jpa.internal.joins;
+package org.torpedoquery.jpa.test.bo;
 
-import org.torpedoquery.core.QueryBuilder;
-import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
-public class InnerJoin extends AbstractJoin {
+public class Entity2 {
+	
 	/**
-	 * <p>Constructor for InnerJoin.</p>
+	 * <p>getId.</p>
 	 *
-	 * @param join a {@link org.torpedoquery.core.QueryBuilder} object.
-	 * @param fieldName a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
-	public InnerJoin(QueryBuilder join, String fieldName) {
-		super(join, fieldName);
+	public String getId(){
+		return null;
 	}
 
-	public InnerJoin(QueryBuilder join, LogicalCondition joinCondition) {
-		super(join, joinCondition);
+	/**
+	 * <p>getCode.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	public String getCode() {
+		return null;
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public String getJoinType() {
-		return "inner";
-	}
 }

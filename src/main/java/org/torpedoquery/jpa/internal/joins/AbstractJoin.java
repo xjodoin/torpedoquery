@@ -20,29 +20,48 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Join;
+import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
 import org.torpedoquery.jpa.internal.query.ValueParameter;
+
 public abstract class AbstractJoin implements Join {
 
 	private final QueryBuilder join;
-	private final String fieldName;
+	private String fieldName;
+	private LogicalCondition joinCondition;
 
 	/**
-	 * <p>Constructor for AbstractJoin.</p>
+	 * <p>
+	 * Constructor for AbstractJoin.
+	 * </p>
 	 *
-	 * @param join a {@link org.torpedoquery.core.QueryBuilder} object.
-	 * @param fieldName a {@link java.lang.String} object.
+	 * @param join
+	 *            a {@link org.torpedoquery.core.QueryBuilder} object.
+	 * @param fieldName
+	 *            a {@link java.lang.String} object.
 	 */
-	public AbstractJoin(QueryBuilder join, String fieldName) {
+	public AbstractJoin(QueryBuilder<?> join, String fieldName) {
 		this.join = join;
 		this.fieldName = fieldName;
+	}
+
+	public AbstractJoin(QueryBuilder<?> join, LogicalCondition joinCondition) {
+		this.join = join;
+		this.joinCondition = joinCondition;
+
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public String getJoin(String parentAlias, AtomicInteger incrementor) {
+		if (joinCondition != null) {
+			return " " + getJoinType() + " join " +join.getEntityName() + " " + join.getAlias(incrementor) + " on "
+					+ joinCondition.createQueryFragment(incrementor);
+		} else {
+			return (" " + getJoinType() + " join " + parentAlias + "." + fieldName + " " + join.getAlias(incrementor))
+					+ (join.hasWithClause() ? join.getWithClause(incrementor) : "")
+					+ (join.hasSubJoin() ? join.getJoins(incrementor) : "");
+		}
 
-		return (" " + getJoinType() + " join " + parentAlias + "." + fieldName + " " + join.getAlias(incrementor))
-				+ (join.hasWithClause() ? join.getWithClause(incrementor) : "") + (join.hasSubJoin() ? join.getJoins(incrementor) : "");
 	}
 
 	/** {@inheritDoc} */
@@ -70,7 +89,9 @@ public abstract class AbstractJoin implements Join {
 	}
 
 	/**
-	 * <p>getJoinType.</p>
+	 * <p>
+	 * getJoinType.
+	 * </p>
 	 *
 	 * @return a {@link java.lang.String} object.
 	 */

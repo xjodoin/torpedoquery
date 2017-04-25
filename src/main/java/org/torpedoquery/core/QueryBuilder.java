@@ -115,10 +115,10 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 * addJoin.
 	 * </p>
 	 *
-	 * @param innerJoin
+	 * @param join
 	 *            a {@link org.torpedoquery.jpa.internal.Join} object.
 	 */
-	public void addJoin(Join innerJoin);
+	public void addJoin(Join join);
 
 	/**
 	 * <p>
@@ -217,5 +217,7 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 * <p>clearSelectors.</p>
 	 */
 	void clearSelectors();
+
+	String getEntityName();
 
 }

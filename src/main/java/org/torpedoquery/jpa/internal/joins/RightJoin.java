@@ -16,6 +16,7 @@
 package org.torpedoquery.jpa.internal.joins;
 
 import org.torpedoquery.core.QueryBuilder;
+import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
 public class RightJoin extends AbstractJoin {
 	/**
 	 * <p>Constructor for RightJoin.</p>
@@ -25,6 +26,10 @@ public class RightJoin extends AbstractJoin {
 	 */
 	public RightJoin(QueryBuilder join, String fieldName) {
 		super(join, fieldName);
+	}
+
+	public RightJoin(QueryBuilder join, LogicalCondition joinCondition) {
+		super(join, joinCondition);
 	}
 
 	/** {@inheritDoc} */

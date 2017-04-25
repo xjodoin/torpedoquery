@@ -16,6 +16,7 @@
 package org.torpedoquery.jpa.internal.joins;
 
 import org.torpedoquery.core.QueryBuilder;
+import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
 public class LeftJoin extends AbstractJoin {
 
 	/**
@@ -26,6 +27,10 @@ public class LeftJoin extends AbstractJoin {
 	 */
 	public LeftJoin(QueryBuilder join, String fieldName) {
 		super(join, fieldName);
+	}
+
+	public LeftJoin(QueryBuilder join, LogicalCondition joinCondition) {
+		super(join, joinCondition);
 	}
 
 	/** {@inheritDoc} */
