@@ -84,8 +84,12 @@ public abstract class AbstractJoin implements Join {
 
 	/** {@inheritDoc} */
 	@Override
-	public List<ValueParameter> getParams() {
-		return join.getValueParameters();
+	public List<ValueParameter<?>> getParams() {
+		List<ValueParameter<?>> valueParameters = join.getValueParameters();
+		if(joinCondition != null) {
+			valueParameters.addAll(joinCondition.getValueParameters());
+		}
+		return valueParameters;
 	}
 
 	/**

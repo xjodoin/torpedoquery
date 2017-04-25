@@ -159,7 +159,7 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 *
 	 * @return a {@link java.util.List} object.
 	 */
-	public List<ValueParameter> getValueParameters();
+	public List<ValueParameter<?>> getValueParameters();
 
 	/**
 	 * <p>

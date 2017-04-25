@@ -44,7 +44,7 @@ public interface Join extends Serializable {
 	 *
 	 * @return a {@link java.util.List} object.
 	 */
-	List<ValueParameter> getParams();
+	List<ValueParameter<?>> getParams();
 
 	/**
 	 * <p>appendOrderBy.</p>

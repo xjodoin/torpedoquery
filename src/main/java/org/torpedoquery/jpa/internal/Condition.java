@@ -16,22 +16,45 @@
 package org.torpedoquery.jpa.internal;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-public interface Condition extends Serializable  {
+
+import org.torpedoquery.jpa.internal.query.SubqueryValueParameters;
+import org.torpedoquery.jpa.internal.query.ValueParameter;
+
+public interface Condition extends Serializable {
 
 	/**
-	 * <p>createQueryFragment.</p>
+	 * <p>
+	 * createQueryFragment.
+	 * </p>
 	 *
-	 * @param incrementor a {@link java.util.concurrent.atomic.AtomicInteger} object.
+	 * @param incrementor
+	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
 	 * @return a {@link java.lang.String} object.
 	 */
 	String createQueryFragment(AtomicInteger incrementor);
 
 	/**
-	 * <p>getParameters.</p>
+	 * <p>
+	 * getParameters.
+	 * </p>
 	 *
 	 * @return a {@link java.util.List} object.
 	 */
 	List<Parameter> getParameters();
+
+	default List<ValueParameter<?>> getValueParameters() {
+		List<ValueParameter<?>> valueParameters = new ArrayList<>();
+		for (Parameter parameter : getParameters()) {
+			if (parameter instanceof ValueParameter) {
+				valueParameters.add((ValueParameter) parameter);
+			} else if (parameter instanceof SubqueryValueParameters) {
+				valueParameters.addAll(((SubqueryValueParameters) parameter).getParameters());
+			}
+		}
+		return valueParameters;
+	}
 }

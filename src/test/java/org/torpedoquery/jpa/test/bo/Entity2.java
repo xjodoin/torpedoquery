@@ -34,5 +34,9 @@ public class Entity2 {
 	public String getCode() {
 		return null;
 	}
+	
+	public String getVar() {
+		return null;
+	}
 
 }

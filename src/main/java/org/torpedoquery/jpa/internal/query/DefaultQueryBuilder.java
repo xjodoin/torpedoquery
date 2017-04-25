@@ -311,7 +311,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		freezeQuery(new AtomicInteger());
 
 		Map<String, Object> params = new HashMap<>();
-		List<ValueParameter> parameters = getValueParameters();
+		List<ValueParameter<?>> parameters = getValueParameters();
 		for (ValueParameter parameter : parameters) {
 			params.put(parameter.getName(), parameter.getValue());
 		}
@@ -326,8 +326,8 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	 */
 	/** {@inheritDoc} */
 	@Override
-	public List<ValueParameter> getValueParameters() {
-		List<ValueParameter> valueParameters = new ArrayList<>();
+	public List<ValueParameter<?>> getValueParameters() {
+		List<ValueParameter<?>> valueParameters = new ArrayList<>();
 
 		Condition whereClauseCondition = getConditionClause(whereClause);
 
@@ -338,7 +338,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		feedValueParameters(valueParameters, withConditionClause);
 
 		for (Join join : joins) {
-			List<ValueParameter> params = join.getParams();
+			List<ValueParameter<?>> params = join.getParams();
 			valueParameters.addAll(params);
 		}
 
@@ -350,16 +350,9 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		return valueParameters;
 	}
 
-	private static void feedValueParameters(List<ValueParameter> valueParameters, Condition clauseCondition) {
+	private static void feedValueParameters(List<ValueParameter<?>> valueParameters, Condition clauseCondition) {
 		if (clauseCondition != null) {
-			List<Parameter> parameters = clauseCondition.getParameters();
-			for (Parameter parameter : parameters) {
-				if (parameter instanceof ValueParameter) {
-					valueParameters.add((ValueParameter) parameter);
-				} else if (parameter instanceof SubqueryValueParameters) {
-					valueParameters.addAll(((SubqueryValueParameters) parameter).getParameters());
-				}
-			}
+			valueParameters.addAll(clauseCondition.getValueParameters());
 		}
 	}
 

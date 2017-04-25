@@ -42,7 +42,7 @@ public class SubqueryValueParameters<T> extends SelectorParameter<T> {
      *
      * @return a {@link java.util.List} object.
      */
-    public List<ValueParameter> getParameters() {
+    public List<ValueParameter<?>> getParameters() {
         return value.getValueParameters();
     }
 
