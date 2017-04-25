@@ -123,5 +123,11 @@ public interface Query<T> extends ComparableFunction<T>, Cloneable {
 	 */
 	Query<T> freeze();
 
+	/**
+	 * <p>setLockMode.</p>
+	 *
+	 * @param lockMode a {@link javax.persistence.LockModeType} object.
+	 * @return a {@link org.torpedoquery.jpa.Query} object.
+	 */
 	Query<T> setLockMode(LockModeType lockMode);
 }

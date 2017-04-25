@@ -1,3 +1,4 @@
+
 /**
  * Copyright (C) 2011 Xavier Jodoin (xavier@jodoin.me)
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author xjodoin
+ * @version $Id: $Id
  */
 package org.torpedoquery.jpa;
 
@@ -33,6 +37,7 @@ public interface OnGoingGroupByCondition extends Serializable {
 	 *
 	 * @param object a {@link org.torpedoquery.jpa.ComparableFunction} object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
+	 * @param <T> a T object.
 	 */
 	public <T extends Comparable<?>> OnGoingComparableCondition<T> having(ComparableFunction<T> object);
 
@@ -51,6 +56,7 @@ public interface OnGoingGroupByCondition extends Serializable {
 	 * @param object a T object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
+	 * @param <T> a T object.
 	 */
 	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> having(T object);
 

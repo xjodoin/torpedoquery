@@ -1,3 +1,4 @@
+
 /**
  * Copyright (C) 2011 Xavier Jodoin (xavier@jodoin.me)
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author xjodoin
+ * @version $Id: $Id
  */
 package org.torpedoquery.jpa.internal.joins;
 
@@ -28,6 +32,12 @@ public class RightJoin extends AbstractJoin {
 		super(join, fieldName);
 	}
 
+	/**
+	 * <p>Constructor for RightJoin.</p>
+	 *
+	 * @param join a {@link org.torpedoquery.core.QueryBuilder} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 */
 	public RightJoin(QueryBuilder join, LogicalCondition joinCondition) {
 		super(join, joinCondition);
 	}

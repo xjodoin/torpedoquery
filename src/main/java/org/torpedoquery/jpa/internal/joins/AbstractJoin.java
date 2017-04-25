@@ -1,3 +1,4 @@
+
 /**
  * Copyright (C) 2011 Xavier Jodoin (xavier@jodoin.me)
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author xjodoin
+ * @version $Id: $Id
  */
 package org.torpedoquery.jpa.internal.joins;
 
@@ -22,7 +26,6 @@ import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Join;
 import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
 import org.torpedoquery.jpa.internal.query.ValueParameter;
-
 public abstract class AbstractJoin implements Join {
 
 	private final QueryBuilder join;
@@ -44,6 +47,12 @@ public abstract class AbstractJoin implements Join {
 		this.fieldName = fieldName;
 	}
 
+	/**
+	 * <p>Constructor for AbstractJoin.</p>
+	 *
+	 * @param join a {@link org.torpedoquery.core.QueryBuilder} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 */
 	public AbstractJoin(QueryBuilder<?> join, LogicalCondition joinCondition) {
 		this.join = join;
 		this.joinCondition = joinCondition;

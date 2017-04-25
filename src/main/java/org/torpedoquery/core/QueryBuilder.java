@@ -1,3 +1,4 @@
+
 /**
  * Copyright (C) 2011 Xavier Jodoin (xavier@jodoin.me)
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author xjodoin
+ * @version $Id: $Id
  */
 package org.torpedoquery.core;
 
@@ -218,6 +222,11 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 */
 	void clearSelectors();
 
+	/**
+	 * <p>getEntityName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	String getEntityName();
 
 }

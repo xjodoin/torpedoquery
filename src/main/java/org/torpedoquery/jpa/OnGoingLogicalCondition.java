@@ -1,3 +1,4 @@
+
 /**
  * Copyright (C) 2011 Xavier Jodoin (xavier@jodoin.me)
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author xjodoin
+ * @version $Id: $Id
  */
 package org.torpedoquery.jpa;
 
@@ -42,6 +46,7 @@ public interface OnGoingLogicalCondition extends Serializable {
 	 * @param property a T object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
+	 * @param <T> a T object.
 	 */
 	<V, T extends Comparable<V>> OnGoingComparableCondition<V> and(T property);
 	
@@ -51,6 +56,7 @@ public interface OnGoingLogicalCondition extends Serializable {
 	 * @param property a T object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
+	 * @param <T> a T object.
 	 */
 	<V, T extends Comparable<V>> OnGoingComparableCondition<V> or(T property);
 
