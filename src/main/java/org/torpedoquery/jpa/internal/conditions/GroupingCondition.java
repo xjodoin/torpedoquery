@@ -24,14 +24,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
+
 public class GroupingCondition implements Condition {
 
 	private final Condition condition;
 
 	/**
-	 * <p>Constructor for GroupingCondition.</p>
+	 * <p>
+	 * Constructor for GroupingCondition.
+	 * </p>
 	 *
-	 * @param condition a {@link org.torpedoquery.jpa.internal.Condition} object.
+	 * @param condition
+	 *            a {@link org.torpedoquery.jpa.internal.Condition} object.
 	 */
 	public GroupingCondition(Condition condition) {
 		this.condition = condition;
@@ -40,7 +44,12 @@ public class GroupingCondition implements Condition {
 	/** {@inheritDoc} */
 	@Override
 	public String createQueryFragment(AtomicInteger incrementor) {
-		return "( " + condition.createQueryFragment(incrementor) + " )";
+		String queryFragment = condition.createQueryFragment(incrementor);
+		if (queryFragment != null && !queryFragment.isEmpty()) {
+			return "( " + queryFragment + " )";
+		} else {
+			return "";
+		}
 	}
 
 	/** {@inheritDoc} */

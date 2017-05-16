@@ -33,10 +33,10 @@ import org.torpedoquery.jpa.OnGoingStringCondition;
 import org.torpedoquery.jpa.ValueOnGoingCondition;
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
-public class LogicalCondition implements OnGoingLogicalCondition, Condition {
+public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 
 	private Condition condition;
-	private final QueryBuilder<?> builder;
+	private final QueryBuilder<E> builder;
 
 	/**
 	 * <p>Constructor for LogicalCondition.</p>
@@ -44,7 +44,7 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 	 * @param builder a {@link org.torpedoquery.core.QueryBuilder} object.
 	 * @param condition a {@link org.torpedoquery.jpa.internal.Condition} object.
 	 */
-	public LogicalCondition(QueryBuilder<?> builder, Condition condition) {
+	public LogicalCondition(QueryBuilder<E> builder, Condition condition) {
 		this.builder = builder;
 		this.condition = condition;
 	}
@@ -197,7 +197,7 @@ public class LogicalCondition implements OnGoingLogicalCondition, Condition {
 	 *
 	 * @return a {@link org.torpedoquery.core.QueryBuilder} object.
 	 */
-	public QueryBuilder<?> getBuilder() {
+	public QueryBuilder<E> getBuilder() {
 		return builder;
 	}
 

@@ -26,6 +26,7 @@ import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.TorpedoProxy;
+import org.torpedoquery.jpa.internal.conditions.EmptyLogicalCondition;
 import org.torpedoquery.jpa.internal.handlers.ArrayCallHandler;
 import org.torpedoquery.jpa.internal.handlers.GroupingConditionHandler;
 import org.torpedoquery.jpa.internal.handlers.InnerJoinHandler;
@@ -1009,6 +1010,10 @@ public class Torpedo extends TorpedoFunction {
 	public static <T> T param(T param) {
 		getTorpedoMethodHandler().addParam(param);
 		return param;
+	}
+	
+	public static OnGoingLogicalCondition emptyCondition() {
+		return new EmptyLogicalCondition();
 	}
 
 }

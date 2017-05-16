@@ -25,16 +25,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
+
 public abstract class LogicalElement implements Condition {
 
 	private final Condition left;
 	private final Condition right;
 
 	/**
-	 * <p>Constructor for LogicalElement.</p>
+	 * <p>
+	 * Constructor for LogicalElement.
+	 * </p>
 	 *
-	 * @param left a {@link org.torpedoquery.jpa.internal.Condition} object.
-	 * @param right a {@link org.torpedoquery.jpa.internal.Condition} object.
+	 * @param left
+	 *            a {@link org.torpedoquery.jpa.internal.Condition} object.
+	 * @param right
+	 *            a {@link org.torpedoquery.jpa.internal.Condition} object.
 	 */
 	public LogicalElement(Condition left, Condition right) {
 		this.left = left;
@@ -54,11 +59,24 @@ public abstract class LogicalElement implements Condition {
 	@Override
 	public String createQueryFragment(AtomicInteger incrementor) {
 
-		return left.createQueryFragment(incrementor) + getCondition() + right.createQueryFragment(incrementor);
+		String leftFragment = left.createQueryFragment(incrementor);
+		String rightFragment = right.createQueryFragment(incrementor);
+		
+		if (!leftFragment.isEmpty() && !rightFragment.isEmpty()) {
+			return leftFragment + getCondition() + rightFragment;
+		} else if (!leftFragment.isEmpty()) {
+			return leftFragment;
+		} else if (!rightFragment.isEmpty()) {
+			return rightFragment;
+		} else {
+			return "";
+		}
 	}
 
 	/**
-	 * <p>getCondition.</p>
+	 * <p>
+	 * getCondition.
+	 * </p>
 	 *
 	 * @return a {@link java.lang.String} object.
 	 */

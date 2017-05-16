@@ -46,7 +46,7 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	private Selector selector;
 	private final LogicalCondition logicalCondition;
 	private Condition condition;
-	private final QueryBuilder<T> builder;
+	private final QueryBuilder<?> builder;
 	private boolean notLike;
 
 	/**
@@ -70,7 +70,7 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	 * Constructor for ConditionBuilder.
 	 * </p>
 	 *
-	 * @param builder
+	 * @param builder2
 	 *            a {@link org.torpedoquery.core.QueryBuilder} object.
 	 * @param logicalCondition
 	 *            a
@@ -79,7 +79,7 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	 * @param selector
 	 *            a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 */
-	public ConditionBuilder(QueryBuilder<T> builder, LogicalCondition logicalCondition, Selector<?> selector) {
+	public ConditionBuilder(QueryBuilder<?> builder, LogicalCondition logicalCondition, Selector<?> selector) {
 		this.builder = builder;
 		this.logicalCondition = logicalCondition;
 		this.selector = selector;
@@ -191,7 +191,7 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition notIn(T... values) {
-		return getOnGoingLogicalCondition(new NotInCondition<T>(selector, selector.generateParameter(values)));
+		return notIn(Arrays.asList(values));
 	}
 
 	/** {@inheritDoc} */
