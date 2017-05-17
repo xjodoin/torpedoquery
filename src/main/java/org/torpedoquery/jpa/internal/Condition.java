@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.query.SubqueryValueParameters;
 import org.torpedoquery.jpa.internal.query.ValueParameter;
 
@@ -56,5 +57,9 @@ public interface Condition extends Serializable {
 			}
 		}
 		return valueParameters;
+	}
+
+	default <T> QueryBuilder<T> getBuilder(){
+		return null;
 	}
 }

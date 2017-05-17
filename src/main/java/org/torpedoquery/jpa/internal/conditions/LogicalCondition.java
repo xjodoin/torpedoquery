@@ -52,9 +52,7 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	/** {@inheritDoc} */
 	@Override
 	public <T1> ValueOnGoingCondition<T1> and(T1 property) {
-
-		ValueOnGoingCondition<T1> right = ConditionHelper
-				.<T1, ValueOnGoingCondition<T1>> createCondition(this);
+		ValueOnGoingCondition<T1> right = ConditionHelper.createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
@@ -62,8 +60,7 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	/** {@inheritDoc} */
 	@Override
 	public <T1> ValueOnGoingCondition<T1> or(T1 property) {
-		ValueOnGoingCondition<T1> right = ConditionHelper
-				.<T1, ValueOnGoingCondition<T1>> createCondition(this);
+		ValueOnGoingCondition<T1> right = ConditionHelper.createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
@@ -72,8 +69,7 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	@Override
 	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> and(
 			T property) {
-		OnGoingComparableCondition<V> right = ConditionHelper
-				.<V, OnGoingComparableCondition<V>> createCondition(this);
+		OnGoingComparableCondition<V> right = ConditionHelper.createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
@@ -82,8 +78,7 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	@Override
 	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> or(
 			T property) {
-		OnGoingComparableCondition<V> right = ConditionHelper
-				.<V, OnGoingComparableCondition<V>> createCondition(this);
+		OnGoingComparableCondition<V> right = ConditionHelper.createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
@@ -128,9 +123,7 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingStringCondition<String> and(Function<String> function) {
-		OnGoingStringCondition<String> right = ConditionHelper
-				.<String, OnGoingStringCondition<String>> createCondition(
-						function, this);
+		OnGoingStringCondition<String> right = ConditionHelper.createCondition(function, this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
@@ -138,8 +131,7 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingStringCondition<String> or(String property) {
-		OnGoingStringCondition<String> right = ConditionHelper
-				.<String, OnGoingStringCondition<String>> createCondition(this);
+		OnGoingStringCondition<String> right = ConditionHelper.createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
@@ -147,9 +139,7 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingStringCondition<String> or(Function<String> function) {
-		OnGoingStringCondition<String> right = ConditionHelper
-				.<String, OnGoingStringCondition<String>> createCondition(
-						function, this);
+		OnGoingStringCondition<String> right = ConditionHelper.createCondition(function, this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
@@ -157,8 +147,7 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	/** {@inheritDoc} */
 	@Override
 	public <T1> OnGoingCollectionCondition<T1> and(Collection<T1> object) {
-		OnGoingCollectionCondition<T1> right = ConditionHelper
-				.<T1, OnGoingCollectionCondition<T1>> createCondition(this);
+		OnGoingCollectionCondition<T1> right = ConditionHelper.createCondition(this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
@@ -166,28 +155,23 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	/** {@inheritDoc} */
 	@Override
 	public <T1> OnGoingCollectionCondition<T1> or(Collection<T1> object) {
-		OnGoingCollectionCondition<T1> right = ConditionHelper
-				.<T1, OnGoingCollectionCondition<T1>> createCondition(this);
+		OnGoingCollectionCondition<T1> right = ConditionHelper.createCondition(this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public <T> OnGoingComparableCondition<T> and(ComparableFunction<T> function) {
-		OnGoingComparableCondition<T> right = ConditionHelper
-				.<T, OnGoingComparableCondition<T>> createCondition(function,
-						this);
+	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> and(ComparableFunction<T> function) {
+		OnGoingComparableCondition<V> right = (OnGoingComparableCondition<V>) ConditionHelper.createCondition(function,this);
 		condition = new AndCondition(condition, (Condition) right);
 		return right;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public <T> OnGoingComparableCondition<T> or(ComparableFunction<T> function) {
-		OnGoingComparableCondition<T> right = ConditionHelper
-				.<T, OnGoingComparableCondition<T>> createCondition(function,
-						this);
+	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> or(ComparableFunction<T> function) {
+		OnGoingComparableCondition<V> right = (OnGoingComparableCondition<V>) ConditionHelper.createCondition(function,	this);
 		condition = new OrCondition(condition, (Condition) right);
 		return right;
 	}
@@ -197,6 +181,7 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	 *
 	 * @return a {@link org.torpedoquery.core.QueryBuilder} object.
 	 */
+	@Override
 	public QueryBuilder<E> getBuilder() {
 		return builder;
 	}

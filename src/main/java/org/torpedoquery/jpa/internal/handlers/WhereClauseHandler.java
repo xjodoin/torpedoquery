@@ -32,42 +32,56 @@ import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
 import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
 import org.torpedoquery.jpa.internal.utils.WhereQueryConfigurator;
 
-//TODO duplicate avec WhereClauseCollectionHandler
-public class WhereClauseHandler<T, E extends OnGoingCondition<T>> extends
-		AbstractCallHandler<E> implements QueryHandler<E>, ValueHandler<E> {
+public class WhereClauseHandler<T, E extends OnGoingCondition<T>> extends AbstractCallHandler<E>
+		implements QueryHandler<E>, ValueHandler<E> {
 
 	private final LogicalCondition logicalCondition;
 	private final QueryConfigurator<T> configurator;
 	private final Object param;
 
 	/**
-	 * <p>Constructor for WhereClauseHandler.</p>
+	 * <p>
+	 * Constructor for WhereClauseHandler.
+	 * </p>
 	 *
-	 * @param param a {@link java.lang.Object} object.
+	 * @param param
+	 *            a {@link java.lang.Object} object.
 	 */
 	public WhereClauseHandler(Object param) {
 		this(param, null, new WhereQueryConfigurator<T>());
 	}
 
 	/**
-	 * <p>Constructor for WhereClauseHandler.</p>
+	 * <p>
+	 * Constructor for WhereClauseHandler.
+	 * </p>
 	 *
-	 * @param param a {@link java.lang.Object} object.
-	 * @param configurator a {@link org.torpedoquery.jpa.internal.QueryConfigurator} object.
+	 * @param param
+	 *            a {@link java.lang.Object} object.
+	 * @param configurator
+	 *            a {@link org.torpedoquery.jpa.internal.QueryConfigurator}
+	 *            object.
 	 */
 	public WhereClauseHandler(Object param, QueryConfigurator<T> configurator) {
 		this(param, null, configurator);
 	}
 
 	/**
-	 * <p>Constructor for WhereClauseHandler.</p>
+	 * <p>
+	 * Constructor for WhereClauseHandler.
+	 * </p>
 	 *
-	 * @param param a {@link java.lang.Object} object.
-	 * @param logicalCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
-	 * @param configurator a {@link org.torpedoquery.jpa.internal.QueryConfigurator} object.
+	 * @param param
+	 *            a {@link java.lang.Object} object.
+	 * @param logicalCondition
+	 *            a
+	 *            {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition}
+	 *            object.
+	 * @param configurator
+	 *            a {@link org.torpedoquery.jpa.internal.QueryConfigurator}
+	 *            object.
 	 */
-	public WhereClauseHandler(Object param, LogicalCondition logicalCondition,
-			QueryConfigurator<T> configurator) {
+	public WhereClauseHandler(Object param, LogicalCondition logicalCondition, QueryConfigurator<T> configurator) {
 		this.param = param;
 		this.logicalCondition = logicalCondition;
 		this.configurator = configurator;
@@ -75,19 +89,17 @@ public class WhereClauseHandler<T, E extends OnGoingCondition<T>> extends
 
 	/** {@inheritDoc} */
 	@Override
-	public E handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders,
-			Deque<MethodCall> methodCalls) {
+	public E handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders, Deque<MethodCall> methodCalls) {
 
-		return handleValue(this, proxyQueryBuilders, methodCalls.iterator(),
-				param);
+		return handleValue(this, proxyQueryBuilders, methodCalls.iterator(), param);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public E handle(TorpedoProxy proxy, QueryBuilder queryBuilder, Selector selector) {
-		final ConditionBuilder<T> whereClause = logicalCondition != null ? new ConditionBuilder<>(
-				queryBuilder, logicalCondition, selector)
-				: new ConditionBuilder<>(queryBuilder, selector);
+		
+		final ConditionBuilder<T> whereClause = logicalCondition != null
+				? new ConditionBuilder<>(logicalCondition, selector) : new ConditionBuilder<>(queryBuilder, selector);
 
 		configurator.configure(queryBuilder, whereClause);
 

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.OnGoingLogicalCondition;
+import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.MethodCall;
 import org.torpedoquery.jpa.internal.QueryConfigurator;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
@@ -32,7 +33,7 @@ import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
 
 public class GroupingConditionHandler<T> implements QueryHandler<OnGoingLogicalCondition> {
 
-	private final OnGoingLogicalCondition condition;
+	private final Condition condition;
 	private final QueryConfigurator<T> configurator;
 
 	/**
@@ -46,7 +47,7 @@ public class GroupingConditionHandler<T> implements QueryHandler<OnGoingLogicalC
 	 * @param condition
 	 *            a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
 	 */
-	public GroupingConditionHandler(QueryConfigurator<T> configurator, OnGoingLogicalCondition condition) {
+	public GroupingConditionHandler(QueryConfigurator<T> configurator, Condition condition) {
 		this.configurator = configurator;
 		this.condition = condition;
 	}
@@ -55,15 +56,15 @@ public class GroupingConditionHandler<T> implements QueryHandler<OnGoingLogicalC
 	@Override
 	public OnGoingLogicalCondition handleCall(Map<Object, QueryBuilder<?>> proxyQueryBuilders,
 			Deque<MethodCall> methods) {
-		if (condition instanceof LogicalCondition) {
-			LogicalCondition logicalCondition = (LogicalCondition) condition;
-			GroupingCondition groupingCondition = new GroupingCondition(logicalCondition);
-			QueryBuilder<T> builder = logicalCondition.getBuilder();
-			LogicalCondition newLogicalCondition = new LogicalCondition(builder, groupingCondition);
-			configurator.configure(builder, new ConditionBuilder<T>(builder, newLogicalCondition, null));
+		QueryBuilder<T> builder = condition.getBuilder();
+		if (builder != null) {
+			GroupingCondition groupingCondition = new GroupingCondition(condition);
+			LogicalCondition newLogicalCondition = new LogicalCondition(builder,groupingCondition);
+			configurator.configure(builder, new ConditionBuilder<T>(newLogicalCondition, null));
 			return newLogicalCondition;
-		} else {
-			return condition;
+		}
+		else {
+			return (OnGoingLogicalCondition) condition;
 		}
 
 	}

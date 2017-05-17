@@ -138,7 +138,7 @@ public class GroupBy implements OnGoingGroupByCondition {
 		LogicalCondition logicalCondition = (LogicalCondition)condition;
 		QueryBuilder builder = logicalCondition.getBuilder();
 		LogicalCondition groupingLogicalCondition = new LogicalCondition(builder, new GroupingCondition(logicalCondition));
-		havingCondition = new ConditionBuilder(builder, groupingLogicalCondition, null);
+		havingCondition = new ConditionBuilder(groupingLogicalCondition, null);
 		return groupingLogicalCondition;
 	}
 	

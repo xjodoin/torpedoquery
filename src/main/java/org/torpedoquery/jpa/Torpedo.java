@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.torpedoquery.core.QueryBuilder;
+import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.TorpedoProxy;
@@ -602,7 +603,7 @@ public class Torpedo extends TorpedoFunction {
 	 */
 	public static <T> OnGoingLogicalCondition where(OnGoingLogicalCondition condition) {
 		return getTorpedoMethodHandler()
-				.handle(new GroupingConditionHandler<T>(new WhereQueryConfigurator<T>(), condition));
+				.handle(new GroupingConditionHandler<T>(new WhereQueryConfigurator<T>(), (Condition) condition));
 	}
 
 	/**
@@ -764,7 +765,7 @@ public class Torpedo extends TorpedoFunction {
 	 */
 	public static <T> OnGoingLogicalCondition with(OnGoingLogicalCondition condition) {
 		return getTorpedoMethodHandler()
-				.handle(new GroupingConditionHandler<T>(new WithQueryConfigurator<T>(), condition));
+				.handle(new GroupingConditionHandler<T>(new WithQueryConfigurator<T>(), (Condition) condition));
 	}
 
 	/**
@@ -883,7 +884,11 @@ public class Torpedo extends TorpedoFunction {
 	 */
 	public static <T> OnGoingLogicalCondition condition(OnGoingLogicalCondition condition) {
 		return getTorpedoMethodHandler()
-				.handle(new GroupingConditionHandler<T>(new DoNothingQueryConfigurator<T>(), condition));
+				.handle(new GroupingConditionHandler<T>(new DoNothingQueryConfigurator<T>(), (Condition) condition));
+	}
+	
+	public static OnGoingLogicalCondition condition() {
+		return new EmptyLogicalCondition();
 	}
 
 	/**
@@ -1012,8 +1017,5 @@ public class Torpedo extends TorpedoFunction {
 		return param;
 	}
 	
-	public static OnGoingLogicalCondition emptyCondition() {
-		return new EmptyLogicalCondition();
-	}
 
 }
