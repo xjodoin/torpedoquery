@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
-
 public abstract class LogicalElement implements Condition {
 
 	private final Condition left;

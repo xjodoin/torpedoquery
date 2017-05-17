@@ -31,7 +31,6 @@ import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
 import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
 import org.torpedoquery.jpa.internal.utils.WhereQueryConfigurator;
-
 public class WhereClauseHandler<T, E extends OnGoingCondition<T>> extends AbstractCallHandler<E>
 		implements QueryHandler<E>, ValueHandler<E> {
 

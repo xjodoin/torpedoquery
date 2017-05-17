@@ -62,7 +62,6 @@ public class TorpedoFunction {
 	 * @param number a T object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> ComparableFunction<V> sum(
 			T number) {
@@ -76,7 +75,6 @@ public class TorpedoFunction {
 	 * @param number a {@link org.torpedoquery.jpa.Function} object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> ComparableFunction<V> sum(
 			Function<T> number) {
@@ -90,7 +88,6 @@ public class TorpedoFunction {
 	 * @param number a T object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> ComparableFunction<V> min(
 			T number) {
@@ -104,7 +101,6 @@ public class TorpedoFunction {
 	 * @param number a {@link org.torpedoquery.jpa.Function} object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> ComparableFunction<V> min(
 			Function<T> number) {
@@ -118,7 +114,6 @@ public class TorpedoFunction {
 	 * @param number a T object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> ComparableFunction<V> max(
 			T number) {
@@ -132,7 +127,6 @@ public class TorpedoFunction {
 	 * @param number a {@link org.torpedoquery.jpa.Function} object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> ComparableFunction<V> max(
 			Function<T> number) {
@@ -146,7 +140,6 @@ public class TorpedoFunction {
 	 * @param number a T object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> ComparableFunction<V> avg(
 			T number) {
@@ -160,7 +153,6 @@ public class TorpedoFunction {
 	 * @param number a {@link org.torpedoquery.jpa.Function} object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> ComparableFunction<V> avg(
 			Function<T> number) {
@@ -174,7 +166,6 @@ public class TorpedoFunction {
 	 * @param values a E object.
 	 * @param <T> a T object.
 	 * @return a E object.
-	 * @param <E> a E object.
 	 */
 	public static <T, E extends Function<T>> E coalesce(E... values) {
 		CoalesceFunction<E> coalesceFunction = getCoalesceFunction(values);
@@ -273,7 +264,6 @@ public class TorpedoFunction {
 	 * @param constant a T object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> ComparableFunction<T> constant(
 			T constant) {
@@ -320,7 +310,6 @@ public class TorpedoFunction {
 	 * @param value a {@link java.lang.Object} object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.ComparableFunction} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> ComparableFunction<V> comparableFunction(
 			String name, Class<V> returnType, Object value) {

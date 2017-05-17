@@ -68,8 +68,6 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	 * Constructor for ConditionBuilder.
 	 * </p>
 	 *
-	 * @param builder2
-	 *            a {@link org.torpedoquery.core.QueryBuilder} object.
 	 * @param logicalCondition
 	 *            a
 	 *            {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition}
@@ -367,6 +365,7 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 		return getOnGoingLogicalCondition(conditionLocal);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public <T> QueryBuilder<T> getBuilder() {
 		return logicalCondition.getBuilder();

@@ -30,7 +30,6 @@ import org.torpedoquery.jpa.internal.QueryConfigurator;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
 import org.torpedoquery.jpa.internal.conditions.GroupingCondition;
 import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
-
 public class GroupingConditionHandler<T> implements QueryHandler<OnGoingLogicalCondition> {
 
 	private final Condition condition;

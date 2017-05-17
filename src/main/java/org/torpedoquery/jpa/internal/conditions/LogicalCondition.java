@@ -177,9 +177,9 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	}
 
 	/**
-	 * <p>Getter for the field <code>builder</code>.</p>
+	 * {@inheritDoc}
 	 *
-	 * @return a {@link org.torpedoquery.core.QueryBuilder} object.
+	 * <p>Getter for the field <code>builder</code>.</p>
 	 */
 	@Override
 	public QueryBuilder<E> getBuilder() {

@@ -138,7 +138,6 @@ public class Torpedo extends TorpedoFunction {
 	 * @param <T>
 	 *            a T object.
 	 * @return a E object.
-	 * @param <E> a E object.
 	 */
 	public static <T, E extends T> E extend(T toExtend, Class<E> subclass) {
 		try {
@@ -253,7 +252,6 @@ public class Torpedo extends TorpedoFunction {
 	 *            a {@link java.lang.Class} object.
 	 * @param <T>
 	 *            a T object.
-	 * @param <E> a E object.
 	 */
 	public static <T, E extends T> E innerJoin(T toJoin, Class<E> realType) {
 		return getTorpedoMethodHandler().handle(new InnerJoinHandler<E>(getTorpedoMethodHandler(), realType));
@@ -289,7 +287,6 @@ public class Torpedo extends TorpedoFunction {
 	 * @param <T>
 	 *            a T object.
 	 * @return a E object.
-	 * @param <E> a E object.
 	 */
 	public static <T, E extends T> E innerJoin(Collection<T> toJoin, Class<E> realType) {
 		return getTorpedoMethodHandler()
@@ -326,7 +323,6 @@ public class Torpedo extends TorpedoFunction {
 	 * @param <T>
 	 *            a T object.
 	 * @return a E object.
-	 * @param <E> a E object.
 	 */
 	public static <T, E extends T> E innerJoin(Map<?, T> toJoin, Class<E> realType) {
 		return getTorpedoMethodHandler()
@@ -395,7 +391,6 @@ public class Torpedo extends TorpedoFunction {
 	 *            a {@link java.lang.Class} object.
 	 * @param <T>
 	 *            a T object.
-	 * @param <E> a E object.
 	 */
 	public static <T, E extends T> E leftJoin(T toJoin, Class<E> realType) {
 		return getTorpedoMethodHandler()
@@ -431,7 +426,6 @@ public class Torpedo extends TorpedoFunction {
 	 * @param <T>
 	 *            a T object.
 	 * @return a E object.
-	 * @param <E> a E object.
 	 */
 	public static <T, E extends T> E leftJoin(Collection<T> toJoin, Class<E> realType) {
 		return getTorpedoMethodHandler()
@@ -467,7 +461,6 @@ public class Torpedo extends TorpedoFunction {
 	 * @param <T>
 	 *            a T object.
 	 * @return a E object.
-	 * @param <E> a E object.
 	 */
 	public static <T, E extends T> E leftJoin(Map<?, T> toJoin, Class<E> realType) {
 		return getTorpedoMethodHandler()
@@ -498,7 +491,6 @@ public class Torpedo extends TorpedoFunction {
 	 *            a {@link java.lang.Class} object.
 	 * @param <T>
 	 *            a T object.
-	 * @param <E> a E object.
 	 */
 	public static <T, E extends T> E rightJoin(T toJoin, Class<E> realType) {
 		return getTorpedoMethodHandler()
@@ -535,7 +527,6 @@ public class Torpedo extends TorpedoFunction {
 	 * @param <T>
 	 *            a T object.
 	 * @return a E object.
-	 * @param <E> a E object.
 	 */
 	public static <T, E extends T> E rightJoin(Collection<T> toJoin, Class<E> realType) {
 		return getTorpedoMethodHandler()
@@ -572,7 +563,6 @@ public class Torpedo extends TorpedoFunction {
 	 * @param <T>
 	 *            a T object.
 	 * @return a E object.
-	 * @param <E> a E object.
 	 */
 	public static <T, E extends T> E rightJoin(Map<?, T> toJoin, Class<E> realType) {
 		return getTorpedoMethodHandler()
@@ -617,7 +607,6 @@ public class Torpedo extends TorpedoFunction {
 	 * @param <V>
 	 *            a V object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> where(T object) {
 		return getTorpedoMethodHandler().handle(new WhereClauseHandler<V, OnGoingComparableCondition<V>>(object));
@@ -712,7 +701,6 @@ public class Torpedo extends TorpedoFunction {
 	 * @param <V>
 	 *            a V object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> with(T object) {
 		return getTorpedoMethodHandler().handle(
@@ -798,7 +786,6 @@ public class Torpedo extends TorpedoFunction {
 	 * @param <V>
 	 *            a V object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(T object) {
 		return getTorpedoMethodHandler().handle(
@@ -816,7 +803,6 @@ public class Torpedo extends TorpedoFunction {
 	 * @param <V>
 	 *            a V object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
-	 * @param <T> a T object.
 	 */
 	public static <V, T extends Comparable<V>> OnGoingComparableCondition<V> condition(ComparableFunction<T> object) {
 		return getTorpedoMethodHandler().handle(
@@ -887,6 +873,11 @@ public class Torpedo extends TorpedoFunction {
 				.handle(new GroupingConditionHandler<T>(new DoNothingQueryConfigurator<T>(), (Condition) condition));
 	}
 	
+	/**
+	 * <p>condition.</p>
+	 *
+	 * @return a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
+	 */
 	public static OnGoingLogicalCondition condition() {
 		return new EmptyLogicalCondition();
 	}
