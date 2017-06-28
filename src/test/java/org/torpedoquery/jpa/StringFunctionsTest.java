@@ -99,6 +99,22 @@ public class StringFunctionsTest {
 		assertEquals("select entity_0 from Entity entity_0 where lower(entity_0.code) like '%test%'", select.getQuery());
 	}
 	
+	@Test
+	public void testWhereWithLikeFunction() {
+		Entity from = from(Entity.class);
+		where(lower(from.getCode())).like("%test%");
+		Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where lower(entity_0.code) like '%test%'", select.getQuery());
+	}
+	
+	@Test
+	public void testWhereWithNotLikeFunction() {
+		Entity from = from(Entity.class);
+		where(lower(from.getCode())).notLike("%test%");
+		Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where lower(entity_0.code) not like '%test%'", select.getQuery());
+	}
+	
 	/**
 	 * <p>testSubstringFunction.</p>
 	 */

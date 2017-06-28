@@ -232,12 +232,23 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	public OnGoingLikeCondition like() {
 		return this;
 	}
+	
+	@Override
+	public OnGoingLogicalCondition like(String likeValue) {
+		return getOnGoingLogicalCondition(createLike(LikeCondition.Type.UNKNOW, likeValue));
+	}
 
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLikeCondition notLike() {
 		notLike = true;
 		return this;
+	}
+	
+	@Override
+	public OnGoingLogicalCondition notLike(String notLikeValue) {
+		notLike = true;
+		return getOnGoingLogicalCondition(createLike(LikeCondition.Type.UNKNOW, notLikeValue));
 	}
 
 	private LikeCondition createLike(Type type, String toMatch) {

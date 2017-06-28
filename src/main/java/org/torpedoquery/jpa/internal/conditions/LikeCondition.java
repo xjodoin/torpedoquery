@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
+
 public class LikeCondition implements Condition {
 
 	public static enum Type {
@@ -45,6 +46,12 @@ public class LikeCondition implements Condition {
 			@Override
 			public String wrap(String toMatch) {
 				return "%" + toMatch;
+			}
+		},
+		UNKNOW {
+			@Override
+			public String wrap(String toMatch) {
+				return toMatch;
 			}
 		};
 
@@ -82,7 +89,9 @@ public class LikeCondition implements Condition {
 	}
 
 	/**
-	 * <p>getLike.</p>
+	 * <p>
+	 * getLike.
+	 * </p>
 	 *
 	 * @return a {@link java.lang.String} object.
 	 */
