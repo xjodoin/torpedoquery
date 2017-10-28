@@ -82,12 +82,6 @@ public abstract class AbstractJoin implements Join {
 
 	/** {@inheritDoc} */
 	@Override
-	public void appendOrderBy(StringBuilder builder, AtomicInteger incrementor) {
-		join.appendOrderBy(builder, incrementor);
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void appendGroupBy(StringBuilder builder, AtomicInteger incrementor) {
 		join.appendGroupBy(builder, incrementor);
 	}

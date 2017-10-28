@@ -45,6 +45,7 @@ import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
+
 public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<>();
@@ -143,10 +144,6 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 			orderBy.createQueryFragment(builder, this, incrementor);
 		}
 
-		for (Join join : joins) {
-			join.appendOrderBy(builder, incrementor);
-		}
-
 		return builder.toString();
 	}
 
@@ -175,8 +172,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.torpedoquery.jpa.internal.query.QueryBuilder#appendWhereClause(java.
+	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#appendWhereClause(java.
 	 * lang.StringBuilder, java.util.concurrent.atomic.AtomicInteger)
 	 */
 	/** {@inheritDoc} */
@@ -203,8 +199,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.torpedoquery.jpa.internal.query.QueryBuilder#appendSelect(java.lang.
+	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#appendSelect(java.lang.
 	 * StringBuilder, java.util.concurrent.atomic.AtomicInteger)
 	 */
 	/** {@inheritDoc} */
@@ -326,8 +321,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.torpedoquery.jpa.internal.query.QueryBuilder#getValueParameters()
+	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getValueParameters()
 	 */
 	/** {@inheritDoc} */
 	@Override
@@ -361,21 +355,9 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#addOrder(org.
-	 * torpedoquery.jpa.internal.Selector)
-	 */
-	/** {@inheritDoc} */
 	@Override
-	public void addOrder(Selector selector) {
-		if (orderBy == null) {
-			orderBy = new OrderBy();
-		}
-
-		orderBy.addOrder(selector);
-
+	public void setOrderBy(OrderBy orderBy) {
+		this.orderBy = orderBy;
 	}
 
 	/*
@@ -534,7 +516,9 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	}
 
 	/**
-	 * <p>freeze.</p>
+	 * <p>
+	 * freeze.
+	 * </p>
 	 *
 	 * @return a {@link org.torpedoquery.jpa.Query} object.
 	 */

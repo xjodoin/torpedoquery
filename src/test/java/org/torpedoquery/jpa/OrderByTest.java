@@ -26,34 +26,41 @@ import static org.torpedoquery.jpa.TorpedoFunction.desc;
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.SubEntity;
+
 public class OrderByTest {
 
 	/**
-	 * <p>test_simpleOrderBy.</p>
+	 * <p>
+	 * test_simpleOrderBy.
+	 * </p>
 	 */
 	@Test
 	public void test_simpleOrderBy() {
 		Entity from = from(Entity.class);
 		orderBy(from.getCode());
 		Query<Entity> select = select(from);
-		
+
 		assertEquals("select entity_0 from Entity entity_0 order by entity_0.code", select.getQuery());
 	}
 
 	/**
-	 * <p>test_multipleOrderBy.</p>
+	 * <p>
+	 * test_multipleOrderBy.
+	 * </p>
 	 */
 	@Test
 	public void test_multipleOrderBy() {
 		Entity from = from(Entity.class);
 		orderBy(from.getCode(), from.getName());
 		Query<Entity> select = select(from);
-		
+
 		assertEquals("select entity_0 from Entity entity_0 order by entity_0.code,entity_0.name", select.getQuery());
 	}
 
 	/**
-	 * <p>test_OrderByOnJoin.</p>
+	 * <p>
+	 * test_OrderByOnJoin.
+	 * </p>
 	 */
 	@Test
 	public void test_OrderByOnJoin() {
@@ -62,12 +69,16 @@ public class OrderByTest {
 
 		orderBy(innerJoin.getCode());
 		Query<Entity> select = select(from);
-		
-		assertEquals("select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 order by subEntity_1.code", select.getQuery());
+
+		assertEquals(
+				"select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 order by subEntity_1.code",
+				select.getQuery());
 	}
 
 	/**
-	 * <p>test_OrderByTwoLevel.</p>
+	 * <p>
+	 * test_OrderByTwoLevel.
+	 * </p>
 	 */
 	@Test
 	public void test_OrderByTwoLevel() {
@@ -76,12 +87,16 @@ public class OrderByTest {
 
 		orderBy(from.getCode(), innerJoin.getCode());
 		Query<Entity> select = select(from);
-		
-		assertEquals("select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 order by entity_0.code,subEntity_1.code", select.getQuery());
+
+		assertEquals(
+				"select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 order by entity_0.code,subEntity_1.code",
+				select.getQuery());
 	}
 
 	/**
-	 * <p>test_simpleOrderBy_asc.</p>
+	 * <p>
+	 * test_simpleOrderBy_asc.
+	 * </p>
 	 */
 	@Test
 	public void test_simpleOrderBy_asc() {
@@ -92,7 +107,9 @@ public class OrderByTest {
 	}
 
 	/**
-	 * <p>test_simpleOrderBy_desc.</p>
+	 * <p>
+	 * test_simpleOrderBy_desc.
+	 * </p>
 	 */
 	@Test
 	public void test_simpleOrderBy_desc() {
@@ -103,13 +120,26 @@ public class OrderByTest {
 	}
 
 	/**
-	 * <p>test_simpleOrderBy_asc_and_default.</p>
+	 * <p>
+	 * test_simpleOrderBy_asc_and_default.
+	 * </p>
 	 */
 	@Test
 	public void test_simpleOrderBy_asc_and_default() {
 		Entity from = from(Entity.class);
 		orderBy(asc(from.getCode()), from.getName());
 		Query<Entity> select = select(from);
-		assertEquals("select entity_0 from Entity entity_0 order by entity_0.code asc,entity_0.name", select.getQuery());
+		assertEquals("select entity_0 from Entity entity_0 order by entity_0.code asc,entity_0.name",
+				select.getQuery());
+	}
+
+	@Test
+	public void shouldKeepOrderingWithInnerJoin() {
+		Entity from = from(Entity.class);
+		SubEntity subEntity = innerJoin(from.getSubEntities());
+		orderBy(subEntity.getCode(), from.getName());
+		Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 inner join entity_0.subEntities subEntity_1 order by subEntity_1.code,entity_0.name",
+				select.getQuery());
 	}
 }

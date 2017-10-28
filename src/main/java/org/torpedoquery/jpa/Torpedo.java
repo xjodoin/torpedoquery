@@ -40,6 +40,7 @@ import org.torpedoquery.jpa.internal.joins.LeftJoinBuilder;
 import org.torpedoquery.jpa.internal.joins.RightJoinBuilder;
 import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.internal.query.GroupBy;
+import org.torpedoquery.jpa.internal.query.OrderBy;
 import org.torpedoquery.jpa.internal.utils.DoNothingQueryConfigurator;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 import org.torpedoquery.jpa.internal.utils.WhereQueryConfigurator;
@@ -982,14 +983,19 @@ public class Torpedo extends TorpedoFunction {
 	 *            a {@link java.lang.Object} object.
 	 */
 	public static void orderBy(Object... values) {
+		TorpedoMethodHandler fjpaMethodHandler = getTorpedoMethodHandler();
+		final QueryBuilder root = fjpaMethodHandler.getRoot();
+		final OrderBy orderBy = new OrderBy();
+		
 		getTorpedoMethodHandler().handle(new ArrayCallHandler(new ValueHandler<Void>() {
 			@Override
 			public Void handle(TorpedoProxy proxy, QueryBuilder queryBuilder, Selector selector) {
-				queryBuilder.addOrder(selector);
+				orderBy.addOrder(selector);
 				return null;
 			}
 		}, values));
 
+		root.setOrderBy(orderBy);
 	}
 
 	/**

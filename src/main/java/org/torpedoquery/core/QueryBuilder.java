@@ -28,6 +28,7 @@ import org.torpedoquery.jpa.internal.Join;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
 import org.torpedoquery.jpa.internal.query.GroupBy;
+import org.torpedoquery.jpa.internal.query.OrderBy;
 import org.torpedoquery.jpa.internal.query.ValueParameter;
 public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 
@@ -167,16 +168,6 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 
 	/**
 	 * <p>
-	 * addOrder.
-	 * </p>
-	 *
-	 * @param selector
-	 *            a {@link org.torpedoquery.jpa.internal.Selector} object.
-	 */
-	public void addOrder(Selector selector);
-
-	/**
-	 * <p>
 	 * setGroupBy.
 	 * </p>
 	 *
@@ -228,5 +219,7 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 * @return a {@link java.lang.String} object.
 	 */
 	String getEntityName();
+
+	public void setOrderBy(OrderBy orderBy);
 
 }

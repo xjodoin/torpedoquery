@@ -51,14 +51,6 @@ public interface Join extends Serializable {
 	List<ValueParameter<?>> getParams();
 
 	/**
-	 * <p>appendOrderBy.</p>
-	 *
-	 * @param builder a {@link java.lang.StringBuilder} object.
-	 * @param incrementor a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 */
-	void appendOrderBy(StringBuilder builder, AtomicInteger incrementor);
-
-	/**
 	 * <p>appendGroupBy.</p>
 	 *
 	 * @param builder a {@link java.lang.StringBuilder} object.
