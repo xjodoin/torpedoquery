@@ -23,8 +23,6 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-
-import com.google.common.base.Throwables;
 public class SerializableMethod implements Serializable {
 
 	private static final long serialVersionUID = 6005610965006048445L;
@@ -115,7 +113,7 @@ public class SerializableMethod implements Serializable {
 		try {
 			return declaringClass.getDeclaredMethod(methodName, parameterTypes);
 		} catch (NoSuchMethodException | SecurityException e) {
-			throw Throwables.propagate(e);
+			throw new RuntimeException(e);
 		}
 	}
 

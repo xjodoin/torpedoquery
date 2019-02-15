@@ -29,15 +29,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javassist.util.proxy.MethodHandler;
-
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.MethodCall;
-import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
+import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.handlers.QueryHandler;
 
-import com.google.common.base.Defaults;
+import javassist.util.proxy.MethodHandler;
 public class TorpedoMethodHandler implements MethodHandler, TorpedoProxy {
 	private final Map<Object, QueryBuilder<?>> proxyQueryBuilders = new IdentityHashMap<>();
 	private final Deque<MethodCall> methods = new LinkedList<>();

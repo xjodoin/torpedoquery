@@ -46,8 +46,6 @@ import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
 import org.torpedoquery.jpa.internal.utils.WhereQueryConfigurator;
 import org.torpedoquery.jpa.internal.utils.WithQueryConfigurator;
 
-import com.google.common.base.Throwables;
-
 /**
  * Torpedo Query goal is to simplify how you create and maintain your HQL and
  * JPA-QL query.
@@ -152,7 +150,7 @@ public class Torpedo extends TorpedoFunction {
 			return proxy;
 
 		} catch (Exception e) {
-			throw Throwables.propagate(e);
+			throw new RuntimeException(e);
 		}
 	}
 

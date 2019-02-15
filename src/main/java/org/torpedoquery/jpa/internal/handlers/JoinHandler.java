@@ -32,10 +32,7 @@ import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.internal.utils.FieldUtils;
-import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
-
-import com.google.common.base.Throwables;
 public abstract class JoinHandler<T> implements QueryHandler<T> {
 
 	private final TorpedoMethodHandler methodHandler;
@@ -101,7 +98,7 @@ public abstract class JoinHandler<T> implements QueryHandler<T> {
 			return join;
 
 		} catch (Exception e) {
-			throw Throwables.propagate(e);
+			throw new RuntimeException(e);
 		}
 
 	}
