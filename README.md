@@ -1,5 +1,6 @@
 TorpedoQuery
 ============
+[Get supported org.torpedoquery:org.torpedoquery with the Tidelift Subscription](https://tidelift.com/subscription/pkg/maven-org-torpedoquery-org-torpedoquery?utm_source=maven-org-torpedoquery-org-torpedoquery&utm_medium=referral&utm_campaign=readme) 
 
 ## Status
 
@@ -7,6 +8,8 @@ TorpedoQuery
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.torpedoquery/org.torpedoquery/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.torpedoquery/org.torpedoquery)
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/org.torpedoquery/org.torpedoquery/badge.svg)](http://www.javadoc.io/doc/org.torpedoquery/org.torpedoquery)
 [![license](https://img.shields.io/github/license/xjodoin/torpedoquery.svg)](https://github.com/xjodoin/torpedoquery/blob/master/LICENSE)
+[![tidelift](https://tidelift.com/badges/github/xjodoin/torpedoquery)]
+
 
 
 
