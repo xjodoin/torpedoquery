@@ -38,6 +38,10 @@ public class RightJoin extends AbstractJoin {
 	 * @param join a {@link org.torpedoquery.core.QueryBuilder} object.
 	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
 	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
 	 */
 	public RightJoin(QueryBuilder join, LogicalCondition joinCondition) {
 		super(join, joinCondition);

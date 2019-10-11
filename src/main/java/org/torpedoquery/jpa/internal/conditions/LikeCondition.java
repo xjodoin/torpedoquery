@@ -21,7 +21,6 @@ package org.torpedoquery.jpa.internal.conditions;
 
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-
 public class LikeCondition<T> extends SingleParameterCondition<T> {
 
 	public static enum Type {
@@ -58,16 +57,14 @@ public class LikeCondition<T> extends SingleParameterCondition<T> {
 	 * Constructor for LikeCondition.
 	 * </p>
 	 *
-	 * @param type     a
-	 *                 {@link org.torpedoquery.jpa.internal.conditions.LikeCondition.Type}
-	 *                 object.
 	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
-	 * @param toMatch  a {@link java.lang.String} object.
+	 * @param parameter a {@link org.torpedoquery.jpa.internal.Parameter} object.
 	 */
 	public LikeCondition(Selector selector, Parameter<T> parameter) {
 		super(selector, parameter);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	protected String getComparator() {
 		return "like";

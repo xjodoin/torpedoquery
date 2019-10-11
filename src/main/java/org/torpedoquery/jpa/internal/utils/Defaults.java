@@ -4,6 +4,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * <p>Defaults class.</p>
+ *
+ * @author xjodoin
+ * @version $Id: $Id
+ */
 public final class Defaults {
 	private Defaults() {
 	}
@@ -33,6 +39,9 @@ public final class Defaults {
 	 * numbers, {@code
 	 * false} for {@code boolean} and {@code '\0'} for {@code char}. For
 	 * non-primitive types and {@code void}, {@code null} is returned.
+	 *
+	 * @param type a {@link java.lang.Class} object.
+	 * @return a T object.
 	 */
 	public static <T> T defaultValue(Class<T> type) {
 		@SuppressWarnings("unchecked") // the put method enforces this key-value relationship

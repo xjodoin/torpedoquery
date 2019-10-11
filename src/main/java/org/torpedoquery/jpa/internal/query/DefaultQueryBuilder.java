@@ -45,7 +45,6 @@ import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
-
 public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private final Class<?> toQuery;
 	private final List<Selector> toSelect = new ArrayList<>();
@@ -355,6 +354,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setOrderBy(OrderBy orderBy) {
 		this.orderBy = orderBy;

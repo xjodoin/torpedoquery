@@ -24,6 +24,7 @@ public interface OnGoingStringCondition<T> extends ValueOnGoingCondition<T> {
 	 * <p>like.</p>
 	 *
 	 * @return a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
+	 * @param likeValue a {@link java.lang.String} object.
 	 */
 	OnGoingLogicalCondition like(String likeValue);
 	
@@ -45,6 +46,7 @@ public interface OnGoingStringCondition<T> extends ValueOnGoingCondition<T> {
 	 * <p>like.</p>
 	 *
 	 * @return a {@link org.torpedoquery.jpa.OnGoingLogicalCondition} object.
+	 * @param notLikeValue a {@link java.lang.String} object.
 	 */
 	OnGoingLogicalCondition notLike(String notLikeValue);
 }

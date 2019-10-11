@@ -26,14 +26,14 @@ public class NotLikeCondition<T> extends LikeCondition<T> {
 	/**
 	 * <p>Constructor for NotLikeCondition.</p>
 	 *
-	 * @param type a Type object.
 	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
-	 * @param toMatch a {@link java.lang.String} object.
+	 * @param parameter a {@link org.torpedoquery.jpa.internal.Parameter} object.
 	 */
 	public NotLikeCondition(Selector selector, Parameter<T> parameter) {
 		super(selector,parameter);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	protected String getComparator() {
 		return "not " + super.getComparator();

@@ -220,6 +220,11 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 */
 	String getEntityName();
 
+	/**
+	 * <p>setOrderBy.</p>
+	 *
+	 * @param orderBy a {@link org.torpedoquery.jpa.internal.query.OrderBy} object.
+	 */
 	public void setOrderBy(OrderBy orderBy);
 
 }
