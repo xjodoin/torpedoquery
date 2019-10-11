@@ -20,6 +20,7 @@
 package org.torpedoquery.jpa.internal.conditions;
 
 import org.torpedoquery.jpa.internal.Condition;
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 public class OrCondition extends LogicalElement {
 
 	/**
@@ -32,9 +33,8 @@ public class OrCondition extends LogicalElement {
 		super(left, right);
 	}
 
-	/** {@inheritDoc} */
 	@Override
-	protected String getCondition() {
-		return " or ";
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
 	}
 }

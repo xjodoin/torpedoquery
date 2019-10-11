@@ -20,7 +20,6 @@
 package org.torpedoquery.jpa.internal.joins;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Join;
@@ -58,32 +57,6 @@ public abstract class AbstractJoin implements Join {
 		this.join = join;
 		this.joinCondition = joinCondition;
 
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String getJoin(String parentAlias, AtomicInteger incrementor) {
-		if (joinCondition != null) {
-			return " " + getJoinType() + " join " +join.getEntityName() + " " + join.getAlias(incrementor) + " on "
-					+ joinCondition.createQueryFragment(incrementor);
-		} else {
-			return (" " + getJoinType() + " join " + parentAlias + "." + fieldName + " " + join.getAlias(incrementor))
-					+ (join.hasWithClause() ? join.getWithClause(incrementor) : "")
-					+ (join.hasSubJoin() ? join.getJoins(incrementor) : "");
-		}
-
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
-		join.appendWhereClause(builder, incrementor);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void appendGroupBy(StringBuilder builder, AtomicInteger incrementor) {
-		join.appendGroupBy(builder, incrementor);
 	}
 
 	/** {@inheritDoc} */

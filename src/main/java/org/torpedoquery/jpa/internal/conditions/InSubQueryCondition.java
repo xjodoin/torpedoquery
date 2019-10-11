@@ -20,13 +20,13 @@
 package org.torpedoquery.jpa.internal.conditions;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Condition;
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-public class InSubQueryCondition<T> implements Condition {
+public class InSubQueryCondition implements Condition {
 
 	private final Selector selector;
 	private final QueryBuilder subQuery;
@@ -44,26 +44,13 @@ public class InSubQueryCondition<T> implements Condition {
 
 	/** {@inheritDoc} */
 	@Override
-	public String createQueryFragment(AtomicInteger incrementor) {
-		String queryFragment = selector.createQueryFragment(incrementor);
-
-		String subQueryString = subQuery.getQuery(incrementor);
-		return queryFragment + " " + getFragment() + " ( " + subQueryString + " ) ";
-	}
-
-	/**
-	 * <p>getFragment.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	protected String getFragment() {
-		return "in";
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public List<Parameter> getParameters() {
 		return subQuery.getValueParameters();
 	}
 
+	@Override
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
+	}
+	
 }

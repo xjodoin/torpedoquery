@@ -53,8 +53,6 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private ConditionBuilder<T> whereClause;
 	private ConditionBuilder<T> withClause;
 
-	private String freezeQuery;
-
 	private String alias;
 	private OrderBy orderBy;
 	private GroupBy groupBy;
@@ -76,41 +74,6 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		this.toQuery = toQuery;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getQuery(java.util.
-	 * concurrent.atomic.AtomicInteger)
-	 */
-	/** {@inheritDoc} */
-	@Override
-	public String getQuery(AtomicInteger incrementor) {
-		return freezeQuery(incrementor);
-	}
-
-	private String freezeQuery(AtomicInteger incrementor) {
-
-		if (freezeQuery == null) {
-			String from = " from " + getEntityName() + " " + getAlias(incrementor);
-			StringBuilder builder = new StringBuilder();
-
-			appendSelect(builder, incrementor);
-
-			builder.append(from)
-
-					.append(getJoins(incrementor))
-
-					.append(appendWhereClause(new StringBuilder(), incrementor))
-
-					.append(appendOrderBy(new StringBuilder(), incrementor))
-
-					.append(appendGroupBy(new StringBuilder(), incrementor));
-
-			freezeQuery = builder.toString().trim();
-
-		}
-		return freezeQuery;
-	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -123,114 +86,7 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 			return toQuery.getSimpleName();
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public String getQuery() {
-		return getQuery(new AtomicInteger());
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.torpedoquery.jpa.internal.query.QueryBuilder#appendOrderBy(java.lang.
-	 * StringBuilder, java.util.concurrent.atomic.AtomicInteger)
-	 */
-	/** {@inheritDoc} */
-	@Override
-	public String appendOrderBy(StringBuilder builder, AtomicInteger incrementor) {
-
-		if (orderBy != null) {
-			orderBy.createQueryFragment(builder, this, incrementor);
-		}
-
-		return builder.toString();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.torpedoquery.jpa.internal.query.QueryBuilder#appendGroupBy(java.lang.
-	 * StringBuilder, java.util.concurrent.atomic.AtomicInteger)
-	 */
-	/** {@inheritDoc} */
-	@Override
-	public String appendGroupBy(StringBuilder builder, AtomicInteger incrementor) {
-
-		if (groupBy != null) {
-			groupBy.createQueryFragment(builder, incrementor);
-		}
-
-		for (Join join : joins) {
-			join.appendGroupBy(builder, incrementor);
-		}
-
-		return builder.toString();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#appendWhereClause(java.
-	 * lang.StringBuilder, java.util.concurrent.atomic.AtomicInteger)
-	 */
-	/** {@inheritDoc} */
-	@Override
-	public StringBuilder appendWhereClause(StringBuilder builder, AtomicInteger incrementor) {
-
-		Condition whereClauseCondition = getConditionClause(whereClause);
-
-		if (whereClauseCondition != null) {
-			if (builder.length() == 0) {
-				builder.append(" where ").append(whereClauseCondition.createQueryFragment(incrementor)).append(' ');
-			} else {
-				builder.append("and ").append(whereClauseCondition.createQueryFragment(incrementor)).append(' ');
-			}
-		}
-
-		for (Join join : joins) {
-			join.appendWhereClause(builder, incrementor);
-		}
-
-		return builder;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#appendSelect(java.lang.
-	 * StringBuilder, java.util.concurrent.atomic.AtomicInteger)
-	 */
-	/** {@inheritDoc} */
-	@Override
-	public void appendSelect(StringBuilder builder, AtomicInteger incrementor) {
-		for (Selector selector : toSelect) {
-			if (builder.length() == 0) {
-				builder.append("select ").append(selector.createQueryFragment(incrementor));
-			} else {
-				builder.append(", ").append(selector.createQueryFragment(incrementor));
-			}
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getAlias(java.util.
-	 * concurrent.atomic.AtomicInteger)
-	 */
-	/** {@inheritDoc} */
-	@Override
-	public String getAlias(AtomicInteger incrementor) {
-		if (alias == null) {
-			final char[] charArray = getEntityName().toCharArray();
-
-			charArray[0] = Character.toLowerCase(charArray[0]);
-			alias = new String(charArray) + "_" + incrementor.getAndIncrement();
-		}
-		return alias;
-	}
 
 	/*
 	 * (non-Javadoc)

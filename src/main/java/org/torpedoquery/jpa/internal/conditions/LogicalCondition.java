@@ -21,7 +21,6 @@ package org.torpedoquery.jpa.internal.conditions;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.ComparableFunction;
@@ -32,6 +31,7 @@ import org.torpedoquery.jpa.OnGoingLogicalCondition;
 import org.torpedoquery.jpa.OnGoingStringCondition;
 import org.torpedoquery.jpa.ValueOnGoingCondition;
 import org.torpedoquery.jpa.internal.Condition;
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 import org.torpedoquery.jpa.internal.Parameter;
 public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 
@@ -87,12 +87,6 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	@Override
 	public List<Parameter> getParameters() {
 		return condition.getParameters();
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String createQueryFragment(AtomicInteger incrementor) {
-		return condition.createQueryFragment(incrementor);
 	}
 
 	/** {@inheritDoc} */
@@ -184,6 +178,11 @@ public class LogicalCondition<E> implements OnGoingLogicalCondition, Condition {
 	@Override
 	public QueryBuilder<E> getBuilder() {
 		return builder;
+	}
+
+	@Override
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
 	}
 
 }

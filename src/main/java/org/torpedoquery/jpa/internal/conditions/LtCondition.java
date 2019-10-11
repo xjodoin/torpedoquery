@@ -19,9 +19,10 @@
  */
 package org.torpedoquery.jpa.internal.conditions;
 
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-public class LtCondition<T> extends SingleParameterCondition<T> {
+public class LtCondition extends SingleParameterCondition {
 
 	/**
 	 * <p>Constructor for LtCondition.</p>
@@ -29,14 +30,13 @@ public class LtCondition<T> extends SingleParameterCondition<T> {
 	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 * @param parameter a {@link org.torpedoquery.jpa.internal.Parameter} object.
 	 */
-	public LtCondition(Selector selector, Parameter<T> parameter) {
+	public LtCondition(Selector selector, Parameter parameter) {
 		super(selector, parameter);
 	}
 
-	/** {@inheritDoc} */
 	@Override
-	protected String getComparator() {
-		return "<";
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
 	}
-
+	
 }

@@ -21,9 +21,7 @@ package org.torpedoquery.jpa.internal.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.ComparableFunction;
@@ -40,43 +38,16 @@ import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
 import org.torpedoquery.jpa.internal.conditions.ConditionHelper;
 import org.torpedoquery.jpa.internal.conditions.GroupingCondition;
 import org.torpedoquery.jpa.internal.conditions.LogicalCondition;
+
 public class GroupBy implements OnGoingGroupByCondition {
 
 	private final List<Selector> groups = new ArrayList<>();
 	private ConditionBuilder havingCondition;
 
 	/**
-	 * <p>createQueryFragment.</p>
-	 *
-	 * @param builder a {@link java.lang.StringBuilder} object.
-	 * @param incrementor a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String createQueryFragment(StringBuilder builder, AtomicInteger incrementor) {
-
-		if (!groups.isEmpty()) {
-			Iterator<Selector> iterator = groups.iterator();
-
-			if (builder.length() == 0) {
-				builder.append(" group by ").append(iterator.next().createQueryFragment(incrementor));
-			}
-
-			while (iterator.hasNext()) {
-				Selector selector = iterator.next();
-				builder.append(',').append(selector.createQueryFragment(incrementor));
-			}
-
-			if (havingCondition != null) {
-				builder.append(" having ").append(ConditionHelper.getConditionClause(havingCondition).createQueryFragment(incrementor));
-			}
-
-			return builder.toString();
-		}
-		return "";
-	}
-
-	/**
-	 * <p>addGroup.</p>
+	 * <p>
+	 * addGroup.
+	 * </p>
 	 *
 	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 */
@@ -87,7 +58,7 @@ public class GroupBy implements OnGoingGroupByCondition {
 	/** {@inheritDoc} */
 	@Override
 	public <T> ValueOnGoingCondition<T> having(T object) {
-		ValueOnGoingCondition<T> createCondition = ConditionHelper.<T, ValueOnGoingCondition<T>> createCondition(null);
+		ValueOnGoingCondition<T> createCondition = ConditionHelper.<T, ValueOnGoingCondition<T>>createCondition(null);
 		havingCondition = (ConditionBuilder) createCondition;
 		return createCondition;
 	}
@@ -95,7 +66,8 @@ public class GroupBy implements OnGoingGroupByCondition {
 	/** {@inheritDoc} */
 	@Override
 	public <V, T extends Comparable<V>> OnGoingComparableCondition<V> having(T object) {
-		OnGoingComparableCondition<V> createCondition = ConditionHelper.<V, OnGoingComparableCondition<V>> createCondition(null);
+		OnGoingComparableCondition<V> createCondition = ConditionHelper
+				.<V, OnGoingComparableCondition<V>>createCondition(null);
 		havingCondition = (ConditionBuilder) createCondition;
 		return createCondition;
 	}
@@ -103,7 +75,8 @@ public class GroupBy implements OnGoingGroupByCondition {
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingStringCondition<String> having(String object) {
-		OnGoingStringCondition<String> createCondition = ConditionHelper.<String, OnGoingStringCondition<String>> createCondition(null);
+		OnGoingStringCondition<String> createCondition = ConditionHelper
+				.<String, OnGoingStringCondition<String>>createCondition(null);
 		havingCondition = (ConditionBuilder) createCondition;
 		return createCondition;
 	}
@@ -111,7 +84,8 @@ public class GroupBy implements OnGoingGroupByCondition {
 	/** {@inheritDoc} */
 	@Override
 	public <T> OnGoingCollectionCondition<T> having(Collection<T> object) {
-		OnGoingCollectionCondition<T> createCollectionCondition = ConditionHelper.<T, OnGoingCollectionCondition<T>> createCondition(null);
+		OnGoingCollectionCondition<T> createCollectionCondition = ConditionHelper
+				.<T, OnGoingCollectionCondition<T>>createCondition(null);
 		havingCondition = (ConditionBuilder) createCollectionCondition;
 		return createCollectionCondition;
 	}
@@ -119,7 +93,8 @@ public class GroupBy implements OnGoingGroupByCondition {
 	/** {@inheritDoc} */
 	@Override
 	public <T> ValueOnGoingCondition<T> having(Function<T> function) {
-		ValueOnGoingCondition<T> createCondition = ConditionHelper.<T, ValueOnGoingCondition<T>> createCondition(function, null);
+		ValueOnGoingCondition<T> createCondition = ConditionHelper
+				.<T, ValueOnGoingCondition<T>>createCondition(function, null);
 		havingCondition = (ConditionBuilder) createCondition;
 		return createCondition;
 	}
@@ -127,28 +102,31 @@ public class GroupBy implements OnGoingGroupByCondition {
 	/** {@inheritDoc} */
 	@Override
 	public <T extends Comparable<?>> OnGoingComparableCondition<T> having(ComparableFunction<T> function) {
-		OnGoingComparableCondition<T> createCondition = ConditionHelper.<T, OnGoingComparableCondition<T>> createCondition(function, null);
+		OnGoingComparableCondition<T> createCondition = ConditionHelper
+				.<T, OnGoingComparableCondition<T>>createCondition(function, null);
 		havingCondition = (ConditionBuilder) createCondition;
 		return createCondition;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition having(OnGoingLogicalCondition condition) {
-		LogicalCondition logicalCondition = (LogicalCondition)condition;
+		LogicalCondition logicalCondition = (LogicalCondition) condition;
 		QueryBuilder builder = logicalCondition.getBuilder();
-		LogicalCondition groupingLogicalCondition = new LogicalCondition(builder, new GroupingCondition(logicalCondition));
+		LogicalCondition groupingLogicalCondition = new LogicalCondition(builder,
+				new GroupingCondition(logicalCondition));
 		havingCondition = new ConditionBuilder(groupingLogicalCondition, null);
 		return groupingLogicalCondition;
 	}
-	
+
 	/**
-	 * <p>getCondition.</p>
+	 * <p>
+	 * getCondition.
+	 * </p>
 	 *
 	 * @return a {@link org.torpedoquery.jpa.internal.Condition} object.
 	 */
-	public Condition getCondition()
-	{
+	public Condition getCondition() {
 		return ConditionHelper.getConditionClause(havingCondition);
 	}
 }

@@ -20,15 +20,14 @@
 package org.torpedoquery.jpa.internal.conditions;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-public class InCondition<T> extends AbstractCondition<List<T>> {
+public class InCondition extends AbstractCondition {
 
 	private final Selector selector;
-	private final Parameter<List<T>> parameter;
+	private final Parameter parameter;
 
 	/**
 	 * <p>Constructor for InCondition.</p>
@@ -41,20 +40,10 @@ public class InCondition<T> extends AbstractCondition<List<T>> {
 		this.selector = selector;
 		this.parameter = parameter;
 	}
-
-	/** {@inheritDoc} */
+	
 	@Override
-	public String createQueryFragment(AtomicInteger incrementor) {
-		return selector.createQueryFragment(incrementor) + " " + getFragment() + " ( " + parameter.generate(incrementor) + " ) ";
-	}
-
-	/**
-	 * <p>getFragment.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	protected String getFragment() {
-		return "in";
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
 	}
 
 }

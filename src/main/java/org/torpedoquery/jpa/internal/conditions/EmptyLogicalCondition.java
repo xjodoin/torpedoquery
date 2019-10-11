@@ -3,7 +3,6 @@ package org.torpedoquery.jpa.internal.conditions;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.ComparableFunction;
@@ -15,6 +14,7 @@ import org.torpedoquery.jpa.OnGoingStringCondition;
 import org.torpedoquery.jpa.Torpedo;
 import org.torpedoquery.jpa.ValueOnGoingCondition;
 import org.torpedoquery.jpa.internal.Condition;
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 import org.torpedoquery.jpa.internal.Parameter;
 
 /**
@@ -141,17 +141,6 @@ public class EmptyLogicalCondition implements OnGoingLogicalCondition, Condition
 
 	/** {@inheritDoc} */
 	@Override
-	public String createQueryFragment(AtomicInteger incrementor) {
-		if(delegate != null) {
-			return delegate.createQueryFragment(incrementor);
-		}else {
-			return "";	
-		}
-		
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public List<Parameter> getParameters() {
 		if(delegate != null) {
 			return delegate.getParameters();
@@ -171,6 +160,11 @@ public class EmptyLogicalCondition implements OnGoingLogicalCondition, Condition
 		else {
 			return null;
 		}
+	}
+	
+	@Override
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
 	}
 
 }

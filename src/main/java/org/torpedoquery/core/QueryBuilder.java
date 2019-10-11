@@ -30,88 +30,15 @@ import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
 import org.torpedoquery.jpa.internal.query.GroupBy;
 import org.torpedoquery.jpa.internal.query.OrderBy;
 import org.torpedoquery.jpa.internal.query.ValueParameter;
+
 public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
-
-	/**
-	 * <p>
-	 * getQuery.
-	 * </p>
-	 *
-	 * @param incrementor
-	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getQuery(AtomicInteger incrementor);
-
-	/**
-	 * <p>
-	 * appendOrderBy.
-	 * </p>
-	 *
-	 * @param builder
-	 *            a {@link java.lang.StringBuilder} object.
-	 * @param incrementor
-	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String appendOrderBy(StringBuilder builder, AtomicInteger incrementor);
-
-	/**
-	 * <p>
-	 * appendGroupBy.
-	 * </p>
-	 *
-	 * @param builder
-	 *            a {@link java.lang.StringBuilder} object.
-	 * @param incrementor
-	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String appendGroupBy(StringBuilder builder, AtomicInteger incrementor);
-
-	/**
-	 * <p>
-	 * appendWhereClause.
-	 * </p>
-	 *
-	 * @param builder
-	 *            a {@link java.lang.StringBuilder} object.
-	 * @param incrementor
-	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 * @return a {@link java.lang.StringBuilder} object.
-	 */
-	public StringBuilder appendWhereClause(StringBuilder builder, AtomicInteger incrementor);
-
-	/**
-	 * <p>
-	 * appendSelect.
-	 * </p>
-	 *
-	 * @param builder
-	 *            a {@link java.lang.StringBuilder} object.
-	 * @param incrementor
-	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 */
-	public void appendSelect(StringBuilder builder, AtomicInteger incrementor);
-
-	/**
-	 * <p>
-	 * getAlias.
-	 * </p>
-	 *
-	 * @param incrementor
-	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getAlias(AtomicInteger incrementor);
 
 	/**
 	 * <p>
 	 * addSelector.
 	 * </p>
 	 *
-	 * @param selector
-	 *            a {@link org.torpedoquery.jpa.internal.Selector} object.
+	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 */
 	public void addSelector(Selector selector);
 
@@ -120,8 +47,7 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 * addJoin.
 	 * </p>
 	 *
-	 * @param join
-	 *            a {@link org.torpedoquery.jpa.internal.Join} object.
+	 * @param join a {@link org.torpedoquery.jpa.internal.Join} object.
 	 */
 	public void addJoin(Join join);
 
@@ -139,8 +65,8 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 * getJoins.
 	 * </p>
 	 *
-	 * @param incrementor
-	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
+	 * @param incrementor a {@link java.util.concurrent.atomic.AtomicInteger}
+	 *                    object.
 	 * @return a {@link java.lang.String} object.
 	 */
 	public String getJoins(AtomicInteger incrementor);
@@ -150,10 +76,9 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 * setWhereClause.
 	 * </p>
 	 *
-	 * @param whereClause
-	 *            a
-	 *            {@link org.torpedoquery.jpa.internal.conditions.ConditionBuilder}
-	 *            object.
+	 * @param whereClause a
+	 *                    {@link org.torpedoquery.jpa.internal.conditions.ConditionBuilder}
+	 *                    object.
 	 */
 	public void setWhereClause(ConditionBuilder<T> whereClause);
 
@@ -171,8 +96,7 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 * setGroupBy.
 	 * </p>
 	 *
-	 * @param groupBy
-	 *            a {@link org.torpedoquery.jpa.internal.query.GroupBy} object.
+	 * @param groupBy a {@link org.torpedoquery.jpa.internal.query.GroupBy} object.
 	 */
 	public void setGroupBy(GroupBy groupBy);
 
@@ -181,10 +105,9 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 * setWithClause.
 	 * </p>
 	 *
-	 * @param withClause
-	 *            a
-	 *            {@link org.torpedoquery.jpa.internal.conditions.ConditionBuilder}
-	 *            object.
+	 * @param withClause a
+	 *                   {@link org.torpedoquery.jpa.internal.conditions.ConditionBuilder}
+	 *                   object.
 	 */
 	public void setWithClause(ConditionBuilder<T> withClause);
 
@@ -202,19 +125,23 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 * getWithClause.
 	 * </p>
 	 *
-	 * @param incrementor
-	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
+	 * @param incrementor a {@link java.util.concurrent.atomic.AtomicInteger}
+	 *                    object.
 	 * @return a {@link java.lang.String} object.
 	 */
 	public String getWithClause(AtomicInteger incrementor);
 
 	/**
-	 * <p>clearSelectors.</p>
+	 * <p>
+	 * clearSelectors.
+	 * </p>
 	 */
 	void clearSelectors();
 
 	/**
-	 * <p>getEntityName.</p>
+	 * <p>
+	 * getEntityName.
+	 * </p>
 	 *
 	 * @return a {@link java.lang.String} object.
 	 */

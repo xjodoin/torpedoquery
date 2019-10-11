@@ -21,7 +21,6 @@ package org.torpedoquery.jpa.internal.conditions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
@@ -53,32 +52,5 @@ public abstract class LogicalElement implements Condition {
 		parameters.addAll(right.getParameters());
 		return parameters;
 	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String createQueryFragment(AtomicInteger incrementor) {
-
-		String leftFragment = left.createQueryFragment(incrementor);
-		String rightFragment = right.createQueryFragment(incrementor);
-		
-		if (!leftFragment.isEmpty() && !rightFragment.isEmpty()) {
-			return leftFragment + getCondition() + rightFragment;
-		} else if (!leftFragment.isEmpty()) {
-			return leftFragment;
-		} else if (!rightFragment.isEmpty()) {
-			return rightFragment;
-		} else {
-			return "";
-		}
-	}
-
-	/**
-	 * <p>
-	 * getCondition.
-	 * </p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	protected abstract String getCondition();
 
 }

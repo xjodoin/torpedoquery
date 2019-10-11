@@ -19,24 +19,27 @@
  */
 package org.torpedoquery.jpa.internal.conditions;
 
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-public class GtCondition<T> extends SingleParameterCondition<T> {
+
+public class GtCondition extends SingleParameterCondition {
 
 	/**
-	 * <p>Constructor for GtCondition.</p>
+	 * <p>
+	 * Constructor for GtCondition.
+	 * </p>
 	 *
-	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
+	 * @param selector  a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 * @param parameter a {@link org.torpedoquery.jpa.internal.Parameter} object.
 	 */
-	public GtCondition(Selector selector, Parameter<T> parameter) {
+	public GtCondition(Selector selector, Parameter parameter) {
 		super(selector, parameter);
 	}
 
-	/** {@inheritDoc} */
 	@Override
-	protected String getComparator() {
-		return ">";
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
 	}
 
 }

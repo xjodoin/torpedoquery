@@ -19,12 +19,10 @@
  */
 package org.torpedoquery.jpa.internal.conditions;
 
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-public class NotEqualCondition<T> extends SingleParameterCondition<T> {
-
-	/** Constant <code>NOT_EQUAL="&lt;&gt;"</code> */
-	public static final String NOT_EQUAL = "<>";
+public class NotEqualCondition extends SingleParameterCondition {
 
 	/**
 	 * <p>Constructor for NotEqualCondition.</p>
@@ -32,14 +30,14 @@ public class NotEqualCondition<T> extends SingleParameterCondition<T> {
 	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 * @param parameter a {@link org.torpedoquery.jpa.internal.Parameter} object.
 	 */
-	public NotEqualCondition(Selector selector, Parameter<T> parameter) {
+	public NotEqualCondition(Selector selector, Parameter parameter) {
 		super(selector, parameter);
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	protected String getComparator() {
-		return NOT_EQUAL;
-	}
 
+	@Override
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
+	}
+	
 }

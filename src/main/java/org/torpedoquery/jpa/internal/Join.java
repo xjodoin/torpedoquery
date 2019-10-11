@@ -21,41 +21,18 @@ package org.torpedoquery.jpa.internal;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.internal.query.ValueParameter;
+
 public interface Join extends Serializable {
 
 	/**
-	 * <p>appendWhereClause.</p>
-	 *
-	 * @param builder a {@link java.lang.StringBuilder} object.
-	 * @param incrementor a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 */
-	void appendWhereClause(StringBuilder builder, AtomicInteger incrementor);
-
-	/**
-	 * <p>getJoin.</p>
-	 *
-	 * @param alias a {@link java.lang.String} object.
-	 * @param incrementor a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getJoin(String alias, AtomicInteger incrementor);
-
-	/**
-	 * <p>getParams.</p>
+	 * <p>
+	 * getParams.
+	 * </p>
 	 *
 	 * @return a {@link java.util.List} object.
 	 */
 	List<ValueParameter<?>> getParams();
-
-	/**
-	 * <p>appendGroupBy.</p>
-	 *
-	 * @param builder a {@link java.lang.StringBuilder} object.
-	 * @param incrementor a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 */
-	void appendGroupBy(StringBuilder builder, AtomicInteger incrementor);
 
 }

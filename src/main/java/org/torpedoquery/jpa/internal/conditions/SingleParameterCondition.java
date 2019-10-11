@@ -20,36 +20,25 @@
 package org.torpedoquery.jpa.internal.conditions;
 
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-public abstract class SingleParameterCondition<T> extends AbstractCondition<T> {
 
-	private final Parameter<T> parameter;
+public abstract class SingleParameterCondition extends AbstractCondition {
+
+	private final Parameter parameter;
 
 	/**
-	 * <p>Constructor for SingleParameterCondition.</p>
+	 * <p>
+	 * Constructor for SingleParameterCondition.
+	 * </p>
 	 *
-	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
+	 * @param selector  a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 * @param parameter a {@link org.torpedoquery.jpa.internal.Parameter} object.
 	 */
 	public SingleParameterCondition(Selector selector, Parameter parameter) {
 		super(selector, Arrays.asList(parameter));
 		this.parameter = parameter;
 	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String createQueryFragment(AtomicInteger incrementor) {
-		return getSelector().createQueryFragment(incrementor) + " " + getComparator() + " " + parameter.generate(incrementor);
-	}
-
-	/**
-	 * <p>getComparator.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	protected abstract String getComparator();
 
 }

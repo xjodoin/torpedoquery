@@ -19,23 +19,26 @@
  */
 package org.torpedoquery.jpa.internal.conditions;
 
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 import org.torpedoquery.jpa.internal.Selector;
-public class EqualPolymorphicCondition<T> extends PolymorphicCondition<T> {
+
+public class EqualPolymorphicCondition extends PolymorphicCondition {
 
 	/**
-	 * <p>Constructor for EqualPolymorphicCondition.</p>
+	 * <p>
+	 * Constructor for EqualPolymorphicCondition.
+	 * </p>
 	 *
-	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
+	 * @param selector  a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 * @param condition a {@link java.lang.Class} object.
 	 */
-	public EqualPolymorphicCondition(Selector selector, Class<? extends T> condition) {
+	public EqualPolymorphicCondition(Selector selector, Class<?> condition) {
 		super(selector, condition);
 	}
 
-	/** {@inheritDoc} */
 	@Override
-	protected String getComparator() {
-		return EqualCondition.EQUAL;
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
 	}
 
 }

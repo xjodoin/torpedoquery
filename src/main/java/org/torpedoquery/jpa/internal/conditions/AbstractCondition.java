@@ -24,7 +24,7 @@ import java.util.List;
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-public abstract class AbstractCondition<T> implements Condition {
+public abstract class AbstractCondition implements Condition {
 	private final Selector selector;
 	private final List<Parameter> parameters;
 

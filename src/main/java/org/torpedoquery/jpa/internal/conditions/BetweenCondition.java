@@ -22,9 +22,10 @@ package org.torpedoquery.jpa.internal.conditions;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-public class BetweenCondition<T> extends AbstractCondition<T> {
+public class BetweenCondition extends AbstractCondition {
 
 	/**
 	 * <p>Constructor for BetweenCondition.</p>
@@ -36,11 +37,10 @@ public class BetweenCondition<T> extends AbstractCondition<T> {
 		super(selector, parameters);
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public String createQueryFragment(AtomicInteger incrementor) {
-		return getSelector().createQueryFragment(incrementor) + " between " + getParameters().get(0).generate(incrementor) + " and "
-				+ getParameters().get(1).generate(incrementor);
-	}
 
+	@Override
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
+	}
+	
 }

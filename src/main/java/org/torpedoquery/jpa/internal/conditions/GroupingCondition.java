@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.internal.Condition;
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 import org.torpedoquery.jpa.internal.Parameter;
 public class GroupingCondition implements Condition {
 
@@ -42,19 +43,13 @@ public class GroupingCondition implements Condition {
 
 	/** {@inheritDoc} */
 	@Override
-	public String createQueryFragment(AtomicInteger incrementor) {
-		String queryFragment = condition.createQueryFragment(incrementor);
-		if (queryFragment != null && !queryFragment.isEmpty()) {
-			return "( " + queryFragment + " )";
-		} else {
-			return "";
-		}
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public List<Parameter> getParameters() {
 		return condition.getParameters();
+	}
+
+	@Override
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
 	}
 
 }

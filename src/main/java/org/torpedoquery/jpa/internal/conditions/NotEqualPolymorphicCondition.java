@@ -19,8 +19,9 @@
  */
 package org.torpedoquery.jpa.internal.conditions;
 
+import org.torpedoquery.jpa.internal.ConditionVisitor;
 import org.torpedoquery.jpa.internal.Selector;
-public class NotEqualPolymorphicCondition<T> extends PolymorphicCondition<T> {
+public class NotEqualPolymorphicCondition<T> extends PolymorphicCondition {
 
 	/**
 	 * <p>Constructor for NotEqualPolymorphicCondition.</p>
@@ -33,10 +34,10 @@ public class NotEqualPolymorphicCondition<T> extends PolymorphicCondition<T> {
 		super(selector, condition);
 	}
 
-	/** {@inheritDoc} */
 	@Override
-	protected String getComparator() {
-		return NotEqualCondition.NOT_EQUAL;
+	public <E> E accept(ConditionVisitor<E> visitior) {
+		return visitior.visit(this);
 	}
+
 
 }

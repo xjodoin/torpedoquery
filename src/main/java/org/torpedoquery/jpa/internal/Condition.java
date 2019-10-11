@@ -27,16 +27,7 @@ import org.torpedoquery.jpa.internal.query.ValueParameter;
 
 public interface Condition extends Serializable {
 
-	/**
-	 * <p>
-	 * createQueryFragment.
-	 * </p>
-	 *
-	 * @param incrementor
-	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	String createQueryFragment(AtomicInteger incrementor);
+	public <T> T accept(ConditionVisitor<T> visitior);
 
 	/**
 	 * <p>

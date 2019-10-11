@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.internal.Condition;
+import org.torpedoquery.jpa.internal.ConditionVisitor;
+import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
 public class IsNullCondition implements Condition {
 
@@ -40,13 +42,12 @@ public class IsNullCondition implements Condition {
 
 	/** {@inheritDoc} */
 	@Override
-	public String createQueryFragment(AtomicInteger incrementor) {
-		return selector.createQueryFragment(incrementor) + " is null";
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public List getParameters() {
+	public List<Parameter> getParameters() {
 		return Collections.emptyList();
+	}
+	
+	@Override
+	public <T> T accept(ConditionVisitor<T> visitior) {
+		return visitior.visit(this);
 	}
 }

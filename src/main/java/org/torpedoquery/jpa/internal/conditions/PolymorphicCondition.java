@@ -20,13 +20,12 @@
 package org.torpedoquery.jpa.internal.conditions;
 
 import java.util.Collections;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
-public abstract class PolymorphicCondition<T> extends AbstractCondition<T> {
+public abstract class PolymorphicCondition extends AbstractCondition {
 
-	private final Class<? extends T> condition;
+	private final Class<?> condition;
 	
 	/**
 	 * <p>Constructor for PolymorphicCondition.</p>
@@ -34,22 +33,9 @@ public abstract class PolymorphicCondition<T> extends AbstractCondition<T> {
 	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 * @param condition a {@link java.lang.Class} object.
 	 */
-	public PolymorphicCondition(Selector selector,Class<? extends T> condition) {
+	public PolymorphicCondition(Selector selector,Class<?> condition) {
 		super(selector, Collections.<Parameter>emptyList());
 		this.condition = condition;
 	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String createQueryFragment(AtomicInteger incrementor) {
-		return getSelector().createQueryFragment(incrementor) + ".class "+getComparator()+" " + condition.getSimpleName();
-	}
-	
-	/**
-	 * <p>getComparator.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	protected abstract String getComparator();
 
 }
