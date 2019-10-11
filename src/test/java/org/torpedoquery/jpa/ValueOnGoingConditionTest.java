@@ -119,7 +119,7 @@ public class ValueOnGoingConditionTest {
 		where(condition);
 		Query<Entity> select = select(entity);
 		assertEquals(
-				"select entity_0 from Entity entity_0 where ( lower(entity_0.code) like '%test%'  )",
+				"select entity_0 from Entity entity_0 where ( lower(entity_0.code) like :function_1 )",
 				select.getQuery());
 	}
 
