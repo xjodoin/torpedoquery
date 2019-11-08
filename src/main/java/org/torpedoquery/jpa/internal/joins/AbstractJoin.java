@@ -57,6 +57,42 @@ public abstract class AbstractJoin implements Join {
 	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
 	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
 	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
+	 * @param joinCondition a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition} object.
 	 */
 	public AbstractJoin(QueryBuilder<?> join, LogicalCondition joinCondition) {
 		this.join = join;

@@ -42,6 +42,7 @@ public final class Defaults {
 	 *
 	 * @param type a {@link java.lang.Class} object.
 	 * @return a T object.
+	 * @param <T> a T object.
 	 */
 	public static <T> T defaultValue(Class<T> type) {
 		@SuppressWarnings("unchecked") // the put method enforces this key-value relationship

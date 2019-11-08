@@ -25,7 +25,6 @@ import org.torpedoquery.core.QueryBuilderFactory;
 import org.torpedoquery.jpa.internal.utils.MultiClassLoaderProvider;
 import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
-
 public final class TorpedoMagic {
 
 	private static final ThreadLocal<TorpedoProxy> query = new ThreadLocal<>();
@@ -56,6 +55,7 @@ public final class TorpedoMagic {
 	 *
 	 * @return a {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler}
 	 *         object.
+	 * @param obj a {@link java.lang.Object} object.
 	 */
 	public static TorpedoMethodHandler getTorpedoMethodHandler(Object obj) {
 		if (obj instanceof TorpedoProxy) {
@@ -65,6 +65,11 @@ public final class TorpedoMagic {
 		}
 	}
 
+	/**
+	 * <p>getTorpedoMethodHandler.</p>
+	 *
+	 * @return a {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler} object.
+	 */
 	public static TorpedoMethodHandler getTorpedoMethodHandler() {
 		TorpedoProxy internalQuery = query.get();
 		if (internalQuery != null) {
