@@ -39,6 +39,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.junit.Test;
+import org.torpedoquery.core.TorpedoQueryException;
 import org.torpedoquery.jpa.test.bo.Entity;
 import org.torpedoquery.jpa.test.bo.ExtendEntity;
 import org.torpedoquery.jpa.test.bo.SubEntity;
@@ -557,5 +558,10 @@ public class TorpedoTest {
 		assertEquals(
 				"select entity_0 from Entity entity_0 inner join entity_0.subEntity subEntity_1 left join entity_0.subEntity subEntity_2",
 				select.getQuery());
+	}
+	
+	@Test(expected = TorpedoQueryException.class)
+	public void shouldThrowWhenCannontFindTorpedoQueryRef() {
+		select("test");
 	}
 }

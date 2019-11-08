@@ -48,8 +48,6 @@ public class ArrayCallHandler extends AbstractCallHandler implements QueryHandle
 
 		Iterator<MethodCall> iterator = methodCalls.descendingIterator();
 
-		TorpedoProxy proxy = null;
-
 		for (int i = 0; i < values.length; i++) {
 
 			Object param = values[i];

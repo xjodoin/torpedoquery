@@ -25,12 +25,13 @@ import org.torpedoquery.core.QueryBuilderFactory;
 import org.torpedoquery.jpa.internal.utils.MultiClassLoaderProvider;
 import org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
+
 public final class TorpedoMagic {
 
 	private static final ThreadLocal<TorpedoProxy> query = new ThreadLocal<>();
 	private static AtomicReference<QueryBuilderFactory> factory = new AtomicReference<>(
 			new DefaultQueryBuilderFactory());
-	
+
 	private static final ProxyFactoryFactory proxyFactoryFactory = new ProxyFactoryFactory(
 			new MultiClassLoaderProvider());
 
@@ -38,7 +39,9 @@ public final class TorpedoMagic {
 	}
 
 	/**
-	 * <p>Setter for the field <code>query</code>.</p>
+	 * <p>
+	 * Setter for the field <code>query</code>.
+	 * </p>
 	 *
 	 * @param query a {@link org.torpedoquery.jpa.internal.TorpedoProxy} object.
 	 */
@@ -47,17 +50,34 @@ public final class TorpedoMagic {
 	}
 
 	/**
-	 * <p>getTorpedoMethodHandler.</p>
+	 * <p>
+	 * getTorpedoMethodHandler.
+	 * </p>
 	 *
-	 * @return a {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler} object.
+	 * @return a {@link org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler}
+	 *         object.
 	 */
+	public static TorpedoMethodHandler getTorpedoMethodHandler(Object obj) {
+		if (obj instanceof TorpedoProxy) {
+			return ((TorpedoProxy) obj).getTorpedoMethodHandler();
+		} else {
+			return getTorpedoMethodHandler();
+		}
+	}
+
 	public static TorpedoMethodHandler getTorpedoMethodHandler() {
 		TorpedoProxy internalQuery = query.get();
-		return internalQuery.getTorpedoMethodHandler();
+		if (internalQuery != null) {
+			return internalQuery.getTorpedoMethodHandler();
+		} else {
+			return null;
+		}
 	}
 
 	/**
-	 * <p>getQueryBuilderFactory.</p>
+	 * <p>
+	 * getQueryBuilderFactory.
+	 * </p>
 	 *
 	 * @return a {@link org.torpedoquery.core.QueryBuilderFactory} object.
 	 */
@@ -66,18 +86,25 @@ public final class TorpedoMagic {
 	}
 
 	/**
-	 * <p>setup.</p>
+	 * <p>
+	 * setup.
+	 * </p>
 	 *
-	 * @param queryBuilderFactory a {@link org.torpedoquery.core.QueryBuilderFactory} object.
+	 * @param queryBuilderFactory a
+	 *                            {@link org.torpedoquery.core.QueryBuilderFactory}
+	 *                            object.
 	 */
 	public static void setup(QueryBuilderFactory queryBuilderFactory) {
 		factory.set(queryBuilderFactory);
 	}
 
 	/**
-	 * <p>getProxyfactoryfactory.</p>
+	 * <p>
+	 * getProxyfactoryfactory.
+	 * </p>
 	 *
-	 * @return a {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory} object.
+	 * @return a {@link org.torpedoquery.jpa.internal.utils.ProxyFactoryFactory}
+	 *         object.
 	 */
 	public static ProxyFactoryFactory getProxyfactoryfactory() {
 		return proxyFactoryFactory;
