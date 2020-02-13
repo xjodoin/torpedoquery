@@ -21,8 +21,10 @@ package org.torpedoquery.core;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.torpedoquery.jpa.OnGoingLogicalCondition;
 import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.Join;
 import org.torpedoquery.jpa.internal.Selector;
@@ -30,18 +32,7 @@ import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
 import org.torpedoquery.jpa.internal.query.GroupBy;
 import org.torpedoquery.jpa.internal.query.OrderBy;
 import org.torpedoquery.jpa.internal.query.ValueParameter;
-public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
-
-	/**
-	 * <p>
-	 * getQuery.
-	 * </p>
-	 *
-	 * @param incrementor
-	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getQuery(AtomicInteger incrementor);
+public interface QueryBuilder<T> extends Serializable {
 
 	/**
 	 * <p>
@@ -82,17 +73,6 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 */
 	public StringBuilder appendWhereClause(StringBuilder builder, AtomicInteger incrementor);
 
-	/**
-	 * <p>
-	 * appendSelect.
-	 * </p>
-	 *
-	 * @param builder
-	 *            a {@link java.lang.StringBuilder} object.
-	 * @param incrementor
-	 *            a {@link java.util.concurrent.atomic.AtomicInteger} object.
-	 */
-	public void appendSelect(StringBuilder builder, AtomicInteger incrementor);
 
 	/**
 	 * <p>
@@ -104,16 +84,6 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 * @return a {@link java.lang.String} object.
 	 */
 	public String getAlias(AtomicInteger incrementor);
-
-	/**
-	 * <p>
-	 * addSelector.
-	 * </p>
-	 *
-	 * @param selector
-	 *            a {@link org.torpedoquery.jpa.internal.Selector} object.
-	 */
-	public void addSelector(Selector selector);
 
 	/**
 	 * <p>
@@ -208,10 +178,6 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 */
 	public String getWithClause(AtomicInteger incrementor);
 
-	/**
-	 * <p>clearSelectors.</p>
-	 */
-	void clearSelectors();
 
 	/**
 	 * <p>getEntityName.</p>
@@ -226,5 +192,7 @@ public interface QueryBuilder<T> extends Query<T>, Cloneable, Serializable {
 	 * @param orderBy a {@link org.torpedoquery.jpa.internal.query.OrderBy} object.
 	 */
 	public void setOrderBy(OrderBy orderBy);
+
+	public Optional<OnGoingLogicalCondition> condition();
 
 }

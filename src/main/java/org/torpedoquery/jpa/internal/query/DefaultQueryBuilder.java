@@ -22,93 +22,37 @@ package org.torpedoquery.jpa.internal.query;
 import static org.torpedoquery.jpa.internal.conditions.ConditionHelper.getConditionClause;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
-import javax.persistence.NoResultException;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.OnGoingLogicalCondition;
-import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Join;
-import org.torpedoquery.jpa.internal.Parameter;
-import org.torpedoquery.jpa.internal.Selector;
-import org.torpedoquery.jpa.internal.TorpedoMagic;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
+
 public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private final Class<?> toQuery;
-	private final List<Selector> toSelect = new ArrayList<>();
 	private final List<Join> joins = new ArrayList<>();
 	private ConditionBuilder<T> whereClause;
 	private ConditionBuilder<T> withClause;
 
-	private String freezeQuery;
-
 	private String alias;
 	private OrderBy orderBy;
 	private GroupBy groupBy;
-
-	// paging infos
-	private int startPosition;
-	private int maxResult;
-	private LockModeType lockMode;
 
 	/**
 	 * <p>
 	 * Constructor for DefaultQueryBuilder.
 	 * </p>
 	 *
-	 * @param toQuery
-	 *            a {@link java.lang.Class} object.
+	 * @param toQuery a {@link java.lang.Class} object.
 	 */
 	public DefaultQueryBuilder(Class<?> toQuery) {
 		this.toQuery = toQuery;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getQuery(java.util.
-	 * concurrent.atomic.AtomicInteger)
-	 */
-	/** {@inheritDoc} */
-	@Override
-	public String getQuery(AtomicInteger incrementor) {
-		return freezeQuery(incrementor);
-	}
-
-	private String freezeQuery(AtomicInteger incrementor) {
-
-		if (freezeQuery == null) {
-			String from = " from " + getEntityName() + " " + getAlias(incrementor);
-			StringBuilder builder = new StringBuilder();
-
-			appendSelect(builder, incrementor);
-
-			builder.append(from)
-
-					.append(getJoins(incrementor))
-
-					.append(appendWhereClause(new StringBuilder(), incrementor))
-
-					.append(appendOrderBy(new StringBuilder(), incrementor))
-
-					.append(appendGroupBy(new StringBuilder(), incrementor));
-
-			freezeQuery = builder.toString().trim();
-
-		}
-		return freezeQuery;
 	}
 
 	/** {@inheritDoc} */
@@ -120,12 +64,6 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 			return e.name();
 		else
 			return toQuery.getSimpleName();
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String getQuery() {
-		return getQuery(new AtomicInteger());
 	}
 
 	/*
@@ -198,24 +136,6 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#appendSelect(java.lang.
-	 * StringBuilder, java.util.concurrent.atomic.AtomicInteger)
-	 */
-	/** {@inheritDoc} */
-	@Override
-	public void appendSelect(StringBuilder builder, AtomicInteger incrementor) {
-		for (Selector selector : toSelect) {
-			if (builder.length() == 0) {
-				builder.append("select ").append(selector.createQueryFragment(incrementor));
-			} else {
-				builder.append(", ").append(selector.createQueryFragment(incrementor));
-			}
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#getAlias(java.util.
 	 * concurrent.atomic.AtomicInteger)
 	 */
@@ -229,18 +149,6 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 			alias = new String(charArray) + "_" + incrementor.getAndIncrement();
 		}
 		return alias;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.torpedoquery.jpa.internal.query.QueryBuilder#addSelector(org.
-	 * torpedoquery.jpa.internal.Selector)
-	 */
-	/** {@inheritDoc} */
-	@Override
-	public void addSelector(Selector selector) {
-		toSelect.add(selector);
 	}
 
 	/*
@@ -301,20 +209,6 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		}
 
 		this.whereClause = whereClause;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public Map<String, Object> getParameters() {
-
-		freezeQuery(new AtomicInteger());
-
-		Map<String, Object> params = new HashMap<>();
-		List<ValueParameter<?>> parameters = getValueParameters();
-		for (ValueParameter parameter : parameters) {
-			params.put(parameter.getName(), parameter.getValue());
-		}
-		return params;
 	}
 
 	/*
@@ -384,60 +278,6 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 		this.withClause = withClause;
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public Optional<T> get(EntityManager entityManager) {
-		try {
-			return Optional.<T>ofNullable((T) createJPAQuery(entityManager).getSingleResult());
-		} catch (NoResultException e) {
-			return Optional.empty();
-		}
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public List<T> list(EntityManager entityManager) {
-		return createJPAQuery(entityManager).getResultList();
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public <E> List<E> map(EntityManager entityManager, Function<T, E> function) {
-		List<T> toConvert = list(entityManager);
-		List<E> result = new ArrayList<>();
-
-		for (T value : toConvert) {
-			result.add(function.apply(value));
-		}
-		return result;
-	}
-
-	private javax.persistence.Query createJPAQuery(EntityManager entityManager) {
-		final javax.persistence.Query query = entityManager.createQuery(getQuery(new AtomicInteger()));
-
-		if (startPosition >= 0) {
-			query.setFirstResult(startPosition);
-		}
-
-		if (maxResult > 0) {
-			query.setMaxResults(maxResult);
-		}
-
-		if (lockMode != null) {
-			query.setLockMode(lockMode);
-		}
-
-		final Map<String, Object> parameters = getParameters();
-
-		for (Entry<String, Object> parameter : parameters.entrySet()) {
-			query.setParameter(parameter.getKey(), parameter.getValue());
-		}
-
-		TorpedoMagic.setQuery(null);
-
-		return query;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -472,65 +312,9 @@ public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Query<T> setFirstResult(int startPosition) {
-		this.startPosition = startPosition;
-		return this;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public Query<T> setMaxResults(int maxResult) {
-		this.maxResult = maxResult;
-		return this;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public Object getProxy() {
-		return null;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String createQueryFragment(AtomicInteger incrementor) {
-		return "( " + getQuery(incrementor) + " )";
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public Parameter<T> generateParameter(T value) {
-		return null;
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public Optional<OnGoingLogicalCondition> condition() {
 		return Optional.ofNullable(Optional.ofNullable(whereClause).orElse(withClause))
 				.map(ConditionBuilder::getLogicalCondition);
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public void clearSelectors() {
-		toSelect.clear();
-	}
-
-	/**
-	 * <p>
-	 * freeze.
-	 * </p>
-	 *
-	 * @return a {@link org.torpedoquery.jpa.Query} object.
-	 */
-	public Query<T> freeze() {
-		QueryBuilder clone = SerializationUtils.clone(this);
-		return clone;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public Query<T> setLockMode(LockModeType lockMode) {
-		this.lockMode = lockMode;
-		return this;
-	}
 }

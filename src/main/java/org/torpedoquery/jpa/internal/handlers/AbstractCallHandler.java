@@ -31,6 +31,7 @@ import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.selectors.ObjectSelector;
 import org.torpedoquery.jpa.internal.selectors.SimpleMethodCallSelector;
+
 public abstract class AbstractCallHandler<T> {
 
 	/**
@@ -55,8 +56,8 @@ public abstract class AbstractCallHandler<T> {
 		if (param instanceof Query) {
 			Query query = (Query) param;
 			selector = query;
-			queryBuilder = (QueryBuilder) param;
 			proxy = (TorpedoProxy) query.getProxy();
+			queryBuilder = proxyQueryBuilders.get(proxy);
 		} else if (param instanceof Function) {
 			Function function = (Function) param;
 			selector = function;

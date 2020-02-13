@@ -20,6 +20,7 @@
 package org.torpedoquery.jpa.internal.conditions;
 
 import org.torpedoquery.core.QueryBuilder;
+import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.Selector;
 public class NotInSubQueryCondition<T> extends InSubQueryCondition<T> {
 
@@ -29,7 +30,7 @@ public class NotInSubQueryCondition<T> extends InSubQueryCondition<T> {
 	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 * @param query a {@link org.torpedoquery.core.QueryBuilder} object.
 	 */
-	public NotInSubQueryCondition(Selector selector, QueryBuilder query) {
+	public NotInSubQueryCondition(Selector selector, Query query) {
 		super(selector, query);
 	}
 

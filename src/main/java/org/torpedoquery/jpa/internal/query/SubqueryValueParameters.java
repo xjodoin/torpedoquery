@@ -19,17 +19,12 @@
  */
 package org.torpedoquery.jpa.internal.query;
 
-import org.torpedoquery.core.QueryBuilder;
-import org.torpedoquery.jpa.Query;
-import org.torpedoquery.jpa.internal.Parameter;
-import org.torpedoquery.jpa.internal.Selector;
-
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import org.torpedoquery.jpa.Query;
 public class SubqueryValueParameters<T> extends SelectorParameter<T> {
 
-    private final QueryBuilder<T> value;
+    private final Query<T> value;
 
     /**
      * <p>Constructor for SubqueryValueParameters.</p>
@@ -38,7 +33,7 @@ public class SubqueryValueParameters<T> extends SelectorParameter<T> {
      */
     public SubqueryValueParameters(Query<T> selector) {
         super(selector);
-        this.value = (QueryBuilder<T>) selector;
+        this.value = selector;
     }
 
     /**

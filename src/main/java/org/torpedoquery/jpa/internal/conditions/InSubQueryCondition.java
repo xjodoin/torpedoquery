@@ -22,14 +22,14 @@ package org.torpedoquery.jpa.internal.conditions;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.torpedoquery.core.QueryBuilder;
+import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
 public class InSubQueryCondition<T> implements Condition {
 
 	private final Selector selector;
-	private final QueryBuilder subQuery;
+	private final Query subQuery;
 
 	/**
 	 * <p>Constructor for InSubQueryCondition.</p>
@@ -37,7 +37,7 @@ public class InSubQueryCondition<T> implements Condition {
 	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 * @param query a {@link org.torpedoquery.core.QueryBuilder} object.
 	 */
-	public InSubQueryCondition(Selector selector, QueryBuilder query) {
+	public InSubQueryCondition(Selector selector, Query query) {
 		this.selector = selector;
 		this.subQuery = query;
 	}

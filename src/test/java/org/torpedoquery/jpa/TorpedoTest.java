@@ -65,30 +65,36 @@ public class TorpedoTest {
 	@Test
 	public void test_createFreezeQuery() {
 		final Entity entity = from(Entity.class);
-		org.torpedoquery.jpa.Query<Entity> select = select(entity).freeze();
+		org.torpedoquery.jpa.Query<Entity> select = select(entity);
 		org.torpedoquery.jpa.Query<String> select2 = select(entity.getName());
 		assertEquals("select entity_0 from Entity entity_0", select.getQuery());
 		assertEquals("select entity_0.name from Entity entity_0", select2.getQuery());
 	}
-
+	
 	@Test
-	public void test_createQueryTwiceWithDifferentCondition() {
+	public void test_createFreezeQueryWithFunction() {
 		final Entity entity = from(Entity.class);
-		org.torpedoquery.jpa.Query<Entity> select = select(entity).freeze();
-		where(entity.getIntegerField()).eq(10);
-		org.torpedoquery.jpa.Query<String> select2 = select(entity.getName());
+		org.torpedoquery.jpa.Query<Entity> select = select(entity);
+		org.torpedoquery.jpa.Query<Long> select2 = select(count(entity));
 		assertEquals("select entity_0 from Entity entity_0", select.getQuery());
-		assertEquals("select entity_0.name from Entity entity_0 where entity_0.integerField = :integerField_1",
-				select2.getQuery());
-		assertNull(select.getParameters().get("integerField_1"));
-		assertEquals(10, select2.getParameters().get("integerField_1"));
+		assertEquals("select count(entity_0) from Entity entity_0", select2.getQuery());
 	}
 	
+	@Test
+	public void test_createFreezeQueryWithJoin() {
+		final Entity entity = from(Entity.class);
+		SubEntity subEntity = innerJoin(entity.getSubEntities());
+		org.torpedoquery.jpa.Query<Entity> select = select(entity);
+		org.torpedoquery.jpa.Query<String> select2 = select(subEntity.getName());
+		assertEquals("select entity_0 from Entity entity_0 inner join entity_0.subEntities subEntity_1", select.getQuery());
+		assertEquals("select subEntity_1.name from Entity entity_0 inner join entity_0.subEntities subEntity_1", select2.getQuery());
+	}
+
 	@Test
 	public void test_createFeeezeWithPrimitive() {
 		final Entity entity = from(Entity.class);
 		where(entity.getPrimitiveInt()).eq(10);
-		org.torpedoquery.jpa.Query<Entity> select = select(entity).freeze();
+		org.torpedoquery.jpa.Query<Entity> select = select(entity);
 		
 		assertEquals("select entity_0 from Entity entity_0 where entity_0.primitiveInt = :primitiveInt_1",
 				select.getQuery());
@@ -99,7 +105,7 @@ public class TorpedoTest {
 	public void test_createFeeezeWithPrimitiveLong() {
 		final Entity entity = from(Entity.class);
 		where(entity.getPrimitiveLong()).eq(10L);
-		org.torpedoquery.jpa.Query<Entity> select = select(entity).freeze();
+		org.torpedoquery.jpa.Query<Entity> select = select(entity);
 		
 		assertEquals("select entity_0 from Entity entity_0 where entity_0.primitiveLong = :primitiveLong_1",
 				select.getQuery());
@@ -110,7 +116,7 @@ public class TorpedoTest {
 	public void test_createFeeezeWithCountFunction() {
 		final Entity entity = from(Entity.class);
 		where(entity.getPrimitiveInt()).eq(10);
-		org.torpedoquery.jpa.Query<Long> select = select(count(entity)).freeze();
+		org.torpedoquery.jpa.Query<Long> select = select(count(entity));
 		
 		assertEquals("select count(entity_0) from Entity entity_0 where entity_0.primitiveInt = :primitiveInt_1",
 				select.getQuery());
@@ -121,7 +127,7 @@ public class TorpedoTest {
 	public void test_createFeeezeAndCondition() {
 		final Entity entity = from(Entity.class);
 		where(entity.getPrimitiveInt()).eq(10).and(entity.getIntegerField()).eq(20);
-		org.torpedoquery.jpa.Query<Long> select = select(count(entity)).freeze();
+		org.torpedoquery.jpa.Query<Long> select = select(count(entity));
 		
 		assertEquals("select count(entity_0) from Entity entity_0 where entity_0.primitiveInt = :primitiveInt_1 and entity_0.integerField = :integerField_2",
 				select.getQuery());

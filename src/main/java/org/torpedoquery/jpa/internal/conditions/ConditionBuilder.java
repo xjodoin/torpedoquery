@@ -41,6 +41,7 @@ import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.conditions.LikeCondition.Type;
 import org.torpedoquery.jpa.internal.selectors.NotSelector;
 import org.torpedoquery.jpa.internal.selectors.SizeSelector;
+
 public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoingStringCondition<T>,
 		OnGoingLikeCondition, OnGoingCollectionCondition<T>, Condition, Serializable {
 	private Selector selector;
@@ -53,10 +54,8 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	 * Constructor for ConditionBuilder.
 	 * </p>
 	 *
-	 * @param builder
-	 *            a {@link org.torpedoquery.core.QueryBuilder} object.
-	 * @param selector
-	 *            a {@link org.torpedoquery.jpa.internal.Selector} object.
+	 * @param builder  a {@link org.torpedoquery.core.QueryBuilder} object.
+	 * @param selector a {@link org.torpedoquery.jpa.internal.Selector} object.
 	 */
 	public ConditionBuilder(QueryBuilder<T> builder, Selector<?> selector) {
 		this.logicalCondition = new LogicalCondition(builder, this);
@@ -68,12 +67,11 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	 * Constructor for ConditionBuilder.
 	 * </p>
 	 *
-	 * @param logicalCondition
-	 *            a
-	 *            {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition}
-	 *            object.
-	 * @param selector
-	 *            a {@link org.torpedoquery.jpa.internal.Selector} object.
+	 * @param logicalCondition a
+	 *                         {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition}
+	 *                         object.
+	 * @param selector         a {@link org.torpedoquery.jpa.internal.Selector}
+	 *                         object.
 	 */
 	public ConditionBuilder(LogicalCondition logicalCondition, Selector<?> selector) {
 		this.logicalCondition = logicalCondition;
@@ -85,8 +83,7 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	 * Getter for the field <code>logicalCondition</code>.
 	 * </p>
 	 *
-	 * @return a
-	 *         {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition}
+	 * @return a {@link org.torpedoquery.jpa.internal.conditions.LogicalCondition}
 	 *         object.
 	 */
 	public LogicalCondition getLogicalCondition() {
@@ -179,7 +176,7 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition in(Query<T> query) {
-		Condition conditionLocal = new InSubQueryCondition<T>(selector, (QueryBuilder) query);
+		Condition conditionLocal = new InSubQueryCondition<T>(selector, query);
 		return getOnGoingLogicalCondition(conditionLocal);
 	}
 
@@ -198,7 +195,7 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition notIn(Query<T> subQuery) {
-		return getOnGoingLogicalCondition(new NotInSubQueryCondition<T>(selector, (QueryBuilder) subQuery));
+		return getOnGoingLogicalCondition(new NotInSubQueryCondition<T>(selector, subQuery));
 	}
 
 	/** {@inheritDoc} */
@@ -232,7 +229,7 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 	public OnGoingLikeCondition like() {
 		return this;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition like(String likeValue) {
@@ -245,7 +242,7 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 		notLike = true;
 		return this;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public OnGoingLogicalCondition notLike(String notLikeValue) {
@@ -377,11 +374,11 @@ public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoi
 				Arrays.asList(selector.generateParameter(from), selector.generateParameter(to)));
 		return getOnGoingLogicalCondition(conditionLocal);
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public <T> QueryBuilder<T> getBuilder() {
 		return logicalCondition.getBuilder();
 	}
-	
+
 }

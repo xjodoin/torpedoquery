@@ -18,8 +18,10 @@ package org.torpedoquery.jpa;
 import static org.torpedoquery.jpa.internal.TorpedoMagic.getTorpedoMethodHandler;
 import static org.torpedoquery.jpa.internal.TorpedoMagic.setQuery;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.torpedoquery.core.QueryBuilder;
@@ -39,6 +41,7 @@ import org.torpedoquery.jpa.internal.handlers.WhereClauseHandler;
 import org.torpedoquery.jpa.internal.joins.InnerJoinBuilder;
 import org.torpedoquery.jpa.internal.joins.LeftJoinBuilder;
 import org.torpedoquery.jpa.internal.joins.RightJoinBuilder;
+import org.torpedoquery.jpa.internal.query.DefaultQuery;
 import org.torpedoquery.jpa.internal.query.DefaultQueryBuilder;
 import org.torpedoquery.jpa.internal.query.GroupBy;
 import org.torpedoquery.jpa.internal.query.OrderBy;
@@ -209,18 +212,18 @@ public class Torpedo extends TorpedoFunction {
 		}
 
 		final QueryBuilder root = methodHandler.getRoot();
-		root.clearSelectors();
+		List<Selector> selectors = new ArrayList<Selector>();
 
 		methodHandler.handle(new ArrayCallHandler(new ValueHandler<Void>() {
 
 			@Override
 			public Void handle(TorpedoProxy query, QueryBuilder queryBuilder, Selector selector) {
-				root.addSelector(selector);
+				selectors.add(selector);
 				return null;
 			}
 		}, values));
 
-		return root;
+		return new DefaultQuery<Object[]>(root, selectors);
 
 	}
 
@@ -762,8 +765,8 @@ public class Torpedo extends TorpedoFunction {
 	 * @return a {@link org.torpedoquery.jpa.OnGoingStringCondition} object.
 	 */
 	public static OnGoingStringCondition<String> condition(Function<String> object) {
-		return getTorpedoMethodHandler(object).handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(object,
-				new DoNothingQueryConfigurator<String>()));
+		return getTorpedoMethodHandler(object).handle(new WhereClauseHandler<String, OnGoingStringCondition<String>>(
+				object, new DoNothingQueryConfigurator<String>()));
 	}
 
 	/**

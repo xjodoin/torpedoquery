@@ -18,10 +18,14 @@ package org.torpedoquery.jpa;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
+
+import org.torpedoquery.jpa.internal.Parameter;
+import org.torpedoquery.jpa.internal.query.ValueParameter;
 
 /**
  *
@@ -42,6 +46,8 @@ public interface Query<T> extends ComparableFunction<T>, Cloneable {
 	 * @return the generated query string
 	 */
 	String getQuery();
+	
+	String getQuery(AtomicInteger incrementor);
 
 	/**
 	 * <p>
@@ -51,6 +57,8 @@ public interface Query<T> extends ComparableFunction<T>, Cloneable {
 	 * @return query parameters
 	 */
 	Map<String, Object> getParameters();
+	
+	List<ValueParameter<?>> getValueParameters();
 
 	/**
 	 *
@@ -117,17 +125,12 @@ public interface Query<T> extends ComparableFunction<T>, Cloneable {
 	Optional<OnGoingLogicalCondition> condition();
 	
 	/**
-	 * <p>freeze.</p>
-	 *
-	 * @return return the a freeze
-	 */
-	Query<T> freeze();
-
-	/**
 	 * <p>setLockMode.</p>
 	 *
 	 * @param lockMode a {@link javax.persistence.LockModeType} object.
 	 * @return a {@link org.torpedoquery.jpa.Query} object.
 	 */
 	Query<T> setLockMode(LockModeType lockMode);
+
+	
 }
