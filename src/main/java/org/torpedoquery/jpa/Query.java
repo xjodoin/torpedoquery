@@ -47,6 +47,12 @@ public interface Query<T> extends ComparableFunction<T>, Cloneable {
 	 */
 	String getQuery();
 	
+	/**
+	 * <p>getQuery.</p>
+	 *
+	 * @param incrementor a {@link java.util.concurrent.atomic.AtomicInteger} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	String getQuery(AtomicInteger incrementor);
 
 	/**
@@ -58,6 +64,11 @@ public interface Query<T> extends ComparableFunction<T>, Cloneable {
 	 */
 	Map<String, Object> getParameters();
 	
+	/**
+	 * <p>getValueParameters.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	List<ValueParameter<?>> getValueParameters();
 
 	/**

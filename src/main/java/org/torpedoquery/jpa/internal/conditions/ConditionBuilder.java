@@ -41,7 +41,6 @@ import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.conditions.LikeCondition.Type;
 import org.torpedoquery.jpa.internal.selectors.NotSelector;
 import org.torpedoquery.jpa.internal.selectors.SizeSelector;
-
 public class ConditionBuilder<T> implements OnGoingComparableCondition<T>, OnGoingStringCondition<T>,
 		OnGoingLikeCondition, OnGoingCollectionCondition<T>, Condition, Serializable {
 	private Selector selector;

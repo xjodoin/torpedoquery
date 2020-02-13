@@ -33,7 +33,6 @@ import org.torpedoquery.jpa.OnGoingLogicalCondition;
 import org.torpedoquery.jpa.internal.Condition;
 import org.torpedoquery.jpa.internal.Join;
 import org.torpedoquery.jpa.internal.conditions.ConditionBuilder;
-
 public class DefaultQueryBuilder<T> implements QueryBuilder<T> {
 	private final Class<?> toQuery;
 	private final List<Join> joins = new ArrayList<>();

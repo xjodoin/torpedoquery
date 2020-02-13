@@ -193,6 +193,11 @@ public interface QueryBuilder<T> extends Serializable {
 	 */
 	public void setOrderBy(OrderBy orderBy);
 
+	/**
+	 * <p>condition.</p>
+	 *
+	 * @return a {@link java.util.Optional} object.
+	 */
 	public Optional<OnGoingLogicalCondition> condition();
 
 }

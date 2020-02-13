@@ -38,7 +38,6 @@ import org.torpedoquery.jpa.Query;
 import org.torpedoquery.jpa.internal.Parameter;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoMagic;
-
 public class DefaultQuery<T> implements Query<T> {
 
 	private List<Selector> toSelect;
@@ -55,13 +54,15 @@ public class DefaultQuery<T> implements Query<T> {
 	 * Constructor for DefaultQueryBuilder.
 	 * </p>
 	 *
-	 * @param toQuery a {@link java.lang.Class} object.
+	 * @param builder a {@link org.torpedoquery.core.QueryBuilder} object.
+	 * @param toSelect a {@link java.util.List} object.
 	 */
 	public DefaultQuery(QueryBuilder<T> builder, List<Selector> toSelect) {
 		this.queryBuilder = builder;
 		this.toSelect = new ArrayList<Selector>(toSelect);
 	}
 
+	/** {@inheritDoc} */
 	public String getQuery(AtomicInteger incrementor) {
 		if (freezeQuery == null) {
 			String from = " from " + queryBuilder.getEntityName() + " " + queryBuilder.getAlias(incrementor);
@@ -90,6 +91,12 @@ public class DefaultQuery<T> implements Query<T> {
 		return getQuery(new AtomicInteger());
 	}
 
+	/**
+	 * <p>appendSelect.</p>
+	 *
+	 * @param builder a {@link java.lang.StringBuilder} object.
+	 * @param incrementor a {@link java.util.concurrent.atomic.AtomicInteger} object.
+	 */
 	public void appendSelect(StringBuilder builder, AtomicInteger incrementor) {
 		for (Selector selector : toSelect) {
 			if (builder.length() == 0) {
@@ -115,6 +122,7 @@ public class DefaultQuery<T> implements Query<T> {
 		return params;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<ValueParameter<?>> getValueParameters() {
 		return queryBuilder.getValueParameters();

@@ -31,7 +31,6 @@ import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.selectors.ObjectSelector;
 import org.torpedoquery.jpa.internal.selectors.SimpleMethodCallSelector;
-
 public abstract class AbstractCallHandler<T> {
 
 	/**

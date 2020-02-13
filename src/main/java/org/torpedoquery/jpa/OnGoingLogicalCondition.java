@@ -46,6 +46,7 @@ public interface OnGoingLogicalCondition extends Serializable {
 	 * @param property a T object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
+	 * @param <T> a T object.
 	 */
 	<V, T extends Comparable<V>> OnGoingComparableCondition<V> and(T property);
 	
@@ -55,6 +56,7 @@ public interface OnGoingLogicalCondition extends Serializable {
 	 * @param property a T object.
 	 * @param <V> a V object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
+	 * @param <T> a T object.
 	 */
 	<V, T extends Comparable<V>> OnGoingComparableCondition<V> or(T property);
 
@@ -64,6 +66,7 @@ public interface OnGoingLogicalCondition extends Serializable {
 	 * @param property a {@link org.torpedoquery.jpa.ComparableFunction} object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
 	 * @param <V> a V object.
+	 * @param <T> a T object.
 	 */
 	<V, T extends Comparable<V>> OnGoingComparableCondition<V> and(ComparableFunction<T> property);
 	
@@ -73,6 +76,7 @@ public interface OnGoingLogicalCondition extends Serializable {
 	 * @param property a {@link org.torpedoquery.jpa.ComparableFunction} object.
 	 * @return a {@link org.torpedoquery.jpa.OnGoingComparableCondition} object.
 	 * @param <V> a V object.
+	 * @param <T> a T object.
 	 */
 	<V, T extends Comparable<V>> OnGoingComparableCondition<V> or(ComparableFunction<T> property);
 	
