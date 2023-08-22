@@ -1,12 +1,9 @@
 TorpedoQuery
 ============
-[Get supported org.torpedoquery:org.torpedoquery with the Tidelift Subscription](https://tidelift.com/subscription/pkg/maven-org-torpedoquery-org-torpedoquery?utm_source=maven-org-torpedoquery-org-torpedoquery&utm_medium=referral&utm_campaign=readme) 
 
 ## Status
 
-[![Build Status](https://secure.travis-ci.org/xjodoin/torpedoquery.png?branch=master)](http://travis-ci.org/xjodoin/torpedoquery)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.torpedoquery/org.torpedoquery/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.torpedoquery/org.torpedoquery)
-[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/org.torpedoquery/org.torpedoquery/badge.svg)](http://www.javadoc.io/doc/org.torpedoquery/org.torpedoquery)
 [![license](https://img.shields.io/github/license/xjodoin/torpedoquery.svg)](https://github.com/xjodoin/torpedoquery/blob/master/LICENSE)
 
 
@@ -15,45 +12,75 @@ TorpedoQuery
 Simple and powerful query builder for your project. Can be use with any existing Hibernate or JPA application.  
 Stop wasting your time to maintain complex HQL queries and start today with the new generation of query builder.
 
+**Torpedo Query Quick Start Guide**
 
-#### Quick start ####
+**Step 1:** **Set Up Your Environment**
 
-  	First add this import static org.torpedoquery.jpa.Torpedo.*;
+Start by importing the necessary classes from the Torpedo Query library. This will enable you to use the query methods directly.
+```java
+import static org.torpedoquery.jpa.Torpedo.*;
+```
 
-  	1. Create simple select
+**Step 2:** **Simple Select Query**
 
-  		Entity entity = from(Entity.class);
- 		org.torpedoquery.jpa.Query<Entity> select = select(entity);
+A basic query retrieves all columns for the Entity rows. This can be compared to SQL's `SELECT *`.
+```java
+Entity entity = from(Entity.class);
+org.torpedoquery.jpa.Query<Entity> selectQuery = select(entity);
+```
 
- 	2. Create scalar queries
+**Step 3:** **Scalar Queries**
 
- 		Entity entity = from(Entity.class);
- 		org.torpedoquery.jpa.Query<String> select = select(entity.getCode());
+Scalar queries return specific columns rather than the entire row. This is useful when you only need particular data points.
+```java
+Entity entity = from(Entity.class);
+org.torpedoquery.jpa.Query<String> scalarQuery = select(entity.getCode());
+```
 
-   	3. How to execute your query
+**Step 4:** **Executing Your Query**
 
-   		Entity entity = from(Entity.class);
- 		org.torpedoquery.jpa.Query<Entity> select = select(entity);
- 		List<Entity> entityList = select.list(entityManager);
+After constructing your query, execute it using an `EntityManager` to retrieve results. Here, we're getting a list of entities.
+```java
+Entity entity = from(Entity.class);
+org.torpedoquery.jpa.Query<Entity> selectQuery = select(entity);
+List<Entity> entityList = selectQuery.list(entityManager);
+```
 
- 	4. Create simple condition
+**Step 5:** **Adding Conditions**
 
- 		Entity entity = from(Entity.class);
- 		where(entity.getCode()).eq("mycode");
- 		org.torpedoquery.jpa.Query<Entity> select = select(entity);
+Queries can be filtered using conditions. Here, we're querying entities with a specific code.
+```java
+Entity entity = from(Entity.class);
+where(entity.getCode()).eq("mycode");
+org.torpedoquery.jpa.Query<Entity> conditionalQuery = select(entity);
+```
+The `.eq("mycode")` is equivalent to SQL's `WHERE code = 'mycode'`.
 
- 	5. Create join on your entities
+**Step 6:** **Joining Entities**
 
- 		Entity entity = from(Entity.class);
- 		SubEntity subEntity = innerJoin(entity.getSubEntities());
- 		org.torpedoquery.jpa.Query<String[]> select = select(entity.getCode(), subEntity.getName());
+Torpedo Query supports joining tables. Here's how you can create an inner join between `Entity` and its associated `SubEntity`.
+```java
+Entity entity = from(Entity.class);
+SubEntity subEntity = innerJoin(entity.getSubEntities());
+org.torpedoquery.jpa.Query<String[]> joinQuery = select(entity.getCode(), subEntity.getName());
+```
+The result will be a combination of `entity.getCode()` and `subEntity.getName()` for each matching row.
 
-   	6. Group your conditions
+**Step 7:** **Grouping Conditions**
 
-   		Entity from = from(Entity.class);
- 		OnGoingLogicalCondition condition = condition(from.getCode()).eq("test").or(from.getCode()).eq("test2");
- 		where(from.getName()).eq("test").and(condition);
- 		Query<Entity> select = select(from);
+Complex conditions can be grouped together using logical operations like `and` & `or`.
+```java
+Entity fromEntity = from(Entity.class);
+OnGoingLogicalCondition groupedCondition = condition(fromEntity.getCode()).eq("test")
+                                               .or(fromEntity.getCode()).eq("test2");
+where(fromEntity.getName()).eq("test").and(groupedCondition);
+Query<Entity> groupedSelect = select(fromEntity);
+```
+Here, we're selecting entities where the name equals "test" and the code is either "test" or "test2".
+
+---
+
+Remember, always refer to the official documentation of Torpedo Query for a comprehensive understanding and best practices. This guide is meant to get you started quickly, but the library offers much more flexibility and depth.
 
 
 #### How to Improve It ####
