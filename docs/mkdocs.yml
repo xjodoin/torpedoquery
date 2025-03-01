@@ -1,0 +1,57 @@
+site_name: TorpedoQuery
+site_description: 'Simple and powerful query builder for JPA/Hibernate applications'
+site_url: 'https://xjodoin.github.io/torpedoquery'
+repo_name: 'xjodoin/torpedoquery'
+repo_url: 'https://github.com/xjodoin/torpedoquery'
+theme:
+  name: material
+  palette:
+    primary: 'indigo'
+    accent: 'indigo'
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+  icon:
+    repo: fontawesome/brands/github
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.tabbed
+  - pymdownx.superfences
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quick-start.md
+  - Core Concepts:
+    - Basic Queries: core-concepts/basic-queries.md
+    - Joins: core-concepts/joins.md
+    - Conditions: core-concepts/conditions.md
+    - Functions: core-concepts/functions.md
+    - Group By: core-concepts/groupby.md
+    - Order By: core-concepts/orderby.md
+  - Advanced:
+    - Subqueries: advanced/subqueries.md
+    - Dynamic Queries: advanced/dynamic-queries.md
+    - Examples: advanced/examples.md
+  - API Reference: api-reference.md
+  - Contributing: contributing.md
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/xjodoin/torpedoquery
+  version:
+    provider: mike
+  analytics:
+    provider: google
+    property: G-LMLF9XGDMZ  
+plugins:
+  - search
+  - minify:
+      minify_html: true
