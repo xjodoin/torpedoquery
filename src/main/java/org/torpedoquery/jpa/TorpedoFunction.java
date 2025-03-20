@@ -26,23 +26,13 @@ import org.torpedoquery.core.QueryBuilder;
 import org.torpedoquery.jpa.internal.Selector;
 import org.torpedoquery.jpa.internal.TorpedoProxy;
 import org.torpedoquery.jpa.internal.functions.CoalesceFunction;
+import org.torpedoquery.jpa.internal.functions.ConcatFunction;
 import org.torpedoquery.jpa.internal.functions.DynamicInstantiationFunction;
-import org.torpedoquery.jpa.internal.handlers.ArrayCallHandler;
-import org.torpedoquery.jpa.internal.handlers.AscFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.AvgFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.ComparableConstantFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.ConstantFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.CustomFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.DescFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.DistinctFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.IndexFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.MathOperationHandler;
-import org.torpedoquery.jpa.internal.handlers.MaxFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.MinFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.SubstringFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.SumFunctionHandler;
-import org.torpedoquery.jpa.internal.handlers.ValueHandler;
+import org.torpedoquery.jpa.internal.handlers.*;
 import org.torpedoquery.jpa.internal.utils.TorpedoMethodHandler;
+
+import java.util.Objects;
+
 public class TorpedoFunction {
 
 	// JPA Functions
@@ -206,7 +196,44 @@ public class TorpedoFunction {
 				}, values));
 		return coalesceFunction;
 	}
-	
+
+    /**
+     * <p>concat.</p>
+     *
+     * @param values a E object.
+     * @param <T> a T object.
+     * @return a E object.
+     * @param <E> a E object.
+     */
+    public static <T, E extends Function<T>> E concat(E... values) {
+        ConcatFunction<E> concatFunction = getConcatFunction(values);
+        return (E) concatFunction;
+    }
+
+    /**
+     * <p>concat.</p>
+     *
+     * @param values a T object.
+     * @param <T> a T object.
+     * @return a {@link org.torpedoquery.jpa.Function} object.
+     */
+    @SafeVarargs
+    public static <T> Function<T> concat(T... values) {
+        return getConcatFunction(values);
+    }
+
+    @SafeVarargs
+    private static <T> ConcatFunction<T> getConcatFunction(T... values) {
+        final ConcatFunction<T> concatFunction = new ConcatFunction<>();
+        Objects.requireNonNull(getTorpedoMethodHandler()).handle(
+                new ArrayCallHandler((ValueHandler<Void>) (proxy, queryBuilder, selector) -> {
+                    concatFunction.setQuery(proxy);
+                    concatFunction.addSelector(selector);
+                    return null;
+                }, values));
+        return concatFunction;
+    }
+
 	private static <T> DynamicInstantiationFunction<T> getDynamicInstantiationFunction(T val) {
 		final DynamicInstantiationFunction<T> dynFunction = new DynamicInstantiationFunction<>(val);
 		TorpedoMethodHandler torpedoMethodHandler = getTorpedoMethodHandler();

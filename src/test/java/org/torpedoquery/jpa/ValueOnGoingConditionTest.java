@@ -23,8 +23,7 @@ import static org.torpedoquery.jpa.Torpedo.from;
 import static org.torpedoquery.jpa.Torpedo.or;
 import static org.torpedoquery.jpa.Torpedo.select;
 import static org.torpedoquery.jpa.Torpedo.where;
-import static org.torpedoquery.jpa.TorpedoFunction.length;
-import static org.torpedoquery.jpa.TorpedoFunction.lower;
+import static org.torpedoquery.jpa.TorpedoFunction.*;
 
 import java.util.Arrays;
 
@@ -120,6 +119,21 @@ public class ValueOnGoingConditionTest {
 		Query<Entity> select = select(entity);
 		assertEquals(
 				"select entity_0 from Entity entity_0 where ( lower(entity_0.code) like :function_1 )",
+				select.getQuery());
+	}
+
+	/**
+	 * <p>testConcatFunctionInCondition.</p>
+	 */
+	@Test
+	public void testConcatFunctionInCondition() {
+		Entity entity = from(Entity.class);
+		OnGoingLogicalCondition condition = condition(concat(entity.getCode(), entity.getName()))
+				.like().any("test");
+		where(condition);
+		Query<Entity> select = select(entity);
+		assertEquals(
+				"select entity_0 from Entity entity_0 where ( concat(entity_0.code, entity_0.name) like :function_1 )",
 				select.getQuery());
 	}
 

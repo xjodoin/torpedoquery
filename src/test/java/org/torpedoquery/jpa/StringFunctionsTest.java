@@ -19,11 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.torpedoquery.jpa.Torpedo.from;
 import static org.torpedoquery.jpa.Torpedo.select;
 import static org.torpedoquery.jpa.Torpedo.where;
-import static org.torpedoquery.jpa.TorpedoFunction.length;
-import static org.torpedoquery.jpa.TorpedoFunction.lower;
-import static org.torpedoquery.jpa.TorpedoFunction.substring;
-import static org.torpedoquery.jpa.TorpedoFunction.trim;
-import static org.torpedoquery.jpa.TorpedoFunction.upper;
+import static org.torpedoquery.jpa.TorpedoFunction.*;
 
 import org.junit.Test;
 import org.torpedoquery.jpa.test.bo.Entity;
@@ -97,6 +93,18 @@ public class StringFunctionsTest {
 		where(lower(from.getCode())).like().any("test");
 		Query<Entity> select = select(from);
 		assertEquals("select entity_0 from Entity entity_0 where lower(entity_0.code) like :function_1", select.getQuery());
+		assertEquals("%test%", select.getParameters().get("function_1"));
+	}
+
+	/**
+	 * <p>testConcatFunction.</p>
+	 */
+	@Test
+	public void testConcatFunction() {
+		Entity from = from(Entity.class);
+		where(concat(from.getCode(), from.getName())).like().any("test");
+		Query<Entity> select = select(from);
+		assertEquals("select entity_0 from Entity entity_0 where concat(entity_0.code, entity_0.name) like :function_1", select.getQuery());
 		assertEquals("%test%", select.getParameters().get("function_1"));
 	}
 	
